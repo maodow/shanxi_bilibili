@@ -3,17 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_common_bg_r8"
-    android:clickable="true"
+    android:background="@drawable/bg_selector_common_image"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:longClickable="false"
-    app:rl_corner_bottom_left="8dp"
-    app:rl_corner_bottom_right="8dp"
-    app:rl_corner_top_left="8dp"
-    app:rl_corner_top_right="8dp"
+    android:padding="@dimen/dp_4"
+    app:rl_corner_bottom_left="@dimen/dp_6"
+    app:rl_corner_bottom_right="@dimen/dp_6"
+    app:rl_corner_top_left="@dimen/dp_6"
+    app:rl_corner_top_right="@dimen/dp_6"
     app:rl_focus="true"
-    app:rl_rate_height="0.54"
+    app:rl_rate_height="0.56"
     app:rl_scale="1.1">
 
     <!-- 图片 -->
@@ -21,31 +19,25 @@
         android:id="@+id/album_item_img_template18"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
         android:scaleType="fitXY" />
 
     <!-- 标题 -->
-    <TextView
+    <tv.huan.bilibili.widget.ShandowTextView
         android:id="@+id/album_item_name_template18"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="@dimen/dp_40"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:clickable="false"
         android:ellipsize="marquee"
         android:focusable="false"
-        android:focusableInTouchMode="false"
         android:gravity="bottom|left"
-        android:longClickable="false"
-        android:paddingLeft="9dp"
-        android:paddingRight="9dp"
-        android:paddingBottom="8dp"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:paddingBottom="@dimen/dp_8"
         android:singleLine="true"
         android:text="-"
-        android:textColor="#ffffff"
-        android:textSize="12sp" />
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/sp_14" />
 
 </lib.kalu.leanback.round.RoundRelativeLayout>

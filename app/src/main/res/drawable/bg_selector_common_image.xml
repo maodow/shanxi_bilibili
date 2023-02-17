@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 获焦 -->
+    <item android:state_focused="true">
+        <layer-list>
+<!--            &lt;!&ndash; 背景 &ndash;&gt;-->
+<!--            <item>-->
+<!--                <shape>-->
+<!--                    <solid android:color="@color/color_303030" />-->
+<!--                    <corners android:radius="@dimen/dp_5" />-->
+<!--                </shape>-->
+<!--            </item>-->
+            <!-- 边框 -->
+            <item>
+                <shape>
+                    <stroke android:width="@dimen/dp_4" android:color="@color/color_white" />
+                    <corners android:radius="@dimen/dp_6" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+<!--    &lt;!&ndash; 默认 &ndash;&gt;-->
+<!--    <item>-->
+<!--        <layer-list>-->
+<!--            &lt;!&ndash; 背景 &ndash;&gt;-->
+<!--            <item>-->
+<!--                <shape>-->
+<!--                    <solid android:color="@color/color_303030" />-->
+<!--                    <corners android:radius="@dimen/dp_5" />-->
+<!--                </shape>-->
+<!--            </item>-->
+<!--        </layer-list>-->
+<!--    </item>-->
+
+</selector>

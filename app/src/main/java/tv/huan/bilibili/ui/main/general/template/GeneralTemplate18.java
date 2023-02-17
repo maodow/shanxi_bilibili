@@ -43,10 +43,12 @@ public class GeneralTemplate18 extends ListGridPresenter<GetSubChannelsByChannel
         try {
             TextView textView = view.findViewById(R.id.album_item_name_template18);
             textView.setText(templateBean.getName());
+        } catch (Exception e) {
+        }
+        try {
             ImageView imageView = view.findViewById(R.id.album_item_img_template18);
             GlideUtils.loadHz(imageView.getContext(), templateBean.getNewPicHz(), imageView);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
