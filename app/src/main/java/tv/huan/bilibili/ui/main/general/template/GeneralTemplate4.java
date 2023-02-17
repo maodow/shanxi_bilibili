@@ -66,7 +66,7 @@ public class GeneralTemplate4 extends ListGridPresenter<GetSubChannelsByChannelB
 
     @Override
     public int initMagrinTop(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_30);
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
     }
 
     @Override

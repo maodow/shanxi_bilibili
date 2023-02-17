@@ -30,17 +30,17 @@ public class TextViewMenuSearch extends TextViewPlus {
         ViewCompat.animate(this).scaleX(focused ? 1.1f : 1.0f).scaleY(focused ? 1.1f : 1.0f).setDuration(200).start();
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        boolean hasFocus = hasFocus();
-        // up
-        if (hasFocus && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
-            return true;
-        }
-        // left
-        else if (hasFocus && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
-            return true;
-        }
-        return super.dispatchKeyEvent(event);
-    }
+//    @Override
+//    public boolean dispatchKeyEvent(KeyEvent event) {
+//        boolean hasFocus = hasFocus();
+//        // up
+//        if (hasFocus && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+//            return true;
+//        }
+//        // left
+//        else if (hasFocus && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+//            return true;
+//        }
+//        return super.dispatchKeyEvent(event);
+//    }
 }

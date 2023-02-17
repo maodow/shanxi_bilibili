@@ -4,6 +4,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+
 import java.util.List;
 
 import lib.kalu.frame.mvp.BaseActivity;
@@ -49,7 +50,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         // auto
         getPresenter().autoNext();
         // request
-        getPresenter().updateTabs();
+        getPresenter().refreshTabs();
         getPresenter().requestExit();
         // listener
         PageView pageView = findViewById(R.id.main_content);
@@ -76,14 +77,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 getPresenter().showBackground(i);
                 getPresenter().showFragment(i);
             }
-
-            @Override
-            public void onRepeat(int i) {
-            }
-
-            @Override
-            public void onLeave(int i) {
-            }
         });
         tabLayout.update(list, index);
     }
@@ -109,11 +102,15 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     @Override
     public void showTitle() {
-        setVisibility(R.id.main_menu, View.VISIBLE);
+        setVisibility(R.id.main_search, View.VISIBLE);
+        setVisibility(R.id.main_vip, View.VISIBLE);
+        setVisibility(R.id.main_logo, View.VISIBLE);
     }
 
     @Override
     public void hideTitle() {
-        setVisibility(R.id.main_menu, View.GONE);
+        setVisibility(R.id.main_search, View.GONE);
+        setVisibility(R.id.main_vip, View.GONE);
+        setVisibility(R.id.main_logo, View.GONE);
     }
 }

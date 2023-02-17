@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -35,6 +36,7 @@ import lib.kalu.leanback.tab.TabLayout;
 import lib.kalu.leanback.tab.model.TabModel;
 import lib.kalu.leanback.tab.model.TabModelImage;
 import lib.kalu.leanback.tab.model.TabModelText;
+import lib.kalu.leanback.tags.TagsLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.ExitBean;
@@ -155,7 +157,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribe());
     }
 
-    protected void updateTabs() {
+    protected void refreshTabs() {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<MainBean>() {
                     @Override
@@ -193,18 +195,13 @@ public class MainPresenter extends BasePresenter<MainView> {
                                 tabModel.setTextColorResourceNormal(R.color.color_bfbfbf);
                                 tabModel.setTextColorResourceChecked(R.color.color_ff6699);
                                 tabModel.setTextColorResourceFocus(R.color.color_black);
+                                tabModel.setBackgroundResourceFocus(R.drawable.bg_shape_tab_focus);
+                                tabModel.setBackgroundResourceChecked(R.drawable.bg_shape_tab_selected);
+                                tabModel.setBackgroundResourceNormal(R.drawable.bg_shape_tab);
                             }
-                            tabModel.setBackgroundResourceFocus(R.drawable.bg_shape_tab_focus);
-                            tabModel.setBackgroundResourceChecked(R.drawable.bg_shape_tab_selected);
-                            tabModel.setBackgroundResourceNormal(R.drawable.bg_shape_tab);
                             list.add(tabModel);
                         }
 
-                        // 4
-                        Log.e("MainPresenter1", new Gson().toJson(list));
-                        Log.e("MainPresenter1", select + "");
-
-                        // 5
                         MainBean mainBean = new MainBean();
                         mainBean.setPosition(select);
                         mainBean.setTabModels(list);
@@ -296,6 +293,57 @@ public class MainPresenter extends BasePresenter<MainView> {
                 bundle.putString(ExitDialog.BUNDLE_DATA, extra);
                 dialog.setArguments(bundle);
                 dialog.show(fragmentManager, "");
+                return true;
+            }
+        }
+        // up
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+            int focusId = getView().getCurrentFocusId();
+            LogUtil.log("MainPresenter => dispatchKeyEvent => up_action_down => ");
+            if (focusId == R.id.main_tabs) {
+                TabLayout tabLayout = (TabLayout) getView().getCurrentFocus();
+                LogUtil.log("MainPresenter => dispatchKeyEvent => up_action_down => tabLayout = " + tabLayout);
+                tabLayout.checkedCurrentItem();
+                int index = tabLayout.getCheckedIndex();
+                getView().setFocusable(R.id.main_vip, index > 0);
+                getView().setFocusable(R.id.main_search, index <= 0);
+            } else if (focusId == R.id.main_search || focusId == R.id.main_vip) {
+                return true;
+            }
+        }
+        // down
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            int focusId = getView().getCurrentFocusId();
+            if (focusId == R.id.main_search || focusId == R.id.main_vip) {
+                LogUtil.log("MainPresenter => dispatchKeyEvent => down_action_down => ");
+                getView().setFocusable(R.id.main_vip, false);
+                getView().setFocusable(R.id.main_search, false);
+                TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+                tabLayout.focusCurrentItem();
+                return true;
+            }
+        }
+        // right
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            int focusId = getView().getCurrentFocusId();
+            LogUtil.log("MainPresenter => dispatchKeyEvent => right_action_down => " + getView().getCurrentFocus());
+            if (focusId == R.id.main_search) {
+                getView().setFocusable(R.id.main_vip, true);
+                getView().setFocusable(R.id.main_search, false);
+                return true;
+            } else if (focusId == R.id.main_vip) {
+                return true;
+            }
+        }
+        // left
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+            int focusId = getView().getCurrentFocusId();
+            LogUtil.log("MainPresenter => dispatchKeyEvent => left_action_down => " + getView().getCurrentFocus());
+            if (focusId == R.id.main_vip) {
+                getView().setFocusable(R.id.main_search, true);
+                getView().setFocusable(R.id.main_vip, false);
+                return true;
+            } else if (focusId == R.id.main_search) {
                 return true;
             }
         }

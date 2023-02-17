@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_menu"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_53"
+    android:layout_height="@dimen/dp_36"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="false"
-    android:gravity="center_vertical"
+    android:gravity="bottom"
     android:orientation="horizontal">
 
     <tv.huan.bilibili.widget.menu.TextViewMenuSearch

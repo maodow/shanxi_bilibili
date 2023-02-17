@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.View;
 import android.widget.ImageView;
@@ -66,7 +67,7 @@ public class GeneralTemplate18 extends ListGridPresenter<GetSubChannelsByChannel
 
     @Override
     public int initMagrinTop(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_30);
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
     }
 
     @Override

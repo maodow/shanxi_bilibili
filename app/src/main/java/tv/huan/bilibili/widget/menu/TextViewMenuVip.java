@@ -30,16 +30,16 @@ public class TextViewMenuVip extends TextViewPlus {
         ViewCompat.animate(this).scaleX(focused ? 1.05f : 1.0f).scaleY(focused ? 1.05f : 1.0f).setDuration(200).start();
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        // up
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
-            return true;
-        }
-        // right
-        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            return true;
-        }
-        return super.dispatchKeyEvent(event);
-    }
+//    @Override
+//    public boolean dispatchKeyEvent(KeyEvent event) {
+//        // up
+//        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+//            return true;
+//        }
+//        // right
+//        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+//            return true;
+//        }
+//        return super.dispatchKeyEvent(event);
+//    }
 }
