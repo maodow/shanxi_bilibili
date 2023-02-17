@@ -4,15 +4,12 @@ import android.util.Log;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
-import androidx.leanback.widget.VerticalGridView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
 
 import lib.kalu.frame.mvp.BaseFragment;
 import tv.huan.bilibili.R;
-import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.ui.main.MainActivity;
+import tv.huan.bilibili.widget.GeneralGridView;
 
 @Keep
 public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter> implements GeneralView {
@@ -35,41 +32,16 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
         // request
         getPresenter().request();
         // listener
-        VerticalGridView gridView = findViewById(R.id.general_list);
-        gridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
+        tv.huan.bilibili.widget.GeneralGridView  gridView = findViewById(R.id.general_list);
+        gridView.setOnScrollTopListener(new GeneralGridView.OnScrollTopListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                // down
-                if (dy > 0) {
-                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(0);
-                    if (null != viewHolder && null != viewHolder.itemView) {
-                        ((MainActivity) getActivity()).hideTitle();
-                    }
-                }
-                // up
-                else if (dy < 0) {
-                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(0);
-                    if (null != viewHolder && null != viewHolder.itemView) {
-                        ((MainActivity) getActivity()).showTitle();
-                    }
-                }
+            public void onShow() {
+                ((MainActivity) getActivity()).showTitle();
             }
 
             @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-//                // stop
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-////                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    View focus = recyclerView.findFocus();
-//                    View under = recyclerView.findChildViewUnder(focus.getX(), focus.getY());
-//                    int position = recyclerView.getChildAdapterPosition(under);
-//                    Log.e("CommonFragment", "newState = " + newState + ", position = " + position + ", focus = " + focus + ", under = " + under);
-////                    ((lib.kalu.frame.mvp.BaseActivity) getActivity()).onCall(position > 0 ? 1 : 0, null);
-//                }
+            public void onHide() {
+                ((MainActivity) getActivity()).hideTitle();
             }
         });
     }
