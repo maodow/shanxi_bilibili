@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 菜单 -->
+    <lib.kalu.leanback.tab.TabLayout
+        android:id="@+id/main_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:layout_below="@id/main_menu"
+        android:layout_marginLeft="@dimen/dp_33"
+        android:layout_marginRight="@dimen/dp_33"
+        android:focusable="true"
+        app:tab_image_height="@dimen/dp_30"
+        app:tab_image_padding="1dp"
+        app:tab_image_width_max="@dimen/dp_80"
+        app:tab_image_width_min="@dimen/dp_60"
+        app:tab_margin="1dp"
+        app:tab_text_padding="@dimen/dp_20"
+        app:tab_text_size="@dimen/sp_21"
+        app:tab_text_underline="true"
+        app:tab_text_underline_height="@dimen/dp_2"
+        app:tab_text_underline_width="@dimen/dp_4" />
+
+    <lib.kalu.leanback.page.PageView
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/main_tabs"
+        android:layout_marginTop="@dimen/dp_17"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingLeft="@dimen/dp_48"
+        android:paddingRight="@dimen/dp_48" />
+
+    <!-- 导航 -->
+    <tv.huan.bilibili.widget.menu.MenuLayout
+        android:id="@+id/main_menu"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_53"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingLeft="@dimen/dp_48"
+        android:paddingRight="@dimen/dp_48" />
+
+</RelativeLayout>

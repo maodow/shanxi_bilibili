@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 属性focusOutFront : https://www.cnblogs.com/DayaoBin/p/15687183.html -->
+<tv.huan.bilibili.widget.GeneralGridView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/general_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingBottom="@dimen/dp_17"
+    app:focusOutEnd="true"
+    app:focusOutFront="true" />

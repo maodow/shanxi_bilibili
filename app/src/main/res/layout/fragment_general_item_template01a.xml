@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tv.huan.bilibili.widget.template1.Template1RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="false"
+    app:rl_corner_bottom_left="8dp"
+    app:rl_corner_top_left="8dp">
+
+    <!-- 图片 -->
+    <ImageView
+        android:id="@+id/album_item_template01a_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:scaleType="fitXY" />
+
+</tv.huan.bilibili.widget.template1.Template1RelativeLayout>

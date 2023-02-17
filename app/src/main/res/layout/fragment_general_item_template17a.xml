@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tv.huan.bilibili.widget.template17.Template171LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="false"
+    android:orientation="vertical"
+    app:rl_corner_bottom_left="8dp"
+    app:rl_corner_bottom_right="8dp"
+    app:rl_corner_top_left="8dp"
+    app:rl_corner_top_right="8dp">
+
+    <tv.huan.bilibili.widget.template17.Template171ImageView
+        android:id="@+id/general_item_template17a_img"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:scaleType="fitXY"
+        app:riv_corner="8dp"
+        app:riv_focus="true"
+        app:riv_scale="1.06" />
+
+    <!-- class1 -->
+    <lib.kalu.leanback.round.RoundRelativeLayout
+        android:id="@+id/general_item_template17a_class1_all"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_selector_general_template17_item_all"
+        android:drawableTop="@mipmap/ic_launcher"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <lib.kalu.leanback.plus.TextViewPlus
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:focusable="false"
+            android:gravity="center"
+            android:text="全部历史"
+            android:textColor="@color/general_template17_item_all"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:tvp_drawable_top_height="44dp"
+            app:tvp_drawable_top_width="44dp" />
+
+    </lib.kalu.leanback.round.RoundRelativeLayout>
+
+    <!-- class2 -->
+    <LinearLayout
+        android:id="@+id/general_item_template17a_class2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:focusable="false"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:weightSum="3">
+
+        <lib.kalu.leanback.focus.FocusLinearLayout
+            android:id="@+id/general_item_template17a_class2_rec1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selector_general_template17_rec_top"
+            android:focusable="true"
+            android:gravity="center_vertical|left"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:weightSum="3"
+            app:rl_scale="1.1">
+
+            <TextView
+                android:id="@+id/general_item_template17a_class2_rec1_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:gravity="left|center_vertical"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="#ffffff"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/general_item_template17a_class2_rec1_position"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:gravity="right|center_vertical"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="#8d8fa8"
+                android:textSize="11sp" />
+
+        </lib.kalu.leanback.focus.FocusLinearLayout>
+
+        <tv.huan.bilibili.widget.template17.Template171TextView
+            android:id="@+id/general_item_template17a_class2_all"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@drawable/bg_selector_general_template17_rec_bottom"
+            android:focusable="true"
+            android:gravity="center_vertical|left"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="全部历史"
+            android:textColor="@color/general_template17_item_all"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <!-- class3 -->
+    <LinearLayout
+        android:id="@+id/general_item_template17a_class3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:focusable="false"
+        android:orientation="vertical"
+        android:weightSum="3">
+
+        <lib.kalu.leanback.focus.FocusLinearLayout
+            android:id="@+id/general_item_template17a_class3_rec1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selector_general_template17_rec_top"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            app:rl_scale="1.1">
+
+            <TextView
+                android:id="@+id/general_item_template17a_class3_rec1_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:gravity="left|center_vertical"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="#ffffff"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/general_item_template17a_class3_rec1_position"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:gravity="right|center_vertical"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="#8d8fa8"
+                android:textSize="11sp" />
+
+        </lib.kalu.leanback.focus.FocusLinearLayout>
+
+        <lib.kalu.leanback.focus.FocusLinearLayout
+            android:id="@+id/general_item_template17a_class3_rec2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selector_general_template17_rec_center"
+            android:focusable="true"
+            android:gravity="center_vertical|left"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            app:rl_scale="1.1">
+
+            <TextView
+                android:id="@+id/general_item_template17a_class3_rec2_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:gravity="left|center_vertical"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="#ffffff"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/general_item_template17a_class3_rec2_position"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:gravity="right|center_vertical"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="#8d8fa8"
+                android:textSize="11sp" />
+
+        </lib.kalu.leanback.focus.FocusLinearLayout>
+
+        <tv.huan.bilibili.widget.template17.Template171TextView
+            android:id="@+id/general_item_template17a_class3_all"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selector_general_template17_rec_bottom"
+            android:focusable="true"
+            android:gravity="center_vertical|left"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="全部历史"
+            android:textColor="@color/general_template17_item_all"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+</tv.huan.bilibili.widget.template17.Template171LinearLayout>

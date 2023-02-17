@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:longClickable="false">
+
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="@dimen/dp_100"-->
+    <!--        android:layout_height="@dimen/dp_100"-->
+    <!--        android:layout_centerInParent="true"-->
+    <!--        android:background="@drawable/ic_exit_background"-->
+    <!--        android:clickable="false"-->
+    <!--        android:focusable="false"-->
+    <!--        android:focusableInTouchMode="false"-->
+    <!--        android:longClickable="false">-->
+
+    <lib.kalu.leanback.loading.LoadingView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:focusable="false"
+        app:lv_color_round="#ffffff"
+        app:lv_count="8"
+        app:lv_radius="10dp"
+        app:lv_rate="0.9" />
+
+    <!--    </RelativeLayout>-->
+
+</RelativeLayout>

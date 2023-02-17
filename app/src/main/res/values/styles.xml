@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/color_171819</item>
+        <!-- 禁用系统水波纹动画 -->
+        <item name="android:colorControlHighlight" tools:ignore="NewApi">@color/color_transparent
+        </item>
+    </style>
+
+    <style name="DialogTheme" parent="@android:style/Theme.Dialog">
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">false</item>
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 除去背景色 -->
+        <item name="android:windowBackground">@color/color_transparent</item>
+        <!-- Android部分手机自定义Dialog顶部有条蓝色的线问题 -->
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:fullBright">@color/color_transparent</item>
+        <item name="android:fullDark">@color/color_transparent</item>
+        <item name="android:topBright">@color/color_transparent</item>
+        <item name="android:topDark">@color/color_transparent</item>
+        <item name="android:borderlessButtonStyle">@color/color_transparent</item>
+        <item name="android:footerDividersEnabled">false</item>
+        <item name="android:headerDividersEnabled">false</item>
+    </style>
+
+</resources>

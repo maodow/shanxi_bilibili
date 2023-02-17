@@ -1,0 +1,107 @@
+apply plugin: 'com.android.application'
+
+def static releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+android {
+
+    namespace 'tv.huan.bilibili'
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
+
+    defaultConfig {
+        applicationId "tv.huan.bilibili"
+        minSdkVersion 16
+        targetSdkVersion 31
+        versionCode 100
+        versionName "1.0.0"
+
+        ndk {
+            abiFilters 'armeabi-v7a'
+//            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+
+    signingConfigs {
+        release {
+            keyAlias 'huanwang'
+            keyPassword 'huanwang'
+            storeFile file('TvTentcentVideo.jks')
+            storePassword 'huanwang'
+            v2SigningEnabled false
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            multiDexEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationIdSuffix ".heilongjiang"
+            versionNameSuffix ".heilongjiang"
+            manifestPlaceholders = [design_width_in_dp_value: "960", design_height_in_dp_value: "540"]
+            buildConfigField("Boolean", "HUAN_AAA", "false") // 视达科aaa认证
+            buildConfigField("Boolean", "HUAN_LOG", "true")  // 日志log
+            buildConfigField("Boolean", "HUAN_SKIN", "false")// 换肤skin
+            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
+            buildConfigField("String", "HUAN_API_SKIN", "\"http://123.59.196.222/\"")
+        }
+        debug {
+            signingConfig signingConfigs.release
+            multiDexEnabled true
+            zipAlignEnabled false
+            shrinkResources false
+            minifyEnabled false
+            applicationIdSuffix ".heilongjiang"
+            versionNameSuffix ".heilongjiang"
+            manifestPlaceholders = [design_width_in_dp_value: "960", design_height_in_dp_value: "540"]
+            buildConfigField("Boolean", "HUAN_AAA", "false") // 视达科aaa认证
+            buildConfigField("Boolean", "HUAN_LOG", "true")  // 日志log
+            buildConfigField("Boolean", "HUAN_SKIN", "false")// 换肤skin
+            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
+            buildConfigField("String", "HUAN_API_SKIN", "\"http://123.59.196.222/\"")
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    //打包APK默认名称格式
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "Huan_Bilibili_Heilongjiang_" + "${variant.mergedFlavor.versionName}_${releaseTime()}.apk"
+        }
+    }
+}
+
+
+dependencies {
+    // autosize
+    api files('libs/lib_autosize_v1.2.1_release.aar')
+    // common
+    api files('libs/lib_huan_common_release_20230213.aar')
+    // mvp
+    api files('libs/lib_frame_mvp_release_20230216.aar')
+    // leanback
+    api files('libs/lib_leanback_r1-2-0-alpha02-release.aar')
+    // player
+    api files('libs/lib_mediaplayer_ui_release_20230216.aar')
+    api files('libs/lib_mediaplayer_exo_r2.18.2_ff4.4_audio_release_20230202.aar')
+    // heilongjiang
+    api files('libs/lib_huan_heilongjiang_release_20230215.aar')
+
+    // core
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+}

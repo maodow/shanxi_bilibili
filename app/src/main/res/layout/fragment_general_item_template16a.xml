@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tv.huan.bilibili.widget.template16.Template16LinearLayoutRec xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="false"
+    android:orientation="vertical">
+
+    <lib.kalu.leanback.focus.FocusLinearLayout
+        android:id="@+id/general_item_template16a_rec1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_selector_general_template16_rec_top"
+        android:focusable="true"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        app:rl_scale="1.1">
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec1_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec1_position"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="right|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#8d8fa8"
+            android:textSize="11sp" />
+
+    </lib.kalu.leanback.focus.FocusLinearLayout>
+
+    <lib.kalu.leanback.focus.FocusLinearLayout
+        android:id="@+id/general_item_template16a_rec2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_selector_general_template16_rec_center"
+        android:focusable="true"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        app:rl_scale="1.1">
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec2_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec2_position"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="right|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#8d8fa8"
+            android:textSize="11sp" />
+
+    </lib.kalu.leanback.focus.FocusLinearLayout>
+
+    <lib.kalu.leanback.focus.FocusLinearLayout
+        android:id="@+id/general_item_template16a_rec3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_selector_general_template16_rec_center"
+        android:focusable="true"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        app:rl_scale="1.1">
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec3_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec3_position"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="right|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#8d8fa8"
+            android:textSize="11sp" />
+
+    </lib.kalu.leanback.focus.FocusLinearLayout>
+
+    <lib.kalu.leanback.focus.FocusLinearLayout
+        android:id="@+id/general_item_template16a_rec4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_selector_general_template16_rec_center"
+        android:focusable="true"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        app:rl_scale="1.1">
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec4_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec4_position"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="right|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#8d8fa8"
+            android:textSize="11sp" />
+
+    </lib.kalu.leanback.focus.FocusLinearLayout>
+
+    <lib.kalu.leanback.focus.FocusLinearLayout
+        android:id="@+id/general_item_template16a_rec5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_selector_general_template16_rec_bottom"
+        android:focusable="true"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        app:rl_scale="1.1">
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec5_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/general_item_template16a_rec5_position"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="right|center_vertical"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="#8d8fa8"
+            android:textSize="11sp" />
+
+    </lib.kalu.leanback.focus.FocusLinearLayout>
+
+</tv.huan.bilibili.widget.template16.Template16LinearLayoutRec>

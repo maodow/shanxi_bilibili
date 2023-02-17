@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp">
+
+    <!-- 中间 -->
+    <View
+        android:id="@+id/keyboard_center"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true" />
+
+    <!-- 搜索 -->
+    <view
+        android:id="@+id/tv_result"
+        class="tv.huan.bilibili.widget.keyboard.KeyboardView$SearchTextView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:drawableLeft="@drawable/ic_search_right"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical|left"
+        android:maxLength="15"
+        android:maxLines="1"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textColorHint="#848194"
+        android:textSize="@dimen/sp_10" />
+
+    <!-- 清空 -->
+    <view
+        android:id="@+id/btn_clear"
+        class="tv.huan.bilibili.widget.keyboard.KeyboardView$KeyboardTextViewSkin"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_24"
+        android:layout_below="@id/tv_result"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="@dimen/dp_5"
+        android:layout_toLeftOf="@id/keyboard_center"
+        android:clickable="true"
+        android:drawableLeft="@drawable/keyboard_clear"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:text="清空"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sp_12" />
+
+    <!-- 退格 -->
+    <view
+        android:id="@+id/btn_delete"
+        class="tv.huan.bilibili.widget.keyboard.KeyboardView$KeyboardTextViewSkin"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_24"
+        android:layout_below="@id/tv_result"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/keyboard_center"
+        android:clickable="true"
+        android:drawableLeft="@drawable/keyboard_del"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:text="退格"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sp_12" />
+
+    <!-- 键盘 -->
+    <view
+        android:id="@+id/recycler_view"
+        class="tv.huan.bilibili.widget.keyboard.KeyboardView$KeyboardRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_clear"
+        android:layout_marginTop="30dp"
+        android:clipChildren="false"
+        android:clipToPadding="false" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@id/recycler_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+    <!-- 全键盘 -->
+    <view
+        android:id="@+id/btn_full"
+        class="tv.huan.bilibili.widget.keyboard.KeyboardView$KeyboardMenuTextView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_24"
+        android:layout_below="@id/recycler_view"
+        android:layout_marginTop="30dp"
+        android:layout_toLeftOf="@id/keyboard_center"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="全键盘"
+        android:textColor="#ff673c"
+        android:textSize="@dimen/sp_12"
+        android:textStyle="bold" />
+
+    <!--         android:drawableBottom="@drawable/keyboard_tab_unfocus" -->
+    <!-- T9键盘 -->
+    <view
+        android:id="@+id/btn_t9"
+        class="tv.huan.bilibili.widget.keyboard.KeyboardView$KeyboardMenuTextView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_24"
+        android:layout_below="@id/recycler_view"
+        android:layout_marginTop="30dp"
+        android:layout_toRightOf="@id/keyboard_center"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="T9键盘"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/sp_12"
+        android:textStyle="bold" />
+
+</RelativeLayout>

@@ -1,0 +1,52 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            zipAlignEnabled false
+            shrinkResources false
+            minifyEnabled false
+            consumerProguardFiles 'proguard-rules.pro'
+            buildConfigField("String", "APP_ID", "\"123\"")
+            buildConfigField("String", "APP_KEY", "\"456\"")
+        }
+        debug {
+            zipAlignEnabled false
+            shrinkResources false
+            minifyEnabled false
+            consumerProguardFiles 'proguard-rules.pro'
+            buildConfigField("String", "APP_ID", "\"123\"")
+            buildConfigField("String", "APP_KEY", "\"456\"")
+        }
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            def type = new String(buildType.name).toLowerCase()
+            def time = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08"))
+            outputFileName = "lib_huan_heilongjiang_" + type + "_" + time + ".aar"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compileOnly 'androidx.appcompat:appcompat:1.4.1'
+    compileOnly files('libs/lib_huan_common_release_20230213.aar')
+    api files('libs/OrderClient_V3.13.06.jar')
+}

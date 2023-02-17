@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="false">
+
+    <ImageView
+        android:id="@+id/special2_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:orientation="horizontal"
+        android:paddingLeft="48dp"
+        android:paddingTop="114dp"
+        android:paddingRight="48dp"
+        android:paddingBottom="33dp"
+        android:weightSum="6">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_weight="3.6"
+            android:background="@drawable/bg_shape_special2_item1"
+            android:focusable="false"
+            android:orientation="vertical"
+            android:padding="14dp"
+            android:weightSum="5">
+
+            <lib.kalu.leanback.round.RoundRelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:longClickable="false"
+                app:rl_corner_bottom_left="8dp"
+                app:rl_corner_bottom_right="8dp"
+                app:rl_corner_top_left="8dp"
+                app:rl_corner_top_right="8dp"
+                app:rl_focus="false">
+
+                <tv.huan.bilibili.widget.player.PlayerViewSpecial
+                    android:id="@+id/special2_player"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="false" />
+
+            </lib.kalu.leanback.round.RoundRelativeLayout>
+
+            <TextView
+                android:id="@+id/special2_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:gravity="bottom|left"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/special2_info"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:gravity="center_vertical|left"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/special2_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="2.4"
+            android:background="@drawable/bg_shape_special2_item1"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:focusable="false"
+            android:padding="14dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

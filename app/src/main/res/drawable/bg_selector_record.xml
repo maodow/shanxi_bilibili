@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true" android:drawable="@drawable/bg_selector_background_focus_nine">
+<!--        <shape>-->
+<!--            <gradient android:centerColor="#ff9e28" android:endColor="#ff02bd" android:startColor="#f76b1c" />-->
+<!--            <corners android:radius="@dimen/dp_4" />-->
+<!--        </shape>-->
+    </item>
+    <item>
+        <shape>
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+</selector>

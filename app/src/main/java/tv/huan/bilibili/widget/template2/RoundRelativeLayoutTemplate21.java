@@ -1,0 +1,48 @@
+package tv.huan.bilibili.widget.template2;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.ViewParent;
+
+import androidx.leanback.widget.VerticalGridView;
+
+import lib.kalu.leanback.round.RoundRelativeLayout;
+import tv.huan.bilibili.R;
+
+public class RoundRelativeLayoutTemplate21 extends RoundRelativeLayout {
+    public RoundRelativeLayoutTemplate21(Context context) {
+        super(context);
+    }
+
+    public RoundRelativeLayoutTemplate21(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public RoundRelativeLayoutTemplate21(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public RoundRelativeLayoutTemplate21(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        try {
+            ViewParent parent = getParent().getParent().getParent();
+            VerticalGridView verticalGridView = (VerticalGridView) parent;
+            int width = verticalGridView.getWidth();
+            int left = verticalGridView.getPaddingLeft();
+            int right = verticalGridView.getPaddingRight();
+            int offset = getResources().getDimensionPixelOffset(R.dimen.dp_20);
+            int w = (((width - left - right) / 6) * 2) - offset;
+            int h = (int) (width * 0.4);
+            int specW = MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY);
+            int specH = MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY);
+            super.onMeasure(specW, specH);
+            setMeasuredDimension(w, h);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

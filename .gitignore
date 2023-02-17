@@ -1,0 +1,12 @@
+/.gradle
+/.idea
+/local.properties
+/app/build
+/app/release
+/app/debug
+/huan_common/build
+/huan_common/release
+/huan_common/debug
+/huan_heilongjiang/build
+/huan_heilongjiang/release
+/huan_heilongjiang/debug

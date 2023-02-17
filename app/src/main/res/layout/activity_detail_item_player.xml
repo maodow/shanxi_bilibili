@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="236dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="horizontal">
+
+    <tv.huan.bilibili.widget.player.PlayerView
+        android:id="@+id/detail_player_item_video"
+        android:layout_width="420dp"
+        android:layout_height="match_parent"
+        android:focusable="false" />
+
+    <!--    <lib.kalu.leanback.round.RoundRelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:focusable="false"-->
+    <!--        android:longClickable="false"-->
+    <!--        app:rl_corner_bottom_left="8dp"-->
+    <!--        app:rl_corner_bottom_right="8dp"-->
+    <!--        app:rl_corner_top_left="8dp"-->
+    <!--        app:rl_corner_top_right="8dp"-->
+    <!--        app:rl_rate_width="1.78">-->
+
+    <!--        <tv.huan.huanshi.widget.player.PlayerView-->
+    <!--            android:id="@+id/detail_player_item_video"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:focusable="false" />-->
+
+    <!--    </lib.kalu.leanback.round.RoundRelativeLayout>-->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="24dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:weightSum="8">
+
+        <TextView
+            android:id="@+id/detail_player_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.2"
+            android:gravity="center_vertical|left"
+            android:text="寻龙传说"
+            android:textColor="#ffffff"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/detail_player_item_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|left"
+            android:text="2021｜动画｜奇幻｜冒险"
+            android:textColor="#ffffff"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/detail_player_item_info"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="top|left"
+            android:layout_weight="3"
+            android:background="@drawable/bg_selector_detail_item_button"
+            android:focusable="true"
+            android:padding="10dp"
+            android:text="简　介： 自然拼读系列为早教启蒙的优选课程，能够帮助孩子提升识字能力、阅读能力…"
+            android:textColor="#ffffff"
+            android:textSize="11sp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.8" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:focusable="false"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detail_player_item_vip"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/bg_selector_detail_item_button"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="vip"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/detail_player_item_full"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/bg_selector_detail_item_button"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="全屏播放"
+                android:textColor="#ffffff"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/detail_player_item_favor"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_selector_detail_item_button"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="收藏"
+                android:textColor="#ffffff"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

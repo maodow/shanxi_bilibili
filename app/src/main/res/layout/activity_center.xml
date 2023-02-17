@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="48dp"
+    android:layout_marginRight="48dp">
+
+    <!-- 导航 -->
+    <tv.huan.bilibili.widget.menu.MenuLayout
+        android:id="@+id/center_menu"
+        android:layout_width="match_parent"
+        android:layout_height="64dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@id/center_menu"
+        android:layout_alignParentRight="true"
+        android:focusable="false"
+        android:gravity="center"
+        android:text="长按【确定键】删除"
+        android:textColor="#ffffff"
+        android:textSize="14sp" />
+
+    <lib.kalu.leanback.clazz.HorizontalClassLayout
+        android:id="@+id/center_tabs"
+        android:layout_width="140dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/center_menu"
+        android:buttonTint="#00000000"
+        android:checked="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="历史观看"
+        android:textColor="#ffffff"
+        android:textSize="14sp" />
+
+    <lib.kalu.leanback.list.RecyclerViewGrid
+        android:id="@+id/center_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/center_tabs"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp" />
+
+</RelativeLayout>

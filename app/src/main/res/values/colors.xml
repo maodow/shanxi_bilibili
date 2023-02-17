@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/color_171819</color>
+    <color name="colorPrimaryDark">@color/color_171819</color>
+    <color name="colorAccent">@color/color_171819</color>
+
+    <color name="color_white">#ffffff</color>
+    <color name="color_black">#000000</color>
+    <color name="color_transparent">#00000000</color>
+
+    <color name="color_ff6699">#ff6699</color>
+    <color name="color_171819">#171819</color>
+    <color name="color_bfbfbf">#bfbfbf</color>
+    <color name="color_aaaaaa">#aaaaaa</color>
+    <color name="color_bdbdbd">#bdbdbd</color>
+    <color name="color_303030">#303030</color>
+
+</resources>

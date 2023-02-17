@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tv.huan.common">
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
+
+        <!-- 视达科AAA[河北广电] -->
+        <provider
+            android:name="tv.huan.common.starcor.StarcorProvider"
+            android:authorities="${applicationId}.aaa.hebei"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+
+    </application>
+
+</manifest>

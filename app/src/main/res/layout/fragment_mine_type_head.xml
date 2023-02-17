@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_182"
+    android:focusable="false"
+    android:orientation="horizontal"
+    android:weightSum="10">
+
+    <!-- 左 -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_weight="2.4"
+        android:background="@drawable/bg_shape_mine_head"
+        android:clipToPadding="false"
+        android:focusable="false"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_20">
+
+        <!-- 上 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10">
+
+            <ImageView
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_10"
+                android:focusable="false"
+                android:src="@drawable/ic_user" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/mine_head_uuid"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_20"
+                    android:focusable="false"
+                    android:gravity="top"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:id="@+id/mine_head_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_20"
+                    android:focusable="false"
+                    android:gravity="bottom"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/sp_12" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_20"
+            android:focusable="false" />
+
+        <!-- 中 -->
+        <tv.huan.bilibili.widget.anim.AnimTextView
+            android:id="@+id/mine_head_vip"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selector_exit_button"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="续费会员"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/sp_12" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_20"
+            android:focusable="false" />
+
+        <!-- 下 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:focusable="false" />
+
+            <lib.kalu.leanback.plus.TextViewPlus
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/ic_launcher"
+                android:drawablePadding="@dimen/dp_4"
+                android:focusable="false"
+                android:gravity="center"
+                android:text="随心免费看"
+                android:textColor="#ffffff"
+                android:textSize="10sp"
+                app:tvp_drawable_left_height="@dimen/dp_14"
+                app:tvp_drawable_left_width="@dimen/dp_14" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:focusable="false" />
+
+            <lib.kalu.leanback.plus.TextViewPlus
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/ic_launcher"
+                android:drawablePadding="@dimen/dp_4"
+                android:focusable="false"
+                android:gravity="center"
+                android:text="新剧抢先看"
+                android:textColor="#ffffff"
+                android:textSize="10sp"
+                app:tvp_drawable_left_height="@dimen/dp_14"
+                app:tvp_drawable_left_width="@dimen/dp_14" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:focusable="false" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:focusable="false" />
+
+    <!-- 右 -->
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="7.6"
+        android:background="#000000"
+        android:focusable="false"
+        android:scaleType="fitEnd"
+        android:src="@drawable/ic_mine_banner" />
+
+</LinearLayout>

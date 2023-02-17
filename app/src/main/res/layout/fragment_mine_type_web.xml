@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lib.kalu.leanback.round.RoundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_selector_mine_txt"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:rl_corner_bottom_left="@dimen/dp_5"
+    app:rl_corner_bottom_right="@dimen/dp_5"
+    app:rl_corner_top_left="@dimen/dp_5"
+    app:rl_corner_top_right="@dimen/dp_5"
+    app:rl_focus="true"
+    app:rl_rate_height="0.45"
+    app:rl_scale="1.1">
+
+    <!-- 图片 -->
+    <ImageView
+        android:id="@+id/mine_web_icon"
+        android:layout_width="@dimen/dp_36"
+        android:layout_height="@dimen/dp_36"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:focusable="false" />
+
+    <!-- 标题 -->
+    <TextView
+        android:id="@+id/mine_web_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:singleLine="true"
+        android:textColor="@color/color_selector_text_mine"
+        android:textSize="@dimen/sp_18" />
+
+</lib.kalu.leanback.round.RoundLinearLayout>

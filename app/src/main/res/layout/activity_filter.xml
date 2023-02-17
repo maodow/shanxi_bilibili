@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingTop="64dp"
+        android:weightSum="10">
+
+        <!-- 左 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1.6"
+            android:background="#000000"
+            android:orientation="vertical"
+            android:weightSum="10">
+
+            <lib.kalu.leanback.bold.BoldTextView
+                android:id="@+id/filter_title"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+
+            <!-- 二级菜单 -->
+            <lib.kalu.leanback.clazz.VerticalClassLayout
+                android:id="@+id/filter_second"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="8.8"
+                android:fillViewport="true"
+                android:scrollbarStyle="@null"
+                app:cl_dispatch_bottom="true"
+                app:cl_dispatch_top="true"
+                app:cl_item_background_resource="@drawable/bg_filter_class_item"
+                app:cl_item_background_resource_checked="@drawable/bg_filter_class_item_checked"
+                app:cl_item_background_resource_highlight="@drawable/bg_filter_class_item_highlight"
+                app:cl_item_height="50dp"
+                app:cl_item_text_color="#ffffff"
+                app:cl_item_text_color_checked="#1dffdc"
+                app:cl_item_text_color_highlight="#1c967f"
+                app:cl_item_text_size="18sp" />
+
+        </LinearLayout>
+
+        <!-- 右 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8.4"
+            android:orientation="vertical">
+
+            <!-- 热搜 -->
+            <lib.kalu.leanback.tags.TagsLayout
+                android:id="@+id/filter_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="#000000"
+                android:minHeight="0dp"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp_4"
+                android:visibility="gone"
+                app:tag_item_height="38dp"
+                app:tag_text_padding_left="23dp"
+                app:tag_text_padding_right="23dp"
+                app:tag_text_size="17sp" />
+
+            <lib.kalu.leanback.list.RecyclerView
+                android:id="@+id/filter_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#000000"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:padding="48dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- 导航 -->
+    <tv.huan.bilibili.widget.menu.MenuLayout
+        android:id="@+id/main_menu"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:focusable="false"
+        android:paddingLeft="48dp"
+        android:paddingRight="48dp" />
+
+</RelativeLayout>

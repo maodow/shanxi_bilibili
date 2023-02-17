@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">云视听小电视</string>
+
+    <!-- 我的 -->
+    <!--    <string name="format_error">请使用%1$s:%2$s:%3$s的格式</string>-->
+<!--    <string name="mine_vip_date"><font color='#ffffff'>2021-01-01</font><font color='#00ff00'>到期</font></string>-->
+</resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#73000014"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dialog_exit_list"
+        android:layout_width="572dp"
+        android:layout_height="230dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/ic_bg_exit" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_alignTop="@id/dialog_exit_list"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical"
+        android:text="您可能喜欢："
+        android:textColor="@color/color_white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Space
+        android:id="@+id/dialpg_exit_temp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true" />
+
+    <tv.huan.bilibili.widget.anim.AnimTextView
+        android:id="@+id/dialog_exit_cancle"
+        android:layout_width="102dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/dialog_exit_list"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@id/dialpg_exit_temp"
+        android:background="@drawable/bg_selector_exit_button"
+        android:drawablePadding="8dp"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="在看一会儿"
+        android:textColor="#ffffff"
+        android:textSize="14sp" />
+
+    <tv.huan.bilibili.widget.anim.AnimTextView
+        android:id="@+id/dialog_exit_sure"
+        android:layout_width="102dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/dialog_exit_list"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_toRightOf="@id/dialpg_exit_temp"
+        android:background="@drawable/bg_selector_exit_button"
+        android:drawablePadding="8dp"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="残忍离开"
+        android:textColor="#ffffff"
+        android:textSize="14sp" />
+
+</RelativeLayout>
