@@ -9,7 +9,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:longClickable="false"
-    app:rl_focus="true"
+
     app:rl_scale="1.06">
 
     <View

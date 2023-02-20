@@ -1,9 +1,11 @@
 package tv.huan.bilibili.ui.main;
 
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.List;
 
@@ -14,6 +16,8 @@ import lib.kalu.leanback.tab.TabLayout;
 import lib.kalu.leanback.tab.listener.OnTabChangeListener;
 import lib.kalu.leanback.tab.model.TabModel;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.dialog.ExitDialog;
+import tv.huan.bilibili.widget.GeneralGridView;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
 
@@ -51,7 +55,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         getPresenter().autoNext();
         // request
         getPresenter().refreshTabs();
-        getPresenter().requestExit();
         // listener
         PageView pageView = findViewById(R.id.main_content);
         pageView.setOnPageChangeListener(new OnPageChangeListener() {
@@ -82,11 +85,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     @Override
-    public void updateExit(@NonNull String data) {
-        putStringExtra("intent_exit", data);
-    }
-
-    @Override
     public void leftScroll() {
         TabLayout tabLayout = findViewById(R.id.main_tabs);
         tabLayout.scrollLeft();
@@ -101,6 +99,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     @Override
+    public void tabScroll(int position) {
+        TabLayout tabLayout = findViewById(R.id.main_tabs);
+        tabLayout.scrollToPosition(1);
+    }
+
+    @Override
     public void showTitle() {
         setVisibility(R.id.main_search, View.VISIBLE);
         setVisibility(R.id.main_vip, View.VISIBLE);
@@ -112,5 +116,21 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         setVisibility(R.id.main_search, View.GONE);
         setVisibility(R.id.main_vip, View.GONE);
         setVisibility(R.id.main_logo, View.GONE);
+    }
+
+    @Override
+    public void contentScrollTop() {
+        GeneralGridView gridView = findViewById(R.id.general_list);
+        gridView.scrollTop();
+    }
+
+    @Override
+    public void showDialog(@NonNull String data) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ExitDialog dialog = new ExitDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString(ExitDialog.BUNDLE_DATA, data);
+        dialog.setArguments(bundle);
+        dialog.show(fragmentManager, "");
     }
 }

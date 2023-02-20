@@ -7,7 +7,7 @@
     android:focusable="true"
     android:orientation="horizontal"
     app:rl_corner_top_right="8dp"
-    app:rl_focus="true"
+
     app:rl_scale="1.06">
 
     <View

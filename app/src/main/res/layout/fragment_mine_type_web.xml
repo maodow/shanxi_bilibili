@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_selector_common_button"
+    android:background="@drawable/bg_selector_common_background"
     android:focusable="true"
     android:gravity="center"
     android:orientation="vertical"
@@ -11,7 +11,7 @@
     app:rl_corner_bottom_right="@dimen/dp_5"
     app:rl_corner_top_left="@dimen/dp_5"
     app:rl_corner_top_right="@dimen/dp_5"
-    app:rl_focus="true"
+
     app:rl_rate_height="0.45"
     app:rl_scale="1.1">
 

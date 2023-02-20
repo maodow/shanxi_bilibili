@@ -122,18 +122,20 @@ public class MainPresenter extends BasePresenter<MainView> {
                         try {
                             TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
                             int count = tabLayout.getItemCount();
+                            Fragment[] fragments = new Fragment[count];
                             if (count > 0) {
                                 for (int i = 0; i < count; i++) {
                                     String tag = "fragment" + i;
                                     Fragment fragment = getView().findFragmentByTag(tag);
-                                    if (null == fragment)
+                                    if (null == fragment || fragment.isHidden())
                                         continue;
                                     if (fragment instanceof GeneralFragment) {
                                         ((GeneralFragment) fragment).clearMessage();
                                     }
-                                    getView().hideFragment(fragment);
+                                    fragments[i] = fragment;
                                 }
                             }
+                            getView().hideFragment(fragments);
                         } catch (Exception e) {
                             LogUtil.log("MainPresenter => showFragment => " + e.getMessage());
                         }
@@ -232,68 +234,38 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribe());
     }
 
-    protected void requestExit() {
-
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        observableEmitter.onNext(true);
-                    }
-                })
-                .flatMap(new Function<Boolean, Observable<BaseBean<List<ExitBean>>>>() {
-                    @Override
-                    public Observable<BaseBean<List<ExitBean>>> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().getExit(2);
-                    }
-                })
-                .map(new Function<BaseBean<List<ExitBean>>, String>() {
-                    @Override
-                    public String apply(BaseBean<List<ExitBean>> response) {
-                        ArrayList<ExitBean> list = new ArrayList<>();
-                        try {
-                            List<ExitBean> data = response.getData();
-                            list.addAll(data);
-                        } catch (Exception e) {
-                        }
-                        String s = new Gson().toJson(list);
-                        return s;
-                    }
-                })
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) {
-//                        getView().showLoading();
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-//                        getView().hideLoading();
-                    }
-                })
-                .doOnNext(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) {
-                        getView().updateExit(s);
-                    }
-                })
-                .subscribe());
-    }
-
     protected boolean dispatchKey(KeyEvent event) {
-        // back
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            String extra = getView().getStringExtra("intent_exit");
-            if (null != extra && extra.length() > 0) {
-                BaseActivity activity = (BaseActivity) getView();
-                FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                ExitDialog dialog = new ExitDialog();
-                Bundle bundle = new Bundle();
-                bundle.putString(ExitDialog.BUNDLE_DATA, extra);
-                dialog.setArguments(bundle);
-                dialog.show(fragmentManager, "");
+        // menu
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_MENU) {
+            TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+            int checkedIndex = tabLayout.getCheckedIndex();
+            int itemCount = tabLayout.getItemCount();
+            if (itemCount > 0 && checkedIndex != 1) {
+                // 1
+                getView().showTitle();
+                // 2
+                getView().tabScroll(1);
+                // 3
+                getView().contentScrollTop();
                 return true;
+            }
+        }
+        // back
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            boolean visibility = getView().isVisibility(R.id.main_search);
+            if (visibility) {
+                requestExit();
+                return true;
+            } else {
+                TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+                int checkedIndex = tabLayout.getCheckedIndex();
+                if (checkedIndex > 0) {
+                    // 1
+//                    getView().showTitle();
+                    // 2
+                    getView().contentScrollTop();
+                    return true;
+                }
             }
         }
         // up
@@ -348,6 +320,57 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         }
         return false;
+    }
+
+    private void requestExit() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        observableEmitter.onNext(true);
+                    }
+                })
+                .flatMap(new Function<Boolean, Observable<BaseBean<List<ExitBean>>>>() {
+                    @Override
+                    public Observable<BaseBean<List<ExitBean>>> apply(Boolean aBoolean) {
+                        return HttpClient.getHttpClient().getHttpApi().getExit(2);
+                    }
+                })
+                .map(new Function<BaseBean<List<ExitBean>>, String>() {
+                    @Override
+                    public String apply(BaseBean<List<ExitBean>> response) {
+                        ArrayList<ExitBean> list = new ArrayList<>();
+                        try {
+                            List<ExitBean> data = response.getData();
+                            list.addAll(data);
+                        } catch (Exception e) {
+                        }
+                        String s = new Gson().toJson(list);
+                        return s;
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                        getView().showDialog("[]");
+                    }
+                })
+                .doOnNext(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) {
+                        getView().hideLoading();
+                        getView().showDialog(s);
+                    }
+                })
+                .subscribe());
     }
 
     protected void showBackground(int position) {

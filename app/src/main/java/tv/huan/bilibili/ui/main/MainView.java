@@ -13,13 +13,17 @@ public interface MainView extends BaseViewImpl {
 
     void refreshTabs(@NonNull List<TabModel> list, @NonNull int index);
 
-    void updateExit(@NonNull String data);
-
     void leftScroll();
 
     void rightScroll();
 
+    void tabScroll(int position);
+
     void showTitle();
 
     void hideTitle();
+
+    void contentScrollTop();
+
+    void showDialog(@NonNull String data);
 }

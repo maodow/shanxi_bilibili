@@ -11,6 +11,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.VerticalGridView;
 
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.widget.GeneralGridView;
 
 public class GeneralTemplateBottom extends Presenter {
@@ -18,23 +19,34 @@ public class GeneralTemplateBottom extends Presenter {
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
         try {
             Context context = viewGroup.getContext();
-            View view = LayoutInflater.from(context).inflate(R.layout.fragment_general_item_template_bottom, viewGroup, false);
-            view.findViewById(R.id.general_item_template_bottom).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        ViewParent parent = v.getParent().getParent();
-                        if (parent instanceof GeneralGridView) {
-                            ((GeneralGridView) parent).scrollTop();
+            View inflate = LayoutInflater.from(context).inflate(R.layout.fragment_general_item_template_bottom, viewGroup, false);
+
+            // 返回顶部
+            try {
+                inflate.findViewById(R.id.template_bottom_top).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            ((GeneralGridView) v.getParent().getParent()).scrollTop();
+                        } catch (Exception e) {
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                }
-            });
-            return new ViewHolder(view);
+                });
+            } catch (Exception e) {
+            }
+
+            // 搜索
+            try {
+                inflate.findViewById(R.id.template_bottom_search).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtil.nextSearch(v.getContext());
+                    }
+                });
+            } catch (Exception e) {
+            }
+            return new ViewHolder(inflate);
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

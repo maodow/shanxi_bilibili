@@ -6,7 +6,6 @@
     android:background="@drawable/bg_selector_general_template16_card_center"
     android:focusable="true"
     android:orientation="horizontal"
-    app:rl_focus="true"
     app:rl_scale="1.06">
 
     <View

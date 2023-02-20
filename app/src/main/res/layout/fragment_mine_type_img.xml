@@ -9,7 +9,7 @@
     app:rl_corner_bottom_right="@dimen/dp_5"
     app:rl_corner_top_left="@dimen/dp_5"
     app:rl_corner_top_right="@dimen/dp_5"
-    app:rl_focus="true"
+
     app:rl_rate_height="0.56"
     app:rl_scale="1.1">
 

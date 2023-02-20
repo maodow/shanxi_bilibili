@@ -11,7 +11,7 @@
     app:rl_corner_bottom_right="8dp"
     app:rl_corner_top_left="8dp"
     app:rl_corner_top_right="8dp"
-    app:rl_focus="true"
+
     app:rl_scale="1.06">
 
     <!-- 图片 -->

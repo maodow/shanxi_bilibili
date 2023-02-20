@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/item_common_bg_r8"
     android:focusable="false"
-    app:rl_focus="false"
+
     app:rl_scale="1.06">
 
     <!-- 图片 -->

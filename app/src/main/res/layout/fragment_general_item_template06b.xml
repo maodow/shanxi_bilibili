@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<lib.kalu.leanback.round.RoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<tv.huan.bilibili.widget.common.CommonRoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/item_common_bg_r8"
-    android:clickable="true"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:longClickable="false"
-    app:rl_corner_bottom_left="8dp"
-    app:rl_corner_bottom_right="8dp"
-    app:rl_corner_top_left="8dp"
-    app:rl_corner_top_right="8dp"
-    app:rl_focus="true"
-    app:rl_rate_height="1.5"
-    app:rl_scale="1.06">
+    app:rl_rate_height="1.5">
 
     <!-- 图片 -->
     <ImageView
@@ -48,4 +38,4 @@
         android:textColor="#ffffff"
         android:textSize="12sp" />
 
-</lib.kalu.leanback.round.RoundRelativeLayout>
+</tv.huan.bilibili.widget.common.CommonRoundRelativeLayout>

@@ -59,7 +59,7 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
             if (null != mOnScrollTopListener) {
                 ViewHolder viewHolder = findViewHolderForLayoutPosition(1);
-                if (null != viewHolder) {
+                if (null != viewHolder && null != viewHolder.itemView && viewHolder.itemView.getVisibility() == View.VISIBLE) {
                     mOnScrollTopListener.onShow();
                 }
             }

@@ -10,7 +10,7 @@
     android:longClickable="false"
     app:rl_corner_bottom_left="8dp"
     app:rl_corner_top_left="8dp"
-    app:rl_focus="false"
+
     app:rl_scale="1.06">
 
     <!-- 图片 -->

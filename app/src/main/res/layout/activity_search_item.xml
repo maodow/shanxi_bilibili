@@ -12,7 +12,7 @@
     app:rl_corner_bottom_right="8dp"
     app:rl_corner_top_left="8dp"
     app:rl_corner_top_right="8dp"
-    app:rl_focus="true"
+
     app:rl_rate_height="1.6"
     app:rl_scale="1.1">
 

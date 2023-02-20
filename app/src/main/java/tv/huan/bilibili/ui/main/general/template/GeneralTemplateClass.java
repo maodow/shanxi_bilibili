@@ -27,29 +27,33 @@ public class GeneralTemplateClass extends ListGridPresenter<GetSubChannelsByChan
                 @Override
                 public void onClick(View v) {
                     int position = viewHolder.getAbsoluteAdapterPosition();
-                    GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                    JumpUtil.next(v.getContext(), bean);
-                }
-            });
-            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    TextView textView = v.findViewById(R.id.album_item_name_template_class);
-                    textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                    if (position >= 0) {
+                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+                        JumpUtil.next(v.getContext(), bean);
+                    }
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+        try {
+            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    TextView textView = v.findViewById(R.id.template_class_name);
+                    textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                    textView.setTextColor(v.getResources().getColor(hasFocus ? R.color.color_black : R.color.color_aaaaaa));
+                }
+            });
+        } catch (Exception e) {
         }
     }
 
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i, @NonNull int i1) {
         try {
-            TextView textView = view.findViewById(R.id.album_item_name_template_class);
+            TextView textView = view.findViewById(R.id.template_class_name);
             textView.setText(templateBean.getName());
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

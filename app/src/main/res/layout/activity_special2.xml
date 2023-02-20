@@ -45,7 +45,7 @@
                 app:rl_corner_bottom_right="8dp"
                 app:rl_corner_top_left="8dp"
                 app:rl_corner_top_right="8dp"
-                app:rl_focus="false">
+                >
 
                 <tv.huan.bilibili.widget.player.PlayerViewSpecial
                     android:id="@+id/special2_player"

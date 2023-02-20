@@ -24,19 +24,9 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="start" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data
-                    android:host="com.huan.huanshi.index"
-                    android:scheme="huanshi" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!-- 首页 -->

@@ -8,7 +8,7 @@
     android:focusableInTouchMode="true"
     android:longClickable="false"
     android:orientation="vertical"
-    app:rl_focus="true"
+
     app:rl_scale="1.2">
 
     <lib.kalu.leanback.round.RoundRelativeLayout
@@ -25,7 +25,7 @@
         app:rl_corner_bottom_right="8dp"
         app:rl_corner_top_left="8dp"
         app:rl_corner_top_right="8dp"
-        app:rl_focus="false"
+
         app:rl_rate_width="1.78">
 
         <!-- 图片 -->

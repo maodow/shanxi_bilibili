@@ -28,8 +28,10 @@ public class GeneralTemplate3 extends ListGridPresenter<GetSubChannelsByChannelB
                 @Override
                 public void onClick(View v) {
                     int position = viewHolder.getAbsoluteAdapterPosition();
-                    GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                    JumpUtil.next(v.getContext(), bean);
+                    if (position >= 0) {
+                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+                        JumpUtil.next(v.getContext(), bean);
+                    }
                 }
             });
         } catch (Exception e) {
