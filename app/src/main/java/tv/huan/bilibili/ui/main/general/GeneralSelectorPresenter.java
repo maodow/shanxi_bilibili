@@ -12,6 +12,8 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplate16;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate18;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate2;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate20;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate21;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate3;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate4;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate5;
@@ -27,16 +29,9 @@ public class GeneralSelectorPresenter extends lib.kalu.leanback.selector.BasePre
     @Override
     protected void init() {
         // 1
-//        CommonRowPresenter rowPresenter = new CommonRowPresenter();
-//        rowPresenter.setSelectEffectEnabled(false);
-//        rowPresenter.setKeepChildForeground(false);
-//        CommonRowHeaderPresenter headerPresenter = new CommonRowHeaderPresenter(true);
-//        rowPresenter.setHeaderPresenter(headerPresenter);
-//        addPresenterRow(rowPresenter, TypeDouble10Presenter.class);
-
         addPresenterCustom(GeneralTemplateBottom.class, new GeneralTemplateBottom());
         addPresenterCustom(GeneralTemplateClass.GeneralTemplateClassList.class, new GeneralTemplateClass());
-
+        // 2
         addPresenterCustom(GeneralTemplate1.GeneralTemplate1List.class, new GeneralTemplate1());
         addPresenterCustom(GeneralTemplate2.GeneralTemplate2List.class, new GeneralTemplate2());
         addPresenterCustom(GeneralTemplate3.GeneralTemplate3List.class, new GeneralTemplate3());
@@ -55,5 +50,7 @@ public class GeneralSelectorPresenter extends lib.kalu.leanback.selector.BasePre
         addPresenterCustom(GeneralTemplate16.GeneralTemplate16List.class, new GeneralTemplate16());
         addPresenterCustom(GeneralTemplate17.GeneralTemplate17List.class, new GeneralTemplate17());
         addPresenterCustom(GeneralTemplate18.GeneralTemplate18List.class, new GeneralTemplate18());
+        addPresenterCustom(GeneralTemplate20.GeneralTemplate20List.class, new GeneralTemplate20());
+        addPresenterCustom(GeneralTemplate21.GeneralTemplate21List.class, new GeneralTemplate21());
     }
 }

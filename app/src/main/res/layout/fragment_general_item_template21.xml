@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="false"
+    android:orientation="vertical">
+
+    <tv.huan.bilibili.widget.player.PlayerView
+        android:id="@+id/general_template21_player"
+        android:layout_width="@dimen/dp_570"
+        android:layout_height="@dimen/dp_320"
+        android:layout_alignParentRight="true"
+        android:focusable="false" />
+
+    <lib.kalu.leanback.list.RecyclerViewHorizontal
+        android:id="@+id/general_template21_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_111"
+        android:layout_below="@id/general_template21_player"
+        android:focusable="false" />
+
+</RelativeLayout>

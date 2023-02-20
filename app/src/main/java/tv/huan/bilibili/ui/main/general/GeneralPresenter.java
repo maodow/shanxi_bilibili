@@ -41,6 +41,8 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplate16;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate18;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate2;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate20;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate21;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate3;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate4;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate5;
@@ -380,6 +382,8 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
             List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
             int preTemplate = bean.getPreTemplate();
             if (preTemplate == 17) {
+                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 1, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 16, templateData);
             }
@@ -501,11 +505,7 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
         // 模板17
         else if (17 == templateCode) {
             GeneralTemplate17.GeneralTemplate17List list = new GeneralTemplate17.GeneralTemplate17List();
-            try {
-                list.addAll(datas);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            list.addAll(datas);
             object = list;
         }
         // 模板18
@@ -513,6 +513,24 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
             GeneralTemplate18.GeneralTemplate18List list = new GeneralTemplate18.GeneralTemplate18List();
             list.addAll(datas);
             object = list;
+        }
+        // 模板20
+        else if (20 == templateCode) {
+            GeneralTemplate20.GeneralTemplate20List list = new GeneralTemplate20.GeneralTemplate20List();
+            list.addAll(datas);
+            object = list;
+        }
+        // 模板21
+        else if (21 == templateCode) {
+            GeneralTemplate21.GeneralTemplate21List list = new GeneralTemplate21.GeneralTemplate21List();
+            list.addAll(datas);
+            object = list;
+        }
+        // 模板22
+        else if (22 == templateCode) {
+//            GeneralTemplate20.GeneralTemplate20List list = new GeneralTemplate20.GeneralTemplate20List();
+//            list.addAll(datas);
+//            object = list;
         }
 
         if (null != object) {
