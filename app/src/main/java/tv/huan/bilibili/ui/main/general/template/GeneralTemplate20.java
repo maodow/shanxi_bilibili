@@ -139,11 +139,6 @@ public class GeneralTemplate20 extends ListGridPresenter<GetSubChannelsByChannel
     }
 
     @Override
-    public String initHeadAssetTTF(@NonNull Context context) {
-        return null;
-    }
-
-    @Override
     protected RecyclerView.ItemDecoration initItemDecoration() {
 
         return new RecyclerView.ItemDecoration() {
@@ -151,21 +146,20 @@ public class GeneralTemplate20 extends ListGridPresenter<GetSubChannelsByChannel
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-//
-//                int span = initSpan();
-//                int position = parent.getChildAdapterPosition(view);
-//                int index = position % span;
-//
-//                // 超过1行
-//                if (index + 1 == span) {
-//                    outRect.set(20, 0, 0, 20);
-//                } else {
-//                    outRect.set(0, 0, 20, 20);
-//                }
-//
-//                if (index != 0 && (index + 1 != span)) {
-//                    view.setTranslationX(10);
-//                }
+
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+                int position = parent.getChildAdapterPosition(view);
+                if (position == 0) {
+                    outRect.set(0, 0, offset, 0);
+                } else if (position == 1) {
+                    outRect.set(offset, 0, 0, 0);
+                } else if (position == 2) {
+                    outRect.set(0, 0, offset * 2, 0);
+                } else if (position == 5) {
+                    outRect.set(offset * 2, 0, 0, 0);
+                } else {
+                    outRect.set(offset, 0, offset, 0);
+                }
             }
         };
     }

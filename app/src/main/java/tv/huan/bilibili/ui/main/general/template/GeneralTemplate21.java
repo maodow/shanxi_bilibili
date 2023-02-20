@@ -2,6 +2,10 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,6 +71,8 @@ public class GeneralTemplate21 extends Presenter {
             return;
 
         PlayerView playerView = inflate.findViewById(R.id.general_template21_player);
+        String url = "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
+        playerView.start(url);
     }
 
     private void setAdapter(View view) {
@@ -75,6 +82,17 @@ public class GeneralTemplate21 extends Presenter {
 
         RecyclerView recyclerView = view.findViewById(R.id.general_template21_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+//                int position = parent.getChildAdapterPosition(view);
+//                if (position == 0)
+//                    return;
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+                outRect.set(0, 0, offset, 0);
+            }
+        });
         recyclerView.setAdapter(new RecyclerView.Adapter() {
             @NonNull
             @Override
