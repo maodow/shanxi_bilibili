@@ -159,7 +159,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribe());
     }
 
-    protected void refreshTabs() {
+    protected void showTabs() {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<MainBean>() {
                     @Override
@@ -195,7 +195,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                                 tabModel = new TabModelText();
                                 tabModel.setText(bean.getName());
                                 tabModel.setTextColorResourceNormal(R.color.color_bfbfbf);
-                                tabModel.setTextColorResourceChecked(R.color.color_ff6699);
+                                tabModel.setTextColorResourceChecked(R.color.color_bfbfbf);
                                 tabModel.setTextColorResourceFocus(R.color.color_black);
                                 tabModel.setBackgroundResourceFocus(R.drawable.bg_shape_tab_focus);
                                 tabModel.setBackgroundResourceChecked(R.drawable.bg_shape_tab_selected);

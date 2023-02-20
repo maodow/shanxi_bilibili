@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         // auto
         getPresenter().autoNext();
         // request
-        getPresenter().refreshTabs();
+        getPresenter().showTabs();
         // listener
         PageView pageView = findViewById(R.id.main_content);
         pageView.setOnPageChangeListener(new OnPageChangeListener() {
