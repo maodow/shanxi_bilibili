@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<lib.kalu.leanback.round.RoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<tv.huan.bilibili.widget.common.CommonRoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_common_bg_r8"
-    android:clickable="true"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:longClickable="false"
-    app:rl_corner_bottom_left="8dp"
-    app:rl_corner_bottom_right="8dp"
-    app:rl_corner_top_left="8dp"
-    app:rl_corner_top_right="8dp"
-    app:rl_rate_height="0.7"
-    app:rl_scale="1.1">
+    app:rl_rate_height="0.7">
 
     <!-- 图片 -->
     <ImageView
@@ -42,7 +33,7 @@
         android:visibility="invisible" />
 
     <!-- 标题 -->
-    <lib.kalu.leanback.auto.AutoTextView
+    <tv.huan.bilibili.widget.ShandowTextView
         android:id="@+id/center_item_name"
         android:layout_width="match_parent"
         android:layout_height="27dp"
@@ -59,21 +50,6 @@
         android:singleLine="true"
         android:text="-"
         android:textColor="#ffffff"
-        android:textSize="15sp"
-        app:fl_bg_color_focus="#f1f1f1"
-        app:fl_bg_color_normal="#5458A4"
-        app:fl_text_color_focus="#3c3c82"
-        app:fl_text_color_normal="#ffffff" />
+        android:textSize="15sp" />
 
-    <!--    &lt;!&ndash; 标记 &ndash;&gt;-->
-    <!--    <lib.kalu.leanback.auto.AutoImageView-->
-    <!--        android:layout_width="33dp"-->
-    <!--        android:layout_height="33dp"-->
-    <!--        android:layout_alignParentRight="true"-->
-    <!--        android:layout_alignParentBottom="true"-->
-    <!--        android:layout_marginRight="5dp"-->
-    <!--        android:layout_marginBottom="22dp"-->
-    <!--        android:visibility="invisible"-->
-    <!--        android:src="@drawable/ic_filter_flag" />-->
-
-</lib.kalu.leanback.round.RoundRelativeLayout>
+</tv.huan.bilibili.widget.common.CommonRoundRelativeLayout>

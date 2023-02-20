@@ -6,21 +6,41 @@
     android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="false"
-    android:orientation="vertical"
-    app:rl_corner_bottom_left="8dp"
-    app:rl_corner_bottom_right="8dp"
-    app:rl_corner_top_left="8dp"
-    app:rl_corner_top_right="8dp">
+    android:orientation="vertical">
 
-    <tv.huan.bilibili.widget.template17.Template171ImageView
-        android:id="@+id/general_item_template17a_img"
+    <!-- banner -->
+    <tv.huan.bilibili.widget.common.CommonRoundRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:focusable="true"
-        android:scaleType="fitXY"
-        app:riv_corner="8dp"
-        app:riv_focus="true"
-        app:riv_scale="1.06" />
+        app:rl_rate_height="0.56">
+
+        <!-- 图片 -->
+        <ImageView
+            android:id="@+id/general_item_template17a_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:scaleType="centerCrop" />
+
+        <!-- 标题 -->
+        <tv.huan.bilibili.widget.ShandowTextView
+            android:id="@+id/general_item_template17a_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:ellipsize="marquee"
+            android:focusable="false"
+            android:gravity="bottom|left"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_8"
+            android:singleLine="true"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_14" />
+
+    </tv.huan.bilibili.widget.common.CommonRoundRelativeLayout>
 
     <!-- class1 -->
     <lib.kalu.leanback.round.RoundRelativeLayout

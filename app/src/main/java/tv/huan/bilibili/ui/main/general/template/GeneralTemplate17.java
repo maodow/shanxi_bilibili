@@ -472,6 +472,9 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
             // 3
             ImageView vImg = v.findViewById(R.id.general_item_template17a_img);
             GlideUtils.loadHz(vImg.getContext(), templateBean.getNewPicHz(), vImg);
+            // 4
+            TextView vTxt = v.findViewById(R.id.general_item_template17a_name);
+            vTxt.setText(templateBean.getName());
         }
         // center
         else if (viewType == 2) {

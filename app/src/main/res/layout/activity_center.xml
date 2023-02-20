@@ -1,41 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="48dp"
-    android:layout_marginRight="48dp">
+    android:layout_height="match_parent">
 
-    <!-- 导航 -->
-    <tv.huan.bilibili.widget.menu.MenuLayout
-        android:id="@+id/center_menu"
-        android:layout_width="match_parent"
-        android:layout_height="64dp" />
-
-    <CheckBox
+    <!-- 搜索 -->
+    <lib.kalu.leanback.plus.TextViewPlus
+        android:id="@+id/center_search"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_below="@id/center_menu"
-        android:layout_alignParentRight="true"
+        android:layout_height="@dimen/dp_24"
+        android:layout_marginLeft="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_12"
+        android:background="@drawable/bg_selector_common_menu"
+        android:drawableLeft="@drawable/ic_selector_menu_search"
+        android:drawablePadding="@dimen/dp_8"
         android:focusable="false"
         android:gravity="center"
-        android:text="长按【确定键】删除"
-        android:textColor="#ffffff"
-        android:textSize="14sp" />
+        android:paddingLeft="@dimen/dp_14"
+        android:paddingRight="@dimen/dp_14"
+        android:text="搜索"
+        android:textColor="@color/color_selector_text_common"
+        android:textSize="14sp"
+        app:tvp_drawable_left_height="@dimen/dp_14"
+        app:tvp_drawable_left_width="@dimen/dp_14" />
 
+    <!-- vip -->
+    <lib.kalu.leanback.plus.TextViewPlus
+        android:id="@+id/center_vip"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_24"
+        android:layout_alignTop="@id/center_search"
+        android:layout_marginLeft="@dimen/dp_14"
+        android:layout_toRightOf="@id/center_search"
+        android:background="@drawable/bg_selector_common_menu"
+        android:drawableLeft="@drawable/ic_selector_menu_vip"
+        android:drawablePadding="@dimen/dp_8"
+        android:focusable="false"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_14"
+        android:paddingRight="@dimen/dp_14"
+        android:text="开通会员"
+        android:textColor="@color/color_selector_text_common"
+        android:textSize="14sp"
+        app:tvp_drawable_left_height="@dimen/dp_14"
+        app:tvp_drawable_left_width="@dimen/dp_14" />
+
+    <!-- logo -->
+    <ImageView
+        android:id="@+id/center_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_24"
+        android:layout_alignTop="@id/center_search"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_48"
+        android:focusable="false"
+        android:scaleType="fitEnd"
+        android:src="@drawable/ic_logo" />
+
+    <!-- 菜单 -->
     <lib.kalu.leanback.clazz.HorizontalClassLayout
         android:id="@+id/center_tabs"
-        android:layout_width="140dp"
-        android:layout_height="60dp"
-        android:layout_below="@id/center_menu"
-        android:buttonTint="#00000000"
-        android:checked="true"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:layout_below="@id/center_search"
+        android:layout_marginLeft="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_48"
         android:focusable="true"
-        android:gravity="center"
-        android:text="历史观看"
-        android:textColor="#ffffff"
-        android:textSize="14sp" />
+        app:cl_item_background_resource="@drawable/bg_shape_center_tab_normal"
+        app:cl_item_background_resource_checked="@drawable/bg_shape_center_tab_normal"
+        app:cl_item_background_resource_highlight="@drawable/bg_shape_center_tab_focus"
+        app:cl_item_margin="@dimen/dp_24"
+        app:cl_item_text_color="@color/color_aaaaaa"
+        app:cl_item_text_color_checked="@color/color_ff6699"
+        app:cl_item_text_color_highlight="@color/color_black"
+        app:cl_item_text_size="@dimen/sp_16"
+        app:cl_item_width="@dimen/dp_124" />
 
+    <!-- 提示文字 -->
+    <TextView
+        android:id="@+id/center_warning"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:layout_alignTop="@id/center_tabs"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_48"
+        android:focusable="false"
+        android:gravity="center"
+        android:textSize="@dimen/sp_14" />
+
+    <!-- 列表 -->
     <lib.kalu.leanback.list.RecyclerViewGrid
         android:id="@+id/center_list"
         android:layout_width="match_parent"
@@ -43,7 +98,18 @@
         android:layout_below="@id/center_tabs"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp" />
+        android:paddingLeft="@dimen/dp_48"
+        android:paddingTop="@dimen/dp_20"
+        android:paddingRight="@dimen/dp_48"
+        android:paddingBottom="@dimen/dp_20" />
+
+    <!-- -->
+    <ImageView
+        android:id="@+id/center_nodata"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_177"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:scaleType="fitCenter" />
 
 </RelativeLayout>

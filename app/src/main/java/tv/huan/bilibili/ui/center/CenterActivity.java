@@ -1,6 +1,7 @@
 package tv.huan.bilibili.ui.center;
 
 import android.view.KeyEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -25,9 +26,10 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
 
     @Override
     public void initData() {
-        getPresenter().setTabs();
+        getPresenter().showWarning();
+        getPresenter().showTabs();
         getPresenter().setAdapter();
-        getPresenter().requestData();
+        getPresenter().request();
     }
 
     @Override
@@ -38,5 +40,10 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     @Override
     public void del(@NonNull int index) {
         notifyItemRemoved(R.id.center_list, index);
+    }
+
+    @Override
+    public void checkNodata(boolean show) {
+        setVisibility(R.id.center_nodata, show ? View.VISIBLE : View.GONE);
     }
 }

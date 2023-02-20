@@ -2,6 +2,8 @@ package tv.huan.bilibili.ui.center;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +28,14 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.leanback.clazz.HorizontalClassLayout;
+import lib.kalu.leanback.tab.TabLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
 public class CenterPresenter extends BasePresenter<CenterView> {
 
@@ -41,7 +45,7 @@ public class CenterPresenter extends BasePresenter<CenterView> {
         super(baseView);
     }
 
-    protected final void setTabs() {
+    protected final void showTabs() {
 
         int position = getView().getIntExtra(CenterActivity.INTENT_SELECT, 0);
         if (position < 0 || position < 1) {
@@ -51,11 +55,17 @@ public class CenterPresenter extends BasePresenter<CenterView> {
         for (int i = 0; i < 2; i++) {
             lib.kalu.leanback.clazz.ClassBean classApi = new lib.kalu.leanback.clazz.ClassBean();
             classApi.setChecked(position == 0);
-            classApi.setText("tab" + position);
+            classApi.setText(i == 0 ? "观看历史" : "我的收藏");
             apis.add(classApi);
         }
         HorizontalClassLayout classLayout = getView().findViewById(R.id.center_tabs);
         classLayout.update(apis);
+    }
+
+    protected void showWarning() {
+        String s = "<font color='#aaaaaa'>长按</font><font color='#ff6699'>【确定键】</font><font color='#aaaaaa'>删除</font>";
+        Spanned html = Html.fromHtml(s);
+        getView().setText(R.id.center_warning, html);
     }
 
     protected void setAdapter() {
@@ -119,112 +129,60 @@ public class CenterPresenter extends BasePresenter<CenterView> {
         });
     }
 
-    protected void requestData() {
-        int select = getView().getIntExtra(CenterActivity.INTENT_SELECT, 0);
-        requestData(select);
-    }
+    protected void request() {
 
-    protected void requestData(int position) {
-        // 观看历史
-        if (position == 1) {
-            addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                        @Override
-                        public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                            observableEmitter.onNext(true);
-                        }
-                    })
-                    .flatMap(new Function<Boolean, Observable<BaseBean<FavBean>>>() {
-                        @Override
-                        public Observable<BaseBean<FavBean>> apply(Boolean aBoolean) {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Integer>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Integer> observableEmitter) {
+                        int select = getView().getIntExtra(CenterActivity.INTENT_SELECT, 0);
+                        observableEmitter.onNext(select);
+                    }
+                })
+                .flatMap(new Function<Integer, Observable<BaseBean<FavBean>>>() {
+                    @Override
+                    public Observable<BaseBean<FavBean>> apply(Integer v) {
+                        if (v == 0) {
+                            return HttpClient.getHttpClient().getHttpApi().getBookmark(0, Integer.MAX_VALUE, "");
+                        } else {
                             return HttpClient.getHttpClient().getHttpApi().getFavList(0, Integer.MAX_VALUE, "1");
                         }
-                    })
-                    .map(new Function<BaseBean<FavBean>, Boolean>() {
-                        @Override
-                        public Boolean apply(BaseBean<FavBean> response) {
-                            try {
-                                List<FavBean.ItemBean> rows = response.getData().getRows();
-                                mDatas.clear();
-                                mDatas.addAll(rows);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            return true;
+                    }
+                })
+                .map(new Function<BaseBean<FavBean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseBean<FavBean> response) {
+                        try {
+                            List<FavBean.ItemBean> rows = response.getData().getRows();
+                            mDatas.clear();
+                            mDatas.addAll(rows);
+                        } catch (Exception e) {
                         }
-                    })
-                    .delay(40, TimeUnit.MILLISECONDS)
-                    .compose(ComposeSchedulers.io_main())
-                    .doOnSubscribe(new Consumer<Disposable>() {
-                        @Override
-                        public void accept(Disposable disposable) {
-                            getView().showLoading();
-                        }
-                    })
-                    .doOnError(new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) {
-                            getView().hideLoading();
-                        }
-                    })
-                    .doOnNext(new Consumer<Boolean>() {
-                        @Override
-                        public void accept(Boolean aBoolean) {
-                            getView().hideLoading();
-                            getView().refreshContent();
-                        }
-                    })
-                    .subscribe());
-        }
-        // 我的收藏
-        else {
-            addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                        @Override
-                        public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                            observableEmitter.onNext(true);
-                        }
-                    })
-                    .flatMap(new Function<Boolean, Observable<BaseBean<FavBean>>>() {
-                        @Override
-                        public Observable<BaseBean<FavBean>> apply(Boolean aBoolean) {
-                            return HttpClient.getHttpClient().getHttpApi().getBookmark(0, Integer.MAX_VALUE, "");
-                        }
-                    })
-                    .map(new Function<BaseBean<FavBean>, Boolean>() {
-                        @Override
-                        public Boolean apply(BaseBean<FavBean> response) {
-                            try {
-                                List<FavBean.ItemBean> rows = response.getData().getRows();
-                                mDatas.clear();
-                                mDatas.addAll(rows);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            return true;
-                        }
-                    })
-                    .delay(40, TimeUnit.MILLISECONDS)
-                    .compose(ComposeSchedulers.io_main())
-                    .doOnSubscribe(new Consumer<Disposable>() {
-                        @Override
-                        public void accept(Disposable disposable) {
-                            getView().showLoading();
-                        }
-                    })
-                    .doOnError(new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) {
-                            getView().hideLoading();
-                        }
-                    })
-                    .doOnNext(new Consumer<Boolean>() {
-                        @Override
-                        public void accept(Boolean aBoolean) {
-                            getView().hideLoading();
-                            getView().refreshContent();
-                        }
-                    })
-                    .subscribe());
-        }
+                        return mDatas.size() > 0;
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                    }
+                })
+                .doOnNext(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) {
+                        getView().hideLoading();
+                        getView().refreshContent();
+                        getView().checkNodata(aBoolean);
+                    }
+                })
+                .subscribe());
     }
 
     private void refreshDel(boolean show) {
@@ -275,9 +233,51 @@ public class CenterPresenter extends BasePresenter<CenterView> {
         }
         // up
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+            int focusId = getView().getCurrentFocusId();
+            LogUtil.log("CenterPresenter => dispatchKeyEvent => up_action_down => ");
+            if (focusId == R.id.center_tabs) {
+                HorizontalClassLayout classLayout = (HorizontalClassLayout) getView().getCurrentFocus();
+                LogUtil.log("CenterPresenter => dispatchKeyEvent => up_action_down => classLayout = " + classLayout);
+                int index = classLayout.getCheckedIndex();
+                classLayout.checked(index);
+                getView().setFocusable(R.id.center_vip, index > 0);
+                getView().setFocusable(R.id.center_search, index <= 0);
+            } else if (focusId == R.id.center_search || focusId == R.id.center_vip) {
+                return true;
+            }
         }
         // down
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            int focusId = getView().getCurrentFocusId();
+            if (focusId == R.id.center_search || focusId == R.id.center_vip) {
+                LogUtil.log("CenterPresenter => dispatchKeyEvent => down_action_down => ");
+                getView().setFocusable(R.id.center_vip, false);
+                getView().setFocusable(R.id.center_search, false);
+            }
+        }
+        // right
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            int focusId = getView().getCurrentFocusId();
+            LogUtil.log("CenterPresenter => dispatchKeyEvent => right_action_down => " + getView().getCurrentFocus());
+            if (focusId == R.id.center_search) {
+                getView().setFocusable(R.id.center_vip, true);
+                getView().setFocusable(R.id.center_search, false);
+                return true;
+            } else if (focusId == R.id.center_vip) {
+                return true;
+            }
+        }
+        // left
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+            int focusId = getView().getCurrentFocusId();
+            LogUtil.log("CenterPresenter => dispatchKeyEvent => left_action_down => " + getView().getCurrentFocus());
+            if (focusId == R.id.center_vip) {
+                getView().setFocusable(R.id.center_search, true);
+                getView().setFocusable(R.id.center_vip, false);
+                return true;
+            } else if (focusId == R.id.center_search) {
+                return true;
+            }
         }
         return false;
     }

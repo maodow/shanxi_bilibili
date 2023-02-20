@@ -8,4 +8,6 @@ public interface CenterView extends BaseViewImpl {
     void refreshContent();
 
     void del(@NonNull int index);
+
+    void checkNodata(boolean show);
 }
