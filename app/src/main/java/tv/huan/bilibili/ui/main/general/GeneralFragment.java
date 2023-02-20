@@ -1,15 +1,13 @@
 package tv.huan.bilibili.ui.main.general;
 
-import android.util.Log;
-
 import androidx.annotation.Keep;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import lib.kalu.frame.mvp.BaseFragment;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.ui.main.MainActivity;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.GeneralGridView;
+import tv.huan.bilibili.widget.player.PlayerView;
 
 @Keep
 public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter> implements GeneralView {
@@ -26,13 +24,12 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
 
     @Override
     public void initData() {
-
         // adapter
         getPresenter().setAdapter();
         // request
         getPresenter().request();
         // listener
-        tv.huan.bilibili.widget.GeneralGridView  gridView = findViewById(R.id.general_list);
+        tv.huan.bilibili.widget.GeneralGridView gridView = findViewById(R.id.general_list);
         gridView.setOnScrollTopListener(new GeneralGridView.OnScrollTopListener() {
             @Override
             public void onShow() {
@@ -47,13 +44,25 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
     }
 
     @Override
-    public void clearMessage() {
-        Log.e("GeneralFragment", "clearMessage => this = " + this);
+    public void refreshContent() {
+        notifyDataSetChanged(R.id.general_list);
     }
 
     @Override
-    public void refreshContent() {
-        Log.e("GeneralFragment", "refreshContent => " + R.id.general_list);
-        notifyDataSetChanged(R.id.general_list);
+    public void onHide() {
+        LogUtil.log("GeneralFragment => onHide => "+this);
+        PlayerView playerView = findViewById(R.id.general_template21_player);
+        if (null != playerView) {
+            playerView.pause();
+        }
+    }
+
+    @Override
+    public void onShow() {
+        LogUtil.log("GeneralFragment => onShow => "+this);
+        PlayerView playerView = findViewById(R.id.general_template21_player);
+        if (null != playerView) {
+            playerView.resume();
+        }
     }
 }

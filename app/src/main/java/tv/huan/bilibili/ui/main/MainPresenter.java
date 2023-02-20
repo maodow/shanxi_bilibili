@@ -130,7 +130,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                                     if (null == fragment || fragment.isHidden())
                                         continue;
                                     if (fragment instanceof GeneralFragment) {
-                                        ((GeneralFragment) fragment).clearMessage();
+                                        ((GeneralFragment) fragment).onHide();
                                     }
                                     fragments[i] = fragment;
                                 }
@@ -154,6 +154,9 @@ public class MainPresenter extends BasePresenter<MainView> {
                         LogUtil.log("MainPresenter => showFragment => succ");
                         LogUtil.log("MainPresenter => showFragment => fragment = " + fragment);
                         getView().showFragment(fragment);
+                        if (fragment instanceof GeneralFragment) {
+                            ((GeneralFragment) fragment).onShow();
+                        }
                     }
                 })
                 .subscribe());

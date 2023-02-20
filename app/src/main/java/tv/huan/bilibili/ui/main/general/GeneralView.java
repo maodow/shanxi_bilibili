@@ -9,5 +9,7 @@ public interface GeneralView extends BaseViewImpl {
 
     void refreshContent();
 
-    void clearMessage();
+    void onHide();
+
+    void onShow();
 }
