@@ -1,6 +1,7 @@
 package tv.huan.bilibili.ui.detail.template;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +14,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.leanback.widget.Presenter;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.listener.OnChangeListener;
 import lib.kalu.mediaplayer.util.ActivityUtils;
@@ -104,11 +113,10 @@ public class DetailTemplatePlayer extends Presenter {
                     playerView.setOnChangeListener(new OnChangeListener() {
                         @Override
                         public void onWindow(int state) {
-                            if(state == PlayerType.WindowType.FULL){
+                            if (state == PlayerType.WindowType.FULL) {
                                 playerView.setFocusable(true);
                                 playerView.requestFocus();
-                            }
-                            else if(state == PlayerType.WindowType.NORMAL){
+                            } else if (state == PlayerType.WindowType.NORMAL) {
                                 playerView.setFocusable(false);
                                 v.requestFocus();
                             }
@@ -131,15 +139,81 @@ public class DetailTemplatePlayer extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
         LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
+        delayPlayer(viewHolder, o);
+    }
+
+    private void delayPlayer(ViewHolder viewHolder, Object o) {
+        Observable.create(new ObservableOnSubscribe<String>() {
+                    @SuppressLint("CheckResult")
+                    @Override
+                    public void subscribe(ObservableEmitter<String> observableEmitter) throws Exception {
+
+                        PlayerView videoLayout = viewHolder.view.findViewById(R.id.detail_player_item_video);
+                        String url = videoLayout.getUrl();
+                        if (null != url && url.length() > 0)
+                            throw new Exception();
+
+                        String cdnUrl;
+                        try {
+                            DetailTemplatePlayerObject data = (DetailTemplatePlayerObject) o;
+                            cdnUrl = data.getCdnUrl();
+                        } catch (Exception e) {
+                            cdnUrl = null;
+                        }
+                        observableEmitter.onNext(cdnUrl);
+                    }
+                })
+                .delay(4, TimeUnit.SECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+//                        View view = viewHolder.view.findViewById(R.id.detail_player_item_vip);
+//                        view.setVisibility(data.showVip ? View.VISIBLE : View.GONE);
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        PlayerView videoLayout = viewHolder.view.findViewById(R.id.detail_player_item_video);
+                        videoLayout.restart();
+                    }
+                })
+                .doOnNext(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) {
+                        hideUI(viewHolder);
+                        startPlayer(viewHolder, s);
+                    }
+                })
+                .subscribe();
+
+    }
+
+    private void hideUI(ViewHolder viewHolder) {
         try {
-            DetailTemplatePlayerObject data = (DetailTemplatePlayerObject) o;
-            LogUtil.log("DetailTemplatePlayer => cdnUrl = " + data.cdnUrl);
-            LogUtil.log("DetailTemplatePlayer => showVip = " + data.showVip);
-            View view = viewHolder.view.findViewById(R.id.detail_player_item_vip);
-            view.setVisibility(data.showVip ? View.VISIBLE : View.GONE);
+            viewHolder.view.findViewById(R.id.detail_player_item_logo).setVisibility(View.GONE);
+            viewHolder.view.findViewById(R.id.detail_player_item_img).setVisibility(View.GONE);
+            viewHolder.view.findViewById(R.id.detail_player_item_info).setVisibility(View.GONE);
+            viewHolder.view.findViewById(R.id.detail_player_item_position).setVisibility(View.GONE);
+            viewHolder.view.findViewById(R.id.detail_player_item_sign).setVisibility(View.GONE);
+        } catch (Exception e) {
+        }
+    }
+
+    private void startPlayer(ViewHolder viewHolder, String s) {
+        try {
             PlayerView videoLayout = viewHolder.view.findViewById(R.id.detail_player_item_video);
-            String cdnUrl = data.getCdnUrl();
-            videoLayout.start(cdnUrl);
+            videoLayout.start(s);
+        } catch (Exception e) {
+        }
+    }
+
+    private void stopPlayer(ViewHolder viewHolder, Object o) {
+        try {
+            ViewGroup viewGroup = (ViewGroup) viewHolder.view.getParent().getParent().getParent();
+            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            playerView.stopFloat();
         } catch (Exception e) {
         }
     }
