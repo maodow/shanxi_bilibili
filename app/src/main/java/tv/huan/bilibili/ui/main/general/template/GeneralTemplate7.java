@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,29 +35,33 @@ public class GeneralTemplate7 extends ListGridPresenter<GetSubChannelsByChannelB
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+        try {
+            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    int position = viewHolder.getAbsoluteAdapterPosition();
+                    if (position >= 0) {
+                        TextView textView = view.findViewById(R.id.general_template7_name);
+                        textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                    }
+                }
+            });
+        } catch (Exception e) {
         }
     }
 
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i, @NonNull int i1) {
         try {
-            @IdRes
-            int txt = (i == 0 ? -1 : R.id.album_item_name_template72);
-            if (txt != -1) {
-                TextView textView = view.findViewById(txt);
-                textView.setText(templateBean.getName());
-            }
-            @IdRes
-            int img = (i == 0 ? R.id.album_item_img_template71 : R.id.album_item_img_template72);
-            ImageView imageView = view.findViewById(img);
-            if (i == 0) {
-                GlideUtils.loadHz(imageView.getContext(), templateBean.getNewPicHz(), imageView);
-            } else {
-                GlideUtils.loadVt(imageView.getContext(), templateBean.getNewPicHz(), imageView);
-            }
+            TextView textView = view.findViewById(R.id.general_template7_name);
+            textView.setText(templateBean.getName());
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+        try {
+            ImageView imageView = view.findViewById(R.id.general_template7_img);
+            GlideUtils.loadHz(imageView.getContext(), i == 0 ? templateBean.getNewPicHz() : templateBean.getNewPicHz(), imageView);
+        } catch (Exception e) {
         }
     }
 
@@ -113,20 +118,28 @@ public class GeneralTemplate7 extends ListGridPresenter<GetSubChannelsByChannelB
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
 
-                Context context = view.getContext();
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72);
+                int v = offset / 8;
+                outRect.set(0, 0, offset, offset);
                 int position = parent.getChildAdapterPosition(view);
-                int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
 
-                if (position > 0 && position <= 4) {
-                    if (position == 4) {
-                        outRect.set(offset, 0, 0, offset);
-                    } else {
-                        outRect.set(0, 0, offset, offset);
-                    }
+                if (position == 0) {
+                    outRect.set(0, 0, 0, 0);
+                } else if (position == 1) {
+                    outRect.set(0, 0, v * 2, 0);
+                } else if (position == 4) {
+                    outRect.set(v * 2, 0, 0, 0);
+                } else {
+                    outRect.set(v, 0, v, 0);
                 }
 
-                if (position != 0 && position != 1 && position != 4) {
-                    view.setTranslationX(offset / 2);
+                int x = v * 2 / 3;
+                if (position == 2) {
+                    view.setTranslationX(-x);
+                } else if (position == 5) {
+                    view.setTranslationX(x);
+                } else {
+                    view.setTranslationX(0);
                 }
             }
         };

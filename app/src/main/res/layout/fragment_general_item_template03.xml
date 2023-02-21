@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
+    android:layout_marginBottom="@dimen/dp_24"
     app:rl_rate_height="0.6">
 
     <!-- 图片 -->
     <ImageView
-        android:id="@+id/album_item_img_template3"
+        android:id="@+id/general_template3_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="false"
@@ -19,7 +20,7 @@
 
     <!-- 标题 -->
     <tv.huan.bilibili.widget.ShandowTextView
-        android:id="@+id/album_item_name_template3"
+        android:id="@+id/general_template3_name"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
         android:layout_alignParentLeft="true"
@@ -27,8 +28,6 @@
         android:ellipsize="marquee"
         android:focusable="false"
         android:gravity="bottom|left"
-
-        android:text="-"
         android:textColor="@color/color_white"
         android:textSize="@dimen/sp_14" />
 
