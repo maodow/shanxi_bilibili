@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.main.general;
 import androidx.annotation.Keep;
 
 import lib.kalu.frame.mvp.BaseFragment;
+import lib.kalu.mediaplayer.core.player.VideoLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.LogUtil;
@@ -50,19 +51,27 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
 
     @Override
     public void onHide() {
-        LogUtil.log("GeneralFragment => onHide => "+this);
-        PlayerView playerView = findViewById(R.id.general_template21_player);
-        if (null != playerView) {
-            playerView.pause();
+        LogUtil.log("GeneralFragment => onHide => " + this);
+        VideoLayout v1 = findViewById(R.id.general_template21_player);
+        if (null != v1) {
+            v1.pause();
+        }
+        VideoLayout v2 = findViewById(R.id.general_template22_player);
+        if (null != v2) {
+            v2.pause();
         }
     }
 
     @Override
     public void onShow() {
-        LogUtil.log("GeneralFragment => onShow => "+this);
-        PlayerView playerView = findViewById(R.id.general_template21_player);
-        if (null != playerView) {
-            playerView.resume();
+        LogUtil.log("GeneralFragment => onShow => " + this);
+        VideoLayout v1 = findViewById(R.id.general_template21_player);
+        if (null != v1) {
+            v1.resume();
+        }
+        VideoLayout v2 = findViewById(R.id.general_template22_player);
+        if (null != v2) {
+            v2.resume();
         }
     }
 }

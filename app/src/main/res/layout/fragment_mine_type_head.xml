@@ -75,16 +75,15 @@
 
         <!-- 中 -->
         <tv.huan.bilibili.widget.anim.AnimTextView
-            android:id="@+id/mine_head_vip"
+            android:id="@+id/mine_head_shopping"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_selector_exit_button"
+            android:background="@drawable/bg_selector_shopping"
             android:focusable="true"
             android:gravity="center"
-            android:text="续费会员"
-            android:textColor="#ffffff"
-            android:textSize="@dimen/sp_12" />
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_20" />
 
         <Space
             android:layout_width="match_parent"

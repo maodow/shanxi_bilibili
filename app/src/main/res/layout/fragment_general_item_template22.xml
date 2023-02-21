@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:focusable="false">
+    android:focusable="false"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <tv.huan.bilibili.widget.player.PlayerViewLite
-        android:id="@+id/general_template21_player"
-        android:layout_width="@dimen/dp_534"
-        android:layout_height="@dimen/dp_300"
-        android:layout_alignParentRight="true"
+        android:id="@+id/general_template22_player"
+        android:layout_width="@dimen/dp_450"
+        android:layout_height="@dimen/dp_256"
         android:layout_marginTop="@dimen/dp_10"
-        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_27"
         android:focusable="false" />
 
     <lib.kalu.leanback.list.RecyclerView
-        android:id="@+id/general_template21_list"
+        android:id="@+id/general_template22_list"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_111"
         android:layout_below="@id/general_template21_player"
@@ -24,4 +25,4 @@
         android:clipToPadding="false"
         android:focusable="false" />
 
-</RelativeLayout>
+</LinearLayout>

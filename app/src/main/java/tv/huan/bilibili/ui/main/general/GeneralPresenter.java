@@ -43,6 +43,7 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplate18;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate2;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate20;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate21;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate22;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate3;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate4;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate5;
@@ -382,6 +383,7 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
             List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
             int preTemplate = bean.getPreTemplate();
             if (preTemplate == 17) {
+                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
                 addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
                 addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 1, templateData);
@@ -528,9 +530,9 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
         }
         // 模板22
         else if (22 == templateCode) {
-//            GeneralTemplate20.GeneralTemplate20List list = new GeneralTemplate20.GeneralTemplate20List();
-//            list.addAll(datas);
-//            object = list;
+            GeneralTemplate22.GeneralTemplate22List list = new GeneralTemplate22.GeneralTemplate22List();
+            list.addAll(datas);
+            object = list;
         }
 
         if (null != object) {

@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,27 +43,110 @@ public class GeneralTemplate20 extends ListGridPresenter<GetSubChannelsByChannel
         }
         // type1
         else {
-            // test1
-            view.findViewById(R.id.general_template20b_type1_item1).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.general_template20b_type1_item2).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.general_template20b_type1_item3).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.general_template20b_type2_item1).setVisibility(View.GONE);
-            view.findViewById(R.id.general_template20b_type2_item2).setVisibility(View.GONE);
-            view.findViewById(R.id.general_template20b_type3).setVisibility(View.GONE);
-            // test2
-//            view.findViewById(R.id.general_template20b_type1_item1).setVisibility(View.GONE);
-//            view.findViewById(R.id.general_template20b_type1_item2).setVisibility(View.GONE);
-//            view.findViewById(R.id.general_template20b_type1_item3).setVisibility(View.GONE);
-//            view.findViewById(R.id.general_template20b_type2_item1).setVisibility(View.VISIBLE);
-//            view.findViewById(R.id.general_template20b_type2_item2).setVisibility(View.VISIBLE);
-//            view.findViewById(R.id.general_template20b_type3).setVisibility(View.GONE);
-            // test3
-//            view.findViewById(R.id.general_template20b_type1_item1).setVisibility(View.GONE);
-//            view.findViewById(R.id.general_template20b_type1_item2).setVisibility(View.GONE);
-//            view.findViewById(R.id.general_template20b_type1_item3).setVisibility(View.GONE);
-//            view.findViewById(R.id.general_template20b_type2_item1).setVisibility(View.GONE);
-//            view.findViewById(R.id.general_template20b_type2_item2).setVisibility(View.GONE);
-//            view.findViewById(R.id.general_template20b_type3).setVisibility(View.VISIBLE);
+            int num = 2;
+            view.findViewById(R.id.general_template20b_type1_item1).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.general_template20b_type1_item2).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.general_template20b_type1_item3).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.general_template20b_type2_item1).setVisibility(num == 1 ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.general_template20b_type2_item2).setVisibility(num == 1 ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.general_template20b_type3).setVisibility(num <= 0 ? View.VISIBLE : View.GONE);
+
+            // type1
+            try {
+                view.findViewById(R.id.general_template20b_type1_item1).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean b) {
+                        TextView v1 = v.findViewById(R.id.general_template20b_type1_item1_name);
+                        v1.setActivated(b);
+                        v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        TextView v2 = v.findViewById(R.id.general_template20b_type1_item1_date);
+                        v2.setActivated(b);
+                        v2.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        v2.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                    }
+                });
+            } catch (Exception e) {
+            }
+            // type1
+            try {
+                view.findViewById(R.id.general_template20b_type1_item2).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean b) {
+                        TextView v1 = v.findViewById(R.id.general_template20b_type1_item2_name);
+                        v1.setActivated(b);
+                        v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        TextView v2 = v.findViewById(R.id.general_template20b_type1_item2_date);
+                        v2.setActivated(b);
+                        v2.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        v2.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                    }
+                });
+            } catch (Exception e) {
+            }
+            // type1
+            try {
+                view.findViewById(R.id.general_template20b_type1_item3).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean b) {
+                        TextView v1 = v.findViewById(R.id.general_template20b_type1_item3_name);
+                        v1.setActivated(b);
+                        v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                    }
+                });
+            } catch (Exception e) {
+            }
+
+            // type2
+            try {
+                view.findViewById(R.id.general_template20b_type2_item1).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean b) {
+                        TextView v1 = v.findViewById(R.id.general_template20b_type2_item1_name);
+                        v1.setActivated(b);
+                        v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        TextView v2 = v.findViewById(R.id.general_template20b_type2_item1_date);
+                        v2.setActivated(b);
+                        v2.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        v2.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                    }
+                });
+            } catch (Exception e) {
+            }
+            // type2
+            try {
+                view.findViewById(R.id.general_template20b_type2_item2).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean b) {
+                        TextView v1 = v.findViewById(R.id.general_template20b_type2_item2_name);
+                        v1.setActivated(b);
+                        v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        TextView v2 = v.findViewById(R.id.general_template20b_type2_item2_info);
+                        v2.setActivated(b);
+                        v2.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        v2.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                    }
+                });
+            } catch (Exception e) {
+            }
+
+            // type3
+            try {
+                view.findViewById(R.id.general_template20b_type3).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean b) {
+                        TextView textView = v.findViewById(R.id.general_template20b_type3_name);
+                        textView.setActivated(b);
+                        textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        textView.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                    }
+                });
+            } catch (Exception e) {
+            }
         }
     }
 

@@ -2,10 +2,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,19 +21,17 @@ import lib.kalu.mediaplayer.core.player.VideoLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
-import tv.huan.bilibili.utils.JumpUtil;
-import tv.huan.bilibili.widget.GeneralGridView;
 import tv.huan.bilibili.widget.player.PlayerView;
 
-public class GeneralTemplate21 extends Presenter {
+public class GeneralTemplate22 extends Presenter {
 
-    private GeneralTemplate21List mData = new GeneralTemplate21List();
+    private List mData = new ArrayList();
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
         try {
             Context context = viewGroup.getContext();
-            View inflate = LayoutInflater.from(context).inflate(R.layout.fragment_general_item_template21, viewGroup, false);
+            View inflate = LayoutInflater.from(context).inflate(R.layout.fragment_general_item_template22, viewGroup, false);
             setAdapter(inflate);
             return new ViewHolder(inflate);
         } catch (Exception e) {
@@ -60,7 +54,7 @@ public class GeneralTemplate21 extends Presenter {
         try {
             mData.clear();
             mData.addAll((List) o);
-            RecyclerView recyclerView = view.findViewById(R.id.general_template21_list);
+            RecyclerView recyclerView = view.findViewById(R.id.general_template22_list);
             recyclerView.getAdapter().notifyItemRangeChanged(0, mData.size());
         } catch (Exception e) {
         }
@@ -71,7 +65,7 @@ public class GeneralTemplate21 extends Presenter {
         if (null == inflate)
             return;
 
-        VideoLayout playerView = inflate.findViewById(R.id.general_template21_player);
+        VideoLayout playerView = inflate.findViewById(R.id.general_template22_player);
         String url = "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
         playerView.start(url);
     }
@@ -81,7 +75,7 @@ public class GeneralTemplate21 extends Presenter {
         if (null == view)
             return;
 
-        RecyclerView recyclerView = view.findViewById(R.id.general_template21_list);
+        RecyclerView recyclerView = view.findViewById(R.id.general_template22_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false) {
             @Override
             public boolean canScrollVertically() {
@@ -105,7 +99,7 @@ public class GeneralTemplate21 extends Presenter {
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_general_item_template21_item, null);
+                View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_general_item_template22_item, null);
                 return new RecyclerView.ViewHolder(inflate) {
                 };
             }
@@ -115,13 +109,13 @@ public class GeneralTemplate21 extends Presenter {
 
                 try {
                     GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = (GetSubChannelsByChannelBean.ListBean.TemplateBean) mData.get(position);
-                    TextView textView = holder.itemView.findViewById(R.id.general_template21_item_name);
+                    TextView textView = holder.itemView.findViewById(R.id.general_template22_item_name);
                     textView.setText(templateBean.getName());
                 } catch (Exception e) {
                 }
                 try {
                     GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = (GetSubChannelsByChannelBean.ListBean.TemplateBean) mData.get(position);
-                    ImageView imageView = holder.itemView.findViewById(R.id.general_template21_item_img);
+                    ImageView imageView = holder.itemView.findViewById(R.id.general_template22_item_img);
                     GlideUtils.loadHz(imageView.getContext(), templateBean.getNewPicHz(), imageView);
                 } catch (Exception e) {
                 }
@@ -139,6 +133,6 @@ public class GeneralTemplate21 extends Presenter {
 
     }
 
-    public static class GeneralTemplate21List extends ArrayList {
+    public static class GeneralTemplate22List extends ArrayList {
     }
 }

@@ -14,6 +14,7 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplate18;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate2;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate20;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate21;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate22;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate3;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate4;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate5;
@@ -52,5 +53,6 @@ public class GeneralSelectorPresenter extends lib.kalu.leanback.selector.BasePre
         addPresenterCustom(GeneralTemplate18.GeneralTemplate18List.class, new GeneralTemplate18());
         addPresenterCustom(GeneralTemplate20.GeneralTemplate20List.class, new GeneralTemplate20());
         addPresenterCustom(GeneralTemplate21.GeneralTemplate21List.class, new GeneralTemplate21());
+        addPresenterCustom(GeneralTemplate22.GeneralTemplate22List.class, new GeneralTemplate22());
     }
 }

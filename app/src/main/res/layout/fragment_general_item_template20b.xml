@@ -29,6 +29,7 @@
         app:rl_scale="1.1">
 
         <TextView
+            android:id="@+id/general_template20b_type1_item1_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/dp_3"
@@ -43,6 +44,7 @@
             android:textSize="@dimen/sp_14" />
 
         <TextView
+            android:id="@+id/general_template20b_type1_item1_date"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_3"
@@ -77,6 +79,7 @@
         app:rl_scale="1.1">
 
         <TextView
+            android:id="@+id/general_template20b_type1_item2_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/dp_3"
@@ -91,6 +94,7 @@
             android:textSize="@dimen/sp_14" />
 
         <TextView
+            android:id="@+id/general_template20b_type1_item2_date"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_3"
@@ -107,23 +111,36 @@
     </lib.kalu.leanback.round.RoundLinearLayout>
 
     <!-- type1_item3 -->
-    <TextView
+    <lib.kalu.leanback.round.RoundRelativeLayout
         android:id="@+id/general_template20b_type1_item3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/bg_selector_common_template20_allb"
-        android:ellipsize="end"
-        android:focusable="true"
-        android:gravity="center_vertical|left"
-        android:lines="1"
         android:paddingLeft="@dimen/dp_8"
         android:paddingRight="@dimen/dp_8"
-        android:singleLine="true"
-        android:text="@string/template_rec"
-        android:textColor="@color/color_aaaaaa"
-        android:textSize="@dimen/sp_14"
-        android:visibility="gone" />
+        android:layout_weight="1"
+        android:background="@drawable/bg_selector_common_template20_allb"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:focusable="true"
+        android:gravity="center"
+        android:visibility="gone"
+        app:rl_scale="1.1">
+
+        <TextView
+            android:id="@+id/general_template20b_type1_item3_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="center_vertical|left"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="@string/template_rec"
+            android:textColor="@color/color_aaaaaa"
+            android:textSize="@dimen/sp_14" />
+    </lib.kalu.leanback.round.RoundRelativeLayout>
+
 
     <!-- type2_item1 -->
     <lib.kalu.leanback.round.RoundLinearLayout
@@ -144,7 +161,7 @@
         app:rl_scale="1.1">
 
         <TextView
-            android:id="@+id/template20b_reca_name"
+            android:id="@+id/general_template20b_type2_item1_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/dp_3"
@@ -161,7 +178,7 @@
             android:textSize="@dimen/sp_14" />
 
         <TextView
-            android:id="@+id/template20b_reca_date"
+            android:id="@+id/general_template20b_type2_item1_date"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_3"
@@ -197,6 +214,7 @@
         app:rl_scale="1.1">
 
         <TextView
+            android:id="@+id/general_template20b_type2_item2_name"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/dp_4"
@@ -213,6 +231,7 @@
             android:textSize="@dimen/sp_14" />
 
         <TextView
+            android:id="@+id/general_template20b_type2_item2_info"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dp_4"
@@ -245,6 +264,7 @@
         app:rl_scale="1.1">
 
         <lib.kalu.leanback.plus.TextViewPlus
+            android:id="@+id/general_template20b_type3_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/ic_selector_common_rec"
