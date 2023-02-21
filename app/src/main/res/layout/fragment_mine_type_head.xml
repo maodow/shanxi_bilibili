@@ -160,6 +160,6 @@
         android:background="#000000"
         android:focusable="false"
         android:scaleType="fitEnd"
-        android:src="@drawable/ic_mine_banner" />
+        android:src="@drawable/ic_banner" />
 
 </LinearLayout>
