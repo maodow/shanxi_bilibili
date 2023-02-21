@@ -24,7 +24,6 @@
         android:ellipsize="marquee"
         android:focusable="false"
         android:gravity="bottom|left"
-
         android:text="-"
         android:textColor="@color/color_white"
         android:textSize="@dimen/sp_14" />

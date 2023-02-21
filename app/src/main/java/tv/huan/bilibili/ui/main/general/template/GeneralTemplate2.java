@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,23 +35,33 @@ public class GeneralTemplate2 extends ListGridPresenter<GetSubChannelsByChannelB
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+        try {
+            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    int position = viewHolder.getAbsoluteAdapterPosition();
+                    if (position >= 0) {
+                        TextView textView = view.findViewById(R.id.general_template2_name);
+                        textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                    }
+                }
+            });
+        } catch (Exception e) {
         }
     }
 
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i, @NonNull int i1) {
         try {
-            @IdRes
-            int txt = (i == 0 ? R.id.album_item_name_h21 : R.id.album_item_name_h22);
-            TextView textView = view.findViewById(txt);
+            TextView textView = view.findViewById(R.id.general_template2_name);
             textView.setText(templateBean.getName());
-            @IdRes
-            int img = (i == 0 ? R.id.album_item_img_h21 : R.id.album_item_img_h22);
-            ImageView imageView = view.findViewById(img);
+        } catch (Exception e) {
+        }
+        try {
+            ImageView imageView = view.findViewById(R.id.general_template2_img);
             GlideUtils.loadVt(imageView.getContext(), templateBean.getNewPicVt(), imageView);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

@@ -12,18 +12,29 @@ import tv.huan.bilibili.R;
 public class RoundRelativeLayoutTemplate21 extends RoundRelativeLayout {
     public RoundRelativeLayoutTemplate21(Context context) {
         super(context);
+        init();
     }
 
     public RoundRelativeLayoutTemplate21(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public RoundRelativeLayoutTemplate21(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     public RoundRelativeLayoutTemplate21(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
+
+    private void init() {
+        int radius = getResources().getDimensionPixelOffset(R.dimen.dp_6);
+        setRadius(radius, radius, radius, radius);
+        setScale(1.06F);
+        setBackgroundResource(R.drawable.bg_selector_common_image);
     }
 
     @Override
@@ -42,7 +53,6 @@ public class RoundRelativeLayoutTemplate21 extends RoundRelativeLayout {
             super.onMeasure(specW, specH);
             setMeasuredDimension(w, h);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
