@@ -4,15 +4,15 @@
     <!-- 获焦 -->
     <item android:state_focused="true">
         <layer-list>
-<!--            &lt;!&ndash; 背景 &ndash;&gt;-->
-<!--            <item>-->
-<!--                <shape>-->
-<!--                    <solid android:color="@color/color_303030" />-->
-<!--                    <corners android:radius="@dimen/dp_5" />-->
-<!--                </shape>-->
-<!--            </item>-->
+            <!--            &lt;!&ndash; 背景 &ndash;&gt;-->
+            <!--            <item>-->
+            <!--                <shape>-->
+            <!--                    <solid android:color="@color/color_303030" />-->
+            <!--                    <corners android:radius="@dimen/dp_5" />-->
+            <!--                </shape>-->
+            <!--            </item>-->
             <!-- 边框 -->
-            <item>
+            <item android:bottom="@dimen/dp_f4" android:left="@dimen/dp_f4" android:right="@dimen/dp_f4" android:top="@dimen/dp_f4">
                 <shape>
                     <stroke android:width="@dimen/dp_4" android:color="@color/color_white" />
                     <corners android:radius="@dimen/dp_6" />
@@ -21,17 +21,17 @@
         </layer-list>
     </item>
 
-<!--    &lt;!&ndash; 默认 &ndash;&gt;-->
-<!--    <item>-->
-<!--        <layer-list>-->
-<!--            &lt;!&ndash; 背景 &ndash;&gt;-->
-<!--            <item>-->
-<!--                <shape>-->
-<!--                    <solid android:color="@color/color_303030" />-->
-<!--                    <corners android:radius="@dimen/dp_5" />-->
-<!--                </shape>-->
-<!--            </item>-->
-<!--        </layer-list>-->
-<!--    </item>-->
+    <!--    &lt;!&ndash; 默认 &ndash;&gt;-->
+    <!--    <item>-->
+    <!--        <layer-list>-->
+    <!--            &lt;!&ndash; 背景 &ndash;&gt;-->
+    <!--            <item>-->
+    <!--                <shape>-->
+    <!--                    <solid android:color="@color/color_303030" />-->
+    <!--                    <corners android:radius="@dimen/dp_5" />-->
+    <!--                </shape>-->
+    <!--            </item>-->
+    <!--        </layer-list>-->
+    <!--    </item>-->
 
 </selector>

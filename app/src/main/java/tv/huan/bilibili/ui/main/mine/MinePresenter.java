@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Keep;
@@ -311,7 +310,7 @@ public class MinePresenter extends BasePresenter<MineView> {
                             more.setTitle("全部历史");
                             more.setJumpType(0);
                             more.setIndex(index == -1 ? 0 : index + 1);
-                            more.setIcon(R.drawable.ic_selector_mine_history);
+                            more.setIcon(R.drawable.ic_selector_common_rec);
                             mDatas.add(more);
                         } catch (Exception e) {
                         }
@@ -348,7 +347,7 @@ public class MinePresenter extends BasePresenter<MineView> {
                             more.setItemType(TYPE_ITEM_MORE);
                             more.setJumpType(1);
                             more.setTitle("全部收藏");
-                            more.setIcon(R.drawable.ic_selector_mine_fav);
+                            more.setIcon(R.drawable.ic_selector_common_fav);
                             mDatas.add(more);
                         } catch (Exception e) {
                         }
@@ -367,10 +366,10 @@ public class MinePresenter extends BasePresenter<MineView> {
                             item.setJumpType(i);
                             if (i == 0) {
                                 itemBean.setTitle("帮助中心");
-                                itemBean.setIcon(R.drawable.ic_selector_mine_help);
+                                itemBean.setIcon(R.drawable.ic_selector_common_help);
                             } else {
                                 itemBean.setTitle("关于我们");
-                                itemBean.setIcon(R.drawable.ic_selector_mine_about);
+                                itemBean.setIcon(R.drawable.ic_selector_common_about);
                             }
                             mDatas.add(itemBean);
                         }

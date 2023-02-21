@@ -7,6 +7,8 @@
     <string name="menu_vip">搜索</string>
     <string name="menu_search">开通大会员</string>
 
+    <string name="template_rec">全部历史</string>
+    <string name="template_warning">快去观看精彩影片吧！</string>
     <string name="template_bottom_top">回到顶部</string>
     <string name="template_bottom_search">搜索</string>
     <string name="template_bottom_hint">按【返回键】回到顶部，按菜单键回到首页</string>

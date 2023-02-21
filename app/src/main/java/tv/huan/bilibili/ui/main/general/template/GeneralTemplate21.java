@@ -81,15 +81,22 @@ public class GeneralTemplate21 extends Presenter {
             return;
 
         RecyclerView recyclerView = view.findViewById(R.id.general_template21_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+        });
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-//                int position = parent.getChildAdapterPosition(view);
-//                if (position == 0)
-//                    return;
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_25);
                 outRect.set(0, 0, offset, 0);
             }
         });

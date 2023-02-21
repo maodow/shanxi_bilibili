@@ -3,13 +3,10 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +16,6 @@ import java.util.List;
 import lib.kalu.leanback.presenter.ListGridPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
-import tv.huan.bilibili.bean.LookBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
@@ -46,9 +42,27 @@ public class GeneralTemplate20 extends ListGridPresenter<GetSubChannelsByChannel
         }
         // type1
         else {
-            // test
-            View inflate = LayoutInflater.from(view.getContext()).inflate(R.layout.fragment_general_item_template20b_all, null);
-            ((ViewGroup) view).addView(inflate);
+            // test1
+            view.findViewById(R.id.general_template20b_type1_item1).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.general_template20b_type1_item2).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.general_template20b_type1_item3).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.general_template20b_type2_item1).setVisibility(View.GONE);
+            view.findViewById(R.id.general_template20b_type2_item2).setVisibility(View.GONE);
+            view.findViewById(R.id.general_template20b_type3).setVisibility(View.GONE);
+            // test2
+//            view.findViewById(R.id.general_template20b_type1_item1).setVisibility(View.GONE);
+//            view.findViewById(R.id.general_template20b_type1_item2).setVisibility(View.GONE);
+//            view.findViewById(R.id.general_template20b_type1_item3).setVisibility(View.GONE);
+//            view.findViewById(R.id.general_template20b_type2_item1).setVisibility(View.VISIBLE);
+//            view.findViewById(R.id.general_template20b_type2_item2).setVisibility(View.VISIBLE);
+//            view.findViewById(R.id.general_template20b_type3).setVisibility(View.GONE);
+            // test3
+//            view.findViewById(R.id.general_template20b_type1_item1).setVisibility(View.GONE);
+//            view.findViewById(R.id.general_template20b_type1_item2).setVisibility(View.GONE);
+//            view.findViewById(R.id.general_template20b_type1_item3).setVisibility(View.GONE);
+//            view.findViewById(R.id.general_template20b_type2_item1).setVisibility(View.GONE);
+//            view.findViewById(R.id.general_template20b_type2_item2).setVisibility(View.GONE);
+//            view.findViewById(R.id.general_template20b_type3).setVisibility(View.VISIBLE);
         }
     }
 
