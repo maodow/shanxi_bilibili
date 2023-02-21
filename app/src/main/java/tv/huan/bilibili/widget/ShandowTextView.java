@@ -2,6 +2,7 @@ package tv.huan.bilibili.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.TextView;

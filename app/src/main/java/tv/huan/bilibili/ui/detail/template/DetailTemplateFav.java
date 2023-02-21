@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.detail.template;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,7 +52,16 @@ public class DetailTemplateFav extends ListRowPresenter<Album> {
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+        try {
+            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    TextView textView = view.findViewById(R.id.detail_fav_item_name);
+                    textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                }
+            });
+        } catch (Exception e) {
         }
     }
 
@@ -60,10 +70,12 @@ public class DetailTemplateFav extends ListRowPresenter<Album> {
         try {
             TextView textView = view.findViewById(R.id.detail_fav_item_name);
             textView.setText(album.getName());
+        } catch (Exception e) {
+        }
+        try {
             ImageView imageView = view.findViewById(R.id.detail_fav_item_img);
             GlideUtils.loadVt(imageView.getContext(), album.getNewPicVt(), imageView);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
