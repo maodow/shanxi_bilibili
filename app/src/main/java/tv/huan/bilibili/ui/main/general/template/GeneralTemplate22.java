@@ -32,10 +32,30 @@ public class GeneralTemplate22 extends Presenter {
         try {
             Context context = viewGroup.getContext();
             View inflate = LayoutInflater.from(context).inflate(R.layout.fragment_general_item_template22, viewGroup, false);
+
+            // 1
+            setControl(inflate);
+            // 2
             setAdapter(inflate);
             return new ViewHolder(inflate);
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    private void setControl(View inflate) {
+        try {
+            inflate.findViewById(R.id.general_template22_control).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (b) {
+                        resumePlayer(view);
+                    } else {
+                        pasuePlayer(view);
+                    }
+                }
+            });
+        } catch (Exception e) {
         }
     }
 
@@ -58,6 +78,24 @@ public class GeneralTemplate22 extends Presenter {
             recyclerView.getAdapter().notifyItemRangeChanged(0, mData.size());
         } catch (Exception e) {
         }
+    }
+
+    private void pasuePlayer(View inflate) {
+
+        if (null == inflate)
+            return;
+
+        VideoLayout playerView = inflate.findViewById(R.id.general_template22_player);
+        playerView.pause();
+    }
+
+    private void resumePlayer(View inflate) {
+
+        if (null == inflate)
+            return;
+
+        VideoLayout playerView = inflate.findViewById(R.id.general_template22_player);
+        playerView.resume();
     }
 
     private void startPlayer(View inflate) {

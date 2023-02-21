@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.filter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,20 +64,34 @@ public class FilterPresenter extends BasePresenter<FilterView> {
     }
 
     protected void setAdapter() {
-        Context context = getView().getContext();
         RecyclerView recyclerView = getView().findViewById(R.id.filter_content);
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 5);
+        GridLayoutManager layoutManager = new GridLayoutManager(getView().getContext(), 5);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_96);
+                int v = offset / 10;
                 outRect.set(0, 0, offset, offset);
                 int position = parent.getChildAdapterPosition(view);
-                if (position % 5 == 0)
-                    return;
-                view.setTranslationX(offset / 2);
+
+                int i = position % 5;
+                if (i == 0) {
+                    outRect.set(0, 0, v * 2, 0);
+                } else if (i == 4) {
+                    outRect.set(v * 2, 0, 0, 0);
+                } else {
+                    outRect.set(v, 0, v, 0);
+                }
+
+                if (i == 1) {
+                    view.setTranslationX(-v / 2);
+                } else if (i == 3) {
+                    view.setTranslationX(v / 2);
+                } else {
+                    view.setTranslationX(0);
+                }
             }
         });
         recyclerView.setAdapter(new RecyclerView.Adapter() {
@@ -87,14 +102,29 @@ public class FilterPresenter extends BasePresenter<FilterView> {
                 View inflate = LayoutInflater.from(context).inflate(R.layout.activity_filter_item, parent, false);
                 RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(inflate) {
                 };
-                inflate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = holder.getAbsoluteAdapterPosition();
-                        GetSecondTagAlbumsBean.ItemBean itemBean = mData.get(position);
-                        JumpUtil.next(v.getContext(), itemBean);
-                    }
-                });
+                try {
+                    inflate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int position = holder.getAbsoluteAdapterPosition();
+                            if (position >= 0) {
+                                GetSecondTagAlbumsBean.ItemBean itemBean = mData.get(position);
+                                JumpUtil.next(v.getContext(), itemBean);
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                }
+                try {
+                    inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View view, boolean b) {
+                            TextView textView = view.findViewById(R.id.filter_item_name);
+                            textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        }
+                    });
+                } catch (Exception e) {
+                }
                 return holder;
             }
 
@@ -107,7 +137,6 @@ public class FilterPresenter extends BasePresenter<FilterView> {
                     ImageView imageView = holder.itemView.findViewById(R.id.filter_item_img);
                     GlideUtils.loadVt(imageView.getContext(), itemBean.getNewPicVt(), imageView);
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
 

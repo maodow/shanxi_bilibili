@@ -383,9 +383,9 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
             List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
             int preTemplate = bean.getPreTemplate();
             if (preTemplate == 17) {
-                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
+//                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
+//                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
+//                addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 1, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 16, templateData);
             }
