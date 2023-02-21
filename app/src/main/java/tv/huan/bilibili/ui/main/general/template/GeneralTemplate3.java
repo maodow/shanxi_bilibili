@@ -121,27 +121,26 @@ public class GeneralTemplate3 extends ListGridPresenter<GetSubChannelsByChannelB
                 int v2 = offset2 / 8;
 
                 int position = parent.getChildAdapterPosition(view);
-                int i = position % 6;
-                if (i == 0) {
+                if (position == 0) {
                     outRect.set(0, 0, v1 * 2, 0);
-                } else if (i == 1) {
+                } else if (position == 1) {
                     outRect.set(v1, 0, v1, 0);
-                } else if (i == 2) {
+                } else if (position == 2) {
                     outRect.set(v1 * 2, 0, 0, 0);
-                } else if (i == 3) {
+                } else if (position == 3) {
                     outRect.set(0, 0, v2 * 2, 0);
-                } else if (i == 4 || i == 5) {
+                } else if (position == 4 || position == 5) {
                     outRect.set(v2, 0, v2, 0);
-                } else if (i == 3) {
+                } else if (position == 6) {
                     outRect.set(v2 * 2, 0, 0, 0);
                 } else {
                     outRect.set(0, 0, 0, 0);
                 }
 
-                int x = v2 * 2 / 3;
-                if (i == 4) {
+                int x = v2 / 3;
+                if (position == 4) {
                     view.setTranslationX(-x);
-                } else if (i == 5) {
+                } else if (position == 5) {
                     view.setTranslationX(x);
                 } else {
                     view.setTranslationX(0);
