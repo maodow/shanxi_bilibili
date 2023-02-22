@@ -4,11 +4,10 @@
     android:id="@+id/general_item_template17c_click"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_selector_general_template17_card_top"
+    android:background="@drawable/bg_selector_template17c"
     android:focusable="true"
     android:orientation="horizontal"
     app:rl_corner_top_right="8dp"
-
     app:rl_scale="1.06">
 
     <View

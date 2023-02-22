@@ -40,7 +40,6 @@ public class RoundLinearLayoutTemplate173 extends RoundLinearLayout {
             super.onMeasure(specW, specH);
             setMeasuredDimension(w, h);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

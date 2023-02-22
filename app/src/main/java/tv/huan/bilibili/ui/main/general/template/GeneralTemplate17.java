@@ -3,11 +3,11 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -151,7 +151,6 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return position;
     }
@@ -289,72 +288,153 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
 
             // 左侧
             if (i == 1) {
-                // 1
-//                ((Template171LinearLayout) view).setOnWindowVisibilityChangedListener(new Template171LinearLayout.OnWindowVisibilityChangedListener() {
-//                    @Override
-//                    public void onChanged(int visibility) {
-//                        Toast.makeText(view.getContext(), "onChanged => " + visibility, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-                // 2
-                int[] ids = new int[]{R.id.general_item_template17a_img,
-                        R.id.general_item_template17a_class1_all,
-                        R.id.general_item_template17a_class2_all,
-                        R.id.general_item_template17a_class2_rec1,
-                        R.id.general_item_template17a_class3_all,
-                        R.id.general_item_template17a_class3_rec1,
-                        R.id.general_item_template17a_class3_rec2};
-                int length = ids.length;
-                for (int j = 0; j < length; j++) {
-                    view.findViewById(ids[j]).setOnKeyListener(new View.OnKeyListener() {
+
+                // type1
+                try {
+                    view.findViewById(R.id.general_template17a_type1_item1).setOnFocusChangeListener(new View.OnFocusChangeListener() {
                         @Override
-                        public boolean onKey(View v, int keyCode, KeyEvent event) {
-                            // right
-                            if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                        public void onFocusChange(View v, boolean b) {
+                            TextView v1 = v.findViewById(R.id.general_template17a_type1_item1_name);
+                            v1.setActivated(b);
+                            v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                            TextView v2 = v.findViewById(R.id.general_template17a_type1_item1_date);
+                            v2.setActivated(b);
+                            v2.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            v2.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        }
+                    });
+                } catch (Exception e) {
+                }
+                // type1
+                try {
+                    view.findViewById(R.id.general_template17a_type1_item2).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean b) {
+                            TextView v1 = v.findViewById(R.id.general_template17a_type1_item2_name);
+                            v1.setActivated(b);
+                            v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                            TextView v2 = v.findViewById(R.id.general_template17a_type1_item2_date);
+                            v2.setActivated(b);
+                            v2.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            v2.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        }
+                    });
+                } catch (Exception e) {
+                }
+                // type1
+                try {
+                    view.findViewById(R.id.general_template17a_type1_item3).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean b) {
+                            TextView v1 = v.findViewById(R.id.general_template17a_type1_item3_name);
+                            v1.setActivated(b);
+                            v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        }
+                    });
+                } catch (Exception e) {
+                }
+
+                // type2
+                try {
+                    view.findViewById(R.id.general_template17a_type2_item1).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean b) {
+                            TextView v1 = v.findViewById(R.id.general_template17a_type2_item1_name);
+                            v1.setActivated(b);
+                            v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                            TextView v2 = v.findViewById(R.id.general_template17a_type2_item1_date);
+                            v2.setActivated(b);
+                            v2.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            v2.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        }
+                    });
+                } catch (Exception e) {
+                }
+                // type2
+                try {
+                    view.findViewById(R.id.general_template17a_type2_item2).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean b) {
+                            TextView v1 = v.findViewById(R.id.general_template17a_type2_item2_name);
+                            v1.setActivated(b);
+                            v1.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            v1.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                            TextView v2 = v.findViewById(R.id.general_template17a_type2_item2_info);
+                            v2.setActivated(b);
+                            v2.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            v2.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        }
+                    });
+                } catch (Exception e) {
+                }
+
+                // type3
+                try {
+                    view.findViewById(R.id.general_template17a_type3).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean b) {
+                            TextView textView = v.findViewById(R.id.general_template17a_type3_name);
+                            textView.setActivated(b);
+                            textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            textView.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                        }
+                    });
+                } catch (Exception e) {
+                }
+
+                // keyEvent
+                try {
+                    view.findViewById(R.id.general_item_template17a_banner).setOnKeyListener(new View.OnKeyListener() {
+                        @Override
+                        public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
                                 try {
                                     int position = selectPosition(list);
-                                    requestFocus(v, position);
+                                    requestFocus(view, position);
                                 } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
                                 return true;
                             }
                             return false;
                         }
                     });
-                    view.findViewById(ids[j]).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            int id = v.getId();
-                            // img
-                            if (id == R.id.general_item_template17a_img) {
-                                int position = viewHolder.getAbsoluteAdapterPosition();
-                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                                JumpUtil.next(v.getContext(), bean);
-                            }
-                            // all
-                            else if (id == R.id.general_item_template17a_class1_all || id == R.id.general_item_template17a_class2_all || id == R.id.general_item_template17a_class3_all) {
-                                JumpUtil.nextCenter(v.getContext(), true);
-                            }
-                            // rec1
-                            else if (id == R.id.general_item_template17a_class2_rec1 || id == R.id.general_item_template17a_class3_rec1) {
-                                int position = viewHolder.getAbsoluteAdapterPosition();
-                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                                List<LookBean> lookBeans = bean.getGeneralTemplate17Recs();
-                                LookBean lookBean = lookBeans.get(0);
-                                JumpUtil.next(v.getContext(), lookBean);
-                            }
-                            // rec2
-                            else if (id == R.id.general_item_template17a_class3_rec2) {
-                                int position = viewHolder.getAbsoluteAdapterPosition();
-                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                                List<LookBean> lookBeans = bean.getGeneralTemplate17Recs();
-                                LookBean lookBean = lookBeans.get(1);
-                                JumpUtil.next(v.getContext(), lookBean);
-                            }
-                        }
-                    });
+                } catch (Exception e) {
                 }
+//                    view.findViewById(ids[j]).setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            int id = v.getId();
+//                            // img
+//                            if (id == R.id.general_item_template17a_img) {
+//                                int position = viewHolder.getAbsoluteAdapterPosition();
+//                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+//                                JumpUtil.next(v.getContext(), bean);
+//                            }
+//                            // all
+//                            else if (id == R.id.general_item_template17a_class1_all || id == R.id.general_item_template17a_class2_all || id == R.id.general_item_template17a_class3_all) {
+//                                JumpUtil.nextCenter(v.getContext(), true);
+//                            }
+//                            // rec1
+//                            else if (id == R.id.general_item_template17a_class2_rec1 || id == R.id.general_item_template17a_class3_rec1) {
+//                                int position = viewHolder.getAbsoluteAdapterPosition();
+//                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+//                                List<LookBean> lookBeans = bean.getGeneralTemplate17Recs();
+//                                LookBean lookBean = lookBeans.get(0);
+//                                JumpUtil.next(v.getContext(), lookBean);
+//                            }
+//                            // rec2
+//                            else if (id == R.id.general_item_template17a_class3_rec2) {
+//                                int position = viewHolder.getAbsoluteAdapterPosition();
+//                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+//                                List<LookBean> lookBeans = bean.getGeneralTemplate17Recs();
+//                                LookBean lookBean = lookBeans.get(1);
+//                                JumpUtil.next(v.getContext(), lookBean);
+//                            }
+//                        }
             }
             // 中间
             else if (i == 2) {
@@ -434,51 +514,35 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
 
         // left
         if (viewType == 1) {
-            // 1
-            List<LookBean> list = templateBean.getGeneralTemplate17Recs();
-//            Log.e("GeneralPresenter", "onBindHolder => " + new Gson().toJson(list));
-            int size = list.size();
-            v.findViewById(R.id.general_item_template17a_class1_all).setVisibility(size <= 0 ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.general_item_template17a_class2).setVisibility(size == 1 ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.general_item_template17a_class3).setVisibility(size >= 2 ? View.VISIBLE : View.GONE);
-            // 2
-            if (size == 1) {
-                LookBean lookBean = list.get(0);
-                TextView vName = v.findViewById(R.id.general_item_template17a_class2_rec1_name);
-                vName.setText(lookBean.getCid());
-                TextView vPosition = v.findViewById(R.id.general_item_template17a_class2_rec1_position);
-                vPosition.setText("1");
-            } else if (size >= 2) {
-                @IdRes
-                int nameId;
-                @IdRes
-                int positionId;
-                for (int m = 0; m < 2; m++) {
-                    if (m == 0) {
-                        nameId = R.id.general_item_template17a_class3_rec1_name;
-                        positionId = R.id.general_item_template17a_class3_rec1_position;
-                    } else {
-                        nameId = R.id.general_item_template17a_class3_rec2_name;
-                        positionId = R.id.general_item_template17a_class3_rec2_position;
-                    }
-                    LookBean lookBean = list.get(m);
-                    TextView vName = v.findViewById(nameId);
-                    vName.setText(lookBean.getCid());
-                    TextView vPosition = v.findViewById(positionId);
-                    vPosition.setText("看至" + m + "%");
-                }
-            }
-            // 3
-            ImageView vImg = v.findViewById(R.id.general_item_template17a_img);
-            GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
-            // 4
+            // a
             TextView vTxt = v.findViewById(R.id.general_item_template17a_name);
             vTxt.setText(templateBean.getName());
+            // b
+            ImageView vImg = v.findViewById(R.id.general_item_template17a_img);
+            GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
+            // c
+            int num = 2;
+            v.findViewById(R.id.general_template17a_type1_item1).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_template17a_type1_item2).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_template17a_type1_item3).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_template17a_type2_item1).setVisibility(num == 1 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_template17a_type2_item2).setVisibility(num == 1 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_template17a_type3).setVisibility(num <= 0 ? View.VISIBLE : View.GONE);
+            if (num >= 1) {
+                ((TextView) v.findViewById(R.id.general_template17a_type1_item1_name)).setText("1");
+                ((TextView) v.findViewById(R.id.general_template17a_type1_item1_date)).setText("观看至：1");
+                ((TextView) v.findViewById(R.id.general_template17a_type2_item1_name)).setText("1");
+                ((TextView) v.findViewById(R.id.general_template17a_type2_item1_date)).setText("观看至：1");
+            }
+            if (num >= 2) {
+                ((TextView) v.findViewById(R.id.general_template17a_type1_item2_name)).setText("2");
+                ((TextView) v.findViewById(R.id.general_template17a_type1_item2_date)).setText("观看至：2");
+            }
         }
         // center
         else if (viewType == 2) {
             ImageView vImg = v.findViewById(R.id.general_item_template17b_img);
-                GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
+            GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
         }
         // right
         else {
@@ -486,35 +550,32 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
             int name;
             @IdRes
             int info;
-            @IdRes
-            int tag;
             if (viewType == 3) {
-                name = R.id.general_item_template17c_name;
-                info = R.id.general_item_template17c_info;
-                tag = R.id.general_item_template17c_tag;
+                name = R.id.general_template17c_name;
+                info = R.id.general_template17c_desc;
             } else if (viewType == 4) {
-                name = R.id.general_item_template17e_name;
-                info = R.id.general_item_template17e_info;
-                tag = R.id.general_item_template17e_tag;
+                name = R.id.general_template17e_name;
+                info = R.id.general_template17e_desc;
             } else {
-                name = R.id.general_item_template17d_name;
-                info = R.id.general_item_template17d_info;
-                tag = R.id.general_item_template17d_tag;
+                name = R.id.general_template17d_name;
+                info = R.id.general_template17d_desc;
             }
             boolean hasFocus = v.hasFocus();
             boolean selected = templateBean.isGeneralTemplate17Selected();
             // 2
-            View vTag = v.findViewById(tag);
-            vTag.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
-            // 3
             TextView vName = v.findViewById(name);
             vName.setText(templateBean.getName());
-            vName.setTextColor(Color.parseColor(hasFocus ? "#3c3c82" : (selected ? "#ffc988" : "#ffffff")));
-            // 4
-            TextView vInfo = v.findViewById(info);
-            vInfo.setText("" + position);
-            vInfo.setTextColor(Color.parseColor(hasFocus ? "#3c3c82" : (selected ? "#ffc988" : "#ffffff")));
-            vInfo.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
+            if (hasFocus) {
+                vName.setTextColor(v.getResources().getColor(R.color.color_black));
+            } else if (selected) {
+                vName.setTextColor(v.getResources().getColor(R.color.color_ff6699));
+            } else {
+                vName.setTextColor(v.getResources().getColor(R.color.color_aaaaaa));
+            }
+            // 3
+            TextView vDesc = v.findViewById(info);
+            vDesc.setText(templateBean.getTitle());
+            vDesc.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
         }
     }
 

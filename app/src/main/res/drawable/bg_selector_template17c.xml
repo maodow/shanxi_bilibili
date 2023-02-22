@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <layer-list>
+            <item android:bottom="0.5dp">
+                <shape>
+                    <solid android:color="@color/color_white" />
+                    <corners android:radius="@dimen/dp_6" />
+                </shape>
+
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item android:bottom="0.5dp">
+                <shape>
+                    <solid android:color="@color/color_303030" />
+                    <corners android:topRightRadius="@dimen/dp_6" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--    <item android:state_focused="true">-->
+<!--        <layer-list>-->
+<!--            <item android:bottom="0.5dp">-->
+<!--                <shape>-->
+<!--                    <solid android:color="@color/color_white" />-->
+<!--                    <corners android:radius="@dimen/dp_6" />-->
+<!--                </shape>-->
+<!--            </item>-->
+<!--        </layer-list>-->
+<!--    </item>-->
+<!--    <item>-->
+<!--        <layer-list>-->
+<!--            <item android:bottom="0.5dp">-->
+<!--                <shape>-->
+<!--                    <solid android:color="@color/color_303030" />-->
+<!--                    <corners android:topLeftRadius="@dimen/dp_6" android:topRightRadius="@dimen/dp_6" />-->
+<!--                </shape>-->
+<!--            </item>-->
+<!--        </layer-list>-->
+<!--    </item>-->
+<!--</selector>-->

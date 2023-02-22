@@ -40,7 +40,6 @@ public class RoundRelativeLayoutTemplate172 extends RoundRelativeLayout {
             super.onMeasure(specW, specH);
             setMeasuredDimension(w, h);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

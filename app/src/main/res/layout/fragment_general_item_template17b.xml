@@ -3,14 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/item_common_bg_r8"
-    android:clickable="false"
+    android:background="@drawable/bg_selector_template17b"
     android:focusable="false"
-    android:focusableInTouchMode="false"
-    android:longClickable="false"
-    app:rl_corner_bottom_left="8dp"
-    app:rl_corner_top_left="8dp"
-
+    app:rl_corner_bottom_left="@dimen/dp_6"
+    app:rl_corner_top_left="@dimen/dp_6"
     app:rl_scale="1.06">
 
     <!-- 图片 -->
@@ -18,10 +14,7 @@
         android:id="@+id/general_item_template17b_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
 </tv.huan.bilibili.widget.template17.RoundRelativeLayoutTemplate172>
