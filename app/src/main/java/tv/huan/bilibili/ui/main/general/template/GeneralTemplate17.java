@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,6 +33,7 @@ import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.LookBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
 public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
@@ -155,69 +155,8 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
         return position;
     }
 
-    private boolean mHasFocus = false;
-    private final Handler mHandler = new Handler(Looper.myLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Log.e("GeneralTemplate17", "handleMessage => what = " + msg.what);
-            // 0x10013
-            if (msg.what == 0x10013) {
-
-                // not loop
-                if (mHasFocus) {
-                    Object[] objects = (Object[]) msg.obj;
-                    nextLoop(objects[0], objects[1], 0x10023, false);
-                }
-                // loop
-                else {
-                    Object[] objects = (Object[]) msg.obj;
-                    List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list = (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) objects[1];
-                    if (null != list) {
-                        int position = nextPosition(list);
-                        if (position == -1) {
-                            position = 2;
-                            refreshSelected(list, 2);
-                        }
-//                    Log.e("GeneralTemplate17", "handleMessage => position = " + position);
-                        int size = list.size();
-                        if (size > 7) {
-                            size = 7;
-                        }
-                        // selected
-                        refreshSelected(list, position);
-                        // center
-                        refreshCenter((View) objects[0], list, position);
-                        // item
-                        notifyItemRangeChanged((View) objects[0], 2, size - 2);
-                        // loop
-                        nextLoop(objects[0], list, 0x10013, false);
-                    }
-                }
-            }
-            // 0x10023
-            else if (msg.what == 0x10023) {
-                // not loop
-                if (mHasFocus) {
-                    Object[] objects = (Object[]) msg.obj;
-                    nextLoop(objects[0], objects[1], 0x10023, false);
-                }
-                // loop
-                else {
-                    Object[] objects = (Object[]) msg.obj;
-                    nextLoop(objects[0], objects[1], 0x10033, true);
-                }
-            }
-            // 0x10033
-            else if (msg.what == 0x10033) {
-                Object[] objects = (Object[]) msg.obj;
-                nextLoop(objects[0], objects[1], 0x10013, false);
-            }
-        }
-    };
-
     private final void nextLoop(@NonNull Object obj0, @NonNull Object obj1, @NonNull int what, boolean start) {
-        Log.e("GeneralTemplate17", "nextLoop => what = " + what);
+        LogUtil.log("GeneralTemplate17", "nextLoop => what = " + what);
         Message message = new Message();
         Object[] objects = new Object[2];
         objects[0] = obj0;
@@ -228,32 +167,119 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
         mHandler.sendMessageDelayed(message, start ? 0 : 2000);
     }
 
-    public final void cleanLoop() {
-        Log.e("GeneralTemplate17", "cleanLoop =>");
+    private final void cleanLoop() {
+        LogUtil.log("GeneralTemplate17", "cleanLoop =>");
         mHandler.removeMessages(0x10013);
         mHandler.removeMessages(0x10023);
         mHandler.removeMessages(0x10033);
         mHandler.removeCallbacksAndMessages(null);
     }
 
+    private boolean mPause = false;
+    private boolean mHasFocus = false;
+    private Message mMessage = null;
+    private final Handler mHandler = new Handler(Looper.myLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            LogUtil.log("GeneralTemplate17", "handleMessage => what = " + msg.what);
+
+            if (mPause) {
+                mHandler.removeCallbacksAndMessages(null);
+                mMessage = Message.obtain();
+                mMessage.what = msg.what;
+                mMessage.obj = msg.obj;
+                mMessage.arg1 = msg.arg1;
+                mMessage.arg2 = msg.arg2;
+            } else {
+                // 0x10013
+                if (msg.what == 0x10013) {
+
+                    // not loop
+                    if (mHasFocus) {
+                        Object[] objects = (Object[]) msg.obj;
+                        nextLoop(objects[0], objects[1], 0x10023, false);
+                    }
+                    // loop
+                    else {
+                        Object[] objects = (Object[]) msg.obj;
+                        List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list = (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) objects[1];
+                        if (null != list) {
+                            int position = nextPosition(list);
+                            if (position == -1) {
+                                position = 2;
+                                refreshSelected(list, 2);
+                            }
+//                    Log.e("GeneralTemplate17", "handleMessage => position = " + position);
+                            int size = list.size();
+                            if (size > 7) {
+                                size = 7;
+                            }
+                            // selected
+                            refreshSelected(list, position);
+                            // center
+                            refreshCenter((View) objects[0], list, position);
+                            // item
+                            notifyItemRangeChanged((View) objects[0], 2, size - 2);
+                            // loop
+                            nextLoop(objects[0], list, 0x10013, false);
+                        }
+                    }
+                }
+                // 0x10023
+                else if (msg.what == 0x10023) {
+                    // not loop
+                    if (mHasFocus) {
+                        Object[] objects = (Object[]) msg.obj;
+                        nextLoop(objects[0], objects[1], 0x10023, false);
+                    }
+                    // loop
+                    else {
+                        Object[] objects = (Object[]) msg.obj;
+                        nextLoop(objects[0], objects[1], 0x10033, true);
+                    }
+                }
+                // 0x10033
+                else if (msg.what == 0x10033) {
+                    Object[] objects = (Object[]) msg.obj;
+                    nextLoop(objects[0], objects[1], 0x10013, false);
+                }
+            }
+        }
+    };
+
+    public final void pauseMessage() {
+        mPause = true;
+        LogUtil.log("GeneralTemplate17", "pauseMessage =>");
+    }
+
+    public final void resumeMessage() {
+        mPause = false;
+        if (null != mMessage) {
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler.sendMessageDelayed(mMessage, 2000);
+            LogUtil.log("GeneralTemplate17", "resumeMessage =>");
+        }
+    }
+
     @Override
     public void onViewAttachedToWindow(ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        Log.e("GeneralTemplate17", "onViewAttachedToWindow =>");
+        LogUtil.log("GeneralTemplate17", "onViewAttachedToWindow =>");
         mHasFocus = false;
     }
 
     @Override
     public void onViewDetachedFromWindow(ViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        Log.e("GeneralTemplate17", "onViewDetachedFromWindow =>");
+        LogUtil.log("GeneralTemplate17", "onViewDetachedFromWindow =>");
         mHasFocus = true;
     }
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
         super.onUnbindViewHolder(viewHolder);
-        Log.e("GeneralTemplate17", "onUnbindViewHolder =>");
+        LogUtil.log("GeneralTemplate17", "onUnbindViewHolder =>");
     }
 
     @Override

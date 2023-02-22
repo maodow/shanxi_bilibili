@@ -60,6 +60,10 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
         if (null != v2) {
             v2.pause();
         }
+        GeneralGridView v3 = findViewById(R.id.general_list);
+        if (null != v3) {
+            v3.pauseMessage();
+        }
     }
 
     @Override
@@ -72,6 +76,10 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
         VideoLayout v2 = findViewById(R.id.general_template22_player);
         if (null != v2) {
             v2.resume();
+        }
+        GeneralGridView v3 = findViewById(R.id.general_list);
+        if (null != v3) {
+            v3.resumeMessage();
         }
     }
 }

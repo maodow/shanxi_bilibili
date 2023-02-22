@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import lib.kalu.leanback.list.LeanBackVerticalGridView;
 import lib.kalu.leanback.list.RecyclerView;
 import lib.kalu.leanback.util.LeanBackUtil;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
 
 public final class GeneralGridView extends LeanBackVerticalGridView {
     public GeneralGridView(@NonNull Context context) {
@@ -98,6 +99,19 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
         scrollUp(0);
     }
 
+    public void pauseMessage() {
+        GeneralTemplate17 template17 = getPresenter(GeneralTemplate17.class);
+        if (null != template17) {
+            template17.pauseMessage();
+        }
+    }
+
+    public void resumeMessage() {
+        GeneralTemplate17 template17 = getPresenter(GeneralTemplate17.class);
+        if (null != template17) {
+            template17.resumeMessage();
+        }
+    }
 
     /**************************/
 
