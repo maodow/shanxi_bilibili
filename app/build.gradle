@@ -92,7 +92,7 @@ dependencies {
     api files('libs/lib_leanback_r1-2-0-alpha02-release.aar')
     // player
     api files('libs/lib_mediaplayer_ui_release_20230216.aar')
-    api files('libs/lib_mediaplayer_exo_r2.18.2_ff4.4_audio_release_20230202.aar')
+    api files('libs/lib_mediaplayer_exo_r2.18.3_ff4.4_audio_release_20230222.aar')
     // heilongjiang
     api files('libs/lib_huan_heilongjiang_release_20230215.aar')
 
