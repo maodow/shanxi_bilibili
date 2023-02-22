@@ -29,6 +29,6 @@ public class Special5Activity extends BaseActivity<Special5View, Special5Present
     public void refreshContent(@NonNull String str) {
         notifyDataSetChanged(R.id.special5_list);
         ImageView imageView = findViewById(R.id.special5_img);
-        GlideUtils.loadNot(getContext(), str, imageView);
+        GlideUtils.load(getContext(), str, imageView);
     }
 }

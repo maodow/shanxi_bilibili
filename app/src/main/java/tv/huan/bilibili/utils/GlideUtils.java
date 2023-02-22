@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import lib.kalu.frame.mvp.context.FrameContext;
 import lib.kalu.leanback.tab.ninepatch.NinePatchChunk;
 import tv.huan.bilibili.HuanApp;
 import tv.huan.bilibili.R;
@@ -47,7 +48,11 @@ public class GlideUtils {
         into(context, url, imageView, R.drawable.bg_shape_placeholder_vt);
     }
 
-    public static void loadNot(Context context, String url, ImageView imageView) {
+    public static void load(Context context, String url, ImageView imageView, @DrawableRes int placeholder) {
+        into(context, url, imageView, placeholder);
+    }
+
+    public static void load(Context context, String url, ImageView imageView) {
         into(context, url, imageView, 0);
     }
 
@@ -88,7 +93,8 @@ public class GlideUtils {
 //            options.transform(transform);
 
             // 图片
-            Glide.with(context).load(url).apply(options).into(imageView);
+            Glide.with(FrameContext.getApplicationContext()).load(url).apply(options).into(imageView);
+//            Glide.with(context).load(url).apply(options).into(imageView);
 //            Glide.with(context).asBitmap().load(url).apply(options).into(new CustomTarget<Bitmap>() {
 //                @Override
 //                public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {

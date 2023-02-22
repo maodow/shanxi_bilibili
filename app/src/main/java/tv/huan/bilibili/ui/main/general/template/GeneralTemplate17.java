@@ -542,7 +542,7 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
         // center
         else if (viewType == 2) {
             ImageView vImg = v.findViewById(R.id.general_item_template17b_img);
-            GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
+            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
         }
         // right
         else {

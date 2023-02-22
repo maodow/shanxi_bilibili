@@ -36,7 +36,7 @@ public class Special2Activity extends BaseActivity<Special2View, Special2Present
     @Override
     public void refreshBackground(@NonNull String url) {
         ImageView imageView = findViewById(R.id.special2_img);
-        GlideUtils.loadNot(getContext(), url, imageView);
+        GlideUtils.load(getContext(), url, imageView);
     }
 
     @Override

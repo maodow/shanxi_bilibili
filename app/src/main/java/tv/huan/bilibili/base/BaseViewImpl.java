@@ -18,7 +18,7 @@ public interface BaseViewImpl extends BaseView {
     default void setImageUrl(@IdRes int id, @NonNull String url) {
         try {
             ImageView imageView = findViewById(id);
-            GlideUtils.loadNot(getContext(), url, imageView);
+            GlideUtils.load(getContext(), url, imageView);
         } catch (Exception e) {
         }
     }
