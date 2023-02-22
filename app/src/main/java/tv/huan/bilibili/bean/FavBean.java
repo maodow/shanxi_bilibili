@@ -189,19 +189,15 @@ public class FavBean implements Serializable {
         }
 
         @Keep
-        public static class InfoBean implements Serializable {
+        public static class InfoBean extends PosterBean implements Serializable {
 
             private String code;
-            private String newPicHz;
             private Object publishDate;
             private String pic;
             private String title;
             private int type;
             private String productName;
-            private String picHzPath;
-            private String picVtPath;
             private Object price;
-            private String newPicVt;
             private Object validTerm;
             private String pic2;
             private int payStatus;
@@ -214,14 +210,6 @@ public class FavBean implements Serializable {
 
             public void setCode(String code) {
                 this.code = code;
-            }
-
-            public String getNewPicHz() {
-                return newPicHz;
-            }
-
-            public void setNewPicHz(String newPicHz) {
-                this.newPicHz = newPicHz;
             }
 
             public Object getPublishDate() {
@@ -264,36 +252,12 @@ public class FavBean implements Serializable {
                 this.productName = productName;
             }
 
-            public String getPicHzPath() {
-                return picHzPath;
-            }
-
-            public void setPicHzPath(String picHzPath) {
-                this.picHzPath = picHzPath;
-            }
-
-            public String getPicVtPath() {
-                return picVtPath;
-            }
-
-            public void setPicVtPath(String picVtPath) {
-                this.picVtPath = picVtPath;
-            }
-
             public Object getPrice() {
                 return price;
             }
 
             public void setPrice(Object price) {
                 this.price = price;
-            }
-
-            public String getNewPicVt() {
-                return newPicVt;
-            }
-
-            public void setNewPicVt(String newPicVt) {
-                this.newPicVt = newPicVt;
             }
 
             public Object getValidTerm() {

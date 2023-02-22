@@ -80,9 +80,8 @@ public class Special1Presenter extends BasePresenter<Special1View> {
                     TextView textView = holder.itemView.findViewById(R.id.special1_item_name);
                     textView.setText(itemBean.getName());
                     ImageView imageView = holder.itemView.findViewById(R.id.special1_item_img);
-                    GlideUtils.loadVt(imageView.getContext(), itemBean.getNewPicVt(), imageView);
+                    GlideUtils.loadVt(imageView.getContext(), itemBean.getPicture(false), imageView);
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
 

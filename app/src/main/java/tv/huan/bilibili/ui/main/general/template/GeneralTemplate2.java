@@ -60,7 +60,7 @@ public class GeneralTemplate2 extends ListGridPresenter<GetSubChannelsByChannelB
         }
         try {
             ImageView imageView = view.findViewById(R.id.general_template2_img);
-            GlideUtils.loadVt(imageView.getContext(), templateBean.getNewPicVt(), imageView);
+            GlideUtils.loadVt(imageView.getContext(), templateBean.getPicture(false), imageView);
         } catch (Exception e) {
         }
     }

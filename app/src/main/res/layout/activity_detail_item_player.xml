@@ -33,7 +33,7 @@
             android:src="@drawable/ic_play" />
 
         <TextView
-            android:id="@+id/detail_player_item_info"
+            android:id="@+id/detail_player_item_warning"
             android:layout_width="@dimen/dp_34"
             android:layout_height="@dimen/dp_34"
             android:layout_below="@id/detail_player_item_sign"

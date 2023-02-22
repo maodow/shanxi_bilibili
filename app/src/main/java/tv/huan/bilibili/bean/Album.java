@@ -5,12 +5,9 @@ import java.io.Serializable;
 import lib.kalu.leanback.presenter.ListGridPresenter;
 import lib.kalu.leanback.presenter.ListRowPresenter;
 
-public class Album implements Serializable, ListRowPresenter.ListRowBean, ListGridPresenter.ListGridBean, JumpBean {
+public class Album extends PosterBean implements Serializable, ListRowPresenter.ListRowBean, ListGridPresenter.ListGridBean, JumpBean {
 
     private static final long serialVersionUID = 2233263498353702029L;
-    private String newPicHz;
-    private String newPicVt;
-    private String picVtPath;
     private String title;
     private int type;
     private int payStatus;
@@ -45,22 +42,6 @@ public class Album implements Serializable, ListRowPresenter.ListRowBean, ListGr
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    public String getNewPicHz() {
-        return newPicHz;
-    }
-
-    public void setNewPicHz(String newPicHz) {
-        this.newPicHz = newPicHz;
-    }
-
-    public String getNewPicVt() {
-        return null == newPicVt || newPicVt.isEmpty() ? picVtPath : newPicVt;
-    }
-
-    public void setNewPicVt(String newPicVt) {
-        this.newPicVt = newPicVt;
     }
 
     public String getTitle() {
@@ -108,14 +89,6 @@ public class Album implements Serializable, ListRowPresenter.ListRowBean, ListGr
 
     public void setCid(String cid) {
         this.cid = cid;
-    }
-
-    public String getPicVtPath() {
-        return picVtPath;
-    }
-
-    public void setPicVtPath(String picVtPath) {
-        this.picVtPath = picVtPath;
     }
 
     @Override

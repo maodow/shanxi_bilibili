@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +17,7 @@ import java.util.List;
 import lib.kalu.leanback.presenter.ListGridPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
+import tv.huan.bilibili.bean.GetSubChannelsByChannelBean.ListBean.TemplateBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
@@ -60,7 +60,7 @@ public class GeneralTemplate7 extends ListGridPresenter<GetSubChannelsByChannelB
         }
         try {
             ImageView imageView = view.findViewById(R.id.general_template7_img);
-            GlideUtils.loadHz(imageView.getContext(), i == 0 ? templateBean.getNewPicHz() : templateBean.getNewPicHz(), imageView);
+            GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(i == 0), imageView);
         } catch (Exception e) {
         }
     }

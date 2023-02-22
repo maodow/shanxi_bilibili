@@ -94,7 +94,7 @@ public class GetSubChannelsByChannelBean implements Serializable {
         }
 
         @Keep
-        public static class TemplateBean implements JumpBean, ListGridPresenter.ListGridBean, ListRowPresenter.ListRowBean, Serializable {
+        public static class TemplateBean extends PosterBean implements JumpBean, ListGridPresenter.ListGridBean, ListRowPresenter.ListRowBean, Serializable {
 
             private int show;
             private String title;
@@ -102,8 +102,6 @@ public class GetSubChannelsByChannelBean implements Serializable {
             private String cid;
             private int classId;
             private int toType;
-            private String newPicVt;
-            private String newPicHz;
 
             private List<LookBean> generalTemplate17Recs;
             private boolean generalTemplate17Selected = false;
@@ -170,22 +168,6 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
             public void setToType(int toType) {
                 this.toType = toType;
-            }
-
-            public String getNewPicVt() {
-                return newPicVt;
-            }
-
-            public void setNewPicVt(String newPicVt) {
-                this.newPicVt = newPicVt;
-            }
-
-            public String getNewPicHz() {
-                return newPicHz;
-            }
-
-            public void setNewPicHz(String newPicHz) {
-                this.newPicHz = newPicHz;
             }
 
             @Override

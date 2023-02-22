@@ -162,7 +162,7 @@ public class GeneralTemplate20 extends ListGridPresenter<GetSubChannelsByChannel
             }
             try {
                 ImageView imageView = v.findViewById(R.id.general_template20a_img);
-                GlideUtils.loadHz(imageView.getContext(), templateBean.getNewPicHz(), imageView);
+                GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
             } catch (Exception e) {
             }
         }
@@ -178,7 +178,7 @@ public class GeneralTemplate20 extends ListGridPresenter<GetSubChannelsByChannel
             }
             try {
                 ImageView imageView = v.findViewById(R.id.general_template20c_img);
-                GlideUtils.loadHz(imageView.getContext(), templateBean.getNewPicHz(), imageView);
+                GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
             } catch (Exception e) {
             }
         }

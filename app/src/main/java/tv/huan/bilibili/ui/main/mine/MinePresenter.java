@@ -201,7 +201,7 @@ public class MinePresenter extends BasePresenter<MineView> {
                     FavBean.ItemBean itemBean = mDatas.get(position);
                     getView().setText(holder.itemView, R.id.mine_img_name, itemBean.getTitle());
                     ImageView imageView = holder.itemView.findViewById(R.id.mine_img_icon);
-                    GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getNewPicHz(), imageView);
+                    GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getPicture(true), imageView);
                 }
                 // item-more
                 else if (itemViewType == TYPE_ITEM_MORE) {

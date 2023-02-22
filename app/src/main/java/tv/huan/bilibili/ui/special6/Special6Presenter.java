@@ -87,7 +87,7 @@ public class Special6Presenter extends BasePresenter<Special6View> {
                     TextView textView = holder.itemView.findViewById(R.id.special6_item_name);
                     textView.setText(itemBean.getName());
                     ImageView imageView = holder.itemView.findViewById(R.id.special6_item_img);
-                    GlideUtils.loadVt(imageView.getContext(), itemBean.getNewPicVt(), imageView);
+                    GlideUtils.loadVt(imageView.getContext(), itemBean.getPicture(false), imageView);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

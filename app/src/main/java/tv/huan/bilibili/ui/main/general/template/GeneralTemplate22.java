@@ -154,7 +154,7 @@ public class GeneralTemplate22 extends Presenter {
                 try {
                     GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = (GetSubChannelsByChannelBean.ListBean.TemplateBean) mData.get(position);
                     ImageView imageView = holder.itemView.findViewById(R.id.general_template22_item_img);
-                    GlideUtils.loadHz(imageView.getContext(), templateBean.getNewPicHz(), imageView);
+                    GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
                 } catch (Exception e) {
                 }
             }

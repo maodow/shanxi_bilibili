@@ -23,12 +23,10 @@ public class GetSecondTagAlbumsBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean implements JumpBean, Serializable {
+    public static class ItemBean extends PosterBean implements JumpBean, Serializable {
         private String cid;
         private String title;
         private int type;
-        private String newPicVt;
-        private String newPicHz;
 
         @Override
         public int getToType() {
@@ -68,22 +66,6 @@ public class GetSecondTagAlbumsBean implements Serializable {
 
         public void setType(int type) {
             this.type = type;
-        }
-
-        public String getNewPicVt() {
-            return newPicVt;
-        }
-
-        public void setNewPicVt(String newPicVt) {
-            this.newPicVt = newPicVt;
-        }
-
-        public String getNewPicHz() {
-            return newPicHz;
-        }
-
-        public void setNewPicHz(String newPicHz) {
-            this.newPicHz = newPicHz;
         }
     }
 }

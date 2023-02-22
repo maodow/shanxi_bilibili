@@ -35,8 +35,7 @@ public class GeneralTemplate1 extends ListGridPresenter<GetSubChannelsByChannelB
         try {
             GetSubChannelsByChannelBean.ListBean.TemplateBean news = list.get(position);
             GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(0);
-            olds.setNewPicHz(news.getNewPicHz());
-            olds.setNewPicVt(news.getNewPicVt());
+            olds.copyPic(news);
             notifyItemRangeChanged(v, 0, 1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,7 +211,7 @@ public class GeneralTemplate1 extends ListGridPresenter<GetSubChannelsByChannelB
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
         super.onBindViewHolder(viewHolder, item);
-//        refreshRecs(context, (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) item);
+//        refreshRecs(context, (List<TemplateBean>) item);
         nextLoop(viewHolder.view, item, 0x10011, true);
     }
 
@@ -263,7 +262,7 @@ public class GeneralTemplate1 extends ListGridPresenter<GetSubChannelsByChannelB
         // left
         if (viewType == 1) {
             ImageView vImg = v.findViewById(R.id.album_item_template01a_img);
-            GlideUtils.loadHz(vImg.getContext(), templateBean.getNewPicHz(), vImg);
+            GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
         }
         // right
         else {

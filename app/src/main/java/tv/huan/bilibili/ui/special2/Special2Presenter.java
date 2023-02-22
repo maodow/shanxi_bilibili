@@ -137,7 +137,7 @@ public class Special2Presenter extends BasePresenter<Special2View> {
                     TextView vInfo = holder.itemView.findViewById(R.id.special2_item_info);
                     vInfo.setText(itemBean.getName());
                     ImageView imageView = holder.itemView.findViewById(R.id.special2_item_img);
-                    GlideUtils.loadHz(imageView.getContext(), itemBean.getNewPicHz(), imageView);
+                    GlideUtils.loadHz(imageView.getContext(), itemBean.getPicture(true), imageView);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

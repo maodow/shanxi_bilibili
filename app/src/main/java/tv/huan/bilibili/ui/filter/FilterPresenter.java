@@ -135,7 +135,7 @@ public class FilterPresenter extends BasePresenter<FilterView> {
                     TextView textView = holder.itemView.findViewById(R.id.filter_item_name);
                     textView.setText(itemBean.getName());
                     ImageView imageView = holder.itemView.findViewById(R.id.filter_item_img);
-                    GlideUtils.loadVt(imageView.getContext(), itemBean.getNewPicVt(), imageView);
+                    GlideUtils.loadVt(imageView.getContext(), itemBean.getPicture(false), imageView);
                 } catch (Exception e) {
                 }
             }

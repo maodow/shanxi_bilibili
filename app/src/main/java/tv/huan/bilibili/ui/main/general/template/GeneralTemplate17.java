@@ -41,8 +41,7 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
         try {
             GetSubChannelsByChannelBean.ListBean.TemplateBean news = list.get(position);
             GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(1);
-            olds.setNewPicHz(news.getNewPicHz());
-            olds.setNewPicVt(news.getNewPicVt());
+            olds.copyPic(news);
             notifyItemRangeChanged(v, 1, 1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -471,7 +470,7 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
             }
             // 3
             ImageView vImg = v.findViewById(R.id.general_item_template17a_img);
-            GlideUtils.loadHz(vImg.getContext(), templateBean.getNewPicHz(), vImg);
+            GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
             // 4
             TextView vTxt = v.findViewById(R.id.general_item_template17a_name);
             vTxt.setText(templateBean.getName());
@@ -479,12 +478,7 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
         // center
         else if (viewType == 2) {
             ImageView vImg = v.findViewById(R.id.general_item_template17b_img);
-            String newPicHz = templateBean.getNewPicHz();
-            if (null == newPicHz || newPicHz.length() <= 0) {
-                vImg.setImageDrawable(null);
-            } else {
-                GlideUtils.loadHz(vImg.getContext(), newPicHz, vImg);
-            }
+                GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
         }
         // right
         else {

@@ -86,7 +86,7 @@ public class Special4Presenter extends BasePresenter<Special4View> {
                     TextView textView = holder.itemView.findViewById(R.id.special4_item_name);
                     textView.setText(itemBean.getName());
                     ImageView imageView = holder.itemView.findViewById(R.id.special4_item_img);
-                    GlideUtils.loadHz(imageView.getContext(), itemBean.getNewPicHz(), imageView);
+                    GlideUtils.loadHz(imageView.getContext(), itemBean.getPicture(true), imageView);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

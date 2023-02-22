@@ -45,7 +45,7 @@ public class GeneralTemplate14 extends ListRowPresenter<GetSubChannelsByChannelB
             TextView textView = view.findViewById(R.id.album_item_name_template14);
             textView.setText(templateBean.getName());
             ImageView imageView = view.findViewById(R.id.album_item_img_template14);
-            GlideUtils.loadVt(imageView.getContext(), templateBean.getNewPicVt(), imageView);
+            GlideUtils.loadVt(imageView.getContext(), templateBean.getPicture(false), imageView);
         } catch (Exception e) {
             e.printStackTrace();
         }

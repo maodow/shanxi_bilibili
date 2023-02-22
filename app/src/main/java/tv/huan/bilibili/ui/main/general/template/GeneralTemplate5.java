@@ -43,7 +43,7 @@ public class GeneralTemplate5 extends ListGridPresenter<GetSubChannelsByChannelB
             TextView textView = view.findViewById(R.id.album_item_name_template5);
             textView.setText(templateBean.getName());
             ImageView imageView = view.findViewById(R.id.album_item_img_template5);
-            GlideUtils.loadHz(imageView.getContext(), templateBean.getNewPicHz(), imageView);
+            GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
         } catch (Exception e) {
             e.printStackTrace();
         }

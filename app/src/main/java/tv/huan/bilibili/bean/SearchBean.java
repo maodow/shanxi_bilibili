@@ -77,17 +77,13 @@ public class SearchBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean implements JumpBean, Serializable {
+    public static class ItemBean extends PosterBean implements JumpBean, Serializable {
 
         private String cid;
         private String title;
         private int type;
-        private String newPicVt;
-        private String newPicHz;
         private int payStatus;
         private String publishDate;
-        private String picHzPath;
-        private String picVtPath;
         private int productType;
         private String pic;
 
@@ -146,22 +142,6 @@ public class SearchBean implements Serializable {
             this.type = type;
         }
 
-        public String getNewPicVt() {
-            return null == newPicVt || newPicVt.isEmpty() ? picVtPath : newPicVt;
-        }
-
-        public void setNewPicVt(String newPicVt) {
-            this.newPicVt = newPicVt;
-        }
-
-        public String getNewPicHz() {
-            return null == newPicHz || newPicHz.isEmpty() ? picHzPath : newPicHz;
-        }
-
-        public void setNewPicHz(String newPicHz) {
-            this.newPicHz = newPicHz;
-        }
-
         public int getPayStatus() {
             return payStatus;
         }
@@ -176,22 +156,6 @@ public class SearchBean implements Serializable {
 
         public void setPublishDate(String publishDate) {
             this.publishDate = publishDate;
-        }
-
-        public String getPicHzPath() {
-            return picHzPath;
-        }
-
-        public void setPicHzPath(String picHzPath) {
-            this.picHzPath = picHzPath;
-        }
-
-        public String getPicVtPath() {
-            return picVtPath;
-        }
-
-        public void setPicVtPath(String picVtPath) {
-            this.picVtPath = picVtPath;
         }
     }
 }

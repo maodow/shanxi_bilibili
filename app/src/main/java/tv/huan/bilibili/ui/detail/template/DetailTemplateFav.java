@@ -74,7 +74,7 @@ public class DetailTemplateFav extends ListRowPresenter<Album> {
         }
         try {
             ImageView imageView = view.findViewById(R.id.detail_fav_item_img);
-            GlideUtils.loadVt(imageView.getContext(), album.getNewPicVt(), imageView);
+            GlideUtils.loadVt(imageView.getContext(), album.getPicture(false), imageView);
         } catch (Exception e) {
         }
     }

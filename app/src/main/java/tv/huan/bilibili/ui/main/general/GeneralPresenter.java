@@ -237,8 +237,7 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
                                         // left
                                         if (size == 0) {
                                             GetSubChannelsByChannelBean.ListBean.TemplateBean temp = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
-                                            temp.setNewPicHz(templateBean.getNewPicHz());
-                                            temp.setNewPicVt(templateBean.getNewPicVt());
+                                            temp.copyPic(templateBean);
                                             result.add(temp);
                                         }
                                     }
@@ -248,8 +247,7 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
                                         // center
                                         if (size == 1) {
                                             GetSubChannelsByChannelBean.ListBean.TemplateBean temp = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
-                                            temp.setNewPicHz(templateBean.getNewPicHz());
-                                            temp.setNewPicVt(templateBean.getNewPicVt());
+                                            temp.copyPic(templateBean);
                                             result.add(temp);
                                         }
                                     }
@@ -272,8 +270,8 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
                                         // center
                                         else if (size == 1) {
                                             GetSubChannelsByChannelBean.ListBean.TemplateBean temp = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
-                                            temp.setNewPicHz(templateBean.getNewPicHz());
-                                            temp.setNewPicVt(templateBean.getNewPicVt());
+//                                            temp.setNewPicHz(templateBean.getNewPicHz());
+//                                            temp.setNewPicVt(templateBean.getNewPicVt());
                                             result.add(temp);
                                         }
                                     }
@@ -346,7 +344,7 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
 //            GetSubChannelsByChannelBean.ListBean bean = list.get(i);
 //            if (null == bean)
 //                continue;
-//            List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
+//            List<TemplateBean> templateData = bean.getTemplateData();
 //            int preTemplate = bean.getPreTemplate();
 //            if (preTemplate == 4) {
 //

@@ -50,17 +50,13 @@ public class SpecialBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean implements JumpBean, Serializable {
-        private String newPicVt;
+    public static class ItemBean extends PosterBean implements JumpBean, Serializable {
         private String bindName;
-        private String newPicHz;
         private int payStatus; //8 免费，其它付费
         private int bindType;
         private int pos;
         private String baseId;
         private String cid;
-        private String picVtPath;
-        private String picHzPath;
         private int productType;
 
         private String pic;
@@ -81,28 +77,12 @@ public class SpecialBean implements Serializable {
             this.productType = productType;
         }
 
-        public String getNewPicVt() {
-            return null == newPicVt || newPicVt.isEmpty() ? picVtPath : newPicVt;
-        }
-
-        public void setNewPicVt(String newPicVt) {
-            this.newPicVt = newPicVt;
-        }
-
         public String getBindName() {
             return bindName;
         }
 
         public void setBindName(String bindName) {
             this.bindName = bindName;
-        }
-
-        public String getNewPicHz() {
-            return null == newPicHz || newPicHz.isEmpty() ? picHzPath : newPicHz;
-        }
-
-        public void setNewPicHz(String newPicHz) {
-            this.newPicHz = newPicHz;
         }
 
         public int getPayStatus() {
@@ -158,23 +138,6 @@ public class SpecialBean implements Serializable {
 
         public void setCid(String cid) {
             this.cid = cid;
-        }
-
-        public String getPicVtPath() {
-            return picVtPath;
-        }
-
-        public void setPicVtPath(String picVtPath) {
-            this.picVtPath = picVtPath;
-        }
-
-        public String getPicHzPath() {
-            return picHzPath;
-        }
-
-
-        public void setPicHzPath(String picHzPath) {
-            this.picHzPath = picHzPath;
         }
     }
 }
