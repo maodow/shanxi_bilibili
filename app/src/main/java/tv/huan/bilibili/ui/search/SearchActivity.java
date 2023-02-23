@@ -1,8 +1,11 @@
 package tv.huan.bilibili.ui.search;
 
+import android.view.View;
+
+import com.huan.keyboard.KeyboardLinearLayout;
+import com.huan.keyboard.listener.OnKeyboardInputListener;
+
 import lib.kalu.frame.mvp.BaseActivity;
-import tv.huan.bilibili.utils.BoxUtil;
-import tv.huan.bilibili.widget.keyboard.KeyboardView;
 import tv.huan.bilibili.R;
 
 /**
@@ -21,11 +24,25 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
         // request
         getPresenter().getSearchRecommend();
         // listener
-        KeyboardView keyboardView = findViewById(R.id.search_keyboard);
-        keyboardView.setProdId(BoxUtil.getProdId());
-        keyboardView.setOnSearchListener(new KeyboardView.OnSearchListener() {
+        findViewById(R.id.search_clean).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSearchKeyResult(String result) {
+            public void onClick(View view) {
+                KeyboardLinearLayout layout = findViewById(R.id.search_keyboard);
+                layout.clear();
+            }
+        });
+        findViewById(R.id.search_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                KeyboardLinearLayout layout = findViewById(R.id.search_keyboard);
+                layout.delete();
+            }
+        });
+        KeyboardLinearLayout keyboardView = findViewById(R.id.search_keyboard);
+        keyboardView.setOnKeyboardInputListener(new OnKeyboardInputListener() {
+            @Override
+            public void onInput(String s) {
+                setText(R.id.search_input, s);
                 getPresenter().searchBySpell();
             }
         });

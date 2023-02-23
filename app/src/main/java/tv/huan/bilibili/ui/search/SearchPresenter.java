@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.search;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.huan.keyboard.KeyboardLinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +27,13 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
-import tv.huan.bilibili.utils.BoxUtil;
-import tv.huan.bilibili.widget.keyboard.KeyboardView;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.BaseBean;
-import tv.huan.bilibili.http.HttpClient;
+import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
 import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.bean.SearchRecommendBean;
+import tv.huan.bilibili.http.HttpClient;
+import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
@@ -51,19 +54,27 @@ public class SearchPresenter extends BasePresenter<SearchView> {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_24);
-
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72);
+                int v = offset / 8;
                 outRect.set(0, 0, offset, offset);
+                int position = parent.getChildAdapterPosition(view);
 
-//                int position = parent.getChildAdapterPosition(view);
-//                if (position % 4 == 2 || ) {
-//                    outRect.set(20, 0, 0, 20);
-//                } else {
-//                    outRect.set(0, 0, 20, 20);
-//                }
-//                if (position % 3 == 1) {
-//                    view.setTranslationX(10);
-//                }
+                int i = position % 4;
+                if (i == 0) {
+                    outRect.set(0, 0, v * 2, 0);
+                } else if (i == 3) {
+                    outRect.set(v * 2, 0, 0, 0);
+                } else {
+                    outRect.set(v, 0, v, 0);
+                }
+
+                if (i == 1) {
+                    view.setTranslationX(-v / 2);
+                } else if (i == 2) {
+                    view.setTranslationX(v / 2);
+                } else {
+                    view.setTranslationX(0);
+                }
             }
         });
         recyclerView.setAdapter(new RecyclerView.Adapter() {
@@ -74,14 +85,29 @@ public class SearchPresenter extends BasePresenter<SearchView> {
                 View inflate = LayoutInflater.from(context).inflate(R.layout.activity_search_item, parent, false);
                 RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(inflate) {
                 };
-                inflate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = holder.getAbsoluteAdapterPosition();
-                        SearchBean.ItemBean itemBean = mData.get(position);
-                        JumpUtil.next(v.getContext(), itemBean);
-                    }
-                });
+                try {
+                    inflate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int position = holder.getAbsoluteAdapterPosition();
+                            if (position >= 0) {
+                                SearchBean.ItemBean itemBean = mData.get(position);
+                                JumpUtil.next(v.getContext(), itemBean);
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                }
+                try {
+                    inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View view, boolean b) {
+                            TextView textView = view.findViewById(R.id.search_item_name);
+                            textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        }
+                    });
+                } catch (Exception e) {
+                }
                 return holder;
             }
 
@@ -91,10 +117,13 @@ public class SearchPresenter extends BasePresenter<SearchView> {
                     SearchBean.ItemBean itemBean = mData.get(position);
                     TextView textView = holder.itemView.findViewById(R.id.search_item_name);
                     textView.setText(itemBean.getName());
+                } catch (Exception e) {
+                }
+                try {
+                    SearchBean.ItemBean itemBean = mData.get(position);
                     ImageView imageView = holder.itemView.findViewById(R.id.search_item_img);
                     GlideUtils.loadVt(imageView.getContext(), itemBean.getPicture(false), imageView);
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -116,8 +145,8 @@ public class SearchPresenter extends BasePresenter<SearchView> {
                 .flatMap(new Function<Boolean, Observable<BaseBean<SearchBean>>>() {
                     @Override
                     public Observable<BaseBean<SearchBean>> apply(Boolean aBoolean) {
-                        KeyboardView keyboardView = getView().findViewById(R.id.search_keyboard);
-                        String result = keyboardView.getResult();
+                        KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
+                        String result = keyboardView.getInput();
                         String lowerCase = result.toLowerCase();
                         return HttpClient.getHttpClient().getHttpApi().searchBySpell(lowerCase, 0, Integer.MAX_VALUE);
                     }

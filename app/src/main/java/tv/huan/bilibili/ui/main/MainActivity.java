@@ -19,6 +19,7 @@ import lib.kalu.leanback.tab.listener.OnTabChangeListener;
 import lib.kalu.leanback.tab.model.TabModel;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.ExitDialog;
+import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.widget.GeneralGridView;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
@@ -68,6 +69,13 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             @Override
             public void onRight() {
                 rightScroll();
+            }
+        });
+        View viewSearch = findViewById(R.id.main_search);
+        viewSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                JumpUtil.nextSearch(view.getContext());
             }
         });
     }

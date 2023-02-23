@@ -1,72 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/dp_48">
 
-    <tv.huan.bilibili.widget.menu.MenuLayout
-        android:id="@+id/search_menu"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:clipChildren="false"
-        android:clipToPadding="false" />
+    <!-- 搜索 -->
+    <lib.kalu.leanback.plus.TextViewPlus
+        android:id="@+id/search_input"
+        android:layout_width="@dimen/dp_220"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_48"
+        android:layout_marginBottom="@dimen/dp_14"
+        android:drawableLeft="@mipmap/ic_launcher"
+        android:drawablePadding="@dimen/dp_8"
+        android:focusable="false"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="@dimen/dp_14"
+        android:paddingRight="@dimen/dp_14"
+        android:text="@string/search_warning"
+        android:textColor="@color/color_white"
+        android:textSize="14sp"
+        app:tvp_drawable_left_height="@dimen/dp_14"
+        app:tvp_drawable_left_width="@dimen/dp_14" />
 
-    <tv.huan.bilibili.widget.keyboard.KeyboardView
+    <!-- 清空 -->
+    <lib.kalu.leanback.plus.TextViewPlus
+        android:id="@+id/search_clean"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_24"
+        android:layout_below="@id/search_input"
+        android:layout_alignLeft="@id/search_input"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:background="@drawable/bg_selector_common_search"
+        android:drawableLeft="@drawable/ic_selector_common_search"
+        android:drawablePadding="@dimen/dp_8"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_14"
+        android:paddingRight="@dimen/dp_14"
+        android:text="@string/search_clean"
+        android:textColor="@color/color_selector_text_common"
+        android:textSize="14sp"
+        app:tvp_drawable_left_height="@dimen/dp_14"
+        app:tvp_drawable_left_width="@dimen/dp_14" />
+
+    <!-- 退格 -->
+    <lib.kalu.leanback.plus.TextViewPlus
+        android:id="@+id/search_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_24"
+        android:layout_below="@id/search_input"
+        android:layout_alignRight="@id/search_input"
+        android:background="@drawable/bg_selector_common_search"
+        android:drawableLeft="@drawable/ic_selector_common_search"
+        android:drawablePadding="@dimen/dp_8"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_14"
+        android:paddingRight="@dimen/dp_14"
+        android:text="@string/search_delete"
+        android:textColor="@color/color_selector_text_common"
+        android:textSize="14sp"
+        app:tvp_drawable_left_height="@dimen/dp_14"
+        app:tvp_drawable_left_width="@dimen/dp_14" />
+
+    <!-- 键盘 -->
+    <com.huan.keyboard.KeyboardLinearLayout
         android:id="@+id/search_keyboard"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:layout_below="@id/search_menu"
+        android:layout_width="@dimen/dp_220"
+        android:layout_height="@dimen/dp_300"
+        android:layout_below="@id/search_clean"
+        android:layout_marginLeft="@dimen/dp_48"
         android:gravity="center_vertical"
-        android:paddingLeft="48dp"
-        android:paddingRight="40dp" />
+        app:kll_background_full="@drawable/bg_selector_keyboard_key"
+        app:kll_background_item_t9="@drawable/bg_selector_keyboard_key"
+        app:kll_background_menu="@drawable/bg_selector_keyboard_menu"
+        app:kll_focus_text="O"
+        app:kll_margin_full="@dimen/dp_1"
+        app:kll_margin_t9="@dimen/dp_2" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_alignRight="@id/search_keyboard"
-        android:layout_marginTop="72dp"
-        android:layout_marginBottom="24dp"
-        android:background="#06031e" />
-
-    <!-- 热搜影片, 提示 -->
+    <!-- 提示 -->
     <TextView
         android:id="@+id/keyboard_title"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginLeft="300dp"
-        android:layout_marginTop="72dp"
+        android:layout_height="@dimen/dp_30"
+        android:layout_alignTop="@id/search_input"
+        android:layout_marginLeft="@dimen/dp_48"
+        android:layout_marginRight="@dimen/dp_48"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_toRightOf="@id/search_input"
         android:focusable="false"
         android:gravity="center_vertical|left"
-        android:paddingLeft="40dp"
-        android:text="热搜影片"
+        android:text="@string/search_hot"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/sp_11" />
+        android:textSize="@dimen/sp_18" />
 
     <!-- 搜索结果 -->
-    <androidx.recyclerview.widget.RecyclerView
+    <lib.kalu.leanback.list.RecyclerViewGrid
         android:id="@+id/search_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="300dp"
-        android:layout_marginTop="102dp"
+        android:layout_below="@id/keyboard_title"
+        android:layout_toRightOf="@id/search_input"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingLeft="40dp"
-        android:paddingTop="14dp"
-        android:paddingRight="48dp"
-        android:paddingBottom="24dp" />
-
-    <!--    &lt;!&ndash; 热搜标签 &ndash;&gt;-->
-    <!--    <tv.huan.huanshi.view.HotSearchTagLayout-->
-    <!--        android:id="@+id/hot_search_tag_container"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_below="@id/keyboard_title"-->
-    <!--        android:layout_marginTop="@dimen/dp_10"-->
-    <!--        android:layout_marginRight="@dimen/dp_27"-->
-    <!--        android:layout_toRightOf="@id/keyboard_line"-->
-    <!--        android:focusable="false"-->
-    <!--        android:orientation="vertical"-->
-    <!--        android:visibility="gone" />-->
+        android:focusable="false"
+        android:paddingLeft="@dimen/dp_48"
+        android:paddingTop="@dimen/dp_14"
+        android:paddingRight="@dimen/dp_48"
+        android:paddingBottom="@dimen/dp_14" />
 
 </RelativeLayout>

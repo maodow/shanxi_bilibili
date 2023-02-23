@@ -545,7 +545,7 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
             vTxt.setText(templateBean.getName());
             // b
             ImageView vImg = v.findViewById(R.id.general_item_template17a_img);
-            GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
+            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
             // c
             int num = 2;
             v.findViewById(R.id.general_template17a_type1_item1).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
