@@ -48,7 +48,9 @@ android {
             buildConfigField("Boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("Boolean", "HUAN_SKIN", "false")// 换肤skin
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
-            buildConfigField("String", "HUAN_API_SKIN", "\"http://123.59.196.222/\"")
+            buildConfigField("String", "APP_ID", "\"8516778006830858242\"")
+            buildConfigField("String", "APP_KEY", "\"c334162ba91649ca89c54f5e742d3d51\"")
+            buildConfigField("String", "PRODUCT_ID", "\"P8516947106404188161\"")
         }
         debug {
             signingConfig signingConfigs.release
@@ -63,7 +65,9 @@ android {
             buildConfigField("Boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("Boolean", "HUAN_SKIN", "false")// 换肤skin
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
-            buildConfigField("String", "HUAN_API_SKIN", "\"http://123.59.196.222/\"")
+            buildConfigField("String", "APP_ID", "\"8516778006830858242\"")
+            buildConfigField("String", "APP_KEY", "\"c334162ba91649ca89c54f5e742d3d51\"")
+            buildConfigField("String", "PRODUCT_ID", "\"P8516947106404188161\"")
         }
     }
     sourceSets {
@@ -97,7 +101,7 @@ dependencies {
     api files('libs/lib_mediaplayer_ui_release_20230216.aar')
     api files('libs/lib_mediaplayer_exo_r2.18.3_ff4.4_audio_release_20230222.aar')
     // heilongjiang
-    api files('libs/lib_huan_heilongjiang_release_20230215.aar')
+    api files('libs/lib_huan_heilongjiang_release_20230224.aar')
 
     // core
     implementation 'androidx.multidex:multidex:2.0.1'

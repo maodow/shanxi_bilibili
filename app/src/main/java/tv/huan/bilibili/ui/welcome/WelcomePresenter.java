@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -25,6 +27,7 @@ import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.LoadPageIcon;
+import tv.huan.bilibili.utils.AppUtils;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.SkinManager;
 
@@ -36,65 +39,20 @@ public class WelcomePresenter extends BasePresenter<WelcomeView> {
 
     protected void request() {
 
-        addDisposable(HttpClient.getHttpClient().getHttpApi().getUpdateJson(BuildConfig.HUAN_API_SKIN + "img/public/s/version.json")
-                // update
-                .map(new Function<JSONObject, Boolean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
-                    public Boolean apply(JSONObject object) {
-                        Log.e("WelcomePresenter", "getUpdateJson => " + object);
-                        try {
-
-                            String flag = object.optString("flag", "");
-//                            boolean flag = false;
-//                            String[] update = s.getVersion().split("\\.");
-//                            String[] versionName = AppUtils.getAppVersionName().split("\\.");
-//                            LogUtils.d("" + s.getVersion());
-//                            LogUtils.d("" + AppUtils.getAppVersionName());
-//                            for (int i = 0; i < update.length; i++) {
-//                                String s1 = versionName[i];
-//                                if (s1.contains("-"))
-//                                    s1 = s1.substring(0, 1);
-//                                flag = Integer.parseInt(update[i]) > Integer.parseInt(s1);
-//                                if (flag) break;
-//                            }
-
-                            String version = object.optString("version", "");
-                            if ("0".equals(flag)) {
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return true;
+                    public void subscribe(ObservableEmitter<Boolean> emitter) {
+                        emitter.onNext(true);
                     }
                 })
-                // skin
-                .flatMap(new Function<Boolean, Observable<JSONObject>>() {
-                    @Override
-                    public Observable<JSONObject> apply(Boolean aBoolean) {
-                        int prod = getView().getIntExtra("prod", 2);
-                        return HttpClient.getHttpClient().getHttpApi().getIcon(BuildConfig.HUAN_API + "img/public/s/skin" + prod + ".json");
-                    }
-                })
-                // 下载皮肤包[如果已下载，则不下载]
-                .map(new Function<JSONObject, Boolean>() {
-                    @Override
-                    public Boolean apply(JSONObject object) {
-                        Log.e("WelcomePresenter", "getIcon => " + object);
-                        int prod = getView().getIntExtra("prod", 2);
-                        String dirs = object.optString("dirs", null);
-                        Context context = getView().getContext();
-                        SkinManager.downloadSkin(context, prod, dirs);
-                        return true;
-                    }
-                })
-                // load和首页弹窗背景图片下载
+                // 广告
                 .flatMap(new Function<Boolean, Observable<LoadPageIcon>>() {
                     @Override
                     public Observable<LoadPageIcon> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().getLoadPage(BoxUtil.getCa());
                     }
                 })
-                // 下载背景图
+                // 下载广告
                 .map(new Function<LoadPageIcon, String>() {
                     @Override
                     public String apply(LoadPageIcon loadPageIcon) {
@@ -117,17 +75,18 @@ public class WelcomePresenter extends BasePresenter<WelcomeView> {
                             String picture_hd = loading_pic.getPicture_HD();
                             object.put("img", picture_hd);
                         } catch (Exception e) {
-                            e.printStackTrace();
                         }
                         return object.toString();
                     }
                 })
+                // 频道
                 .flatMap(new Function<String, Observable<BaseBean<GetChannelsBean>>>() {
                     @Override
                     public Observable<BaseBean<GetChannelsBean>> apply(String s) {
                         return HttpClient.getHttpClient().getHttpApi().getChannels(1, 100, s);
                     }
                 })
+                // 整理数据
                 .map(new Function<BaseBean<GetChannelsBean>, Object[]>() {
                     @Override
                     public Object[] apply(BaseBean<GetChannelsBean> response) {

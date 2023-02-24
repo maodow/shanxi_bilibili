@@ -18,16 +18,12 @@ android {
             shrinkResources false
             minifyEnabled false
             consumerProguardFiles 'proguard-rules.pro'
-            buildConfigField("String", "APP_ID", "\"123\"")
-            buildConfigField("String", "APP_KEY", "\"456\"")
         }
         debug {
             zipAlignEnabled false
             shrinkResources false
             minifyEnabled false
             consumerProguardFiles 'proguard-rules.pro'
-            buildConfigField("String", "APP_ID", "\"123\"")
-            buildConfigField("String", "APP_KEY", "\"456\"")
         }
     }
 

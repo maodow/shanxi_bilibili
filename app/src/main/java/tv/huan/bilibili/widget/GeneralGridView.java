@@ -121,6 +121,15 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
         scrollUp(0);
     }
 
+//    public boolean isTop() {
+//        try {
+//            ViewHolder viewHolder = findViewHolderForLayoutPosition(0);
+//            viewHolder.itemView;
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
+
     public void pauseMessage() {
         GeneralTemplate17 template17 = getPresenter(GeneralTemplate17.class);
         if (null != template17) {

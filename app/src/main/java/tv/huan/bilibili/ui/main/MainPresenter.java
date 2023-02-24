@@ -2,6 +2,8 @@ package tv.huan.bilibili.ui.main;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -240,36 +242,37 @@ public class MainPresenter extends BasePresenter<MainView> {
     protected boolean dispatchKey(KeyEvent event) {
         // menu
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_MENU) {
-            TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
-            int checkedIndex = tabLayout.getCheckedIndex();
-            int itemCount = tabLayout.getItemCount();
-            if (itemCount > 0 && checkedIndex != 1) {
-                // 1
-                getView().showTitle();
-                // 2
-                getView().tabScroll(1);
-                // 3
-                getView().contentScrollTop();
-                return true;
-            }
+//            TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+//            int checkedIndex = tabLayout.getCheckedIndex();
+//            int itemCount = tabLayout.getItemCount();
+//            if (itemCount > 0 && checkedIndex != 1) {
+//                // 1
+//                getView().showTitle();
+//                // 2
+//                getView().tabScroll(1);
+//                // 3
+//                getView().contentScrollTop();
+//                return true;
+//            }
         }
         // back
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             boolean visibility = getView().isVisibility(R.id.main_search);
+            LogUtil.log("MainPresenter", "back => visibility = " + visibility);
             if (visibility) {
-                requestExit();
-                return true;
-            } else {
                 TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
                 int checkedIndex = tabLayout.getCheckedIndex();
-                if (checkedIndex > 0) {
-                    // 1
-//                    getView().showTitle();
-                    // 2
+                int itemCount = tabLayout.getItemCount();
+                if (itemCount > 1 && checkedIndex != 1) {
+                    tabLayout.scrollToPosition(1);
                     getView().contentScrollTop();
-                    return true;
+                } else {
+                    requestExit();
                 }
+            } else {
+                getView().contentScrollTop();
             }
+            return true;
         }
         // up
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {

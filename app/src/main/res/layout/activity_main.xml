@@ -19,7 +19,7 @@
         android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
-        android:text="@string/menu_vip"
+        android:text="@string/menu_search"
         android:textColor="@color/color_selector_text_common"
         android:textSize="14sp"
         app:tvp_drawable_left_height="@dimen/dp_14"

@@ -17,10 +17,12 @@ import lib.kalu.leanback.page.PageView;
 import lib.kalu.leanback.tab.TabLayout;
 import lib.kalu.leanback.tab.listener.OnTabChangeListener;
 import lib.kalu.leanback.tab.model.TabModel;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.ExitDialog;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.widget.GeneralGridView;
+import tv.huan.heilongjiang.HeilongjiangApi;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
 
@@ -71,11 +73,18 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 rightScroll();
             }
         });
-        View viewSearch = findViewById(R.id.main_search);
-        viewSearch.setOnClickListener(new View.OnClickListener() {
+        // 搜索
+        findViewById(R.id.main_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 JumpUtil.nextSearch(view.getContext());
+            }
+        });
+        // 会员
+        findViewById(R.id.main_vip).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HeilongjiangApi.init(getApplicationContext(), BuildConfig.APP_ID, BuildConfig.APP_KEY);
             }
         });
     }
