@@ -34,7 +34,6 @@ import lib.kalu.leanback.tab.ninepatch.NinePatchChunk;
 import tv.huan.bilibili.HuanApp;
 import tv.huan.bilibili.R;
 
-
 public class GlideUtils {
 
     /**************************** 网络图片 ************************************/
@@ -93,8 +92,20 @@ public class GlideUtils {
 //            options.transform(transform);
 
             // 图片
-            Glide.with(FrameContext.getApplicationContext()).load(url).apply(options).into(imageView);
-//            Glide.with(context).load(url).apply(options).into(imageView);
+            Glide.with(FrameContext.getApplicationContext()).load(url.trim()).apply(options).into(imageView);
+//            Glide.with(context).load(url).apply(options).into(new CustomTarget<Drawable>() {
+//                @Override
+//                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+//                    int visibility = imageView.getVisibility();
+//                    if (visibility == View.VISIBLE) {
+//                        imageView.setImageDrawable(resource);
+//                    }
+//                }
+//
+//                @Override
+//                public void onLoadCleared(@Nullable Drawable placeholder) {
+//                }
+//            });
 //            Glide.with(context).asBitmap().load(url).apply(options).into(new CustomTarget<Bitmap>() {
 //                @Override
 //                public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
@@ -159,6 +170,14 @@ public class GlideUtils {
     }
 
     /**************************** ↓↓↓↓ ************************************/
+
+    public static void resumeRequests(Context context) {
+        Glide.with(context).resumeRequests();
+    }
+
+    public static void pauseRequests(Context context) {
+        Glide.with(context).pauseAllRequests();
+    }
 
     public static void clear(@NonNull Context context) {
         clear(context, true, true);

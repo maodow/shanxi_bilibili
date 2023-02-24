@@ -38,6 +38,8 @@ public interface KeyboardImpl {
     }
 
     default void delete() {
+        if (mInput.size() <= 0)
+            return;
         mInput.removeLast();
         boolean hasListener = hasListener();
         if (hasListener) {
@@ -47,6 +49,8 @@ public interface KeyboardImpl {
     }
 
     default void clear() {
+        if (mInput.size() <= 0)
+            return;
         mInput.clear();
         boolean hasListener = hasListener();
         if (hasListener) {

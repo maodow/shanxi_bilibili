@@ -13,18 +13,36 @@ import lib.kalu.leanback.list.LeanBackVerticalGridView;
 import lib.kalu.leanback.list.RecyclerView;
 import lib.kalu.leanback.util.LeanBackUtil;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
+import tv.huan.bilibili.utils.GlideUtils;
 
 public final class GeneralGridView extends LeanBackVerticalGridView {
     public GeneralGridView(@NonNull Context context) {
         super(context);
+        init();
     }
 
     public GeneralGridView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public GeneralGridView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
+    }
+
+    private void init() {
+//        addOnScrollListener(new OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull androidx.recyclerview.widget.RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    GlideUtils.resumeRequests(getContext());
+//                } else {
+//                    GlideUtils.pauseRequests(getContext());
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -42,8 +60,12 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
             // 正在被外部拖拽,一般为用户正在用手指滚动 SCROLL_STATE_DRAGGING
             // 自动滚动开始 SCROLL_STATE_SETTLING
             int state = getScrollState();
-            if (state != RecyclerView.SCROLL_STATE_IDLE)
+            if (state != RecyclerView.SCROLL_STATE_IDLE) {
+                GlideUtils.pauseRequests(getContext());
                 return true;
+            } else {
+                GlideUtils.resumeRequests(getContext());
+            }
         } catch (Exception e) {
         }
 
