@@ -67,18 +67,20 @@
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
     <!-- 键盘 -->
-    <com.huan.keyboard.KeyboardLinearLayout
+    <tv.huan.keyboard.KeyboardLinearLayout
         android:id="@+id/search_keyboard"
         android:layout_width="@dimen/dp_220"
-        android:layout_height="@dimen/dp_300"
+        android:layout_height="wrap_content"
         android:layout_below="@id/search_clean"
         android:layout_marginLeft="@dimen/dp_48"
         android:gravity="center_vertical"
         app:kll_background_full="@drawable/bg_selector_keyboard_key"
-        app:kll_background_item_t9="@drawable/bg_selector_keyboard_key"
         app:kll_background_menu="@drawable/bg_selector_keyboard_menu"
+        app:kll_background_t9_item="@drawable/bg_selector_keyboard_key"
+        app:kll_background_t9_preview="@drawable/bg_selector_keyboard_key"
         app:kll_focus_text="O"
         app:kll_margin_full="@dimen/dp_1"
+        app:kll_margin_space="@dimen/dp_40"
         app:kll_margin_t9="@dimen/dp_2" />
 
     <!-- 提示 -->

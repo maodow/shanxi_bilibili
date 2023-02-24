@@ -2,8 +2,8 @@ package tv.huan.bilibili.ui.search;
 
 import android.view.View;
 
-import com.huan.keyboard.KeyboardLinearLayout;
-import com.huan.keyboard.listener.OnKeyboardInputListener;
+import tv.huan.keyboard.KeyboardLinearLayout;
+import tv.huan.keyboard.listener.OnKeyboardInputListener;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;

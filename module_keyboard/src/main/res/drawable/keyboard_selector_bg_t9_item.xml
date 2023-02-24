@@ -2,12 +2,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingDefaultResource">
     <item android:state_focused="true">
         <shape>
-            <solid android:color="@color/color_white" />
+            <solid android:color="#ffffff" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="@color/color_303030" />
+            <solid android:color="#000000" />
         </shape>
     </item>
 </selector>

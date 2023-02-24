@@ -4,6 +4,7 @@
 /app/build
 /app/release
 /app/debug
+/module_keyboard
 /huan_common/build
 /huan_common/release
 /huan_common/debug
