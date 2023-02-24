@@ -33,60 +33,73 @@
         <activity
             android:name="tv.huan.bilibili.ui.main.MainActivity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 网页 -->
         <activity
             android:name="tv.huan.bilibili.ui.webview.WebviewActivity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 详情 -->
         <activity
             android:name="tv.huan.bilibili.ui.detail.DetailActivity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 筛选 -->
         <activity
             android:name="tv.huan.bilibili.ui.filter.FilterActivity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 个人中心【观看历史、我的收藏、我的订单】 -->
         <activity
             android:name="tv.huan.bilibili.ui.center.CenterActivity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 搜索 -->
         <activity
             android:name="tv.huan.bilibili.ui.search.SearchActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 专题1 -->
         <activity
             android:name="tv.huan.bilibili.ui.special1.Special1Activity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 专题2 -->
         <activity
             android:name="tv.huan.bilibili.ui.special2.Special2Activity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 专题3 -->
         <activity
             android:name="tv.huan.bilibili.ui.special3.Special3Activity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 专题4 -->
         <activity
             android:name="tv.huan.bilibili.ui.special4.Special4Activity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 专题5 -->
         <activity
             android:name="tv.huan.bilibili.ui.special5.Special5Activity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
         <!-- 专题6 -->
         <activity
             android:name="tv.huan.bilibili.ui.special6.Special6Activity"
             android:exported="false"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
     </application>
 

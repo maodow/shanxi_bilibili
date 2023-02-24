@@ -194,7 +194,7 @@ public class DetailTemplatePlayer extends Presenter {
         try {
             viewHolder.view.findViewById(R.id.detail_player_item_logo).setVisibility(View.GONE);
             viewHolder.view.findViewById(R.id.detail_player_item_img).setVisibility(View.GONE);
-            viewHolder.view.findViewById(R.id.detail_player_item_info).setVisibility(View.GONE);
+            viewHolder.view.findViewById(R.id.detail_player_item_warning).setVisibility(View.GONE);
             viewHolder.view.findViewById(R.id.detail_player_item_position).setVisibility(View.GONE);
             viewHolder.view.findViewById(R.id.detail_player_item_sign).setVisibility(View.GONE);
         } catch (Exception e) {

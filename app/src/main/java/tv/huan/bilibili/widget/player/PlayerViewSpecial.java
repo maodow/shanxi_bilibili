@@ -143,7 +143,7 @@ public class PlayerViewSpecial extends VideoLayout {
                     //播放完成
                     case PlayerType.StateType.STATE_END:
 //                        if (null != mOnListener) {
-//                            Message message = Message.obtain();
+//                            Message message = new Message();
 //                            message.what = 1002;
 //                            mHandler.sendMessage(message);
 //                            mOnListener.onCompletion();

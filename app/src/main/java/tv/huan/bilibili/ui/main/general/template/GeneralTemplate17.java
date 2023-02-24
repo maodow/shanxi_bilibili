@@ -31,6 +31,7 @@ import lib.kalu.leanback.round.RoundRelativeLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.LookBean;
+import tv.huan.bilibili.bean.MessageBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
@@ -177,7 +178,7 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
 
     private boolean mPause = false;
     private boolean mHasFocus = false;
-    private Message mMessage = null;
+    private MessageBean[] mMessage = new MessageBean[1];
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -186,11 +187,12 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
 
             if (mPause) {
                 mHandler.removeCallbacksAndMessages(null);
-                mMessage = Message.obtain();
-                mMessage.what = msg.what;
-                mMessage.obj = msg.obj;
-                mMessage.arg1 = msg.arg1;
-                mMessage.arg2 = msg.arg2;
+                MessageBean bean = new MessageBean();
+                bean.setWhat(msg.what);
+                bean.setObj(msg.obj);
+                bean.setArg1(msg.arg1);
+                bean.setArg2(msg.arg2);
+                mMessage[0] = bean;
             } else {
                 // 0x10013
                 if (msg.what == 0x10013) {
@@ -255,9 +257,14 @@ public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannel
 
     public final void resumeMessage() {
         mPause = false;
-        if (null != mMessage) {
+        if (null != mMessage && null != mMessage[0]) {
+            Message message = new Message();
+            message.what = mMessage[0].getWhat();
+            message.obj = mMessage[0].getObj();
+            message.arg1 = mMessage[0].getArg1();
+            message.arg2 = mMessage[0].getArg2();
             mHandler.removeCallbacksAndMessages(null);
-            mHandler.sendMessageDelayed(mMessage, 2000);
+            mHandler.sendMessageDelayed(message, 2000);
             LogUtil.log("GeneralTemplate17", "resumeMessage =>");
         }
     }
