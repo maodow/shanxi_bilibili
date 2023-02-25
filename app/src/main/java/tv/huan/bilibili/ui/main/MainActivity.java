@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import lib.kalu.frame.mvp.BaseActivity;
@@ -71,20 +73,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             @Override
             public void onRight() {
                 rightScroll();
-            }
-        });
-        // 搜索
-        findViewById(R.id.main_search).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                JumpUtil.nextSearch(view.getContext());
-            }
-        });
-        // 会员
-        findViewById(R.id.main_vip).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                HeilongjiangApi.init(getApplicationContext(), BuildConfig.APP_ID, BuildConfig.APP_KEY);
             }
         });
     }
@@ -151,5 +139,18 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         bundle.putString(ExitDialog.BUNDLE_DATA, data);
         dialog.setArguments(bundle);
         dialog.show(fragmentManager, "");
+    }
+
+    @Override
+    public void onCall(@NonNull int code, @NonNull JSONObject object) {
+        super.onCall(code, object);
+        if (code == 9900 && null != object) {
+            String cid = object.optString("cid", "");
+            String name = object.optString("name", "");
+            getPresenter().reportExitRetentionClick(cid, name);
+        } else if (code == 1100) {
+            getPresenter().reportAppExit();
+            onBackPressed();
+        }
     }
 }

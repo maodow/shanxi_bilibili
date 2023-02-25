@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ import java.util.List;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.bean.ExitBean;
+import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.R;
@@ -102,7 +105,7 @@ public class ExitDialog extends DialogFragment implements DialogInterface.OnKeyL
             @Override
             public void onClick(View v) {
                 try {
-                    getActivity().onBackPressed();
+                    ((MainActivity) getActivity()).onCall(1100, null);
                 } catch (Exception e) {
                 }
                 dismiss();
@@ -260,6 +263,14 @@ public class ExitDialog extends DialogFragment implements DialogInterface.OnKeyL
                         ExitBean itemBean = list.get(position);
                         JumpUtil.next(getContext(), itemBean);
                         dismiss();
+                        // 2
+                        try {
+                            JSONObject object = new JSONObject();
+                            object.put("cid", itemBean.getCid());
+                            object.put("name", itemBean.getName());
+                            ((MainActivity) getActivity()).onCall(9900, object);
+                        } catch (Exception e) {
+                        }
                     }
                 });
                 return holder;

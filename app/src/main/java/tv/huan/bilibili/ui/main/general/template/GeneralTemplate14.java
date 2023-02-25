@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.kalu.leanback.presenter.ListRowPresenter;
+import lib.kalu.leanback.presenter.ListTvRowPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
-public class GeneralTemplate14 extends ListRowPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+public class GeneralTemplate14 extends ListTvRowPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {

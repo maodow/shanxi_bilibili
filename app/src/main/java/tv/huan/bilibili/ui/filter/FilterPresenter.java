@@ -1,7 +1,6 @@
 package tv.huan.bilibili.ui.filter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -35,7 +34,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.tags.TagsLayout;
@@ -44,6 +42,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.FilterBean;
 import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
@@ -55,7 +54,7 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class FilterPresenter extends BasePresenter<FilterView> {
+public class FilterPresenter extends BasePresenterImpl<FilterView> {
 
     private final List<GetSecondTagAlbumsBean.ItemBean> mData = new ArrayList<>();
 
@@ -264,11 +263,11 @@ public class FilterPresenter extends BasePresenter<FilterView> {
                                 // 全部
                                 LinkedList<TagBean> list = new LinkedList<>();
                                 TagBean firstBean = new TagBean();
-                                firstBean.setText("全部");
+                                firstBean.setText(getView().getString(R.string.filter_all));
                                 firstBean.setId(0);
-                                firstBean.setTextColorFocus(Color.parseColor("#1c967f"));
-                                firstBean.setTextColorSelect(Color.parseColor("#1dffdc"));
-                                firstBean.setTextColorDetault(Color.parseColor("#ffffff"));
+                                firstBean.setTextColorResourceDetault(R.color.color_white);
+                                firstBean.setTextColorResourceSelect(R.color.color_ff6699);
+                                firstBean.setTextColorResourceFocus(R.color.color_black);
                                 firstBean.setBackgroundResourceDefault(R.drawable.bg_filter_tag_unfocus);
                                 firstBean.setBackgroundResourceFocus(R.drawable.bg_filter_tag_focus);
                                 firstBean.setBackgroundResourceSelect(R.drawable.bg_filter_tag_unfocus);
@@ -281,9 +280,9 @@ public class FilterPresenter extends BasePresenter<FilterView> {
                                     TagBean tagsModel = new TagBean();
                                     tagsModel.setText(value);
                                     tagsModel.setId(0);
-                                    tagsModel.setTextColorFocus(Color.parseColor("#1c967f"));
-                                    tagsModel.setTextColorSelect(Color.parseColor("#1dffdc"));
-                                    tagsModel.setTextColorDetault(Color.parseColor("#ffffff"));
+                                    tagsModel.setTextColorResourceDetault(R.color.color_white);
+                                    tagsModel.setTextColorResourceSelect(R.color.color_ff6699);
+                                    tagsModel.setTextColorResourceFocus(R.color.color_black);
                                     tagsModel.setBackgroundResourceDefault(R.drawable.bg_filter_tag_unfocus);
                                     tagsModel.setBackgroundResourceFocus(R.drawable.bg_filter_tag_focus);
                                     tagsModel.setBackgroundResourceSelect(R.drawable.bg_filter_tag_unfocus);

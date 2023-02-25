@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,10 +25,10 @@ import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.BuildConfig;
+import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.R;
@@ -46,7 +47,7 @@ import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.utils.Constants;
 import tv.huan.common.starcor.StarcorUtil;
 
-public class DetailPresenter extends BasePresenter<DetailView> {
+public class DetailPresenter extends BasePresenterImpl<DetailView> {
     public DetailPresenter(@NonNull DetailView detailView) {
         super(detailView);
     }
@@ -95,8 +96,7 @@ public class DetailPresenter extends BasePresenter<DetailView> {
     protected void refreshLook() {
 
         String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-        if (null == cid || cid.length() <= 0)
-            return;
+        if (null == cid || cid.length() <= 0) return;
 
         Context context = getView().getContext();
         String s = CacheUtil.getCache(context, "user_look");
@@ -110,8 +110,7 @@ public class DetailPresenter extends BasePresenter<DetailView> {
         int size = recs.size();
         for (int i = 0; i < size; i++) {
             LookBean temp = recs.get(i);
-            if (null == temp)
-                continue;
+            if (null == temp) continue;
             String str = temp.getCid();
             if (cid.equals(str)) {
                 position = i;
@@ -164,21 +163,29 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                     @Override
                     public ObservableSource<Auth2Bean> apply(BaseBean<ProgramInfoDetail> programInfoDetailBaseBean) {
 
+                        // 上报
+                        try {
+                            String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                            reportDetailLoadFinished(cid);
+                        } catch (Exception e) {
+                        }
+
+
                         ProgramInfoDetail data = programInfoDetailBaseBean.getData();
-                        boolean request;
+                        boolean auth;
                         try {
                             ProgramDetail album = data.getAlbum();
                             // 付费
                             if (0 != album.getProductType()) {
-                                request = true;
+                                auth = true;
                             } else {
-                                request = false;
+                                auth = false;
                             }
                         } catch (Exception e) {
-                            request = false;
+                            auth = false;
                         }
 
-                        if (request) { //专区请求周期返回专区购买的列表
+                        if (auth) { //专区请求周期返回专区购买的列表
                             String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                             if (null == cid) {
                                 cid = "";
@@ -216,7 +223,6 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                         } catch (Exception e) {
                             s = "{}";
                         }
-                        LogUtil.log("DetailPresenter => s = " + s);
                         ProgramInfoDetail data = new Gson().fromJson(s, ProgramInfoDetail.class);
                         String whiteListVip = auth2Bean.getWhiteListVip();
 
@@ -241,14 +247,11 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                             try {
                                 for (int i = 0; i < length; i++) {
                                     ProgramDetail.Item item = productCodes.get(i);
-                                    if (null == item)
-                                        continue;
+                                    if (null == item) continue;
                                     int productType = item.getProductType();
-                                    if (1 != productType)
-                                        continue;
+                                    if (1 != productType) continue;
                                     String code = item.getCode();
-                                    if (null == code || code.length() <= 0)
-                                        continue;
+                                    if (null == code || code.length() <= 0) continue;
                                     data.setVipLinkDanDian(true);
                                     String singleAuth = auth2Bean.getSingleAuth();
                                     if ("1".equals(singleAuth)) {
@@ -263,14 +266,11 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                             try {
                                 for (int i = 0; i < length; i++) {
                                     ProgramDetail.Item item = productCodes.get(i);
-                                    if (null == item)
-                                        continue;
+                                    if (null == item) continue;
                                     int productType = item.getProductType();
-                                    if (3 != productType)
-                                        continue;
+                                    if (3 != productType) continue;
                                     String code = item.getCode();
-                                    if (null == code || code.length() <= 0)
-                                        continue;
+                                    if (null == code || code.length() <= 0) continue;
                                     data.setVipLinkZhouQi(true);
                                     String vip = auth2Bean.getVip();
                                     if ("1".equals(vip)) {
@@ -285,14 +285,11 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                             try {
                                 for (int i = 0; i < length; i++) {
                                     ProgramDetail.Item item = productCodes.get(i);
-                                    if (null == item)
-                                        continue;
+                                    if (null == item) continue;
                                     int productType = item.getProductType();
-                                    if (4 != productType)
-                                        continue;
+                                    if (4 != productType) continue;
                                     String code = item.getCode();
-                                    if (null == code || code.length() <= 0)
-                                        continue;
+                                    if (null == code || code.length() <= 0) continue;
                                     data.setVipLinkZhuanQu(true);
                                     List<Auth2Bean.VipBean> specialList = auth2Bean.getVipSpecialList();
                                     int size;
@@ -304,8 +301,7 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                                     for (int j = 0; j < size; j++) {
                                         Auth2Bean.VipBean vipBean = specialList.get(j);
                                         String v = vipBean.getCode();
-                                        if (null == v || v.length() <= 0)
-                                            continue;
+                                        if (null == v || v.length() <= 0) continue;
                                         if (v.equals(code)) {
                                             data.setVipPassZhuanQu(true);
                                         }
@@ -322,37 +318,6 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                     @Override
                     public ProgramInfoDetail apply(ProgramInfoDetail data) {
                         try {
-                            DetailTemplateXuanJi.DetailTemplateXuanJiList list = new DetailTemplateXuanJi.DetailTemplateXuanJiList();
-                            String cndUrl = null;
-                            List<Media> medias = data.getMedias();
-                            int size = medias.size();
-                            for (int i = 0; i < size; i++) {
-                                Media media = medias.get(i);
-                                if (null == media) {
-                                    continue;
-                                }
-                                if (i == 0) {
-                                    cndUrl = media.getCdnUrl();
-                                }
-                                media.setIndex(i);
-                                media.setTop(true);
-                                media.setName(String.valueOf(i + 1));
-                                media.setHead("选集列表");
-                                list.add(media);
-                            }
-                            for (int i = 0; i < size; i += 10) {
-                                Media media1 = new Media();
-                                int i1 = (i / 10) * 10 + 1;
-                                int i2 = i1 + 9;
-                                if (i2 >= size) {
-                                    i2 = size;
-                                }
-                                media1.setTop(false);
-                                media1.setIndex(i1);
-                                media1.setName(i1 + "-" + i2);
-                                media1.setHead("选集列表");
-                                list.add(media1);
-                            }
 
                             VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
                             RecyclerView.Adapter adapter = verticalGridView.getAdapter();
@@ -362,7 +327,7 @@ public class DetailPresenter extends BasePresenter<DetailView> {
 
                             // aaaMediaAuth
                             boolean aaaPass = false;
-                            if (BuildConfig.HUAN_AAA) {
+                            if (BuildConfig.HUAN_AUTH) {
                                 try {
                                     boolean vipFree = data.isVipFree();
                                     if (vipFree) {
@@ -373,14 +338,11 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                                         List<ProgramDetail.Item> productCodes = album.getProductCodes();
                                         int num = productCodes.size();
                                         for (int i = 0; i < num; i++) {
-                                            if (aaaPass)
-                                                break;
+                                            if (aaaPass) break;
                                             ProgramDetail.Item item = productCodes.get(i);
-                                            if (null == item)
-                                                continue;
+                                            if (null == item) continue;
                                             String code = item.getCode();
-                                            if (null == code || code.length() <= 0)
-                                                continue;
+                                            if (null == code || code.length() <= 0) continue;
                                             try {
                                                 aaaPass = StarcorUtil.mediaAuth(code);
                                             } catch (Exception e) {
@@ -394,7 +356,7 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                                 aaaPass = true;
                             }
                             if (aaaPass) {
-                                object.setCdnUrl(cndUrl);
+                                object.setCdnUrl("");
                             } else {
                                 object.setCdnUrl(null);
                             }
@@ -409,7 +371,6 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                 .map(new Function<ProgramInfoDetail, ProgramInfoDetail>() {
                     @Override
                     public ProgramInfoDetail apply(ProgramInfoDetail data) {
-
 
                         boolean show;
                         try {
@@ -459,9 +420,18 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                                 }
                                 ((ArrayObjectAdapter) objectAdapter).add(list);
                             } catch (Exception e) {
-                                e.printStackTrace();
                             }
                         }
+
+                        // 上报
+                        try {
+                            if (show) {
+                                String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                                reportDetailSelectionsButtonShow(cid);
+                            }
+                        } catch (Exception e) {
+                        }
+
                         return data;
                     }
                 })
@@ -501,41 +471,35 @@ public class DetailPresenter extends BasePresenter<DetailView> {
 
                         if (show) {
                             try {
-                                VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                                RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                                ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+
                                 DetailTemplateXuanJi.DetailTemplateXuanJiList list = new DetailTemplateXuanJi.DetailTemplateXuanJiList();
                                 List<Media> medias = data.getMedias();
                                 int size = medias.size();
                                 for (int i = 0; i < size; i++) {
-                                    Media media = medias.get(i);
-                                    if (null == media) {
-                                        continue;
-                                    }
-                                    media.setIndex(i);
-                                    media.setTop(true);
-                                    media.setName(String.valueOf(i + 1));
-                                    media.setHead("选集列表");
-                                    list.add(media);
+                                    Media t = medias.get(i);
+                                    t.setName(String.valueOf(i + 1));
+                                    t.setHead("选集列表");
                                 }
-                                for (int i = 0; i < size; i += 10) {
-                                    Media media1 = new Media();
-                                    int i1 = (i / 10) * 10 + 1;
-                                    int i2 = i1 + 9;
-                                    if (i2 >= size) {
-                                        i2 = size;
-                                    }
-                                    media1.setTop(false);
-                                    media1.setIndex(i1);
-                                    media1.setName(i1 + "-" + i2);
-                                    media1.setHead("选集列表");
-                                    list.add(media1);
-                                }
+                                list.addAll(medias);
+
+                                VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
+                                RecyclerView.Adapter adapter = verticalGridView.getAdapter();
+                                ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
                                 ((ArrayObjectAdapter) objectAdapter).add(list);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
+
+                        // 上报
+                        try {
+                            if (show) {
+                                String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                                reportDetailSelectionsButtonShow(cid);
+                            }
+                        } catch (Exception e) {
+                        }
+
                         return data;
                     }
                 })
@@ -543,24 +507,35 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                 .map(new Function<ProgramInfoDetail, ProgramInfoDetail>() {
                     @Override
                     public ProgramInfoDetail apply(ProgramInfoDetail data) {
+                        VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
+                        RecyclerView.Adapter adapter = verticalGridView.getAdapter();
+                        DetailTemplateFav.DetailTemplateFavList list = new DetailTemplateFav.DetailTemplateFavList();
                         try {
-                            VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                            RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            DetailTemplateFav.DetailTemplateFavList list = new DetailTemplateFav.DetailTemplateFavList();
                             List<Album> recAlbums = data.getRecAlbums();
                             int size = recAlbums.size();
                             for (int i = 0; i < size; i++) {
                                 Album album = recAlbums.get(i);
-                                if (null == album)
-                                    continue;
+                                if (null == album) continue;
                                 album.setHead("猜你喜欢");
                                 list.add(album);
                             }
-                            ((ArrayObjectAdapter) objectAdapter).add(list);
                         } catch (Exception e) {
-                            e.printStackTrace();
                         }
+
+                        if (list.size() > 0) {
+                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+                            ((ArrayObjectAdapter) objectAdapter).add(list);
+                        }
+
+                        // 上报
+                        try {
+                            if (list.size() > 0) {
+                                String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                                reportDetailRecommendShow(cid);
+                            }
+                        } catch (Exception e) {
+                        }
+
                         return data;
                     }
                 })
@@ -606,22 +581,17 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                         }
                         return show;
                     }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
+                }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
                         getView().showLoading();
                     }
-                })
-                .doOnError(new Consumer<Throwable>() {
+                }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                     }
-                })
-                .doOnNext(new Consumer<Boolean>() {
+                }).doOnNext(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) {
                         getView().hideLoading();
@@ -630,7 +600,6 @@ public class DetailPresenter extends BasePresenter<DetailView> {
                         // 2
                         getView().updateVip(aBoolean);
                     }
-                })
-                .subscribe());
+                }).subscribe());
     }
 }

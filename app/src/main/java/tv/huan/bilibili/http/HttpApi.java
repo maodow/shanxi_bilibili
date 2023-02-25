@@ -42,7 +42,7 @@ public interface HttpApi {
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("log/report")
-    Call<ResponseBody> logReport(@Body RequestBody requestBody);
+    Observable<BaseBean<Object>> logReport(@Body RequestBody requestBody);
 
     /**
      * 获取频道

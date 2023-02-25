@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.kalu.leanback.presenter.ListGridPresenter;
+import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.round.RoundLinearLayout;
 import lib.kalu.leanback.round.RoundRelativeLayout;
 import tv.huan.bilibili.R;
@@ -26,7 +26,7 @@ import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
-public class GeneralTemplate1 extends ListGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> implements Handler.Callback {
+public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> implements Handler.Callback {
 
     private boolean mHasFocus = false;
     private final Handler mHandler = new Handler(this);

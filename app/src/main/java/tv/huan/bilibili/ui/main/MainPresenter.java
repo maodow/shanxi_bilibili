@@ -2,15 +2,10 @@ package tv.huan.bilibili.ui.main;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -31,27 +26,24 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import lib.kalu.frame.mvp.BaseActivity;
-import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.leanback.tab.TabLayout;
 import lib.kalu.leanback.tab.model.TabModel;
 import lib.kalu.leanback.tab.model.TabModelImage;
 import lib.kalu.leanback.tab.model.TabModelText;
-import lib.kalu.leanback.tags.TagsLayout;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.MainBean;
-import tv.huan.bilibili.dialog.ExitDialog;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.general.GeneralFragment;
 import tv.huan.bilibili.ui.main.mine.MineFragment;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class MainPresenter extends BasePresenter<MainView> {
+public class MainPresenter extends BasePresenterImpl<MainView> {
     public MainPresenter(@NonNull MainView mainView) {
         super(mainView);
     }
@@ -75,93 +67,85 @@ public class MainPresenter extends BasePresenter<MainView> {
     protected void showFragment(int position) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<List<GetChannelsBean.ItemBean>>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<List<GetChannelsBean.ItemBean>> emitter) throws Exception {
-                        try {
-                            String extra = getView().getStringExtra(MainActivity.INTENT_TABS);
-                            Type type = new TypeToken<List<GetChannelsBean.ItemBean>>() {
-                            }.getType();
-                            List<GetChannelsBean.ItemBean> datas = new Gson().fromJson(extra, type);
-                            if (null == datas || datas.size() <= 0)
-                                throw new Exception("datas is null");
-                            emitter.onNext(datas);
-                        } catch (Exception e) {
-                            throw e;
+            @Override
+            public void subscribe(ObservableEmitter<List<GetChannelsBean.ItemBean>> emitter) throws Exception {
+                try {
+                    String extra = getView().getStringExtra(MainActivity.INTENT_TABS);
+                    Type type = new TypeToken<List<GetChannelsBean.ItemBean>>() {
+                    }.getType();
+                    List<GetChannelsBean.ItemBean> datas = new Gson().fromJson(extra, type);
+                    if (null == datas || datas.size() <= 0) throw new Exception("datas is null");
+                    emitter.onNext(datas);
+                } catch (Exception e) {
+                    throw e;
+                }
+            }
+        }).map(new Function<List<GetChannelsBean.ItemBean>, Fragment>() {
+            @Override
+            public Fragment apply(List<GetChannelsBean.ItemBean> data) {
+                try {
+                    String tag = "fragment" + position;
+                    Fragment fragment = getView().findFragmentByTag(tag);
+                    if (null == fragment) {
+                        GetChannelsBean.ItemBean bean = data.get(position);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(GeneralFragment.BUNDLE_INDEX, position);
+                        bundle.putString(GeneralFragment.BUNDLE_NAME, bean.getName());
+                        bundle.putInt(GeneralFragment.BUNDLE_CHANNELID, bean.getId());
+                        bundle.putInt(GeneralFragment.BUNDLE_CLASSID, bean.getClassId());
+                        if (position == 0) {
+                            fragment = new MineFragment();
+                        } else {
+                            fragment = new GeneralFragment();
                         }
+                        fragment.setArguments(bundle);
+                        getView().addFragment(fragment, R.id.main_content, tag);
                     }
-                })
-                .map(new Function<List<GetChannelsBean.ItemBean>, Fragment>() {
-                    @Override
-                    public Fragment apply(List<GetChannelsBean.ItemBean> data) {
-                        try {
-                            String tag = "fragment" + position;
+                    return fragment;
+                } catch (Exception e) {
+                    throw e;
+                }
+            }
+        }).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) {
+                try {
+                    TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+                    int count = tabLayout.getItemCount();
+                    Fragment[] fragments = new Fragment[count];
+                    if (count > 0) {
+                        for (int i = 0; i < count; i++) {
+                            String tag = "fragment" + i;
                             Fragment fragment = getView().findFragmentByTag(tag);
-                            if (null == fragment) {
-                                GetChannelsBean.ItemBean bean = data.get(position);
-                                Bundle bundle = new Bundle();
-                                bundle.putInt(GeneralFragment.BUNDLE_INDEX, position);
-                                bundle.putString(GeneralFragment.BUNDLE_NAME, bean.getName());
-                                bundle.putInt(GeneralFragment.BUNDLE_CHANNELID, bean.getId());
-                                bundle.putInt(GeneralFragment.BUNDLE_CLASSID, bean.getClassId());
-                                if (position == 0) {
-                                    fragment = new MineFragment();
-                                } else {
-                                    fragment = new GeneralFragment();
-                                }
-                                fragment.setArguments(bundle);
-                                getView().addFragment(fragment, R.id.main_content, tag);
+                            if (null == fragment || fragment.isHidden()) continue;
+                            if (fragment instanceof GeneralFragment) {
+                                ((GeneralFragment) fragment).onHide();
                             }
-                            return fragment;
-                        } catch (Exception e) {
-                            throw e;
+                            fragments[i] = fragment;
                         }
                     }
-                })
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) {
-                        try {
-                            TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
-                            int count = tabLayout.getItemCount();
-                            Fragment[] fragments = new Fragment[count];
-                            if (count > 0) {
-                                for (int i = 0; i < count; i++) {
-                                    String tag = "fragment" + i;
-                                    Fragment fragment = getView().findFragmentByTag(tag);
-                                    if (null == fragment || fragment.isHidden())
-                                        continue;
-                                    if (fragment instanceof GeneralFragment) {
-                                        ((GeneralFragment) fragment).onHide();
-                                    }
-                                    fragments[i] = fragment;
-                                }
-                            }
-                            getView().hideFragment(fragments);
-                        } catch (Exception e) {
-                            LogUtil.log("MainPresenter => showFragment => " + e.getMessage());
-                        }
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        LogUtil.log("MainPresenter => showFragment => fail");
-                        LogUtil.log("MainPresenter => showFragment => " + throwable.getMessage());
-                    }
-                })
-                .doOnNext(new Consumer<Fragment>() {
-                    @Override
-                    public void accept(Fragment fragment) {
-                        LogUtil.log("MainPresenter => showFragment => succ");
-                        LogUtil.log("MainPresenter => showFragment => fragment = " + fragment);
-                        getView().showFragment(fragment);
-                        if (fragment instanceof GeneralFragment) {
-                            ((GeneralFragment) fragment).onShow();
-                        }
-                    }
-                })
-                .subscribe());
+                    getView().hideFragment(fragments);
+                } catch (Exception e) {
+                    LogUtil.log("MainPresenter => showFragment => " + e.getMessage());
+                }
+            }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                LogUtil.log("MainPresenter => showFragment => fail");
+                LogUtil.log("MainPresenter => showFragment => " + throwable.getMessage());
+            }
+        }).doOnNext(new Consumer<Fragment>() {
+            @Override
+            public void accept(Fragment fragment) {
+                LogUtil.log("MainPresenter => showFragment => succ");
+                LogUtil.log("MainPresenter => showFragment => fragment = " + fragment);
+                getView().showFragment(fragment);
+                if (fragment instanceof GeneralFragment) {
+                    ((GeneralFragment) fragment).onShow();
+                }
+            }
+        }).subscribe());
     }
 
     protected void showTabs() {
@@ -182,8 +166,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                         for (int i = 0; i < size; i++) {
 
                             GetChannelsBean.ItemBean bean = datas.get(i);
-                            if (null == bean)
-                                continue;
+                            if (null == bean) continue;
 
                             TabModel tabModel;
 
@@ -215,28 +198,40 @@ public class MainPresenter extends BasePresenter<MainView> {
                         observableEmitter.onNext(mainBean);
                     }
                 })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
+                // 上报-进入APP首页
+                .map(new Function<MainBean, MainBean>() {
+                    @Override
+                    public MainBean apply(MainBean mainBean) {
+                        try {
+                            int select = getView().getIntExtra(MainActivity.INTENT_SELECT, 0);
+                            String extra = getView().getStringExtra(MainActivity.INTENT_TABS);
+                            Type type = new TypeToken<List<GetChannelsBean.ItemBean>>() {
+                            }.getType();
+                            List<GetChannelsBean.ItemBean> datas = new Gson().fromJson(extra, type);
+                            GetChannelsBean.ItemBean itemBean = datas.get(select);
+                            int classId = itemBean.getClassId();
+                            reportHomePageEnter(classId);
+                        } catch (Exception e) {
+                        }
+                        return mainBean;
+                    }
+                }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
                         getView().showLoading();
                     }
-                })
-                .doOnError(new Consumer<Throwable>() {
+                }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                     }
-                })
-                .doOnNext(new Consumer<MainBean>() {
+                }).doOnNext(new Consumer<MainBean>() {
                     @Override
                     public void accept(MainBean data) {
                         getView().hideLoading();
                         getView().refreshTabs(data.getTabModels(), data.getPosition());
                     }
-                })
-                .subscribe());
+                }).subscribe());
     }
 
     protected boolean dispatchKey(KeyEvent event) {
@@ -334,20 +329,25 @@ public class MainPresenter extends BasePresenter<MainView> {
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
                         observableEmitter.onNext(true);
                     }
-                })
-                .flatMap(new Function<Boolean, Observable<BaseBean<List<ExitBean>>>>() {
+                }).flatMap(new Function<Boolean, Observable<BaseBean<List<ExitBean>>>>() {
                     @Override
                     public Observable<BaseBean<List<ExitBean>>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().getExit(2);
                     }
                 })
+                // 上报
                 .map(new Function<BaseBean<List<ExitBean>>, String>() {
                     @Override
-                    public String apply(BaseBean<List<ExitBean>> response) {
+                    public String apply(BaseBean<List<ExitBean>> listBaseBean) {
                         ArrayList<ExitBean> list = new ArrayList<>();
                         try {
-                            List<ExitBean> data = response.getData();
-                            list.addAll(data);
+                            List<ExitBean> data = listBaseBean.getData();
+                            for (int i = 0; i < 2; i++) {
+                                ExitBean bean = data.get(i);
+                                if (null == bean) continue;
+                                reportExitRetentionExposure(bean.getCid());
+                                list.add(bean);
+                            }
                         } catch (Exception e) {
                         }
                         String s = new Gson().toJson(list);
@@ -361,75 +361,53 @@ public class MainPresenter extends BasePresenter<MainView> {
                     public void accept(Disposable disposable) {
                         getView().showLoading();
                     }
-                })
-                .doOnError(new Consumer<Throwable>() {
+                }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                         getView().showDialog("[]");
                     }
-                })
-                .doOnNext(new Consumer<String>() {
+                }).doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(String s) {
                         getView().hideLoading();
                         getView().showDialog(s);
                     }
-                })
-                .subscribe());
+                }).subscribe());
     }
 
     protected void showBackground(int position) {
         addDisposable(Observable.create(new ObservableOnSubscribe<Drawable>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Drawable> emitter) throws Exception {
-                        try {
-                            String extra = getView().getStringExtra(MainActivity.INTENT_TABS);
-                            Type type = new TypeToken<List<GetChannelsBean.ItemBean>>() {
-                            }.getType();
-                            List<GetChannelsBean.ItemBean> datas = new Gson().fromJson(extra, type);
-                            GetChannelsBean.ItemBean bean = datas.get(position);
-                            String poster = bean.getImgs().getPoster();
-                            if (null == poster || poster.length() <= 0)
-                                throw new Exception("url is null");
-                            RequestOptions options = new RequestOptions()
-                                    .dontAnimate()
-                                    .dontTransform()
-                                    .dontAnimate()
-                                    .dontTransform()
-                                    .encodeQuality(40)
-                                    .format(DecodeFormat.PREFER_RGB_565)
-                                    .priority(Priority.LOW)
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .skipMemoryCache(false);
-                            Drawable drawable = Glide.with(getView().getContext())
-                                    .load(poster)
-                                    .apply(options)
-                                    .submit()
-                                    .get();
-                            if (null == drawable)
-                                throw new Exception("drawable is null");
-                            emitter.onNext(drawable);
-                        } catch (Exception e) {
-                            throw new Exception();
-                        }
-                    }
-                })
-                .compose(ComposeSchedulers.io_main())
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
+            @Override
+            public void subscribe(ObservableEmitter<Drawable> emitter) throws Exception {
+                try {
+                    String extra = getView().getStringExtra(MainActivity.INTENT_TABS);
+                    Type type = new TypeToken<List<GetChannelsBean.ItemBean>>() {
+                    }.getType();
+                    List<GetChannelsBean.ItemBean> datas = new Gson().fromJson(extra, type);
+                    GetChannelsBean.ItemBean bean = datas.get(position);
+                    String poster = bean.getImgs().getPoster();
+                    if (null == poster || poster.length() <= 0) throw new Exception("url is null");
+                    RequestOptions options = new RequestOptions().dontAnimate().dontTransform().dontAnimate().dontTransform().encodeQuality(40).format(DecodeFormat.PREFER_RGB_565).priority(Priority.LOW).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false);
+                    Drawable drawable = Glide.with(getView().getContext()).load(poster).apply(options).submit().get();
+                    if (null == drawable) throw new Exception("drawable is null");
+                    emitter.onNext(drawable);
+                } catch (Exception e) {
+                    throw new Exception();
+                }
+            }
+        }).compose(ComposeSchedulers.io_main()).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
 //                        LogUtil.log("MainPresenter => refreshBackground => fail");
-                        getView().setWindowBackgroundColorRes(R.color.color_171819);
-                    }
-                })
-                .doOnNext(new Consumer<Drawable>() {
-                    @Override
-                    public void accept(Drawable drawable) {
+                getView().setWindowBackgroundColorRes(R.color.color_171819);
+            }
+        }).doOnNext(new Consumer<Drawable>() {
+            @Override
+            public void accept(Drawable drawable) {
 //                        LogUtil.log("MainPresenter => refreshBackground => succ");
-                        getView().setWindowBackgroundDrawable(drawable);
-                    }
-                })
-                .subscribe());
+                getView().setWindowBackgroundDrawable(drawable);
+            }
+        }).subscribe());
     }
 }

@@ -18,12 +18,18 @@ android {
             shrinkResources false
             minifyEnabled false
             consumerProguardFiles 'proguard-rules.pro'
+            buildConfigField("String", "APP_ID", "\"8516778006830858242\"")
+            buildConfigField("String", "APP_KEY", "\"c334162ba91649ca89c54f5e742d3d51\"")
+            buildConfigField("String", "PRODUCT_ID", "\"P8516947106404188161\"")
         }
         debug {
             zipAlignEnabled false
             shrinkResources false
             minifyEnabled false
             consumerProguardFiles 'proguard-rules.pro'
+            buildConfigField("String", "APP_ID", "\"8516778006830858242\"")
+            buildConfigField("String", "APP_KEY", "\"c334162ba91649ca89c54f5e742d3d51\"")
+            buildConfigField("String", "PRODUCT_ID", "\"P8516947106404188161\"")
         }
     }
 

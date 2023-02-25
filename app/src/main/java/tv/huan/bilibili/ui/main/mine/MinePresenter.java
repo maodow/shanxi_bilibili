@@ -31,9 +31,9 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.bean.FavBean;
@@ -42,7 +42,7 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
 @Keep
-public class MinePresenter extends BasePresenter<MineView> {
+public class MinePresenter extends BasePresenterImpl<MineView> {
 
     private int TYPE_ITEM_HEAD = 1;
     private int TYPE_ITEM_TITLE = 2;

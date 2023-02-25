@@ -1,6 +1,5 @@
 package tv.huan.bilibili.ui.welcome;
 
-import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,19 +18,16 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
-import tv.huan.bilibili.BuildConfig;
+import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.LoadPageIcon;
-import tv.huan.bilibili.utils.AppUtils;
 import tv.huan.bilibili.utils.BoxUtil;
-import tv.huan.bilibili.utils.SkinManager;
 
-public class WelcomePresenter extends BasePresenter<WelcomeView> {
+public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
 
     public WelcomePresenter(@NonNull WelcomeView welcomeView) {
         super(welcomeView);
@@ -42,6 +38,8 @@ public class WelcomePresenter extends BasePresenter<WelcomeView> {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> emitter) {
+                        // 首次打开app上报
+                        reportAppActivation();
                         emitter.onNext(true);
                     }
                 })

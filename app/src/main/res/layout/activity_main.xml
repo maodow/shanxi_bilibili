@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <!-- 搜索 -->
-    <lib.kalu.leanback.plus.TextViewPlus
+    <tv.huan.bilibili.widget.SearchButton
         android:id="@+id/main_search"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_24"
@@ -26,7 +26,7 @@
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
     <!-- vip -->
-    <lib.kalu.leanback.plus.TextViewPlus
+    <tv.huan.bilibili.widget.VipButton
         android:id="@+id/main_vip"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_24"

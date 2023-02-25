@@ -2,10 +2,10 @@ package tv.huan.bilibili.bean;
 
 import java.io.Serializable;
 
-import lib.kalu.leanback.presenter.ListGridPresenter;
-import lib.kalu.leanback.presenter.ListRowPresenter;
+import lib.kalu.leanback.presenter.ListTvGridPresenter;
+import lib.kalu.leanback.presenter.ListTvRowPresenter;
 
-public class Album extends PosterBean implements Serializable, ListRowPresenter.ListRowBean, ListGridPresenter.ListGridBean, JumpBean {
+public class Album extends PosterBean implements Serializable, ListTvRowPresenter.ListRowBean, ListTvGridPresenter.ListGridBean, JumpBean {
 
     private static final long serialVersionUID = 2233263498353702029L;
     private String title;

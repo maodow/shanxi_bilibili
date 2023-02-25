@@ -8,18 +8,56 @@ import org.json.JSONObject;
 
 import tv.huan.bilibili.BuildConfig;
 
-/**
- * Create by Richard
- * 2019-07-31 13:39
- */
-public class ReportUtils {
+public final class ReportUtils {
+
+    /**
+     * 详情页加载成功并且选集按钮露出
+     *
+     * @param cid x
+     */
+    public static JSONObject detailSelectionsButtonShow(int prodId, String cid) {
+        JSONObject object = create("detail_selections_button_show", prodId);
+        try {
+            object.put("cid", cid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 点击某选集中某一项并成功跳转播放页
+     *
+     * @param cid x
+     */
+    public static JSONObject detailSelectionsItemClicked(int prodId, String cid) {
+        JSONObject object = create("detail_selections_item_clicked", prodId);
+        try {
+            object.put("cid", cid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 相关推荐结果加载完成
+     *
+     * @param cid x
+     */
+    public static JSONObject detailRecommendShow(int prodId, String cid) {
+        JSONObject object = create("detail_recommend_show", prodId);
+        try {
+            object.put("cid", cid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
 
     /**
      * 首次打开app。 如果rom版本变化，则重新上报
      *
      * @param mac x
      */
-    public JSONObject appActivation(String mac, int prodId) {
+    public static JSONObject appActivation(String mac, int prodId) {
         JSONObject object = create("app_activation", prodId);
         try {
             object.put("mac", mac);
@@ -35,7 +73,7 @@ public class ReportUtils {
      *
      * @param channel
      */
-    public JSONObject homePageEnter(int prodId, int channel) {
+    public static JSONObject homePageEnter(int prodId, int channel) {
         JSONObject object = create("home_page_enter", prodId);
         try {
             object.put("ver", BuildConfig.VERSION_NAME);
@@ -48,7 +86,7 @@ public class ReportUtils {
     /**
      * 进入频道页并加载数据完成
      */
-    public JSONObject channelLoadFinished(int prodId, int channelId, String channelName) {
+    public static JSONObject channelLoadFinished(int prodId, int channelId, String channelName) {
         JSONObject object = create("channel_load_finished", prodId);
         try {
             object.put("channel_id", channelId);
@@ -58,6 +96,125 @@ public class ReportUtils {
         }
         return object;
     }
+
+    /**
+     * 点击搜索按钮
+     *
+     * @param keyword x
+     * @param num     x
+     */
+    public static JSONObject searchResultItemNum(int prodId, int num, String keyword) {
+        JSONObject object = create("search_result_item_num", prodId);
+        try {
+            object.put("keyword", keyword);
+            object.put("num", num);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 点击搜索结果
+     *
+     * @param keyword x
+     * @param cid     x
+     */
+    public static JSONObject searchResultItemClicked(int prodId, String keyword, String cid) {
+        JSONObject object = create("search_result_item_clicked", prodId);
+        try {
+            object.put("keyword", keyword);
+            object.put("cid", cid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 进入详情页并加载数据完成
+     */
+    public static JSONObject detailLoadFinished(int prodId, String cid) {
+        JSONObject object = create("detail_load_finished", prodId);
+        try {
+            object.put("pre_page", "");
+            object.put("pre_info", "");
+            if (null == cid) {
+                cid = "";
+            }
+            object.put("cid", cid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 退出挽留弹窗露出
+     */
+    public static JSONObject exitRetentionExposure(int prodId, String cid) {
+        JSONObject object = create("exit_retention_exposure", prodId);
+        try {
+            object.put("recommend_id", cid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 退出挽留，点击跳转
+     */
+    public static JSONObject exitRetentionClick(int prodId, String cid, String name) {
+        JSONObject object = create("exit_retention_click", prodId);
+        try {
+            object.put("recommend_id", cid);
+            object.put("recommend_name", name);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 退出
+     */
+    public static JSONObject appExit(int prodId) {
+        JSONObject object = create("app_exit", prodId);
+        try {
+            object.put("use_time", System.currentTimeMillis());
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 进入专题页并加载数据完成
+     */
+    public static JSONObject topicLoadFinished(int prodId, int sceneId) {
+        JSONObject object = create("topic_load_finished", prodId);
+        try {
+            object.put("scene_id", sceneId);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+//    /**
+//     * 进入某专题列表页并加载数据完成
+//     *
+//     * @param sceneId   x
+//     * @param topicId   x
+//     * @param topicName x
+//     */
+//    public void topicSubtypeClicked(String sceneId, int topicId, String topicName) {
+//        try {
+//            JSONObject jsonObject = getBaseObject("topic_subtype_clicked");
+//            jsonObject.put("scene_id", sceneId);
+//            jsonObject.put("topic_id", topicId);
+//            jsonObject.put("topic_name", topicName);
+//            jsonObject.put("business_id", HuanApp.getProd(null));
+//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
+//            actionReport(jsonObject);
+//        } catch (Exception e) {
+//        }
+//    }
+//
 
 //    /**
 //     * 频道下子分类切换量
@@ -92,105 +249,6 @@ public class ReportUtils {
 //        }
 //    }
 //
-//    /**
-//     * 进入专题页并加载数据完成
-//     */
-//    public void topicLoadFinished(String sceneId) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("topic_load_finished");
-//            jsonObject.put("scene_id", sceneId);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 进入某专题列表页并加载数据完成
-//     *
-//     * @param sceneId   x
-//     * @param topicId   x
-//     * @param topicName x
-//     */
-//    public void topicSubtypeClicked(String sceneId, int topicId, String topicName) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("topic_subtype_clicked");
-//            jsonObject.put("scene_id", sceneId);
-//            jsonObject.put("topic_id", topicId);
-//            jsonObject.put("topic_name", topicName);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 从专题列表页点击进入详情页
-//     *
-//     * @param sceneId   x
-//     * @param topicId   x
-//     * @param topicName x
-//     * @param cid       x
-//     */
-//    public void topicEnterDetail(String sceneId, int topicId, String topicName, String cid) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("topic_enter_detail");
-//            jsonObject.put("scene_id", sceneId);
-//            jsonObject.put("topic_id", topicId);
-//            jsonObject.put("topic_name", topicName);
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 点击搜索按钮
-//     *
-//     * @param keyword x
-//     * @param num     x
-//     */
-//    public void searchResultItemNum(String keyword, int num) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("search_result_item_num");
-//            jsonObject.put("keyword", keyword);
-//            jsonObject.put("num", num);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//
-//            JSONObject json = new JSONObject();
-//            json.put("keyword", keyword);
-//            json.put("num", num);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 点击搜索结果
-//     *
-//     * @param keyword x
-//     * @param cid     x
-//     */
-//    public void searchResultItemClicked(String keyword, String cid) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("search_result_item_clicked");
-//            jsonObject.put("keyword", keyword);
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//
-//            JSONObject json = new JSONObject();
-//            json.put("keyword", keyword);
-//            json.put("cid", cid);
-//        } catch (Exception e) {
-//        }
-//    }
 //
 //    /**
 //     * 进入播放历史页并加载数据完成
@@ -225,109 +283,9 @@ public class ReportUtils {
 //        }
 //    }
 //
-//    /**
-//     * 进入详情页并加载数据完成
-//     *
-//     * @param cid     x
-//     * @param prePage x
-//     * @param preInfo x
-//     */
-//    public void detailLoadFinished(String cid, String prePage, String preInfo) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("detail_load_finished");
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("pre_page", prePage);
-//            jsonObject.put("pre_info", preInfo);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
 //
-//            JSONObject json = new JSONObject();
-//            json.put("cid", cid);
-//        } catch (Exception e) {
-//        }
-//    }
 //
-//    /**
-//     * 点击播放按钮
-//     *
-//     * @param cid x
-//     */
-//    public void detailPlayClicked(String cid) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("detail_play_clicked");
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
 //
-//    /**
-//     * 详情页加载成功并且选集按钮露出
-//     *
-//     * @param cid x
-//     */
-//    public void detailSelectionsButtonShow(String cid) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("detail_selections_button_show");
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 点击某选集中某一项并成功跳转播放页
-//     *
-//     * @param cid x
-//     */
-//    public void detailSelectionsItemClicked(String cid) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("detail_selections_item_clicked");
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 相关推荐结果加载完成
-//     *
-//     * @param cid x
-//     */
-//    public void detailRecommendShow(String cid) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("detail_recommend_show");
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 点击相关推荐内某一项并成功跳转
-//     *
-//     * @param cid x
-//     */
-//    public void detailRecommendItemClicked(String cid, String toCid) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("detail_recommend_item_clicked");
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("to_cid", toCid);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
 //
 //    /**
 //     * 订购成功
@@ -337,39 +295,6 @@ public class ReportUtils {
 //            JSONObject jsonObject = getBaseObject("order_success");
 //            jsonObject.put("cid", cid);
 //            jsonObject.put("vid", vid);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 播放记录
-//     */
-//    public void playVodStop(String startTime, String endTime, long playTime, String cid, String vid) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("play_vod_stop");
-////        jsonObject.put("start_time", startTime);
-////        jsonObject.put("end_time", endTime);
-//            jsonObject.put("play_time", playTime);
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("vid", vid);
-//            jsonObject.put("ip", AppUtils.getEtherNetIP());
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 退出
-//     */
-//    public void exitApp(long useTime) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("app_exit");
-//            jsonObject.put("use_time", useTime);
 //            jsonObject.put("business_id", HuanApp.getProd(null));
 //            jsonObject.put("ver", BuildConfig.VERSION_NAME);
 //            actionReport(jsonObject);
@@ -396,66 +321,7 @@ public class ReportUtils {
 //
 //    /**************/
 //
-//    /**
-//     * 退出挽留，点击跳转
-//     *
-//     * @param recommend_id
-//     * @param recommend_name
-//     */
-//    public void exitRetentionClick(String recommend_id, String recommend_name) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("exit_retention_click");
-//            jsonObject.put("user_id", PublicGetClientUuid.getCa());
-//            jsonObject.put("model", Build.MODEL);
-//            jsonObject.put("recommend_id", recommend_id);
-//            jsonObject.put("recommend_name", recommend_name);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 退出挽留弹窗露出
-//     *
-//     * @param recommend_id
-//     */
-//    public void exitRetentionExposure(String recommend_id) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("exit_retention_exposure");
-//            jsonObject.put("user_id", PublicGetClientUuid.getCa());
-//            jsonObject.put("model", Build.MODEL);
-//            jsonObject.put("recommend_id", recommend_id);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-//    /**
-//     * 播放记录
-//     */
-//    public void playVodStop(String startTime, String endTime, String playTime, String cid, String vid) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("play_vod_stop");
-//            jsonObject.put("start_time", startTime);
-//            jsonObject.put("end_time", endTime);
-//            jsonObject.put("play_time", playTime);
-//            jsonObject.put("cid", cid);
-//            jsonObject.put("vid", vid);
-//            jsonObject.put("ip", AppUtils.getEtherNetIP());
-//            jsonObject.put("area_code", AppUtils.getEtherNetIP());
-//            jsonObject.put("user_id", PublicGetClientUuid.getCa());
-//            jsonObject.put("model", Build.MODEL);
-//            jsonObject.put("type", "1");
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
+
 //
 //    /**
 //     * 订购失败上报
@@ -544,9 +410,75 @@ public class ReportUtils {
 //        }
 //    }
 
+
+    /**
+     * 点击相关推荐内某一项并成功跳转
+     */
+    public static JSONObject detailRecommendItemClicked(int prodId, String cid, String toCid) {
+        JSONObject object = create("detail_recommend_item_clicked", prodId);
+        try {
+            object.put("cid", cid);
+            object.put("to_cid", toCid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 点击播放按钮
+     *
+     * @param prodId
+     * @param cid
+     * @return
+     */
+    public static JSONObject detailPlayClicked(int prodId, int cid) {
+        JSONObject object = create("detail_play_clicked", prodId);
+        try {
+            object.put("cid", cid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 播放记录
+     */
+    public static JSONObject playVodStop(int prodId, String startTime, String endTime, String playTime, String cid, String vid) {
+        JSONObject object = create("play_vod_stop", prodId);
+        try {
+            object.put("start_time", startTime);
+            object.put("end_time", endTime);
+            object.put("play_time", playTime);
+            object.put("cid", cid);
+            object.put("vid", vid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    /**
+     * 从专题列表页点击进入详情页
+     *
+     * @param sceneId   x
+     * @param topicId   x
+     * @param topicName x
+     * @param cid       x
+     */
+    public static JSONObject topicEnterDetail(int prodId, int sceneId, int topicId, String topicName, String cid) {
+        JSONObject object = create("topic_enter_detail", prodId);
+        try {
+            object.put("scene_id", sceneId);
+            object.put("topic_id", topicId);
+            object.put("topic_name", topicName);
+            object.put("cid", cid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
     /**********/
 
-    private final JSONObject create(@NonNull String action, @NonNull int prodId) {
+    private static JSONObject create(@NonNull String action, @NonNull int prodId) {
         JSONObject object = new JSONObject();
         try {
             object.put("action", action);
@@ -554,6 +486,8 @@ public class ReportUtils {
             object.put("model", Build.MODEL);
             object.put("ver", BuildConfig.VERSION_NAME);
             object.put("business_id", prodId);
+            object.put("ip", AppUtils.getEtherNetIP());
+            object.put("area_code", AppUtils.getEtherNetIP());
         } catch (Exception e) {
         }
         return object;

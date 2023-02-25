@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <!-- 搜索 -->
-    <lib.kalu.leanback.plus.TextViewPlus
+    <tv.huan.bilibili.widget.SearchButton
         android:id="@+id/center_search"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_24"
@@ -15,7 +15,7 @@
         android:background="@drawable/bg_selector_common_search"
         android:drawableLeft="@drawable/ic_selector_common_search"
         android:drawablePadding="@dimen/dp_8"
-        android:focusable="false"
+        android:focusable="true"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
@@ -26,7 +26,7 @@
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
     <!-- vip -->
-    <lib.kalu.leanback.plus.TextViewPlus
+    <tv.huan.bilibili.widget.VipButton
         android:id="@+id/center_vip"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_24"
@@ -36,7 +36,7 @@
         android:background="@drawable/bg_selector_common_search"
         android:drawableLeft="@drawable/ic_selector_common_vip"
         android:drawablePadding="@dimen/dp_8"
-        android:focusable="false"
+        android:focusable="true"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"

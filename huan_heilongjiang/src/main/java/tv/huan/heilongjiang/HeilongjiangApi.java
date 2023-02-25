@@ -6,10 +6,11 @@ import android.util.Log;
 import com.istv.ystframework.callback.ResultCallBack;
 import com.istv.ystframework.client.OrderClient;
 
-import tv.huan.common.cmcc.CmccUtil;
-import tv.huan.common.huawei.HuaweiUtil;
-
 public final class HeilongjiangApi {
+
+    public static boolean init(Context context) {
+        return init(context, BuildConfig.APP_ID, BuildConfig.APP_KEY);
+    }
 
     public static boolean init(Context context, String appId, String appKey) {
         try {
@@ -24,6 +25,10 @@ public final class HeilongjiangApi {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static String getUserId(Context context) {
+        return getUserId(context, BuildConfig.APP_ID, BuildConfig.APP_KEY);
     }
 
     public static String getUserId(Context context,
@@ -44,6 +49,11 @@ public final class HeilongjiangApi {
         }
     }
 
+    public static void checkVip(Context context,
+                                OnCheckVipChangeListener l) {
+        checkVip(context, BuildConfig.APP_ID, BuildConfig.APP_KEY, "", BuildConfig.PRODUCT_ID, l);
+    }
+
     /**
      * 判断用户是否购买过内容对应的产品包，未订购的场合返回该内容所关联的产品包列表。
      *
@@ -53,19 +63,27 @@ public final class HeilongjiangApi {
      * @param contentId
      * @param productId
      */
-    public static void isVip(Context context,
-                             String appid,
-                             String appkey,
-                             String contentId,
-                             String productId) {
+    public static void checkVip(Context context,
+                                String appid,
+                                String appkey,
+                                String contentId,
+                                String productId,
+                                OnCheckVipChangeListener l) {
         String userId = getUserId(context, appid, appkey);
         Log.e("HeilongjiangApi", "isVip => userId = " + userId);
         OrderClient.authOrize_V3(context, appid, appkey, userId, contentId, productId, "1", new ResultCallBack() {
             @Override
             public void onResult(String s) {
                 Log.e("HeilongjiangApi", "isVip => s = " + s);
+                if (null != l) {
+                    l.onPass();
+                }
             }
         });
+    }
+
+    public static void jumpVip(Context context) {
+        jumpVip(context, BuildConfig.APP_ID, BuildConfig.APP_KEY, BuildConfig.PRODUCT_ID);
     }
 
     /**

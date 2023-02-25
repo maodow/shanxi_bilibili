@@ -14,13 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.kalu.leanback.presenter.ListRowPresenter;
+import lib.kalu.leanback.presenter.ListTvRowPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.Album;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
-public class DetailTemplateFav extends ListRowPresenter<Album> {
+public class DetailTemplateFav extends ListTvRowPresenter<Album> {
 
     @Override
     public int initMagrinTop(@NonNull Context context) {

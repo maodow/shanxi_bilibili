@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lib.kalu.frame.mvp.util.CacheUtil;
-import lib.kalu.leanback.presenter.ListGridPresenter;
+import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.round.RoundLinearLayout;
 import lib.kalu.leanback.round.RoundRelativeLayout;
 import tv.huan.bilibili.R;
@@ -36,7 +36,7 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class GeneralTemplate17 extends ListGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
     private final void refreshCenter(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
         try {

@@ -23,16 +23,17 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.SpecialBean;
 import tv.huan.bilibili.http.HttpClient;
+import tv.huan.bilibili.ui.special1.Special1Activity;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
-public class Special4Presenter extends BasePresenter<Special4View> {
+public class Special4Presenter extends BasePresenterImpl<Special4View> {
 
     private final List<SpecialBean.ItemBean> mData = new ArrayList<>();
 
@@ -110,9 +111,7 @@ public class Special4Presenter extends BasePresenter<Special4View> {
                 .flatMap(new Function<Boolean, Observable<BaseBean<SpecialBean>>>() {
                     @Override
                     public Observable<BaseBean<SpecialBean>> apply(Boolean aBoolean) {
-                        // 45
-                        int specialId = 45;
-//                        int specialId = getView().getIntExtra(Special4Activity.INTENT_SPECIALID, 0);
+                        int specialId = getView().getIntExtra(Special4Activity.INTENT_SPECIALID, 0);
                         return HttpClient.getHttpClient().getHttpApi().getSpecialById(specialId);
                     }
                 })
@@ -131,6 +130,14 @@ public class Special4Presenter extends BasePresenter<Special4View> {
                             mData.addAll(list);
                         } catch (Exception e) {
                             e.printStackTrace();
+                        }
+                        // 上报
+                        try {
+                            if (mData.size() > 0) {
+                                int specialId = getView().getIntExtra(Special4Activity.INTENT_SPECIALID, 0);
+                                reportTopicLoadFinished(specialId);
+                            }
+                        } catch (Exception e) {
                         }
                         return str;
                     }

@@ -2,10 +2,10 @@ package tv.huan.bilibili.bean;
 
 import java.io.Serializable;
 
-import lib.kalu.leanback.presenter.ListGridPresenter;
-import lib.kalu.leanback.presenter.ListRowDoublePresenter;
+import lib.kalu.leanback.presenter.ListTvEpisodesPresenter;
+import lib.kalu.leanback.presenter.ListTvGridPresenter;
 
-public class Media extends ListRowDoublePresenter.ListRowDoubleBean implements Serializable, ListGridPresenter.ListGridBean {
+public class Media extends ListTvEpisodesPresenter.ItemBean implements Serializable, ListTvGridPresenter.ListGridBean {
 
     private int id;
     private String vid;

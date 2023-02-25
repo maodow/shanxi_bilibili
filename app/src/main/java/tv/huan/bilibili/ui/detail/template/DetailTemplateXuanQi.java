@@ -15,11 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.kalu.leanback.presenter.ListGridPresenter;
+import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.Media;
 
-public class DetailTemplateXuanQi extends ListGridPresenter<Media> {
+public class DetailTemplateXuanQi extends ListTvGridPresenter<Media> {
 
     @Override
     public int initMagrinTop(@NonNull Context context) {

@@ -9,10 +9,10 @@
         android:id="@+id/filter_cover"
         android:layout_width="@dimen/dp_160"
         android:layout_height="match_parent"
-        android:background="@color/color_aaaaaa" />
+        android:background="@color/color_303030" />
 
     <!-- 搜索 -->
-    <lib.kalu.leanback.plus.TextViewPlus
+    <tv.huan.bilibili.widget.SearchButton
         android:id="@+id/filter_search"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_24"
@@ -22,18 +22,18 @@
         android:background="@drawable/bg_selector_common_search"
         android:drawableLeft="@drawable/ic_selector_common_search"
         android:drawablePadding="@dimen/dp_8"
-        android:focusable="true"
+        android:focusable="false"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
-        android:text="@string/menu_vip"
+        android:text="@string/menu_search"
         android:textColor="@color/color_selector_text_common"
         android:textSize="14sp"
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
     <!-- vip -->
-    <lib.kalu.leanback.plus.TextViewPlus
+    <tv.huan.bilibili.widget.VipButton
         android:id="@+id/filter_vip"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_24"
@@ -43,7 +43,7 @@
         android:background="@drawable/bg_selector_common_vip"
         android:drawableLeft="@drawable/ic_selector_common_vip"
         android:drawablePadding="@dimen/dp_8"
-        android:focusable="true"
+        android:focusable="false"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
@@ -93,8 +93,8 @@
         app:cl_item_background_resource_highlight="@drawable/bg_filter_class_item_highlight"
         app:cl_item_height="@dimen/dp_50"
         app:cl_item_text_color="@color/color_white"
-        app:cl_item_text_color_checked="#1dffdc"
-        app:cl_item_text_color_highlight="#1c967f"
+        app:cl_item_text_color_checked="@color/color_ff6699"
+        app:cl_item_text_color_highlight="@color/color_black"
         app:cl_item_text_size="18sp" />
 
     <!-- 热搜-->
@@ -106,7 +106,6 @@
         android:layout_marginLeft="@dimen/dp_48"
         android:layout_marginRight="@dimen/dp_48"
         android:layout_toRightOf="@id/filter_title"
-        android:background="@android:color/holo_red_dark"
         android:minHeight="0dp"
         android:focusable="true"
         android:orientation="vertical"

@@ -44,13 +44,10 @@ android {
             applicationIdSuffix ".heilongjiang"
             versionNameSuffix ".heilongjiang"
             manifestPlaceholders = [design_width_in_dp_value: "960", design_height_in_dp_value: "540"]
-            buildConfigField("Boolean", "HUAN_AAA", "false") // 视达科aaa认证
+            buildConfigField("Boolean", "HUAN_AUTH", "true")  // 鉴权开关
             buildConfigField("Boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("Boolean", "HUAN_SKIN", "false")// 换肤skin
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
-            buildConfigField("String", "APP_ID", "\"8516778006830858242\"")
-            buildConfigField("String", "APP_KEY", "\"c334162ba91649ca89c54f5e742d3d51\"")
-            buildConfigField("String", "PRODUCT_ID", "\"P8516947106404188161\"")
         }
         debug {
             signingConfig signingConfigs.release
@@ -61,13 +58,10 @@ android {
             applicationIdSuffix ".heilongjiang"
             versionNameSuffix ".heilongjiang"
             manifestPlaceholders = [design_width_in_dp_value: "960", design_height_in_dp_value: "540"]
-            buildConfigField("Boolean", "HUAN_AAA", "false") // 视达科aaa认证
+            buildConfigField("Boolean", "HUAN_AUTH", "true")  // 鉴权开关
             buildConfigField("Boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("Boolean", "HUAN_SKIN", "false")// 换肤skin
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
-            buildConfigField("String", "APP_ID", "\"8516778006830858242\"")
-            buildConfigField("String", "APP_KEY", "\"c334162ba91649ca89c54f5e742d3d51\"")
-            buildConfigField("String", "PRODUCT_ID", "\"P8516947106404188161\"")
         }
     }
     sourceSets {

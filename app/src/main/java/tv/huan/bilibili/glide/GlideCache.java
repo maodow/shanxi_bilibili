@@ -36,6 +36,6 @@ public class GlideCache extends AppGlideModule {
         String diskCacheFolder = filesGlide.getAbsolutePath();
         DiskLruCacheFactory diskLruCacheFactory = new DiskLruCacheFactory(diskCacheFolder, 200 * 1024 * 1024);
         builder.setDiskCache(diskLruCacheFactory);
-        builder.setMemoryCache(new LruResourceCache(50 * 1024 * 1024));
+        builder.setMemoryCache(new LruResourceCache(100 * 1024 * 1024));
     }
 }

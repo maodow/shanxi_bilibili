@@ -3,7 +3,6 @@ package tv.huan.bilibili.ui.main.general;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ItemBridgeAdapter;
 import androidx.leanback.widget.ObjectAdapter;
@@ -23,13 +22,12 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.http.HttpClient;
-import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate1;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate10;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate11;
@@ -55,7 +53,7 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplateBottom;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplateClass;
 
 @Keep
-public class GeneralPresenter extends BasePresenter<GeneralView> {
+public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
     public GeneralPresenter(@NonNull GeneralView commonView) {
         super(commonView);
     }
@@ -294,6 +292,19 @@ public class GeneralPresenter extends BasePresenter<GeneralView> {
                         } catch (Exception e) {
                         }
                         return true;
+                    }
+                })
+                // 上报
+                .map(new Function<Boolean, Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean aBoolean) {
+                        try {
+                            int channelId = getView().getIntExtra(GeneralFragment.BUNDLE_CHANNELID, 0);
+                            String name = getView().getStringExtra(GeneralFragment.BUNDLE_NAME);
+                            reportChannelLoadFinished(channelId, name);
+                        }catch (Exception e){
+                        }
+                        return aBoolean;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)

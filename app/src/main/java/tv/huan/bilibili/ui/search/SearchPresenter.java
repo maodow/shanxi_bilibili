@@ -23,9 +23,9 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.bean.SearchRecommendBean;
@@ -35,7 +35,7 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.keyboard.KeyboardLinearLayout;
 
-public class SearchPresenter extends BasePresenter<SearchView> {
+public class SearchPresenter extends BasePresenterImpl<SearchView> {
 
     private final ArrayList<SearchBean.ItemBean> mData = new ArrayList<>();
 
@@ -91,6 +91,11 @@ public class SearchPresenter extends BasePresenter<SearchView> {
                             if (position >= 0) {
                                 SearchBean.ItemBean itemBean = mData.get(position);
                                 JumpUtil.next(v.getContext(), itemBean);
+                                String cid = itemBean.getCid();
+                                KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
+                                String result = keyboardView.getInput();
+                                String lowerCase = result.toLowerCase();
+                                reportSearchResultItemClicked(lowerCase, cid);
                             }
                         }
                     });
@@ -160,6 +165,20 @@ public class SearchPresenter extends BasePresenter<SearchView> {
                             e.printStackTrace();
                         }
                         return true;
+                    }
+                })
+                // 上报
+                .map(new Function<Boolean, Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean aBoolean) {
+                        try {
+                            KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
+                            String result = keyboardView.getInput();
+                            String lowerCase = result.toLowerCase();
+                            reportSearchResultItemNum(lowerCase);
+                        } catch (Exception e) {
+                        }
+                        return aBoolean;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)

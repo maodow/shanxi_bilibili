@@ -5,8 +5,8 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 import java.util.List;
 
-import lib.kalu.leanback.presenter.ListGridPresenter;
-import lib.kalu.leanback.presenter.ListRowPresenter;
+import lib.kalu.leanback.presenter.ListTvGridPresenter;
+import lib.kalu.leanback.presenter.ListTvRowPresenter;
 
 @Keep
 public class GetSubChannelsByChannelBean implements Serializable {
@@ -94,7 +94,7 @@ public class GetSubChannelsByChannelBean implements Serializable {
         }
 
         @Keep
-        public static class TemplateBean extends PosterBean implements JumpBean, ListGridPresenter.ListGridBean, ListRowPresenter.ListRowBean, Serializable {
+        public static class TemplateBean extends PosterBean implements JumpBean, ListTvGridPresenter.ListGridBean, ListTvRowPresenter.ListRowBean, Serializable {
 
             private int show;
             private String title;

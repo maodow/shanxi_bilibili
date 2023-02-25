@@ -1,5 +1,6 @@
 package tv.huan.bilibili.base;
 
+import android.content.Context;
 import android.widget.ImageView;
 
 import androidx.annotation.IdRes;
@@ -10,10 +11,13 @@ import androidx.fragment.app.FragmentManager;
 import lib.kalu.frame.mvp.BaseActivity;
 import lib.kalu.frame.mvp.BaseFragment;
 import lib.kalu.frame.mvp.BaseView;
+import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.dialog.LoadingDialog;
 import tv.huan.bilibili.utils.GlideUtils;
 
 public interface BaseViewImpl extends BaseView {
+
+    String KEY_INSTALL_TIME = "install_time";
 
     default void setImageUrl(@IdRes int id, @NonNull String url) {
         try {
@@ -36,6 +40,34 @@ public interface BaseViewImpl extends BaseView {
             return getStringExtra("secondTag");
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    default int getProdId() {
+        try {
+            return getIntExtra("prodId", 2);
+        } catch (Exception e) {
+            return 2;
+        }
+    }
+
+    default boolean updateInstallTime() {
+        try {
+            Context context = getContext();
+            CacheUtil.setCache(context, KEY_INSTALL_TIME, "1");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    default boolean containsInstallTime() {
+        try {
+            Context context = getContext();
+            String s = CacheUtil.getCache(context, KEY_INSTALL_TIME);
+            return null != s && s.length() > 0;
+        } catch (Exception e) {
+            return false;
         }
     }
 
