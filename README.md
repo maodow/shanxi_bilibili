@@ -50,3 +50,10 @@ APP_ID：8774148295636500482、APP_KEY：87b91bd2993b4150a69f522139f5e5f8、prod
 
 4、《[落地省份]《[APK名称]》[厂商]-初测验收版V1.2》此报告测试通过后用来换取正式的局数据参数信息
 ```
+
+#
+#### 说明
+```
+huan_common.aar/huan_heilongjiang.aar/module_keyboard
+以上3个组件, 在repo根目录先
+```
