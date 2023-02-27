@@ -37,11 +37,11 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     private void init() {
     }
 
-    public void requestCheckedEpisode() {
+    public void requestFocusEpisodePlayingItem() {
         DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
         LogUtil.log("DetailGridView", "requestCheckedEpisode => presenter = " + presenter);
         if (null == presenter)
             return;
-        presenter.requestCheckedEpisode(this);
+        presenter.requestFocusEpisodePlayingItem(this);
     }
 }
