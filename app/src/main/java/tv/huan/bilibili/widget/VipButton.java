@@ -46,13 +46,11 @@ public class VipButton extends TextViewPlus {
         HeilongjiangApi.checkVip(getContext(), new OnCheckVipChangeListener() {
             @Override
             public void onPass() {
-                setEnabled(true);
                 setText("已开通vip");
             }
 
             @Override
             public void onFail() {
-                setEnabled(false);
                 setText("未开通vip");
             }
         });

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="28dp"
-    android:background="@drawable/bg_selector_detail_item_xuanji"
+    android:background="@drawable/bg_selector_common_noboard"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -17,18 +17,13 @@
     app:rl_scale="1.04">
 
     <!-- 标题 -->
-    <lib.kalu.leanback.auto.AutoTextView
+    <TextView
         android:id="@+id/detail_xuanji2_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        android:text="-"
-        android:textColor="#ffffff"
-        android:textSize="15sp"
-        app:fl_text_color_focus="#3c3c82"
-        app:fl_text_color_normal="#ffffff" />
+        android:textColor="@color/color_aaaaaa"
+        android:textSize="@dimen/sp_16" />
 
 </lib.kalu.leanback.round.RoundRelativeLayout>

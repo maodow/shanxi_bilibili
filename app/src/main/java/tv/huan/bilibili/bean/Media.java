@@ -188,4 +188,14 @@ public class Media extends ListTvEpisodesPresenter.ItemBean implements Serializa
     public String getGridHead() {
         return getTitle();
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                ", title='" + title + '\'' +
+                ", name='" + name + '\'' +
+                ", start='" + getStart() + '\'' +
+                ", end='" + getEnd() + '\'' +
+                '}';
+    }
 }

@@ -15,14 +15,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            boolean checkPlayer = getPresenter().checkPlayer();
-            if (checkPlayer) {
-                onBackPressed();
-            }
-            return true;
-        }
-        return super.dispatchKeyEvent(event);
+        return getPresenter().dispatchEvent(event) || super.dispatchKeyEvent(event);
     }
 
     @Override

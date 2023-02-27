@@ -47,7 +47,8 @@ android {
             buildConfigField("Boolean", "HUAN_AUTH", "true")  // 鉴权开关
             buildConfigField("Boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("Boolean", "HUAN_SKIN", "false")// 换肤skin
-            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
+//            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
+            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8188/mediaApi/\"")
         }
         debug {
             signingConfig signingConfigs.release
@@ -61,7 +62,8 @@ android {
             buildConfigField("Boolean", "HUAN_AUTH", "true")  // 鉴权开关
             buildConfigField("Boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("Boolean", "HUAN_SKIN", "false")// 换肤skin
-            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
+//            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
+            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8188/mediaApi/\"")
         }
     }
     sourceSets {
@@ -95,7 +97,8 @@ dependencies {
     api files('libs/lib_mediaplayer_ui_release_20230216.aar')
     api files('libs/lib_mediaplayer_exo_r2.18.3_ff4.4_audio_release_20230222.aar')
     // heilongjiang
-    api files('libs/lib_huan_heilongjiang_release_20230224.aar')
+//    api files('libs/lib_huan_heilongjiang_release_20230224.aar')
+    api project(path: ':huan_heilongjiang')
 
     // core
     implementation 'androidx.multidex:multidex:2.0.1'

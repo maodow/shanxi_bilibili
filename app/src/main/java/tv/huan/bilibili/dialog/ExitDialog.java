@@ -226,9 +226,6 @@ public class ExitDialog extends DialogFragment implements DialogInterface.OnKeyL
             e.printStackTrace();
         }
 
-        if (null == list || list.size() <= 0)
-            dismiss();
-
         RecyclerView recyclerView = dialog.findViewById(R.id.dialog_exit_list);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);

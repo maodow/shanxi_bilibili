@@ -1,5 +1,6 @@
 package tv.huan.bilibili.ui.welcome;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.LoadPageIcon;
 import tv.huan.bilibili.utils.BoxUtil;
+import tv.huan.heilongjiang.HeilongjiangApi;
 
 public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
 
@@ -40,6 +42,10 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     public void subscribe(ObservableEmitter<Boolean> emitter) {
                         // 首次打开app上报
                         reportAppActivation();
+                        // 初始化sdk
+                        Context context = getView().getContext();
+                        HeilongjiangApi.init(context);
+                        // next
                         emitter.onNext(true);
                     }
                 })

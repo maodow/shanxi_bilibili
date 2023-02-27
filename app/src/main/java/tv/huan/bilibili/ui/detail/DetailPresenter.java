@@ -1,6 +1,9 @@
 package tv.huan.bilibili.ui.detail;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.KeyEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -30,6 +33,7 @@ import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.Album;
@@ -415,7 +419,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                         continue;
                                     }
                                     media.setIndex(i);
-                                    media.setHead("选期列表");
                                     list.add(media);
                                 }
                                 ((ArrayObjectAdapter) objectAdapter).add(list);
@@ -478,7 +481,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                 for (int i = 0; i < size; i++) {
                                     Media t = medias.get(i);
                                     t.setName(String.valueOf(i + 1));
-                                    t.setHead("选集列表");
                                 }
                                 list.addAll(medias);
 
@@ -601,5 +603,26 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         getView().updateVip(aBoolean);
                     }
                 }).subscribe());
+    }
+
+    protected boolean dispatchEvent(KeyEvent event) {
+        // back
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            boolean checkPlayer = checkPlayer();
+            if (checkPlayer) {
+                ((Activity) getView()).onBackPressed();
+            }
+            return true;
+        }
+        // down
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            int focusId = getView().getCurrentFocusId();
+            if (focusId == R.id.detail_player_item_vip || focusId == R.id.detail_player_item_full || focusId == R.id.detail_player_item_favor) {
+                DetailGridView gridView = getView().findViewById(R.id.detail_list);
+                gridView.requestCheckedEpisode();
+                return true;
+            }
+        }
+        return false;
     }
 }

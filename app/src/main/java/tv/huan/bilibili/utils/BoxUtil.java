@@ -6,9 +6,9 @@ public final class BoxUtil {
 
     public static int getProdId() {
         try {
-            return 2;
+            return 1;
         } catch (Exception e) {
-            return 2;
+            return 1;
         }
     }
 

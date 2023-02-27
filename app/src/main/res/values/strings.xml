@@ -11,6 +11,12 @@
 
     <string name="filter_all">全部</string>
 
+    <string name="detail_full">全屏播放</string>
+    <string name="detail_vip">开通会员</string>
+    <string name="detail_favor">收藏</string>
+    <string name="detail_xuanji">选集列表</string>
+    <string name="detail_xuanqi">选期列表</string>
+
     <string name="menu_vip">开通大会员</string>
     <string name="menu_search">搜索</string>
 

@@ -31,7 +31,6 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.InfoDialog;
 
 public class DetailTemplatePlayer extends Presenter {
-
     @Override
     public void onViewAttachedToWindow(ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
@@ -110,19 +109,22 @@ public class DetailTemplatePlayer extends Presenter {
                 public void onClick(View v) {
                     ViewGroup viewGroup = (ViewGroup) v.getParent().getParent().getParent();
                     PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
-                    playerView.setOnChangeListener(new OnChangeListener() {
-                        @Override
-                        public void onWindow(int state) {
-                            if (state == PlayerType.WindowType.FULL) {
-                                playerView.setFocusable(true);
-                                playerView.requestFocus();
-                            } else if (state == PlayerType.WindowType.NORMAL) {
-                                playerView.setFocusable(false);
-                                v.requestFocus();
+                    String url = playerView.getUrl();
+                    if (null != url && url.length() > 0) {
+                        playerView.setOnChangeListener(new OnChangeListener() {
+                            @Override
+                            public void onWindow(int state) {
+                                if (state == PlayerType.WindowType.FULL) {
+                                    playerView.setFocusable(true);
+                                    playerView.requestFocus();
+                                } else if (state == PlayerType.WindowType.NORMAL) {
+                                    playerView.setFocusable(false);
+                                    v.requestFocus();
+                                }
                             }
-                        }
-                    });
-                    playerView.startFull();
+                        });
+                        playerView.startFull();
+                    }
                 }
             });
             return new ViewHolder(view);

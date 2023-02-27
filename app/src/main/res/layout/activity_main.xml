@@ -36,7 +36,6 @@
         android:background="@drawable/bg_selector_common_vip"
         android:drawableLeft="@drawable/ic_selector_common_vip"
         android:drawablePadding="@dimen/dp_8"
-        android:focusable="false"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
@@ -54,7 +53,6 @@
         android:layout_alignTop="@id/main_search"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/dp_48"
-        android:focusable="false"
         android:scaleType="fitEnd"
         android:src="@drawable/ic_logo" />
 

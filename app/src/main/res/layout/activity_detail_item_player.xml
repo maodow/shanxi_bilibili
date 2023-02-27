@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_236"
     android:clipChildren="false"
@@ -97,12 +98,12 @@
             android:layout_height="0dp"
             android:layout_gravity="top|left"
             android:layout_weight="3"
-            android:background="@drawable/bg_selector_detail_item_button"
+            android:background="@drawable/bg_selector_common_noboard"
             android:focusable="true"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:text="简　介： 自然拼读系列为早教启蒙的优选课程，能够帮助孩子提升识字能力、阅读能力…"
-            android:textColor="#ffffff"
-            android:textSize="11sp" />
+            android:textColor="@color/color_selector_text_aaaaa_00000"
+            android:textSize="@dimen/sp_12" />
 
         <Space
             android:layout_width="0dp"
@@ -118,41 +119,59 @@
             android:focusable="false"
             android:orientation="horizontal">
 
-            <TextView
+            <lib.kalu.leanback.plus.TextViewPlus
                 android:id="@+id/detail_player_item_vip"
-                android:layout_width="93dp"
+                android:layout_width="@dimen/dp_93"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/bg_selector_detail_item_button"
+                android:layout_marginRight="@dimen/dp_10"
+                android:background="@drawable/bg_selector_common_noboard"
+                android:drawableTop="@drawable/ic_selector_common_chao"
+                android:drawablePadding="@dimen/dp_8"
                 android:focusable="true"
                 android:gravity="center"
-                android:text="vip"
-                android:textColor="#ffffff"
-                android:textSize="12sp"
-                android:visibility="gone" />
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/detail_vip"
+                android:textColor="@color/color_selector_text_ffffff_00000"
+                android:textSize="@dimen/sp_12"
+                android:visibility="gone"
+                app:tvp_drawable_top_height="@dimen/dp_21"
+                app:tvp_drawable_top_width="@dimen/dp_21" />
 
-            <TextView
+            <lib.kalu.leanback.plus.TextViewPlus
                 android:id="@+id/detail_player_item_full"
-                android:layout_width="93dp"
+                android:layout_width="@dimen/dp_93"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/bg_selector_detail_item_button"
+                android:layout_marginRight="@dimen/dp_10"
+                android:background="@drawable/bg_selector_common_noboard"
+                android:drawableTop="@drawable/ic_selector_common_full"
+                android:drawablePadding="@dimen/dp_8"
                 android:focusable="true"
                 android:gravity="center"
-                android:text="全屏播放"
-                android:textColor="#ffffff"
-                android:textSize="12sp" />
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/detail_full"
+                android:textColor="@color/color_selector_text_ffffff_00000"
+                android:textSize="@dimen/sp_12"
+                app:tvp_drawable_top_height="@dimen/dp_21"
+                app:tvp_drawable_top_width="@dimen/dp_21" />
 
-            <TextView
+            <lib.kalu.leanback.plus.TextViewPlus
                 android:id="@+id/detail_player_item_favor"
-                android:layout_width="93dp"
+                android:layout_width="@dimen/dp_93"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_selector_detail_item_button"
+                android:background="@drawable/bg_selector_common_noboard"
+                android:drawableTop="@drawable/ic_selector_common_favor"
+                android:drawablePadding="@dimen/dp_8"
                 android:focusable="true"
                 android:gravity="center"
-                android:text="收藏"
-                android:textColor="#ffffff"
-                android:textSize="12sp" />
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/detail_favor"
+                android:textColor="@color/color_selector_text_ffffff_00000"
+                android:textSize="@dimen/sp_12"
+                app:tvp_drawable_top_height="@dimen/dp_21"
+                app:tvp_drawable_top_width="@dimen/dp_21" />
 
         </LinearLayout>
 

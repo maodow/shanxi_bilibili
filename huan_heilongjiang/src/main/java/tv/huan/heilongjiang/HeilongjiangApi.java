@@ -1,10 +1,15 @@
 package tv.huan.heilongjiang;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.istv.ystframework.callback.ResultCallBack;
 import com.istv.ystframework.client.OrderClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public final class HeilongjiangApi {
 
@@ -51,7 +56,7 @@ public final class HeilongjiangApi {
 
     public static void checkVip(Context context,
                                 OnCheckVipChangeListener l) {
-        checkVip(context, BuildConfig.APP_ID, BuildConfig.APP_KEY, "", BuildConfig.PRODUCT_ID, l);
+        checkVip(context, BuildConfig.APP_ID, BuildConfig.APP_KEY, BuildConfig.PRODUCT_ID, l);
     }
 
     /**
@@ -60,26 +65,42 @@ public final class HeilongjiangApi {
      * @param context
      * @param appid
      * @param appkey
-     * @param contentId
      * @param productId
      */
     public static void checkVip(Context context,
                                 String appid,
                                 String appkey,
-                                String contentId,
                                 String productId,
                                 OnCheckVipChangeListener l) {
-        String userId = getUserId(context, appid, appkey);
-        Log.e("HeilongjiangApi", "isVip => userId = " + userId);
-        OrderClient.authOrize_V3(context, appid, appkey, userId, contentId, productId, "1", new ResultCallBack() {
+        new Thread(new Runnable() {
             @Override
-            public void onResult(String s) {
-                Log.e("HeilongjiangApi", "isVip => s = " + s);
-                if (null != l) {
-                    l.onPass();
-                }
+            public void run() {
+                String userId = getUserId(context, appid, appkey);
+                Log.e("HeilongjiangApi", "checkVip => appid = " + appid);
+                Log.e("HeilongjiangApi", "checkVip => appkey = " + appkey);
+                Log.e("HeilongjiangApi", "checkVip => productId = " + productId);
+                Log.e("HeilongjiangApi", "checkVip => userId = " + userId);
+
+                OrderClient.authOrize_V3(context, appid, appkey, userId, "", productId, "1", new ResultCallBack() {
+                    @Override
+                    public void onResult(String s) {
+                        Log.e("HeilongjiangApi", "isVip => s = " + s);
+                        if (null != l) {
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (null != s && s.toLowerCase().contains("\"result\":\"ord-000\"")) {
+                                        l.onPass();
+                                    } else {
+                                        l.onFail();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
             }
-        });
+        }).start();
     }
 
     public static void jumpVip(Context context) {
@@ -98,14 +119,18 @@ public final class HeilongjiangApi {
                                String appid,
                                String appkey,
                                String productId) {
-        String phoneNo = getPhoneNo(context);
         String userId = getUserId(context, appid, appkey);
-        Log.e("HeilongjiangApi", "jumpVip => phoneNo = " + phoneNo + ", userId = " + userId);
-        OrderClient.goOrder_V3(context, appid, appkey, productId, "测试Title", userId, phoneNo, new ResultCallBack() {
-            @Override
-            public void onResult(String s) {
-                Log.e("HeilongjiangApi", "jumpVip => s = " + s);
-            }
-        });
+        Log.e("HeilongjiangApi", "jumpVip => appid = " + appid);
+        Log.e("HeilongjiangApi", "jumpVip => appkey = " + appkey);
+        Log.e("HeilongjiangApi", "jumpVip => productId = " + productId);
+        Log.e("HeilongjiangApi", "jumpVip => userId = " + userId);
+
+        OrderClient.goOrder_V3(context, appid, appkey, productId, "1", "测试Title", userId, null);
+//        OrderClient.goOrder_V3(context, appid, appkey, productId, "1", "测试Title", userId, new ResultCallBack() {
+//            @Override
+//            public void onResult(String s) {
+//                Log.e("HeilongjiangApi", "jumpVip => s = " + s);
+//            }
+//        });
     }
 }

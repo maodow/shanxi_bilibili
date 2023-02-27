@@ -13,6 +13,7 @@ import lib.kalu.frame.mvp.BaseFragment;
 import lib.kalu.frame.mvp.BaseView;
 import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.dialog.LoadingDialog;
+import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 
 public interface BaseViewImpl extends BaseView {
@@ -44,11 +45,7 @@ public interface BaseViewImpl extends BaseView {
     }
 
     default int getProdId() {
-        try {
-            return getIntExtra("prodId", 2);
-        } catch (Exception e) {
-            return 2;
-        }
+        return BoxUtil.getProdId();
     }
 
     default boolean updateInstallTime() {

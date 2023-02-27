@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<lib.kalu.leanback.round.RoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<tv.huan.bilibili.widget.common.CommonEpisodeRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_selector_detail_item_xuanji"
-    android:clickable="true"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:longClickable="false"
-    app:rl_corner_bottom_left="8dp"
-    app:rl_corner_bottom_right="8dp"
-    app:rl_corner_top_left="8dp"
-    app:rl_corner_top_right="8dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_selector_common_noboard"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="true">
 
-    app:rl_rate_height="0.6"
-    app:rl_scale="1.08">
+    <!-- popu -->
+    <lib.kalu.leanback.marquee.MarqueeTextView
+        android:id="@+id/detail_xuanji1_item_popu"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/dp_f40"
+        android:layout_marginLeft="-20dp"
+        android:layout_marginRight="-20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:background="@color/color_white"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/sp_16"
+        android:visibility="invisible" />
 
     <!-- 标题 -->
-    <lib.kalu.leanback.auto.AutoTextView
+    <TextView
         android:id="@+id/detail_xuanji1_item_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        android:text="-"
-        android:textColor="#ffffff"
-        android:textSize="15sp"
-        app:fl_text_color_focus="#3c3c82"
-        app:fl_text_color_normal="#ffffff" />
+        android:gravity="center"
+        android:textColor="@color/color_aaaaaa"
+        android:textSize="@dimen/sp_16" />
 
-</lib.kalu.leanback.round.RoundRelativeLayout>
+</tv.huan.bilibili.widget.common.CommonEpisodeRelativeLayout>

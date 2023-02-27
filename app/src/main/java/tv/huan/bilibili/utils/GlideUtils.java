@@ -1,5 +1,6 @@
 package tv.huan.bilibili.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -55,20 +56,15 @@ public class GlideUtils {
         into(context, url, imageView, 0);
     }
 
+    @SuppressLint("CheckResult")
     private static void into(Context context, String url, final ImageView imageView, @DrawableRes int res) {
 
         if (null == imageView || null == url || url.length() == 0)
             return;
 
-//        if (null != imageView && res != 0) {
-//            imageView.setImageResource(res);
-//        }
-
         RequestOptions options = new RequestOptions()
-                .error(res)
                 .dontAnimate()
                 .dontTransform()
-                .placeholder(res)
                 .dontAnimate()
                 .dontTransform()
                 .encodeQuality(40)
@@ -76,6 +72,15 @@ public class GlideUtils {
                 .priority(Priority.LOW)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(false);
+
+        try {
+            Drawable drawable = context.getResources().getDrawable(res);
+            if (null != drawable) {
+                options.error(drawable).placeholder(drawable);
+            }
+        } catch (Exception e) {
+        }
+
         into(context, url, imageView, options);
     }
 
@@ -92,7 +97,7 @@ public class GlideUtils {
 //            options.transform(transform);
 
             // 图片
-            Glide.with(FrameContext.getApplicationContext()).load(url.trim()).apply(options).into(imageView);
+            Glide.with(context).load(url.trim()).apply(options).into(imageView);
 //            Glide.with(context).load(url).apply(options).into(new CustomTarget<Drawable>() {
 //                @Override
 //                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
