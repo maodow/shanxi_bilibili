@@ -42,6 +42,6 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         LogUtil.log("DetailGridView", "requestCheckedEpisode => presenter = " + presenter);
         if (null == presenter)
             return;
-        presenter.requestFocusEpisodePlayingItem(this);
+        presenter.requestFocusChildOfEpisodeChecked(this);
     }
 }

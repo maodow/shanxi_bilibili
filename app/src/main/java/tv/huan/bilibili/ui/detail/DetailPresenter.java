@@ -443,7 +443,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public ProgramInfoDetail apply(ProgramInfoDetail data) {
 
-                        boolean show;
+                        boolean show = true;
                         try {
                             List<Media> medias = data.getMedias();
                             ProgramDetail detail = data.getAlbum();

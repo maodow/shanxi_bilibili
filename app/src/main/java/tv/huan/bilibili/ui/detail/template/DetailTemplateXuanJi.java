@@ -46,15 +46,6 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
         return offset;
     }
 
-    @Override
-    protected void onFocusChangeRange(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position, boolean hasFocus) {
-        try {
-            TextView textView = v.findViewById(R.id.detail_xuanji2_item_name);
-            textView.setTextColor(context.getResources().getColor(hasFocus ? R.color.color_black : R.color.color_aaaaaa));
-        } catch (Exception e) {
-        }
-    }
-
     protected final void startPosition(@NonNull View v, @NonNull Media media) {
         try {
             // 1
@@ -76,7 +67,8 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
     }
 
     @Override
-    protected void onBindViewHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position, @NonNull boolean isPlayingIndex) {
+    protected void onBindViewHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {
+        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked);
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji1_item_name);
             textView.setText(item.getName());
@@ -88,17 +80,29 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
         } catch (Exception e) {
         }
         try {
+            TextView textView = v.findViewById(R.id.detail_xuanji1_item_popu);
+            textView.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
+            textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+        } catch (Exception e) {
+        }
+        try {
             TextView textView = v.findViewById(R.id.detail_xuanji1_item_name);
-            textView.setTextColor(context.getResources().getColor(isPlayingIndex ? R.color.color_ff6699 : R.color.color_aaaaaa));
+            textView.setTextColor(context.getResources().getColor(isChecked ? R.color.color_black : isPlaying ? R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
     }
 
     @Override
-    protected void onBindViewHolderRange(@NonNull Context context, @NonNull View view, @NonNull Media media, @NonNull int i) {
+    protected void onBindViewHolderRange(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {
+        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderRange => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked);
         try {
-            TextView textView = view.findViewById(R.id.detail_xuanji2_item_name);
-            textView.setText(media.getStart() + "-" + media.getEnd());
+            TextView textView = v.findViewById(R.id.detail_xuanji2_item_name);
+            textView.setText(item.getStart() + "-" + item.getEnd());
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = v.findViewById(R.id.detail_xuanji2_item_name);
+            textView.setTextColor(context.getResources().getColor(isChecked ?  R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
     }
@@ -112,21 +116,6 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
     protected void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position) {
         try {
             Toast.makeText(v.getContext(), item.getName(), Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-        }
-    }
-
-    @Override
-    protected void onFocusChangeEpisode(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int index, boolean hasFocus, boolean isPlayingIndex) {
-        try {
-            TextView textView = v.findViewById(R.id.detail_xuanji1_item_popu);
-            textView.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
-            textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
-        } catch (Exception e) {
-        }
-        try {
-            TextView textView = v.findViewById(R.id.detail_xuanji1_item_name);
-            textView.setTextColor(context.getResources().getColor(hasFocus ? R.color.color_black : isPlayingIndex ? R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
     }

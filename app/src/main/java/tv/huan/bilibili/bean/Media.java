@@ -196,6 +196,8 @@ public class Media extends ListTvEpisodesPresenter.ItemBean implements Serializa
                 ", name='" + name + '\'' +
                 ", start='" + getStart() + '\'' +
                 ", end='" + getEnd() + '\'' +
+                ", isChecked='" + isChecked() + '\'' +
+                ", isPlaying='" + isPlaying() + '\'' +
                 '}';
     }
 }

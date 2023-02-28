@@ -172,7 +172,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             if (position > 0) {
                                 FavBean.ItemBean itemBean = mDatas.get(position);
                                 int jumpType = itemBean.getJumpType();
-                                JumpUtil.nextWeb(v.getContext(), jumpType == 0 ? "http://www.baidu.com" : "http://www.hao123.com");
+                                JumpUtil.nextWebHelp(v.getContext());
                             }
                         }
                     });

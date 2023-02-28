@@ -135,11 +135,17 @@ public class JumpUtil {
         context.startActivity(intent);
     }
 
-    public static final void nextWeb(@NonNull Context context, @NonNull String url) {
-        if (null == url || url.length() <= 0)
-            return;
+    public static final void nextWebHelp(@NonNull Context context) {
         Intent intent = new Intent(context, WebviewActivity.class);
-        intent.putExtra(WebviewActivity.INTENT_URL, url);
+        intent.putExtra(WebviewActivity.INTENT_HELP, true);
+        intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 1);
+        context.startActivity(intent);
+    }
+
+    public static final void nextWebAbout(@NonNull Context context) {
+        Intent intent = new Intent(context, WebviewActivity.class);
+        intent.putExtra(WebviewActivity.INTENT_HELP, true);
+        intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 2);
         context.startActivity(intent);
     }
 }

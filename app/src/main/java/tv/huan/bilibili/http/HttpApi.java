@@ -45,6 +45,14 @@ public interface HttpApi {
     Observable<BaseBean<Object>> logReport(@Body RequestBody requestBody);
 
     /**
+     * fileType为文件类型，1为帮助中心，2为关于我们，可以测试下
+     *
+     * @return
+     */
+    @GET("apk/getFileUrl")
+    Observable<BaseBean<String>> getFileUrl(@Query("fileType") int fileType);
+
+    /**
      * 获取频道
      *
      * @param modId
