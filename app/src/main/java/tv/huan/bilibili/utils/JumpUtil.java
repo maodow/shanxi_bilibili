@@ -49,14 +49,13 @@ public class JumpUtil {
     public static void nextDetail(@NonNull Context context, @NonNull JumpBean data) {
         try {
             String cid = data.getCid();
-            int classId = data.getClassId();
-            nextDetail(context, cid, classId);
+            nextDetail(context, cid);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void nextDetail(@NonNull Context context, @NonNull String cid, @NonNull int classId) {
+    public static void nextDetail(@NonNull Context context, @NonNull String cid) {
 //        Log.e("JumpUtil", "nextDetail => cid = " + cid + ", classId = " + classId);
         if (null != cid && cid.length() > 0) {
             Intent intent = new Intent(context, DetailActivity.class);

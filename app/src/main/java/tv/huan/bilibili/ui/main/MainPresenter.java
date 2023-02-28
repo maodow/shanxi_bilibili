@@ -1,5 +1,6 @@
 package tv.huan.bilibili.ui.main;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -53,8 +54,7 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         // 专辑
         if (type == MainActivity.INTENT_TYPE_DETAIL) {
             String cid = getView().getStringExtra(MainActivity.INTENT_CID);
-            int classId = getView().getIntExtra(MainActivity.INTENT_CLASSID, -1);
-            JumpUtil.nextDetail(getView().getContext(), cid, classId);
+            JumpUtil.nextDetail((Context) getView(), cid);
         }
         // 筛选
         else if (type == MainActivity.INTENT_TYPE_FILTER) {

@@ -54,6 +54,24 @@ APP_ID：8774148295636500482、APP_KEY：87b91bd2993b4150a69f522139f5e5f8、prod
 #
 #### 说明
 ```
-huan_common.aar/huan_heilongjiang.aar/module_keyboard
-以上3个组件, 在repo根目录先
+huan_common.aar
+huan_heilongjiang.aar
+module_keyboard.aar
+3个组件, 在repo根目录
+```
+#
+#### 统一搜索
+```
+{
+    "action":"tv.huan.bilibili.heilongjiang.open",
+    "package":"tv.huan.bilibili.heilongjiang",
+    "component":{
+        "pkg":"tv.huan.bilibili.heilongjiang",
+        "cls":"tv.huan.bilibili.ui.welcome.WelcomeActivity"
+    },
+    "extras":{
+        "intent_type":2,
+        "intent_cid":""
+    }
+}
 ```
