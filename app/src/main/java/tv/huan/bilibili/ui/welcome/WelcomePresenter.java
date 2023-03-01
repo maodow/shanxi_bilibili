@@ -244,7 +244,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                 .doOnNext(new Consumer<WelcomeBean>() {
                     @Override
                     public void accept(WelcomeBean data) {
-                        LogUtil.log("WelcomePresenter => request => doOnNext");
+                        LogUtil.log("WelcomePresenter => request => doOnNext => "+new Gson().toJson(data));
                         if (data.containsAd()) {
                             getView().refreshBackground(data.getAdUrl());
                             intervalTime(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
