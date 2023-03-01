@@ -1,12 +1,10 @@
 
 package tv.huan.bilibili.ui.webview;
 
-import android.app.Activity;
-import android.os.Bundle;
+import android.graphics.Color;
 import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
@@ -23,6 +21,7 @@ public final class WebviewActivity extends BaseActivity<WebviewView, WebviewPres
 
     @Override
     public void initData() {
+        getPresenter().initWebView();
         getPresenter().request();
     }
 
@@ -30,7 +29,7 @@ public final class WebviewActivity extends BaseActivity<WebviewView, WebviewPres
     public void showUrl(@NonNull String s) {
         if (null == s || s.length() <= 0)
             return;
-        WebView webView = findViewById(R.id.webview);
+        WebView webView = findViewById(R.id.webview_html);
         webView.loadUrl(s);
     }
 
