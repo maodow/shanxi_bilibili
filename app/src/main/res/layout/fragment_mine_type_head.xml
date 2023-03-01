@@ -52,16 +52,17 @@
                     android:layout_height="@dimen/dp_20"
                     android:focusable="false"
                     android:gravity="top"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/color_white"
                     android:textSize="@dimen/sp_12" />
 
-                <TextView
+                <tv.huan.bilibili.widget.common.CommomDataView
                     android:id="@+id/mine_head_date"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_20"
                     android:focusable="false"
                     android:gravity="bottom"
-                    android:textColor="#ffffff"
+                    android:visibility="invisible"
+                    android:textColor="@color/color_white"
                     android:textSize="@dimen/sp_12" />
 
             </LinearLayout>
