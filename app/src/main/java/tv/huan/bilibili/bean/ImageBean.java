@@ -5,7 +5,7 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 
 @Keep
-public class PosterBean implements Serializable {
+public class ImageBean implements Serializable {
 
     //  return null == newPicVt || newPicVt.isEmpty() ? picVtPath : newPicVt;
     private String poster;
@@ -37,7 +37,7 @@ public class PosterBean implements Serializable {
         }
     }
 
-    public void copyPic(PosterBean data) {
+    public void copyPic(ImageBean data) {
         if (null == data)
             return;
         this.poster = data.poster;

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +27,9 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.listener.OnChangeListener;
 import lib.kalu.mediaplayer.util.ActivityUtils;
+import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.widget.AutoImageView;
 import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.InfoDialog;
@@ -141,7 +145,63 @@ public class DetailTemplatePlayer extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
         LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
-        delayPlayer(viewHolder, o);
+        showData(viewHolder, o);
+//        delayPlayer(viewHolder, o);
+    }
+
+    private void showData(ViewHolder viewHolder, Object o) {
+        try {
+            ImageView imageView = viewHolder.view.findViewById(R.id.detail_player_item_cover);
+            GlideUtils.loadHz(imageView.getContext(), ((DetailTemplatePlayerObject) o).getImageUrl(), imageView);
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_tag);
+            textView.setText(((DetailTemplatePlayerObject) o).getTag());
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_title);
+            textView.setText(((DetailTemplatePlayerObject) o).getTitle());
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_index);
+            String string = textView.getResources().getString(R.string.detail_playing_index, ((DetailTemplatePlayerObject) o).getTitle(), ((DetailTemplatePlayerObject) o).getPlayingIndex());
+            textView.setText(string);
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_info);
+            textView.setText(((DetailTemplatePlayerObject) o).getInfo());
+        } catch (Exception e) {
+        }
+        try {
+            LinearLayout linearLayout = viewHolder.view.findViewById(R.id.detail_player_item_pic);
+            int childCount = linearLayout.getChildCount();
+            for (int i = 0; i < childCount - 1; i++) {
+                linearLayout.removeViewAt(i);
+            }
+            String[] picList = ((DetailTemplatePlayerObject) o).getPicList();
+            int length;
+            try {
+                length = picList.length;
+            } catch (Exception e) {
+                length = 0;
+            }
+            Context context = linearLayout.getContext();
+            int height = context.getResources().getDimensionPixelOffset(R.dimen.dp_16);
+            for (int i = 0; i < length; i++) {
+                AutoImageView picView = new AutoImageView(context);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, height);
+                int margin = linearLayout.getContext().getResources().getDimensionPixelOffset(i == length - 1 ? R.dimen.dp_8 : R.dimen.dp_4);
+                params.setMargins(0, 0, margin, 0);
+                picView.setLayoutParams(params);
+                GlideUtils.loadHz(picView.getContext(), picList[i], picView);
+                linearLayout.addView(picView, i);
+            }
+        } catch (Exception e) {
+        }
     }
 
     private void delayPlayer(ViewHolder viewHolder, Object o) {
@@ -158,7 +218,7 @@ public class DetailTemplatePlayer extends Presenter {
                         String cdnUrl;
                         try {
                             DetailTemplatePlayerObject data = (DetailTemplatePlayerObject) o;
-                            cdnUrl = data.getCdnUrl();
+                            cdnUrl = data.getVideoUrl();
                         } catch (Exception e) {
                             cdnUrl = null;
                         }
@@ -195,9 +255,9 @@ public class DetailTemplatePlayer extends Presenter {
     private void hideUI(ViewHolder viewHolder) {
         try {
             viewHolder.view.findViewById(R.id.detail_player_item_logo).setVisibility(View.GONE);
-            viewHolder.view.findViewById(R.id.detail_player_item_img).setVisibility(View.GONE);
+            viewHolder.view.findViewById(R.id.detail_player_item_cover).setVisibility(View.GONE);
             viewHolder.view.findViewById(R.id.detail_player_item_warning).setVisibility(View.GONE);
-            viewHolder.view.findViewById(R.id.detail_player_item_position).setVisibility(View.GONE);
+            viewHolder.view.findViewById(R.id.detail_player_item_index).setVisibility(View.GONE);
             viewHolder.view.findViewById(R.id.detail_player_item_sign).setVisibility(View.GONE);
         } catch (Exception e) {
         }
@@ -222,8 +282,55 @@ public class DetailTemplatePlayer extends Presenter {
 
     public static class DetailTemplatePlayerObject {
 
-        private String cdnUrl;
+        private String tag;
+        private String title;
+        private String info;
+        private String[] picList;
+
+        private String imageUrl;
+        private String videoUrl;
         private boolean showVip;
+        private int playingIndex = 1;
+
+        public int getPlayingIndex() {
+            return playingIndex;
+        }
+
+        public void setPlayingIndex(int playingIndex) {
+            this.playingIndex = playingIndex;
+        }
+
+        public String[] getPicList() {
+            return picList;
+        }
+
+        public void setPicList(String[] picList) {
+            this.picList = picList;
+        }
+
+        public String getInfo() {
+            return info;
+        }
+
+        public void setInfo(String info) {
+            this.info = info;
+        }
+
+        public String getTag() {
+            return tag;
+        }
+
+        public void setTag(String tag) {
+            this.tag = tag;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
         public boolean isShowVip() {
             return showVip;
@@ -233,12 +340,20 @@ public class DetailTemplatePlayer extends Presenter {
             this.showVip = showVip;
         }
 
-        public String getCdnUrl() {
-            return cdnUrl;
+        public String getImageUrl() {
+            return imageUrl;
         }
 
-        public void setCdnUrl(String cdnUrl) {
-            this.cdnUrl = cdnUrl;
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+        }
+
+        public String getVideoUrl() {
+            return videoUrl;
+        }
+
+        public void setVideoUrl(String videoUrl) {
+            this.videoUrl = videoUrl;
         }
     }
 }

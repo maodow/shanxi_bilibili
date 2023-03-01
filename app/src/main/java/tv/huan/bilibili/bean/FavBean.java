@@ -4,7 +4,6 @@ import androidx.annotation.Keep;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.TreeSet;
 
 /**
  * Create by XIECHENG
@@ -189,7 +188,7 @@ public class FavBean implements Serializable {
         }
 
         @Keep
-        public static class InfoBean extends PosterBean implements Serializable {
+        public static class InfoBean extends ImageBean implements Serializable {
 
             private String code;
             private Object publishDate;

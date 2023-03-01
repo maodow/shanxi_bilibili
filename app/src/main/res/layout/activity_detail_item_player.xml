@@ -19,11 +19,11 @@
             android:focusable="false" />
 
         <ImageView
-            android:id="@+id/detail_player_item_img"
+            android:id="@+id/detail_player_item_cover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/bg_shape_placeholder_hz" />
 
         <ImageView
             android:id="@+id/detail_player_item_sign"
@@ -36,7 +36,7 @@
         <TextView
             android:id="@+id/detail_player_item_warning"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_34"
+            android:layout_height="wrap_content"
             android:layout_below="@id/detail_player_item_sign"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp_10"
@@ -45,12 +45,14 @@
             android:textSize="@dimen/sp_16" />
 
         <TextView
-            android:id="@+id/detail_player_item_position"
+            android:id="@+id/detail_player_item_index"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_34"
-            android:layout_below="@id/detail_player_item_info"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_player_item_warning"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp_10"
+            android:lines="1"
+            android:singleLine="true"
             android:textColor="@color/color_white"
             android:textSize="@dimen/sp_14" />
 
@@ -78,19 +80,26 @@
             android:layout_height="0dp"
             android:layout_weight="1.2"
             android:gravity="center_vertical|left"
-            android:text="寻龙传说"
             android:textColor="#ffffff"
             android:textSize="28sp" />
 
-        <TextView
-            android:id="@+id/detail_player_item_tag"
+        <LinearLayout
+            android:id="@+id/detail_player_item_pic"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="2021｜动画｜奇幻｜冒险"
-            android:textColor="#ffffff"
-            android:textSize="11sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detail_player_item_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|left"
+                android:textColor="@color/color_aaaaaa"
+                android:textSize="@dimen/sp_11" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/detail_player_item_info"
@@ -99,9 +108,9 @@
             android:layout_gravity="top|left"
             android:layout_weight="3"
             android:background="@drawable/bg_selector_common_noboard"
+            android:ellipsize="end"
             android:focusable="true"
             android:padding="@dimen/dp_10"
-            android:text="简　介： 自然拼读系列为早教启蒙的优选课程，能够帮助孩子提升识字能力、阅读能力…"
             android:textColor="@color/color_selector_text_aaaaa_00000"
             android:textSize="@dimen/sp_12" />
 

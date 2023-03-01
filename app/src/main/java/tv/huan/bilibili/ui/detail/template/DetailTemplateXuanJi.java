@@ -46,48 +46,26 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
         return offset;
     }
 
-    protected final void startPosition(@NonNull View v, @NonNull Media media) {
-        try {
-            // 1
-            int position = media.getIndex();
-            Toast.makeText(v.getContext(), "=> " + position, Toast.LENGTH_SHORT).show();
-            String cdnUrl = media.getCdnUrl();
-            // 2
-            VerticalGridView gridView = (VerticalGridView) v.getParent().getParent().getParent();
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) gridView.getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setCdnUrl(cdnUrl);
-            // 3
-            gridView.smoothScrollToPosition(0);
-            // 4
-            itemBridgeAdapter.notifyItemChanged(0);
-        } catch (Exception e) {
-        }
-    }
-
     @Override
     protected void onBindViewHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {
-        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked);
+        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked + ", data = " + item.toString());
+        try {
+            View view = v.findViewById(R.id.detail_xuanji1_item_img);
+            view.setVisibility(isPlaying ? View.VISIBLE : View.GONE);
+        } catch (Exception e) {
+        }
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji1_item_name);
+            textView.setVisibility(isPlaying ? View.GONE : View.VISIBLE);
             textView.setText(item.getName());
+            textView.setTextColor(context.getResources().getColor(isChecked ? R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji1_item_popu);
             textView.setText(item.getTitle());
-        } catch (Exception e) {
-        }
-        try {
-            TextView textView = v.findViewById(R.id.detail_xuanji1_item_popu);
             textView.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
             textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
-        } catch (Exception e) {
-        }
-        try {
-            TextView textView = v.findViewById(R.id.detail_xuanji1_item_name);
-            textView.setTextColor(context.getResources().getColor(isChecked ? R.color.color_black : isPlaying ? R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
     }
@@ -102,14 +80,9 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
         }
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji2_item_name);
-            textView.setTextColor(context.getResources().getColor(isChecked ?  R.color.color_ff6699 : R.color.color_aaaaaa));
+            textView.setTextColor(context.getResources().getColor(isChecked ? R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
-    }
-
-    @Override
-    protected int initRangeLayout() {
-        return R.layout.activity_detail_item_xuanji2;
     }
 
     @Override
@@ -118,6 +91,11 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
             Toast.makeText(v.getContext(), item.getName(), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
         }
+    }
+
+    @Override
+    protected int initRangeLayout() {
+        return R.layout.activity_detail_item_xuanji2;
     }
 
     @Override
@@ -131,22 +109,50 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
     }
 
     @Override
+    protected String initHead(Context context) {
+        return context.getResources().getString(R.string.detail_xuanji);
+    }
+
+    @Override
     protected int initEpisodePadding(@NonNull Context context) {
         int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_5);
         return offset;
     }
 
     @Override
-    protected String initHead(Context context) {
-        return context.getResources().getString(R.string.detail_xuanji);
+    protected int initRangePadding(@NonNull Context context) {
+        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
+        return offset;
     }
 
     @Override
-    protected int initRangePadding(@NonNull Context context) {
+    protected int initRangeMarginTop(@NonNull Context context) {
         int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_5);
         return offset;
     }
 
     public static class DetailTemplateXuanJiList extends ArrayList<Media> {
+    }
+
+    /*****/
+
+    protected final void startPosition(@NonNull View v, @NonNull Media media) {
+        try {
+            // 1
+            int position = media.getIndex();
+            Toast.makeText(v.getContext(), "=> " + position, Toast.LENGTH_SHORT).show();
+            String cdnUrl = media.getCdnUrl();
+            // 2
+            VerticalGridView gridView = (VerticalGridView) v.getParent().getParent().getParent();
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) gridView.getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
+            playerObject.setVideoUrl(cdnUrl);
+            // 3
+            gridView.smoothScrollToPosition(0);
+            // 4
+            itemBridgeAdapter.notifyItemChanged(0);
+        } catch (Exception e) {
+        }
     }
 }

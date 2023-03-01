@@ -50,7 +50,7 @@ public class SpecialBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean extends PosterBean implements JumpBean, Serializable {
+    public static class ItemBean extends ImageBean implements JumpBean, Serializable {
         private String bindName;
         private int payStatus; //8 免费，其它付费
         private int bindType;

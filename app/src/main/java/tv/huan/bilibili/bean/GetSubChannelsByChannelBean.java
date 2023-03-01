@@ -94,7 +94,7 @@ public class GetSubChannelsByChannelBean implements Serializable {
         }
 
         @Keep
-        public static class TemplateBean extends PosterBean implements JumpBean, ListTvGridPresenter.ListGridBean, ListTvRowPresenter.ListRowBean, Serializable {
+        public static class TemplateBean extends ImageBean implements JumpBean, ListTvGridPresenter.ListGridBean, ListTvRowPresenter.ListRowBean, Serializable {
 
             private int show;
             private String title;

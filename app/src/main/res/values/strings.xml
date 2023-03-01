@@ -16,6 +16,7 @@
     <string name="detail_favor">收藏</string>
     <string name="detail_xuanji">选集列表</string>
     <string name="detail_xuanqi">选期列表</string>
+    <string name="detail_playing_index">%1$s 第%2$d集</string>
 
     <string name="menu_vip">开通大会员</string>
     <string name="menu_search">搜索</string>

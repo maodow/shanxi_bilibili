@@ -23,11 +23,11 @@ public class CommonEpisodeRelativeLayout extends RelativeLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = (int) (width * 0.6);
-        setMeasuredDimension(width, height);
-    }
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//        int width = MeasureSpec.getSize(widthMeasureSpec);
+//        int height = (int) (width * 0.6);
+//        setMeasuredDimension(width, height);
+//    }
 }

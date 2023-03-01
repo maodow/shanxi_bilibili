@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -360,10 +361,15 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                 aaaPass = true;
                             }
                             if (aaaPass) {
-                                object.setCdnUrl("");
+                                object.setVideoUrl("");
                             } else {
-                                object.setCdnUrl(null);
+                                object.setVideoUrl(null);
                             }
+                            object.setImageUrl(data.getAlbum().getPicture(true));
+                            object.setTag(data.getAlbum().getSplitTag());
+                            object.setTitle(data.getAlbum().getTitle());
+                            object.setInfo(data.getAlbum().getInfo());
+                            object.setPicList(data.getAlbum().getPicList());
                             ((ArrayObjectAdapter) objectAdapter).add(object);
                         } catch (Exception e) {
                             e.printStackTrace();

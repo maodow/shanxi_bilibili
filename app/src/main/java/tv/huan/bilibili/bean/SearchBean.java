@@ -77,7 +77,7 @@ public class SearchBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean extends PosterBean implements JumpBean, Serializable {
+    public static class ItemBean extends ImageBean implements JumpBean, Serializable {
 
         private String cid;
         private String title;

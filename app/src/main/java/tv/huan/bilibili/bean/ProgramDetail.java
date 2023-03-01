@@ -1,11 +1,17 @@
 package tv.huan.bilibili.bean;
 
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.annotation.Keep;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class ProgramDetail implements Serializable {
+import tv.huan.bilibili.R;
+import tv.huan.bilibili.utils.Constants;
+
+public class ProgramDetail extends ImageBean implements Serializable {
 
     private String id;
     private String cid;
@@ -27,10 +33,6 @@ public class ProgramDetail implements Serializable {
     private String publishDate;
     private String episodeAll;
     private String episodeUpdated;
-    private String newPicVt;
-    private String newPicHz;
-    private String picVtPath;
-    private String picHzPath;
     private int payStatus; //0周期，-1免费，其他单点
     private String areaName;
     private String year;
@@ -52,6 +54,48 @@ public class ProgramDetail implements Serializable {
     private String pic2;//角标
     private String splitTag;//标签
     private String[] picList; // 标签集合
+
+
+    public String getInfo() {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            // 电影，电视剧
+            if (type == Constants.AlbumType.FILM || type == Constants.AlbumType.TELEPLAY) {
+                stringBuilder.append("导   演： " + getDirector());
+                stringBuilder.append("\n");
+                stringBuilder.append("主   演： " + getLeadingActor());
+                stringBuilder.append("\n");
+            }
+            // 综艺，体育
+            else if (type == Constants.AlbumType.VARIETY || type == Constants.AlbumType.SPORTS) {
+                stringBuilder.append("嘉   宾： " + getGuests());
+                stringBuilder.append("\n");
+            }
+            // 少儿，动漫
+            else if (type == Constants.AlbumType.ANIME || type == Constants.AlbumType.CHILDREN) {
+                stringBuilder.append("导   演： " + getDirector());
+                stringBuilder.append("\n");
+            }
+            // 教育
+            else if (type == Constants.AlbumType.EDUCATION) {
+            }
+            // 默认
+            else {
+                stringBuilder.append("嘉   宾： " + getDirector());
+                stringBuilder.append("\n");
+            }
+
+            // 简介
+            String desc = getDescription();
+            if (desc.contains("杜比")) {
+                stringBuilder.append("杜   比： " + desc);
+            } else {
+                stringBuilder.append("简   介： " + desc);
+            }
+        } catch (Exception e) {
+        }
+        return stringBuilder.toString();
+    }
 
     public String getPic2() {
         return pic2;
@@ -142,10 +186,6 @@ public class ProgramDetail implements Serializable {
         this.playType = playType;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -199,7 +239,11 @@ public class ProgramDetail implements Serializable {
     }
 
     public String getDirector() {
-        return director;
+        if (null == director || director.length() <= 0) {
+            return "暂无";
+        } else {
+            return director;
+        }
     }
 
     public void setDirector(String director) {
@@ -263,7 +307,11 @@ public class ProgramDetail implements Serializable {
     }
 
     public String getLeadingActor() {
-        return leadingActor;
+        if (null == leadingActor || leadingActor.length() <= 0) {
+            return "暂无";
+        } else {
+            return leadingActor;
+        }
     }
 
     public void setLeadingActor(String leadingActor) {
@@ -271,7 +319,11 @@ public class ProgramDetail implements Serializable {
     }
 
     public String getGuests() {
-        return guests;
+        if (null == guests || guests.length() <= 0) {
+            return "暂无";
+        } else {
+            return guests;
+        }
     }
 
     public void setGuests(String guests) {
@@ -300,22 +352,6 @@ public class ProgramDetail implements Serializable {
 
     public void setEpisodeUpdated(String episodeUpdated) {
         this.episodeUpdated = episodeUpdated;
-    }
-
-    public String getNewPicVt() {
-        return null == newPicVt || newPicVt.isEmpty() ? picVtPath : newPicVt;
-    }
-
-    public void setNewPicVt(String newPicVt) {
-        this.newPicVt = newPicVt;
-    }
-
-    public String getNewPicHz() {
-        return null == newPicHz || newPicHz.isEmpty() ? picHzPath : newPicHz;
-    }
-
-    public void setNewPicHz(String newPicHz) {
-        this.newPicHz = newPicHz;
     }
 
     public int getPayStatus() {
@@ -351,7 +387,11 @@ public class ProgramDetail implements Serializable {
     }
 
     public String getDescription() {
-        return description;
+        try {
+            return description.replace("\\n", "\n");
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public void setDescription(String description) {
@@ -374,22 +414,6 @@ public class ProgramDetail implements Serializable {
         this.url = url;
     }
 
-    public String getPicVtPath() {
-        return picVtPath;
-    }
-
-    public void setPicVtPath(String picVtPath) {
-        this.picVtPath = picVtPath;
-    }
-
-    public String getPicHzPath() {
-        return picHzPath;
-    }
-
-    public void setPicHzPath(String picHzPath) {
-        this.picHzPath = picHzPath;
-    }
-
     public String getEncryptionType() {
         return encryptionType;
     }
@@ -398,51 +422,6 @@ public class ProgramDetail implements Serializable {
         this.encryptionType = encryptionType;
     }
 
-
-    @Override
-    public String toString() {
-        return "ProgramDetail{" +
-                "id='" + id + '\'' +
-                ", cid='" + cid + '\'' +
-                ", title='" + title + '\'' +
-                ", columnId='" + columnId + '\'' +
-                ", type=" + type +
-                ", isTrailer=" + isTrailer +
-                ", seconditle='" + seconditle + '\'' +
-                ", director='" + director + '\'' +
-                ", language='" + language + '\'' +
-                ", status=" + status +
-                ", positiveTrailer=" + positiveTrailer +
-                ", score='" + score + '\'' +
-                ", subtype='" + subtype + '\'' +
-                ", tag='" + tag + '\'' +
-                ", copyright='" + copyright + '\'' +
-                ", leadingActor='" + leadingActor + '\'' +
-                ", guests='" + guests + '\'' +
-                ", publishDate='" + publishDate + '\'' +
-                ", episodeAll='" + episodeAll + '\'' +
-                ", episodeUpdated='" + episodeUpdated + '\'' +
-                ", newPicVt='" + newPicVt + '\'' +
-                ", newPicHz='" + newPicHz + '\'' +
-                ", picVtPath='" + picVtPath + '\'' +
-                ", picHzPath='" + picHzPath + '\'' +
-                ", payStatus=" + payStatus +
-                ", areaName='" + areaName + '\'' +
-                ", year='" + year + '\'' +
-                ", videoIds='" + videoIds + '\'' +
-                ", description='" + description + '\'' +
-                ", resolutionList='" + resolutionList + '\'' +
-                ", url='" + url + '\'' +
-                ", encryptionType='" + encryptionType + '\'' +
-                ", playType=" + playType +
-                ", price='" + price + '\'' +
-                ", productName='" + productName + '\'' +
-                ", validTerm=" + validTerm +
-                ", productType=" + productType +
-                ", code='" + code + '\'' +
-                ", pic='" + pic + '\'' +
-                '}';
-    }
 
     // 新加2021年10月26日
     private List<Item> productCodes; // 计费类型【0免费，1单点，2专区单点，3周期，4专区周期】

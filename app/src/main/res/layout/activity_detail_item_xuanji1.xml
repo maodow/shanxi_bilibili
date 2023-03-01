@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv.huan.bilibili.widget.common.CommonEpisodeRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/dp_40"
     android:background="@drawable/bg_selector_common_noboard"
     android:clipChildren="false"
     android:clipToPadding="false"
@@ -13,16 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_30"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/dp_f40"
         android:layout_marginLeft="-20dp"
+        android:layout_marginTop="@dimen/dp_f40"
         android:layout_marginRight="-20dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:layout_marginBottom="@dimen/dp_10"
         android:background="@color/color_white"
         android:ellipsize="end"
         android:focusable="false"
         android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:singleLine="true"
         android:textColor="@color/color_black"
         android:textSize="@dimen/sp_16"
@@ -31,11 +31,21 @@
     <!-- 标题 -->
     <TextView
         android:id="@+id/detail_xuanji1_item_name"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:focusable="false"
-        android:gravity="center"
+        android:layout_centerInParent="true"
         android:textColor="@color/color_aaaaaa"
-        android:textSize="@dimen/sp_16" />
+        android:textSize="@dimen/sp_16"
+        android:visibility="gone" />
 
-</tv.huan.bilibili.widget.common.CommonEpisodeRelativeLayout>
+    <!-- 在播 -->
+    <ImageView
+        android:id="@+id/detail_xuanji1_item_img"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_20"
+        android:src="@drawable/ic_playing"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>

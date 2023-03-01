@@ -65,7 +65,7 @@ public class DetailTemplateXuanQi extends ListTvGridPresenter<Media> {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) gridView.getAdapter();
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
             DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setCdnUrl(cdnUrl);
+            playerObject.setVideoUrl(cdnUrl);
             // 3
             gridView.smoothScrollToPosition(0);
             // 4
