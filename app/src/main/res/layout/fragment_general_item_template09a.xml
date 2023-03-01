@@ -16,7 +16,7 @@
         android:scaleType="fitXY" />
 
     <!-- 标题 -->
-    <tv.huan.bilibili.widget.ShandowTextView
+    <tv.huan.bilibili.widget.common.CommonShandowTextView
         android:id="@+id/general_template9_name"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"

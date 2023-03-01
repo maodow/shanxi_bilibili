@@ -12,7 +12,7 @@
         android:background="@color/color_303030" />
 
     <!-- 搜索 -->
-    <tv.huan.bilibili.widget.SearchButton
+    <tv.huan.bilibili.widget.common.CommonSearchView
         android:id="@+id/filter_search"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_24"
@@ -33,7 +33,7 @@
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
     <!-- vip -->
-    <tv.huan.bilibili.widget.VipButton
+    <tv.huan.bilibili.widget.common.CommomChaoView
         android:id="@+id/filter_vip"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_24"
@@ -41,13 +41,12 @@
         android:layout_marginLeft="@dimen/dp_14"
         android:layout_toRightOf="@id/filter_search"
         android:background="@drawable/bg_selector_common_vip"
-        android:drawableLeft="@drawable/ic_selector_common_vip"
+        android:drawableLeft="@drawable/ic_selector_common_chao"
         android:drawablePadding="@dimen/dp_8"
         android:focusable="false"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
-        android:text="@string/menu_vip"
         android:textColor="@color/color_selector_text_vip"
         android:textSize="14sp"
         app:tvp_drawable_left_height="@dimen/dp_14"

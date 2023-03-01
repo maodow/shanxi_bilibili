@@ -1,6 +1,10 @@
 package tv.huan.bilibili.utils;
 
-import tv.huan.common.util.CaUtil;
+import android.content.Context;
+
+import lib.kalu.frame.mvp.context.FrameContext;
+import tv.huan.bilibili.BuildConfig;
+import tv.huan.heilongjiang.HeilongjiangApi;
 
 public final class BoxUtil {
 
@@ -13,6 +17,16 @@ public final class BoxUtil {
     }
 
     public static String getCa() {
-        return CaUtil.getCa("00380035890");
+        try {
+            Context context = FrameContext.getApplicationContext();
+            String userId = HeilongjiangApi.getUserId(context);
+            if (null == userId || userId.length() <= 0)
+                throw new Exception("userId error: null");
+            return userId;
+        } catch (Exception e) {
+            LogUtil.log("BoxUtil => getCa => " + e.getMessage());
+            return "00380035890";
+//            return BuildConfig.HUAN_CHECK_USERID ? "null" : "00380035890";
+        }
     }
 }

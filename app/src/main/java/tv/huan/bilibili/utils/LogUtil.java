@@ -5,10 +5,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import lib.kalu.frame.mvp.util.MvpUtil;
-import lib.kalu.leanback.util.LeanBackUtil;
-import tv.huan.common.util.CommonUtil;
-
 public final class LogUtil {
 
     private static String TAG = "huan_log";

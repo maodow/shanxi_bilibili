@@ -33,7 +33,7 @@
         android:visibility="invisible" />
 
     <!-- 标题 -->
-    <tv.huan.bilibili.widget.ShandowTextView
+    <tv.huan.bilibili.widget.common.CommonShandowTextView
         android:id="@+id/center_item_name"
         android:layout_width="match_parent"
         android:layout_height="27dp"

@@ -30,7 +30,7 @@
         android:layout_height="0dp"
         android:layout_centerInParent="true" />
 
-    <tv.huan.bilibili.widget.anim.AnimTextView
+    <tv.huan.bilibili.widget.common.CommomFocusTextView
         android:id="@+id/dialog_exit_cancle"
         android:layout_width="102dp"
         android:layout_height="40dp"
@@ -46,7 +46,7 @@
         android:textColor="#ffffff"
         android:textSize="14sp" />
 
-    <tv.huan.bilibili.widget.anim.AnimTextView
+    <tv.huan.bilibili.widget.common.CommomFocusTextView
         android:id="@+id/dialog_exit_sure"
         android:layout_width="102dp"
         android:layout_height="40dp"

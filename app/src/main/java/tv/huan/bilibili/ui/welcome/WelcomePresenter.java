@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.welcome;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -20,6 +21,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.WelcomeBean;
 import tv.huan.bilibili.ui.main.MainActivity;
@@ -95,6 +97,24 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         } catch (Exception e) {
                         }
                         return data;
+                    }
+                })
+                // 获取userId
+                .map(new Function<WelcomeBean, WelcomeBean>() {
+                    @Override
+                    public WelcomeBean apply(WelcomeBean data) throws Exception {
+                        LogUtil.log("WelcomePresenter => request => 获取userId");
+                        try {
+                            if (BuildConfig.HUAN_CHECK_USERID) {
+                                Context context = getView().getContext();
+                                String userId = HeilongjiangApi.getUserId(context);
+                                if (null == userId || userId.length() <= 0)
+                                    throw new Exception("获取userId失败, 请稍后重试");
+                            }
+                            return data;
+                        } catch (Exception e) {
+                            throw e;
+                        }
                     }
                 })
                 // 首次打开app上报
@@ -212,6 +232,13 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     @Override
                     public void accept(Throwable throwable) {
                         LogUtil.log("WelcomePresenter => request => doOnError");
+                        try {
+                            String s = throwable.getMessage();
+                            if (null != s && s.length() > 0) {
+                               getView().showWarning(s);
+                            }
+                        } catch (Exception e) {
+                        }
                     }
                 })
                 .doOnNext(new Consumer<WelcomeBean>() {

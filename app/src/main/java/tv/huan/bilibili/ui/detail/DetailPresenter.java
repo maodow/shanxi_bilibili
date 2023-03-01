@@ -50,7 +50,6 @@ import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanJi;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.utils.Constants;
-import tv.huan.common.starcor.StarcorUtil;
 
 public class DetailPresenter extends BasePresenterImpl<DetailView> {
     public DetailPresenter(@NonNull DetailView detailView) {
@@ -349,7 +348,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                             String code = item.getCode();
                                             if (null == code || code.length() <= 0) continue;
                                             try {
-                                                aaaPass = StarcorUtil.mediaAuth(code);
+                                                aaaPass = false;
                                             } catch (Exception e) {
                                             }
                                         }

@@ -9,6 +9,8 @@ import tv.huan.bilibili.bean.GetChannelsBean;
 
 public interface WelcomeView extends BaseViewImpl {
 
+    void showWarning(@NonNull String s);
+
     void refreshBackground(@NonNull String backgroundUrl);
 
     void refreshTime(@NonNull String text);

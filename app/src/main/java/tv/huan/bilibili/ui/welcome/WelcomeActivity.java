@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.welcome;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -31,6 +32,12 @@ public class WelcomeActivity extends BaseActivity<WelcomeView, WelcomePresenter>
     public void initData() {
         // request
         getPresenter().request();
+    }
+
+    @Override
+    public void showWarning(@NonNull String s) {
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+        onBackPressed();
     }
 
     @Override

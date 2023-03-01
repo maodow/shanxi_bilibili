@@ -74,7 +74,7 @@
             android:focusable="false" />
 
         <!-- 中 -->
-        <tv.huan.bilibili.widget.anim.AnimTextView
+        <tv.huan.bilibili.widget.common.CommomChaoView
             android:id="@+id/mine_head_shopping"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -91,58 +91,11 @@
             android:focusable="false" />
 
         <!-- 下 -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusable="false"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:focusable="false" />
-
-            <lib.kalu.leanback.plus.TextViewPlus
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_launcher"
-                android:drawablePadding="@dimen/dp_4"
-                android:focusable="false"
-                android:gravity="center"
-                android:text="随心免费看"
-                android:textColor="#ffffff"
-                android:textSize="10sp"
-                app:tvp_drawable_left_height="@dimen/dp_14"
-                app:tvp_drawable_left_width="@dimen/dp_14" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:focusable="false" />
-
-            <lib.kalu.leanback.plus.TextViewPlus
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_launcher"
-                android:drawablePadding="@dimen/dp_4"
-                android:focusable="false"
-                android:gravity="center"
-                android:text="新剧抢先看"
-                android:textColor="#ffffff"
-                android:textSize="10sp"
-                app:tvp_drawable_left_height="@dimen/dp_14"
-                app:tvp_drawable_left_width="@dimen/dp_14" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:focusable="false" />
-
-        </LinearLayout>
+            android:src="@drawable/ic_tag" />
 
     </LinearLayout>
 

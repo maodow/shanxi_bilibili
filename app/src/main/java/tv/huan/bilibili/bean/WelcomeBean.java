@@ -1,9 +1,8 @@
 package tv.huan.bilibili.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
-public class WelcomeBean implements Serializable {
+public final class WelcomeBean implements Serializable {
 
     private int adTime;
     private String adUrl;

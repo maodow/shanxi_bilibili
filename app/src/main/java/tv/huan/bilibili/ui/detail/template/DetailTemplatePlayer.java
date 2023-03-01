@@ -30,7 +30,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.InfoDialog;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.bilibili.widget.AutoImageView;
+import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerView;
 
 public class DetailTemplatePlayer extends Presenter {
@@ -163,7 +163,7 @@ public class DetailTemplatePlayer extends Presenter {
             Context context = linearLayout.getContext();
             int height = context.getResources().getDimensionPixelOffset(R.dimen.dp_16);
             for (int i = 0; i < length; i++) {
-                AutoImageView picView = new AutoImageView(context);
+                CommonPicView picView = new CommonPicView(context);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, height);
                 int margin = linearLayout.getContext().getResources().getDimensionPixelOffset(i == length - 1 ? R.dimen.dp_8 : R.dimen.dp_4);
                 params.setMargins(0, 0, margin, 0);

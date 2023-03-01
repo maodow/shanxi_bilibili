@@ -1,8 +1,7 @@
-package tv.huan.bilibili.widget;
+package tv.huan.bilibili.widget.common;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -12,24 +11,24 @@ import androidx.annotation.Nullable;
 import tv.huan.bilibili.R;
 
 @SuppressLint("AppCompatCustomView")
-public class ShandowTextView extends TextView {
-    public ShandowTextView(Context context) {
+public class CommonShandowTextView extends TextView {
+    public CommonShandowTextView(Context context) {
         super(context);
         init();
     }
 
-    public ShandowTextView(Context context, @Nullable AttributeSet attrs) {
+    public CommonShandowTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ShandowTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CommonShandowTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     @SuppressLint("NewApi")
-    public ShandowTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CommonShandowTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
