@@ -15,7 +15,7 @@ import tv.huan.bilibili.R;
 import tv.huan.heilongjiang.HeilongjiangApi;
 import tv.huan.heilongjiang.OnCheckVipChangeListener;
 
-public class CommomChaoView extends TextViewPlus {
+public final class CommomChaoView extends TextViewPlus {
     public CommomChaoView(@NonNull Context context) {
         super(context);
         init();

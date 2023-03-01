@@ -18,7 +18,7 @@ import tv.huan.heilongjiang.HeilongjiangApi;
 import tv.huan.heilongjiang.OnCheckVipChangeListener;
 
 @SuppressLint("AppCompatCustomView")
-public class CommomDataView extends TextView {
+public final class CommomDataView extends TextView {
     public CommomDataView(@NonNull Context context) {
         super(context);
         init();

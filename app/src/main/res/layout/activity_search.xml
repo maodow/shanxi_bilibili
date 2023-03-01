@@ -13,7 +13,8 @@
         android:layout_height="@dimen/dp_40"
         android:layout_marginLeft="@dimen/dp_48"
         android:layout_marginBottom="@dimen/dp_14"
-        android:drawableLeft="@mipmap/ic_launcher"
+        android:background="@color/color_303030"
+        android:drawableLeft="@drawable/ic_search"
         android:drawablePadding="@dimen/dp_8"
         android:focusable="false"
         android:gravity="center_vertical|left"
@@ -33,7 +34,7 @@
         android:layout_below="@id/search_input"
         android:layout_alignLeft="@id/search_input"
         android:layout_marginBottom="@dimen/dp_20"
-        android:background="@drawable/bg_selector_common_search"
+        android:background="@drawable/bg_selector_common_clean"
         android:drawableLeft="@drawable/ic_selector_common_search"
         android:drawablePadding="@dimen/dp_8"
         android:focusable="true"
@@ -42,7 +43,7 @@
         android:paddingRight="@dimen/dp_14"
         android:text="@string/search_clean"
         android:textColor="@color/color_selector_text_common"
-        android:textSize="14sp"
+        android:textSize="@dimen/sp_14"
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
@@ -53,7 +54,7 @@
         android:layout_height="@dimen/dp_24"
         android:layout_below="@id/search_input"
         android:layout_alignRight="@id/search_input"
-        android:background="@drawable/bg_selector_common_search"
+        android:background="@drawable/bg_selector_common_clean"
         android:drawableLeft="@drawable/ic_selector_common_search"
         android:drawablePadding="@dimen/dp_8"
         android:focusable="true"
@@ -62,7 +63,7 @@
         android:paddingRight="@dimen/dp_14"
         android:text="@string/search_delete"
         android:textColor="@color/color_selector_text_common"
-        android:textSize="14sp"
+        android:textSize="@dimen/sp_14"
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />
 

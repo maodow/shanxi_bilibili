@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat;
 import lib.kalu.leanback.plus.TextViewPlus;
 import tv.huan.bilibili.utils.JumpUtil;
 
-public class CommonSearchView extends TextViewPlus {
+public final class CommonSearchView extends TextViewPlus {
     public CommonSearchView(@NonNull Context context) {
         super(context);
         init();
