@@ -17,11 +17,11 @@
         android:drawablePadding="@dimen/dp_8"
         android:focusable="false"
         android:gravity="center"
-        android:paddingLeft="@dimen/dp_14"
+        android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_14"
         android:text="@string/menu_search"
         android:textColor="@color/color_selector_text_common"
-        android:textSize="14sp"
+        android:textSize="@dimen/sp_14"
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
@@ -38,10 +38,10 @@
         android:drawablePadding="@dimen/dp_8"
         android:gravity="center"
         android:focusable="false"
-        android:paddingLeft="@dimen/dp_14"
+        android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_14"
         android:textColor="@color/color_selector_text_vip"
-        android:textSize="14sp"
+        android:textSize="@dimen/sp_14"
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
