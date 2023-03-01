@@ -21,12 +21,14 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.base.BasePresenterImpl;
+import tv.huan.bilibili.bean.WelcomeBean;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.LoadPageIcon;
 import tv.huan.bilibili.utils.BoxUtil;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.heilongjiang.HeilongjiangApi;
 
 public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
@@ -37,145 +39,164 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
 
     protected void request() {
 
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<WelcomeBean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> emitter) {
-                        // 首次打开app上报
-                        reportAppActivation();
-                        // 初始化sdk
-                        Context context = getView().getContext();
-                        HeilongjiangApi.init(context);
-                        // next
-                        emitter.onNext(true);
+                    public void subscribe(ObservableEmitter<WelcomeBean> emitter) {
+                        WelcomeBean welcomeBean = new WelcomeBean();
+                        try {
+                            // 3
+                            int select = getView().getIntExtra(WelcomeActivity.INTENT_SELECT, 1);
+                            welcomeBean.setSelect(select);
+
+                            int type;
+                            try {
+                                String extra = getView().getStringExtra(WelcomeActivity.INTENT_TYPE);
+                                type = Integer.parseInt(extra);
+                            } catch (Exception e) {
+                                type = getView().getIntExtra(WelcomeActivity.INTENT_TYPE, MainActivity.INTENT_TYPE_DEFAULT);
+                            }
+                            welcomeBean.setType(type);
+
+                            String cid = null;
+                            try {
+                                cid = getView().getStringExtra(WelcomeActivity.INTENT_CID);
+                            } catch (Exception e) {
+                            }
+                            welcomeBean.setCid(cid);
+
+                            int classId;
+                            try {
+                                String extra = getView().getStringExtra(WelcomeActivity.INTENT_CLASSID);
+                                classId = Integer.parseInt(extra);
+                            } catch (Exception e) {
+                                classId = getView().getIntExtra(WelcomeActivity.INTENT_CLASSID, -1);
+                            }
+                            welcomeBean.setClassId(classId);
+
+                            String secondTag = null;
+                            try {
+                                secondTag = getView().getStringExtra(WelcomeActivity.INTENT_SECOND_TAG);
+                            } catch (Exception e) {
+                            }
+                            welcomeBean.setSecondTag(secondTag);
+                        } catch (Exception e) {
+                        }
+                        emitter.onNext(welcomeBean);
                     }
                 })
-                // 广告
-                .flatMap(new Function<Boolean, Observable<LoadPageIcon>>() {
+                // 初始化支付sdk
+                .map(new Function<WelcomeBean, WelcomeBean>() {
                     @Override
-                    public Observable<LoadPageIcon> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().getLoadPage(BoxUtil.getCa());
+                    public WelcomeBean apply(WelcomeBean data) {
+                        LogUtil.log("WelcomePresenter => request => 初始化支付sdk");
+                        try {
+                            Context context = getView().getContext();
+                            HeilongjiangApi.init(context);
+                        } catch (Exception e) {
+                        }
+                        return data;
+                    }
+                })
+                // 首次打开app上报
+                .map(new Function<WelcomeBean, WelcomeBean>() {
+                    @Override
+                    public WelcomeBean apply(WelcomeBean data) {
+                        LogUtil.log("WelcomePresenter => request => 首次打开app上报");
+                        try {
+                            reportAppActivation();
+                        } catch (Exception e) {
+                        }
+                        return data;
+                    }
+                })
+                // 广告接口
+                .flatMap(new Function<WelcomeBean, Observable<LoadPageIcon>>() {
+                    @Override
+                    public Observable<LoadPageIcon> apply(WelcomeBean data) {
+                        LogUtil.log("WelcomePresenter => request => 广告接口");
+                        String s = new Gson().toJson(data);
+                        return HttpClient.getHttpClient().getHttpApi().getLoadPage(BoxUtil.getCa(), s);
                     }
                 })
                 // 下载广告
-                .map(new Function<LoadPageIcon, String>() {
+                .map(new Function<LoadPageIcon, WelcomeBean>() {
                     @Override
-                    public String apply(LoadPageIcon loadPageIcon) {
-                        Log.e("WelcomePresenter", "getLoadPage => " + new Gson().toJson(loadPageIcon));
-                        JSONObject object = new JSONObject();
+                    public WelcomeBean apply(LoadPageIcon loadPageIcon) {
+                        LogUtil.log("WelcomePresenter => request => 下载广告");
+
+                        WelcomeBean welcomeBean;
+                        try {
+                            welcomeBean = new Gson().fromJson(loadPageIcon.getExtra(), WelcomeBean.class);
+                        } catch (Exception e) {
+                            welcomeBean = new WelcomeBean();
+                        }
+
                         try {
                             LoadPageIcon.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
                             String display_time = loading_pic.getDisplay_time();
                             if (null != display_time && display_time.length() > 0) {
                                 int parseInt = Integer.parseInt(display_time);
-                                object.put("time", parseInt);
+                                welcomeBean.setAdTime(parseInt);
                             } else {
-                                object.put("time", 0);
+                                welcomeBean.setAdTime(0);
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            welcomeBean.setAdTime(0);
                         }
                         try {
                             LoadPageIcon.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
                             String picture_hd = loading_pic.getPicture_HD();
-                            object.put("img", picture_hd);
+                            welcomeBean.setAdUrl(picture_hd);
                         } catch (Exception e) {
                         }
-                        return object.toString();
+                        return welcomeBean;
                     }
                 })
-                // 频道
-                .flatMap(new Function<String, Observable<BaseBean<GetChannelsBean>>>() {
+                // 频道接口
+                .flatMap(new Function<WelcomeBean, Observable<BaseBean<GetChannelsBean>>>() {
                     @Override
-                    public Observable<BaseBean<GetChannelsBean>> apply(String s) {
+                    public Observable<BaseBean<GetChannelsBean>> apply(WelcomeBean data) {
+                        LogUtil.log("WelcomePresenter => request => 频道接口");
+                        String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getChannels(1, 100, s);
                     }
                 })
                 // 整理数据
-                .map(new Function<BaseBean<GetChannelsBean>, Object[]>() {
+                .map(new Function<BaseBean<GetChannelsBean>, WelcomeBean>() {
                     @Override
-                    public Object[] apply(BaseBean<GetChannelsBean> response) {
-                        Log.e("WelcomePresenter", "getChannels => " + new Gson().toJson(response));
+                    public WelcomeBean apply(BaseBean<GetChannelsBean> response) {
+                        LogUtil.log("WelcomePresenter => request => 整理数据");
+
+                        WelcomeBean welcomeBean;
+                        try {
+                            welcomeBean = new Gson().fromJson(response.getExtra(), WelcomeBean.class);
+                        } catch (Exception e) {
+                            welcomeBean = new WelcomeBean();
+                        }
 
                         ArrayList<GetChannelsBean.ItemBean> list = new ArrayList<>();
-
-                        // 1
                         GetChannelsBean.ItemBean bean = new GetChannelsBean.ItemBean();
                         bean.setName("我的");
                         list.add(bean);
-
-                        // 2
                         try {
                             List<GetChannelsBean.ItemBean> datas = response.getData().getList();
                             list.addAll(datas);
                         } catch (Exception e) {
-                            e.printStackTrace();
                         }
+                        String s = new Gson().toJson(list);
+                        welcomeBean.setData(s);
 
-                        // 3
                         int size = list.size();
-                        int select = getView().getIntExtra(WelcomeActivity.INTENT_SELECT, 1);
                         if (size == 1) {
-                            select = 0;
-                        } else if (select + 1 >= size) {
-                            select = 1;
+                            welcomeBean.setSelect(0);
+                        } else {
+                            int select = welcomeBean.getSelect();
+                            if (select + 1 >= size) {
+                                welcomeBean.setSelect(1);
+                            }
                         }
 
-                        // 3
-                        String img = null;
-                        int time = 0;
-                        try {
-                            String extra = response.getExtra();
-                            JSONObject object = new JSONObject(extra);
-                            img = object.optString("img", null);
-                            time = object.optInt("time", 0);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        // 5
-                        Object[] objects = new Object[8];
-                        objects[0] = new Gson().toJson(list);
-                        objects[1] = select;
-                        objects[2] = img;
-                        objects[3] = time;
-
-                        int type;
-                        try {
-                            String extra = getView().getStringExtra(WelcomeActivity.INTENT_TYPE);
-                            type = Integer.parseInt(extra);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            type = getView().getIntExtra(WelcomeActivity.INTENT_TYPE, MainActivity.INTENT_TYPE_DEFAULT);
-                        }
-                        objects[4] = type;
-
-                        String cid = null;
-                        try {
-                            cid = getView().getStringExtra(WelcomeActivity.INTENT_CID);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        objects[5] = cid;
-
-                        int classId;
-                        try {
-                            String extra = getView().getStringExtra(WelcomeActivity.INTENT_CLASSID);
-                            classId = Integer.parseInt(extra);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            classId = getView().getIntExtra(WelcomeActivity.INTENT_CLASSID, -1);
-                        }
-                        objects[6] = classId;
-
-                        String secondTag = null;
-                        try {
-                            secondTag = getView().getStringExtra(WelcomeActivity.INTENT_SECOND_TAG);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        objects[7] = secondTag;
-
-                        return objects;
+                        return welcomeBean;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -184,36 +205,24 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     @Override
                     public void accept(Disposable disposable) {
                         //  getView().showLoading();
+                        LogUtil.log("WelcomePresenter => request => doOnSubscribe");
                     }
                 })
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        // getView().hideLoading();
+                        LogUtil.log("WelcomePresenter => request => doOnError");
                     }
                 })
-                .doOnNext(new Consumer<Object[]>() {
+                .doOnNext(new Consumer<WelcomeBean>() {
                     @Override
-                    public void accept(Object[] objects) {
-
-                        //  getView().hideLoading();
-
-                        // 1
-                        int time = (int) objects[3];
-                        String backgroundUrl = (String) objects[2];
-                        int select = (int) objects[1];
-                        String data = (String) objects[0];
-                        int type = (int) objects[4];
-                        String cid = (String) objects[5];
-                        int classId = (int) objects[6];
-                        String secondTag = (String) objects[7];
-
-                        // 2
-                        if (null != backgroundUrl && backgroundUrl.length() > 0 && time > 0) {
-                            getView().refreshBackground(backgroundUrl);
-                            intervalTime(data, select, type, cid, classId, secondTag, time);
+                    public void accept(WelcomeBean data) {
+                        LogUtil.log("WelcomePresenter => request => doOnNext");
+                        if (data.containsAd()) {
+                            getView().refreshBackground(data.getAdUrl());
+                            intervalTime(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
                         } else {
-                            getView().next(data, select, type, cid, classId, secondTag);
+                            getView().next(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag());
                         }
                     }
                 })

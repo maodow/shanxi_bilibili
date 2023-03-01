@@ -7,12 +7,7 @@ import android.os.Parcelable;
  * Create by Richard
  * 2019-07-29 16:21
  */
-public class LoadPageIcon {
-
-    /**
-     * loading_pic : {"picture_SD":"","extras":"","picture_HD":"","display_time":"","webaddress":""}
-     * popup_pic : {"picture_SD":"http://testsd","picture_HD":"http://testhd","display_time":"3","webaddress":""}
-     */
+public class LoadPageIcon extends BaseBean {
 
     private LoadingPicBean loading_pic;
     private PopupPicBean popup_pic;
@@ -241,13 +236,5 @@ public class LoadPageIcon {
             dest.writeString(show_advert);
             dest.writeString(show_time);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "LoadPageIcon{" +
-                "loading_pic=" + loading_pic +
-                ", popup_pic=" + popup_pic +
-                '}';
     }
 }

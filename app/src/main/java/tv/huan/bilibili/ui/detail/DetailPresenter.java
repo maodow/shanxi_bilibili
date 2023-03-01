@@ -421,10 +421,8 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                 int size = medias.size();
                                 for (int i = 0; i < size; i++) {
                                     Media media = medias.get(i);
-                                    if (null == media) {
+                                    if (null == media)
                                         continue;
-                                    }
-                                    media.setIndex(i);
                                     list.add(media);
                                 }
                                 ((ArrayObjectAdapter) objectAdapter).add(list);

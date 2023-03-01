@@ -405,7 +405,8 @@ public interface HttpApi {
      * @return
      */
     @GET("advert/getPopupInfo")
-    Observable<LoadPageIcon> getLoadPage(@Query("phoneNumber") String phoneNumber);
+    Observable<LoadPageIcon> getLoadPage(@Query("phoneNumber") String phoneNumber,
+                                         @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
 
     /**

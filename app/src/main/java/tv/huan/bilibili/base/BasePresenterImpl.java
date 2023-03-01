@@ -1,5 +1,7 @@
 package tv.huan.bilibili.base;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -24,6 +26,7 @@ import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.utils.ReportUtils;
+import tv.huan.heilongjiang.HeilongjiangApi;
 
 public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
 

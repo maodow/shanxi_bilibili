@@ -26,7 +26,6 @@ public class Media extends ListTvEpisodesPresenter.ItemBean implements Serializa
     private int positionSelect;
 
     private String name;
-    private int index = -1;
 
     public String getName() {
         return name;
@@ -34,14 +33,6 @@ public class Media extends ListTvEpisodesPresenter.ItemBean implements Serializa
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 
     public int getPositionSelect() {

@@ -55,23 +55,23 @@ public class DetailTemplateXuanQi extends ListTvGridPresenter<Media> {
     }
 
     protected final void startPosition(@NonNull View v, @NonNull Media media) {
-        try {
-            // 1
-            int position = media.getIndex();
-            Toast.makeText(v.getContext(), "=> " + position, Toast.LENGTH_SHORT).show();
-            String cdnUrl = media.getCdnUrl();
-            // 2
-            VerticalGridView gridView = (VerticalGridView) v.getParent().getParent().getParent();
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) gridView.getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setVideoUrl(cdnUrl);
-            // 3
-            gridView.smoothScrollToPosition(0);
-            // 4
-            itemBridgeAdapter.notifyItemChanged(0);
-        } catch (Exception e) {
-        }
+//        try {
+//            // 1
+//            int position = media.getIndex();
+//            Toast.makeText(v.getContext(), "=> " + position, Toast.LENGTH_SHORT).show();
+//            String cdnUrl = media.getCdnUrl();
+//            // 2
+//            VerticalGridView gridView = (VerticalGridView) v.getParent().getParent().getParent();
+//            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) gridView.getAdapter();
+//            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+//            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
+//            playerObject.setVideoUrl(cdnUrl);
+//            // 3
+//            gridView.smoothScrollToPosition(0);
+//            // 4
+//            itemBridgeAdapter.notifyItemChanged(0);
+//        } catch (Exception e) {
+//        }
     }
 
     @Override

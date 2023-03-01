@@ -290,31 +290,31 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         mDatas.add(itemT1);
 
                         // 3 => 观看历史 and more
+                        int indexLS = -1;
                         try {
                             // 1
                             List<FavBean.ItemBean> list = response.getData().getRows();
-                            int index = -1;
                             if (null != list && list.size() > 0) {
                                 for (int i = 0; i <= 2; i++) {
                                     FavBean.ItemBean itemBean = list.get(i);
                                     if (null == itemBean)
                                         continue;
-                                    index = i;
-                                    itemBean.setIndex(index);
+                                    indexLS = i;
+                                    itemBean.setIndex(indexLS);
                                     itemBean.setItemType(TYPE_ITEM_IMG);
                                     mDatas.add(itemBean);
                                 }
                             }
-                            // 2
-                            FavBean.ItemBean more = new FavBean.ItemBean();
-                            more.setItemType(TYPE_ITEM_MORE);
-                            more.setTitle("全部历史");
-                            more.setJumpType(0);
-                            more.setIndex(index == -1 ? 0 : index + 1);
-                            more.setIcon(R.drawable.ic_selector_common_rec);
-                            mDatas.add(more);
                         } catch (Exception e) {
                         }
+                        // 2
+                        FavBean.ItemBean itemT2 = new FavBean.ItemBean();
+                        itemT2.setItemType(TYPE_ITEM_MORE);
+                        itemT2.setTitle("全部历史");
+                        itemT2.setJumpType(0);
+                        itemT2.setIndex(indexLS == -1 ? 0 : indexLS + 1);
+                        itemT2.setIcon(R.drawable.ic_selector_common_rec);
+                        mDatas.add(itemT2);
 
                         // 4 => title => 我的收藏
                         FavBean.ItemBean itemT3 = new FavBean.ItemBean();
@@ -323,6 +323,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         mDatas.add(itemT3);
 
                         // 5 => 我的收藏
+                        int indexSC = -1;
                         try {
                             // 1
                             String extra = response.getExtra();
@@ -330,28 +331,27 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             Type type = new TypeToken<List<FavBean.ItemBean>>() {
                             }.getType();
                             List<FavBean.ItemBean> list = gson.fromJson(extra, type);
-                            int index = -1;
                             if (null != list && list.size() > 0) {
                                 for (int i = 0; i <= 2; i++) {
                                     FavBean.ItemBean itemBean = list.get(i);
                                     if (null == itemBean)
                                         continue;
-                                    index = i;
-                                    itemBean.setIndex(index);
+                                    indexSC = i;
+                                    itemBean.setIndex(indexSC);
                                     itemBean.setItemType(TYPE_ITEM_IMG);
                                     mDatas.add(itemBean);
                                 }
                             }
-                            // 2
-                            FavBean.ItemBean more = new FavBean.ItemBean();
-                            more.setIndex(index == -1 ? 0 : index + 1);
-                            more.setItemType(TYPE_ITEM_MORE);
-                            more.setJumpType(1);
-                            more.setTitle("全部收藏");
-                            more.setIcon(R.drawable.ic_selector_common_fav);
-                            mDatas.add(more);
                         } catch (Exception e) {
                         }
+                        // 2
+                        FavBean.ItemBean more = new FavBean.ItemBean();
+                        more.setIndex(indexSC == -1 ? 0 : indexSC + 1);
+                        more.setItemType(TYPE_ITEM_MORE);
+                        more.setJumpType(1);
+                        more.setTitle("全部收藏");
+                        more.setIcon(R.drawable.ic_selector_common_fav);
+                        mDatas.add(more);
 
                         // 7 => title => 更多功能
                         FavBean.ItemBean itemT5 = new FavBean.ItemBean();

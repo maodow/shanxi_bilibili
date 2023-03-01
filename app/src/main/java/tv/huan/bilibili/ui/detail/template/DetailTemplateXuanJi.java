@@ -88,7 +88,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
     @Override
     protected void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position) {
         try {
-            Toast.makeText(v.getContext(), item.getName(), Toast.LENGTH_SHORT).show();
+            startPosition(v, item, position);
         } catch (Exception e) {
         }
     }
@@ -136,18 +136,17 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
 
     /*****/
 
-    protected final void startPosition(@NonNull View v, @NonNull Media media) {
+    protected final void startPosition(@NonNull View v, @NonNull Media media, @NonNull int psoition) {
         try {
             // 1
-            int position = media.getIndex();
-            Toast.makeText(v.getContext(), "=> " + position, Toast.LENGTH_SHORT).show();
             String cdnUrl = media.getCdnUrl();
+            Toast.makeText(v.getContext(), "position => " + cdnUrl, Toast.LENGTH_SHORT).show();
             // 2
             VerticalGridView gridView = (VerticalGridView) v.getParent().getParent().getParent();
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) gridView.getAdapter();
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
             DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setVideoUrl(cdnUrl);
+            playerObject.setPlayingIndex(psoition);
             // 3
             gridView.smoothScrollToPosition(0);
             // 4
