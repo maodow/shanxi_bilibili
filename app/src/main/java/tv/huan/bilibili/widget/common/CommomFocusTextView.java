@@ -10,8 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 
-@SuppressLint("AppCompatCustomView")
-public class CommomFocusTextView extends TextView {
+import lib.kalu.leanback.plus.TextViewPlus;
+
+public class CommomFocusTextView extends TextViewPlus {
     public CommomFocusTextView(@NonNull Context context) {
         super(context);
     }

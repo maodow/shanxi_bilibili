@@ -22,7 +22,7 @@
         android:layout_height="0dp"
         android:layout_centerHorizontal="true" />
 
-    <tv.huan.bilibili.widget.anim.AnimTextView
+    <tv.huan.bilibili.widget.common.CommomFocusTextView
         android:id="@+id/template_bottom_top"
         android:layout_width="@dimen/dp_148"
         android:layout_height="@dimen/dp_38"
@@ -42,7 +42,7 @@
         app:tvp_drawable_left_height="@dimen/dp_12"
         app:tvp_drawable_left_width="@dimen/dp_22" />
 
-    <tv.huan.bilibili.widget.anim.AnimTextView
+    <tv.huan.bilibili.widget.common.CommomFocusTextView
         android:id="@+id/template_bottom_search"
         android:layout_width="@dimen/dp_148"
         android:layout_height="@dimen/dp_38"

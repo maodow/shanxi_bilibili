@@ -25,48 +25,46 @@ public class GeneralTemplate3 extends ListTvGridPresenter<GetSubChannelsByChanne
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
-        LogUtil.log("GeneralTemplate3 => onCreateHolder => ");
-//        try {
-//            view.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int position = viewHolder.getAbsoluteAdapterPosition();
-//                    if (position >= 0) {
-//                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-//                        JumpUtil.next(v.getContext(), bean);
-//                    }
-//                }
-//            });
-//        } catch (Exception e) {
-//        }
-//        try {
-//            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View view, boolean b) {
-//                    int position = viewHolder.getAbsoluteAdapterPosition();
-//                    if (position >= 0) {
-//                        TextView textView = view.findViewById(R.id.general_template3_name);
-//                        textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
-//                    }
-//                }
-//            });
-//        } catch (Exception e) {
-//        }
+        try {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = viewHolder.getAbsoluteAdapterPosition();
+                    if (position >= 0) {
+                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+                        JumpUtil.next(v.getContext(), bean);
+                    }
+                }
+            });
+        } catch (Exception e) {
+        }
+        try {
+            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    int position = viewHolder.getAbsoluteAdapterPosition();
+                    if (position >= 0) {
+                        TextView textView = view.findViewById(R.id.general_template3_name);
+                        textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                    }
+                }
+            });
+        } catch (Exception e) {
+        }
     }
 
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i, @NonNull int i1) {
-        LogUtil.log("GeneralTemplate3 => onBindHolder => ");
-//        try {
-//            TextView textView = view.findViewById(R.id.general_template3_name);
-//            textView.setText(templateBean.getName());
-//        } catch (Exception e) {
-//        }
-//        try {
-//            ImageView imageView = view.findViewById(R.id.general_template3_img);
-//            GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
-//        } catch (Exception e) {
-//        }
+        try {
+            TextView textView = view.findViewById(R.id.general_template3_name);
+            textView.setText(templateBean.getName());
+        } catch (Exception e) {
+        }
+        try {
+            ImageView imageView = view.findViewById(R.id.general_template3_img);
+            GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
+        } catch (Exception e) {
+        }
     }
 
     @Override

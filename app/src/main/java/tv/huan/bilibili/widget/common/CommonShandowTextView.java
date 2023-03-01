@@ -2,16 +2,20 @@ package tv.huan.bilibili.widget.common;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import tv.huan.bilibili.R;
 
 @SuppressLint("AppCompatCustomView")
 public class CommonShandowTextView extends TextView {
+
+
     public CommonShandowTextView(Context context) {
         super(context);
         init();
@@ -27,7 +31,7 @@ public class CommonShandowTextView extends TextView {
         init();
     }
 
-    @SuppressLint("NewApi")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CommonShandowTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();

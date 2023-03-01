@@ -61,10 +61,10 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
             // 自动滚动开始 SCROLL_STATE_SETTLING
             int state = getScrollState();
             if (state != RecyclerView.SCROLL_STATE_IDLE) {
-                GlideUtils.pauseRequests(getContext());
+                //GlideUtils.pauseRequests(getContext());
                 return true;
             } else {
-                GlideUtils.resumeRequests(getContext());
+                //GlideUtils.resumeRequests(getContext());
             }
         } catch (Exception e) {
         }
