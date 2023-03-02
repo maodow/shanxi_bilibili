@@ -168,17 +168,24 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                     }
                 })
                 // 上报
-                .map(new Function<Boolean, Boolean>() {
+                .map(new Function<Boolean, String>() {
                     @Override
-                    public Boolean apply(Boolean aBoolean) {
+                    public String apply(Boolean aBoolean) {
+                        String s;
                         try {
                             KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
-                            String result = keyboardView.getInput();
-                            String lowerCase = result.toLowerCase();
+                            s = keyboardView.getInput();
+                            String lowerCase = s.toLowerCase();
                             reportSearchResultItemNum(lowerCase);
                         } catch (Exception e) {
+                            s = null;
                         }
-                        return aBoolean;
+
+                        if (null == s || s.length() <= 0) {
+                            return getView().getString(R.string.search_hot);
+                        } else {
+                            return getView().getString(R.string.search_title, s);
+                        }
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -195,10 +202,11 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         getView().hideLoading();
                     }
                 })
-                .doOnNext(new Consumer<Boolean>() {
+                .doOnNext(new Consumer<String>() {
                     @Override
-                    public void accept(Boolean aBoolean) {
+                    public void accept(String s) {
                         getView().hideLoading();
+                        getView().showTitle(s);
                         getView().refreshContent();
                     }
                 })
@@ -219,9 +227,9 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         return HttpClient.getHttpClient().getHttpApi().getSearchRecommend(BoxUtil.getProdId(), Integer.MAX_VALUE);
                     }
                 })
-                .map(new Function<BaseBean<SearchRecommendBean>, Boolean>() {
+                .map(new Function<BaseBean<SearchRecommendBean>, String>() {
                     @Override
-                    public Boolean apply(BaseBean<SearchRecommendBean> searchRecommendBeanBaseBean) throws Exception {
+                    public String apply(BaseBean<SearchRecommendBean> searchRecommendBeanBaseBean) throws Exception {
                         try {
                             List<SearchRecommendBean.RecommendsBean> recommends = searchRecommendBeanBaseBean.getData().getRecommends();
                             mData.clear();
@@ -229,7 +237,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        return true;
+                        return getView().getString(R.string.search_hot);
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -246,10 +254,11 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         getView().hideLoading();
                     }
                 })
-                .doOnNext(new Consumer<Boolean>() {
+                .doOnNext(new Consumer<String>() {
                     @Override
-                    public void accept(Boolean aBoolean) {
+                    public void accept(String s) {
                         getView().hideLoading();
+                        getView().showTitle(s);
                         getView().refreshContent();
                     }
                 })

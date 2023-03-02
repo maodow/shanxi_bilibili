@@ -2,6 +2,8 @@ package tv.huan.bilibili.ui.search;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import tv.huan.keyboard.KeyboardLinearLayout;
 import tv.huan.keyboard.listener.OnKeyboardInputListener;
 
@@ -51,5 +53,10 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
     @Override
     public void refreshContent() {
         notifyDataSetChanged(R.id.search_list);
+    }
+
+    @Override
+    public void showTitle(@NonNull String s) {
+        setText(R.id.keyboard_title, s);
     }
 }

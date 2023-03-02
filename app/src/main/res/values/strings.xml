@@ -8,6 +8,7 @@
     <string name="search_hot">热搜影片</string>
     <string name="search_clean">清空</string>
     <string name="search_delete">退格</string>
+    <string name="search_title">全部&#160;\"%1$s\"&#160;的搜索结果</string>
 
     <string name="filter_all">全部</string>
     <string name="filter_name">筛选</string>
