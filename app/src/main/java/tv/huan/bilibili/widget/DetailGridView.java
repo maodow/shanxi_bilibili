@@ -20,6 +20,7 @@ import retrofit2.http.Streaming;
 import tv.huan.bilibili.bean.Media;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanJi;
+import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
@@ -62,6 +63,46 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             itemBridgeAdapter.notifyItemChanged(0);
         } catch (Exception e) {
         }
+    }
+
+    public boolean containsXuanJi() {
+        boolean contains = false;
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            int size = objectAdapter.size();
+            for (int i = 0; i < size; i++) {
+                Object o = objectAdapter.get(i);
+                if (null == o)
+                    continue;
+                if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
+                    contains = true;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return contains;
+    }
+
+    public boolean containsXuanQi() {
+        boolean contains = false;
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            int size = objectAdapter.size();
+            for (int i = 0; i < size; i++) {
+                Object o = objectAdapter.get(i);
+                if (null == o)
+                    continue;
+                if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
+                    contains = true;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return contains;
     }
 
     public void updateFavor(boolean status) {

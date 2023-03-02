@@ -13,6 +13,7 @@ import lib.kalu.mediaplayer.config.start.StartBuilder;
 import lib.kalu.mediaplayer.core.controller.ControllerEmpty;
 import lib.kalu.mediaplayer.core.controller.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.controller.component.ComponentPause;
+import lib.kalu.mediaplayer.core.controller.component.ComponentSeek;
 import lib.kalu.mediaplayer.core.controller.component.ComponentSpeed;
 import lib.kalu.mediaplayer.core.player.VideoLayout;
 import tv.huan.bilibili.R;
@@ -79,8 +80,8 @@ public final class PlayerView extends VideoLayout {
         controller.addComponent(speed);
 
         // seekbar
-//        PlayerComponentSeek seek = new PlayerComponentSeek(getContext());
-//        controller.addComponent(seek);
+        ComponentSeek seek = new ComponentSeek(getContext());
+        controller.addComponent(seek);
 
         // 监听器
         setOnChangeListener(new lib.kalu.mediaplayer.listener.OnChangeListener() {

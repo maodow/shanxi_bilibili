@@ -741,8 +741,11 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
             int focusId = getView().getCurrentFocusId();
             if (focusId == R.id.detail_player_item_vip || focusId == R.id.detail_player_item_full || focusId == R.id.detail_player_item_favor) {
                 DetailGridView gridView = getView().findViewById(R.id.detail_list);
-                gridView.requestFocusEpisodePlayingItem();
-                return true;
+                boolean containsXuanJi = gridView.containsXuanJi();
+                if (containsXuanJi) {
+                    gridView.requestFocusEpisodePlayingItem();
+                    return true;
+                }
             }
         }
         return false;

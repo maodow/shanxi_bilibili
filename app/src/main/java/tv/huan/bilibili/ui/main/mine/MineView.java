@@ -7,7 +7,7 @@ import tv.huan.bilibili.base.BaseViewImpl;
 @Keep
 public interface MineView extends BaseViewImpl {
 
-    void refreshContent();
+    void refreshContent(boolean update, int size);
 
     void onUpdate();
 }

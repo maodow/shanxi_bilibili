@@ -4,8 +4,10 @@ import java.io.Serializable;
 
 import lib.kalu.leanback.presenter.ListTvEpisodesPresenter;
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
+import lib.kalu.leanback.presenter.bean.TvEpisodesItemBean;
+import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
 
-public class Media extends ListTvEpisodesPresenter.ItemBean implements Serializable, ListTvGridPresenter.ListGridBean {
+public class Media extends TvEpisodesItemBean implements Serializable, TvPresenterRowBean {
 
     private int id;
     private String vid;
@@ -176,11 +178,6 @@ public class Media extends ListTvEpisodesPresenter.ItemBean implements Serializa
     }
 
     @Override
-    public String getGridHead() {
-        return getTitle();
-    }
-
-    @Override
     public String toString() {
         return "{" +
                 ", title='" + title + '\'' +
@@ -190,5 +187,10 @@ public class Media extends ListTvEpisodesPresenter.ItemBean implements Serializa
                 ", isChecked='" + isChecked() + '\'' +
                 ", isPlaying='" + isPlaying() + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getRowTitle() {
+        return getTitle();
     }
 }

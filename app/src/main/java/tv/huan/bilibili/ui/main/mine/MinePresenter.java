@@ -41,6 +41,7 @@ import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.ui.center.CenterActivity;
+import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
@@ -139,7 +140,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             int position = holder.getAbsoluteAdapterPosition();
                             if (position > 0) {
                                 FavBean.ItemBean itemBean = mDatas.get(position);
-                                JumpUtil.nextDetail(v.getContext(), itemBean.getCid());
+                                Intent intent = new Intent(context, DetailActivity.class);
+                                intent.putExtra(DetailActivity.INTENT_CID, itemBean.getCid());
+                                ((Fragment) getView()).getActivity().startActivityForResult(intent, 2001);
                             }
                         }
                     });
@@ -283,9 +286,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 3, s);
                     }
                 })
-                .map(new Function<BaseBean<FavBean>, Boolean>() {
+                .map(new Function<BaseBean<FavBean>, Integer>() {
                     @Override
-                    public Boolean apply(BaseBean<FavBean> response) {
+                    public Integer apply(BaseBean<FavBean> response) {
 
                         // clean
                         mDatas.clear();
@@ -388,7 +391,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             mDatas.add(itemBean);
                         }
 
-                        return true;
+                        return mDatas.size();
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -405,11 +408,11 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         getView().hideLoading();
                     }
                 })
-                .doOnNext(new Consumer<Boolean>() {
+                .doOnNext(new Consumer<Integer>() {
                     @Override
-                    public void accept(Boolean aBoolean) {
+                    public void accept(Integer i) {
                         getView().hideLoading();
-                        getView().refreshContent();
+                        getView().refreshContent(update, i);
                     }
                 })
                 .subscribe());

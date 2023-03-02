@@ -123,7 +123,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     TextView textView = holder.itemView.findViewById(R.id.center_item_name);
                     textView.setText(itemBean.getName());
                     ImageView imageView = holder.itemView.findViewById(R.id.center_item_img);
-                    GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getPicture(false), imageView);
+                    GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getPicture(true), imageView);
                 } catch (Exception e) {
                 }
             }

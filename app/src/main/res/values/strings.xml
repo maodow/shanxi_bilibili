@@ -12,6 +12,7 @@
     <string name="filter_all">全部</string>
     <string name="filter_name">筛选</string>
 
+    <string name="detail_cai">猜你喜欢</string>
     <string name="detail_full">全屏播放</string>
     <string name="detail_vip">开通会员</string>
     <string name="detail_favor_yes">已收藏</string>

@@ -18,10 +18,20 @@ import tv.huan.heilongjiang.HeilongjiangApi;
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 
     public static final String INTENT_CID = "intent_cid";
+    private static final String INTENT_UPDATE = "intent_update";
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         return getPresenter().dispatchEvent(event) || super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public void finish() {
+        boolean extra = getBooleanExtra(INTENT_UPDATE, false);
+        if (extra) {
+            setResult(2002);
+        }
+        super.finish();
     }
 
     @Override
@@ -81,6 +91,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void updateFavor(boolean status) {
+        putBooleanExtra(INTENT_UPDATE, true);
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.updateFavor(status);
     }

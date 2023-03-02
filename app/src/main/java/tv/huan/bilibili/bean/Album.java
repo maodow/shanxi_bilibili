@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.presenter.ListTvRowPresenter;
+import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
 
-public class Album extends ImageBean implements Serializable, ListTvRowPresenter.ListRowBean, ListTvGridPresenter.ListGridBean, JumpBean {
+public class Album extends ImageBean implements Serializable, TvPresenterRowBean, JumpBean {
 
     private static final long serialVersionUID = 2233263498353702029L;
     private String title;
@@ -92,12 +93,7 @@ public class Album extends ImageBean implements Serializable, ListTvRowPresenter
     }
 
     @Override
-    public String getGridHead() {
-        return getTitle();
-    }
-
-    @Override
-    public String getRowHead() {
-        return getTitle();
+    public String getRowTitle() {
+        return null;
     }
 }

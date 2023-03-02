@@ -22,6 +22,12 @@ import tv.huan.bilibili.utils.JumpUtil;
 
 public class DetailTemplateFavor extends ListTvRowPresenter<Album> {
 
+
+    @Override
+    protected String initRowTitle(Context context) {
+        return context.getResources().getString(R.string.detail_cai);
+    }
+
     @Override
     public int initMagrinTop(@NonNull Context context) {
         int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_30);

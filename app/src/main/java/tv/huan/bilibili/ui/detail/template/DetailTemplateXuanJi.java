@@ -110,7 +110,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
     }
 
     @Override
-    protected String initHead(Context context) {
+    protected String initRowTitle(Context context) {
         return context.getResources().getString(R.string.detail_xuanji);
     }
 

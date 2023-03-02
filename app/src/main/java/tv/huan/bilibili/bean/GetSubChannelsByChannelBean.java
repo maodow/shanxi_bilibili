@@ -7,6 +7,7 @@ import java.util.List;
 
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.presenter.ListTvRowPresenter;
+import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
 
 @Keep
 public class GetSubChannelsByChannelBean implements Serializable {
@@ -94,7 +95,7 @@ public class GetSubChannelsByChannelBean implements Serializable {
         }
 
         @Keep
-        public static class TemplateBean extends ImageBean implements JumpBean, ListTvGridPresenter.ListGridBean, ListTvRowPresenter.ListRowBean, Serializable {
+        public static class TemplateBean extends ImageBean implements JumpBean, TvPresenterRowBean, Serializable {
 
             private int show;
             private String title;
@@ -171,16 +172,7 @@ public class GetSubChannelsByChannelBean implements Serializable {
             }
 
             @Override
-            public String getGridHead() {
-                if (1 == getShow()) {
-                    return getTitle();
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            public String getRowHead() {
+            public String getRowTitle() {
                 if (1 == getShow()) {
                     return getTitle();
                 } else {
