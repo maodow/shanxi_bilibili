@@ -1,5 +1,6 @@
 package tv.huan.bilibili.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -151,6 +152,14 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         } else if (code == 1100) {
             getPresenter().reportAppExit();
             onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1001 && resultCode == 1002) {
+            getPresenter().updateFragment(0);
         }
     }
 }

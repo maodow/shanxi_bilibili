@@ -4,19 +4,33 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.BaseActivity;
+import lib.kalu.leanback.clazz.ClassBean;
+import lib.kalu.leanback.clazz.HorizontalClassLayout;
+import lib.kalu.leanback.list.RecyclerViewHorizontal;
 import tv.huan.bilibili.R;
 
 public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> implements CenterView {
 
-    public static final String INTENT_SELECT = "intent_select";
+    public static final String INTENT_FAVORY = "intent_favory"; // 我的收藏
+    private static final String INTENT_UPDATE = "intent_update";
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         return getPresenter().dispatchKey(event) || super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public void finish() {
+        boolean extra = getBooleanExtra(INTENT_UPDATE, false);
+        if (extra) {
+            setResult(1002);
+        }
+        super.finish();
     }
 
     @Override
@@ -27,9 +41,21 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     @Override
     public void initData() {
         getPresenter().showWarning();
-        getPresenter().showTabs();
         getPresenter().setAdapter();
-        getPresenter().request();
+        getPresenter().requestTabs();
+    }
+
+    @Override
+    public void updateTab(ArrayList<ClassBean> data, int select) {
+        HorizontalClassLayout classLayout = findViewById(R.id.center_tabs);
+        classLayout.update(data);
+        classLayout.requestFocusTab(select);
+        classLayout.setOnCheckedChangeListener(new HorizontalClassLayout.OnCheckedChangeListener() {
+            @Override
+            public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
+                getPresenter().request();
+            }
+        });
     }
 
     @Override
@@ -38,12 +64,26 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     }
 
     @Override
-    public void del(@NonNull int index) {
-        notifyItemRemoved(R.id.center_list, index);
+    public void updateFocus() {
+        setFocusable(R.id.center_search, true);
+        setFocusable(R.id.center_vip, true);
     }
 
     @Override
     public void checkNodata(boolean show) {
         setVisibility(R.id.center_nodata, show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void updatePosition(int position) {
+        RecyclerView recyclerView = findViewById(R.id.center_list);
+        recyclerView.getAdapter().notifyItemRangeChanged(position, 1);
+    }
+
+    @Override
+    public void deletePosition(int position) {
+        putBooleanExtra(INTENT_UPDATE, true);
+        RecyclerView recyclerView = findViewById(R.id.center_list);
+        recyclerView.getAdapter().notifyItemRangeRemoved(position, 1);
     }
 }

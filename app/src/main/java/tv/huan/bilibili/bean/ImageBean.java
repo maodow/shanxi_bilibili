@@ -8,12 +8,13 @@ import java.io.Serializable;
 public class ImageBean implements Serializable {
 
     //  return null == newPicVt || newPicVt.isEmpty() ? picVtPath : newPicVt;
+//    private String pic;
     private String poster;
     private String newPicVt;
     private String newPicHz;
 
-    private String picVtPath;
-    private String picHzPath;
+//    private String picVtPath;
+//    private String picHzPath;
 
     public void setPoster(String poster) {
         this.poster = poster;
@@ -27,6 +28,10 @@ public class ImageBean implements Serializable {
         this.newPicHz = newPicHz;
     }
 
+//    public void setPic(String pic) {
+//        this.pic = pic;
+//    }
+
     public String getPicture(boolean hz) {
         if (null != poster && poster.length() > 0) {
             return poster;
@@ -37,13 +42,21 @@ public class ImageBean implements Serializable {
         }
     }
 
+//    public String getPictureFavor() {
+//        if (null != poster && poster.length() > 0) {
+//            return poster;
+//        } else {
+//            return pic;
+//        }
+//    }
+
     public void copyPic(ImageBean data) {
         if (null == data)
             return;
         this.poster = data.poster;
         this.newPicHz = data.newPicHz;
         this.newPicVt = data.newPicVt;
-        this.picVtPath = data.picVtPath;
-        this.picHzPath = data.picHzPath;
+//        this.picVtPath = data.picVtPath;
+//        this.picHzPath = data.picHzPath;
     }
 }

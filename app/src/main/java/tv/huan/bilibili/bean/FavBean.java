@@ -29,6 +29,7 @@ public class FavBean implements Serializable {
         return offset;
     }
 
+
     public void setOffset(int offset) {
         this.offset = offset;
     }
@@ -52,6 +53,7 @@ public class FavBean implements Serializable {
     @Keep
     public static class ItemBean implements Serializable, JumpBean {
 
+        private boolean showDel;
         private String favTime;
         private int classId;
         private String huanId;
@@ -60,12 +62,19 @@ public class FavBean implements Serializable {
         private int id;
         private String cid;
         private int itemType = 1;
-        private boolean del;
 
         private int icon;
         private String title;
         private int index;
         private int jumpType;
+
+        public boolean isShowDel() {
+            return showDel;
+        }
+
+        public void setShowDel(boolean showDel) {
+            this.showDel = showDel;
+        }
 
         public int getJumpType() {
             return jumpType;
@@ -97,14 +106,6 @@ public class FavBean implements Serializable {
 
         public void setTitle(String title) {
             this.title = title;
-        }
-
-        public boolean isDel() {
-            return del;
-        }
-
-        public void setDel(boolean del) {
-            this.del = del;
         }
 
         public int getItemType() {
@@ -191,14 +192,9 @@ public class FavBean implements Serializable {
         public static class InfoBean extends ImageBean implements Serializable {
 
             private String code;
-            private Object publishDate;
-            private String pic;
             private String title;
             private int type;
             private String productName;
-            private Object price;
-            private Object validTerm;
-            private String pic2;
             private int payStatus;
             private int productType;
             private String cid;
@@ -209,22 +205,6 @@ public class FavBean implements Serializable {
 
             public void setCode(String code) {
                 this.code = code;
-            }
-
-            public Object getPublishDate() {
-                return publishDate;
-            }
-
-            public void setPublishDate(Object publishDate) {
-                this.publishDate = publishDate;
-            }
-
-            public String getPic() {
-                return pic;
-            }
-
-            public void setPic(String pic) {
-                this.pic = pic;
             }
 
             public String getTitle() {
@@ -249,30 +229,6 @@ public class FavBean implements Serializable {
 
             public void setProductName(String productName) {
                 this.productName = productName;
-            }
-
-            public Object getPrice() {
-                return price;
-            }
-
-            public void setPrice(Object price) {
-                this.price = price;
-            }
-
-            public Object getValidTerm() {
-                return validTerm;
-            }
-
-            public void setValidTerm(Object validTerm) {
-                this.validTerm = validTerm;
-            }
-
-            public String getPic2() {
-                return pic2;
-            }
-
-            public void setPic2(String pic2) {
-                this.pic2 = pic2;
             }
 
             public int getPayStatus() {

@@ -20,7 +20,7 @@ import tv.huan.bilibili.bean.Album;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
-public class DetailTemplateFav extends ListTvRowPresenter<Album> {
+public class DetailTemplateFavor extends ListTvRowPresenter<Album> {
 
     @Override
     public int initMagrinTop(@NonNull Context context) {

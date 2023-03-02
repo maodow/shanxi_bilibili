@@ -42,13 +42,18 @@ public final class CommomChaoView extends TextViewPlus {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        checkVip();
+    }
+
+    @Override
     protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
         ViewCompat.animate(this).scaleX(focused ? 1.1f : 1.0f).scaleY(focused ? 1.1f : 1.0f).setDuration(200).start();
     }
 
-    private final void init() {
-        setText(getResources().getString(R.string.menu_chao_no));
+    private void init() {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,11 +78,6 @@ public final class CommomChaoView extends TextViewPlus {
     }
 
     private void updateText(boolean succ) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                setText(getResources().getString(succ ? R.string.menu_chao_yes : R.string.menu_chao_no));
-            }
-        });
+        setText(getResources().getString(succ ? R.string.menu_chao_yes : R.string.menu_chao_no));
     }
 }

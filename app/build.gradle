@@ -97,7 +97,7 @@ dependencies {
     api files('libs/lib_mediaplayer_ui_release_20230302.aar')
     api files('libs/lib_mediaplayer_exo_r2.18.3_ff4.4_audio_release_20230222.aar')
     // heilongjiang
-    api files('libs/lib_huan_heilongjiang_release_20230224.aar')
+    api files('libs/lib_huan_heilongjiang_release_20230302.aar')
 //    api project(path: ':huan_heilongjiang')
 
     // core

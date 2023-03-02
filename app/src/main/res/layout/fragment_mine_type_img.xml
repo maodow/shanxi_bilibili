@@ -1,54 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<lib.kalu.leanback.round.RoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<tv.huan.bilibili.widget.common.CommonRoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_common_bg_r8"
     android:focusable="true"
-    app:rl_corner_bottom_left="@dimen/dp_5"
-    app:rl_corner_bottom_right="@dimen/dp_5"
-    app:rl_corner_top_left="@dimen/dp_5"
-    app:rl_corner_top_right="@dimen/dp_5"
-
-    app:rl_rate_height="0.56"
-    app:rl_scale="1.1">
+    app:rl_rate_height="0.56">
 
     <!-- 图片 -->
     <ImageView
         android:id="@+id/mine_img_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="27dp"
-        android:clickable="false"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
         android:scaleType="fitXY" />
 
     <!-- 标题 -->
-    <lib.kalu.leanback.auto.AutoTextView
+    <tv.huan.bilibili.widget.common.CommonShandowTextView
         android:id="@+id/mine_img_name"
         android:layout_width="match_parent"
-        android:layout_height="27dp"
+        android:layout_height="@dimen/dp_40"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:clickable="false"
-        android:ellipsize="marquee"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:gravity="center_vertical|left"
-        android:longClickable="false"
-        android:paddingLeft="9dp"
-        android:paddingRight="9dp"
-        android:singleLine="true"
-        android:text="-"
-        android:textColor="#ffffff"
-        android:textSize="15sp"
-        app:fl_bg_color_focus="#f1f1f1"
-        app:fl_bg_color_normal="#5458A4"
-        app:fl_text_color_focus="#3c3c82"
-        app:fl_text_color_normal="#ffffff" />
-
+        android:gravity="bottom|left"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/sp_14" />
     <!--    &lt;!&ndash; 标记 &ndash;&gt;-->
     <!--    <lib.kalu.leanback.auto.AutoImageView-->
     <!--        android:layout_width="33dp"-->
@@ -60,4 +36,4 @@
     <!--        android:visibility="invisible"-->
     <!--        android:src="@drawable/ic_filter_flag" />-->
 
-</lib.kalu.leanback.round.RoundRelativeLayout>
+</tv.huan.bilibili.widget.common.CommonRoundRelativeLayout>

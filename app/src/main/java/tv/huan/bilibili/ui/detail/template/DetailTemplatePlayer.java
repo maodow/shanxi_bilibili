@@ -78,6 +78,7 @@ public final class DetailTemplatePlayer extends Presenter {
         if (updateOnlyFavor) {
             try {
                 TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_favor);
+                textView.setSelected(((DetailTemplatePlayerObject) o).isFavorStatus());
                 textView.setText(viewHolder.view.getResources().getString(((DetailTemplatePlayerObject) o).isFavorStatus() ? R.string.detail_favor_yes : R.string.detail_favor_no));
             } catch (Exception e) {
             }
@@ -147,8 +148,8 @@ public final class DetailTemplatePlayer extends Presenter {
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_favor);
+            textView.setSelected(((DetailTemplatePlayerObject) o).isFavorStatus());
             textView.setText(view.getResources().getString(((DetailTemplatePlayerObject) o).isFavorStatus() ? R.string.detail_favor_yes : R.string.detail_favor_no));
-
             JSONObject object = new JSONObject();
             object.put("cid", ((DetailTemplatePlayerObject) o).getCid());
             object.put("recClassId", ((DetailTemplatePlayerObject) o).getRecClassId());

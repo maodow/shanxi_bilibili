@@ -18,11 +18,16 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
         // adapter
         getPresenter().setAdapter();
         // http
-        getPresenter().request();
+        getPresenter().request(false);
     }
 
     @Override
     public void refreshContent() {
         notifyDataSetChanged(R.id.mine_list);
+    }
+
+    @Override
+    public void onUpdate() {
+        getPresenter().request(true);
     }
 }

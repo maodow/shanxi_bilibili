@@ -37,6 +37,10 @@ import tv.huan.bilibili.bean.UrlType;
 
 public interface HttpApi {
 
+    // 删除历史
+    @GET("data/delBookmarkById")
+    Observable<BaseBean<Object>> deleteBookmark(@Query("cid") String cid);
+
     // 添加收藏
     @GET("data/addFavorite")
     Observable<BaseBean<FavorBean>> addFavorite(@Query("cid") String cid,
@@ -45,7 +49,7 @@ public interface HttpApi {
 
     // 取消收藏
     @GET("data/cancelFavorite")
-    Observable<BaseBean<FavorBean>> cancelFavorite(@Query("cid") String cid);
+    Observable<BaseBean<Object>> cancelFavorite(@Query("cid") String cid);
 
     // 查询收藏
     @GET("data/checkFavorite")
@@ -236,28 +240,7 @@ public interface HttpApi {
      */
     @GET("data/getFavList")
     Observable<BaseBean<FavBean>> getFavList(@Query("offset") int offset,
-                                             @Query("size") int size,
-                                             @Query("productId") String productId);
-
-    /**
-     * 取消收藏
-     *
-     * @param productId x
-     * @param cid       x
-     * @return x
-     */
-    @GET("data/cancelFavorite")
-    Observable<BaseBean<Object>> cancelFav(@Query("productId") int productId,
-                                           @Query("cid") String cid);
-
-    /**
-     * 删除历史
-     *
-     * @param cid x
-     * @return x
-     */
-    @GET("data/delBookmarkById")
-    Observable<BaseBean<Object>> deleteBookmark(@Query("cid") String cid);
+                                             @Query("size") int size);
 
     /**
      * 查询数据库中某个分类的所有绑定专辑信息

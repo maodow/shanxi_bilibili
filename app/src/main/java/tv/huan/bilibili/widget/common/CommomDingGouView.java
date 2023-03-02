@@ -41,6 +41,12 @@ public final class CommomDingGouView extends TextViewPlus {
         }
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        checkVip();
+    }
+
     private void init() {
         setVisibility(View.GONE);
     }
@@ -49,22 +55,17 @@ public final class CommomDingGouView extends TextViewPlus {
         HeilongjiangApi.checkVip(getContext(), new OnCheckVipChangeListener() {
             @Override
             public void onPass() {
-                updateVisibility(true);
+                updateVisibility(false);
             }
 
             @Override
             public void onFail() {
-                updateVisibility(false);
+                updateVisibility(true);
             }
         });
     }
 
     private void updateVisibility(boolean succ) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                setVisibility(succ ? View.VISIBLE : View.GONE);
-            }
-        });
+        setVisibility(succ ? View.VISIBLE : View.GONE);
     }
 }

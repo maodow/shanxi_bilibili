@@ -126,7 +126,7 @@ public class JumpUtil {
 
     public static final void nextCenter(@NonNull Context context, boolean isFavor) {
         Intent intent = new Intent(context, CenterActivity.class);
-        intent.putExtra(isFavor ? CenterActivity.INTENT_SELECT : CenterActivity.INTENT_SELECT, 1);
+        intent.putExtra(CenterActivity.INTENT_FAVORY, isFavor);
         context.startActivity(intent);
     }
 

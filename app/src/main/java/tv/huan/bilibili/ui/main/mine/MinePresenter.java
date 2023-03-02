@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.main.mine;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.text.Html;
 import android.text.Spanned;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.Keep;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +40,7 @@ import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.bean.FavBean;
+import tv.huan.bilibili.ui.center.CenterActivity;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
@@ -128,6 +131,19 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         }
                     });
                 }
+                // image
+                else if (viewType == TYPE_ITEM_IMG) {
+                    inflate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int position = holder.getAbsoluteAdapterPosition();
+                            if (position > 0) {
+                                FavBean.ItemBean itemBean = mDatas.get(position);
+                                JumpUtil.nextDetail(v.getContext(), itemBean.getCid());
+                            }
+                        }
+                    });
+                }
                 // more
                 else if (viewType == TYPE_ITEM_MORE) {
                     inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -145,7 +161,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             if (position > 0) {
                                 FavBean.ItemBean itemBean = mDatas.get(position);
                                 int jumpType = itemBean.getJumpType();
-                                JumpUtil.nextCenter(v.getContext(), jumpType == 0 ? true : false);
+                                Intent intent = new Intent(v.getContext(), CenterActivity.class);
+                                intent.putExtra(CenterActivity.INTENT_FAVORY, jumpType == 0);
+                                ((Fragment) getView()).getActivity().startActivityForResult(intent, 1001);
                             }
                         }
                     });
@@ -193,7 +211,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 // item-img
                 else if (itemViewType == TYPE_ITEM_IMG) {
                     FavBean.ItemBean itemBean = mDatas.get(position);
-                    getView().setText(holder.itemView, R.id.mine_img_name, itemBean.getTitle());
+                    getView().setText(holder.itemView, R.id.mine_img_name, itemBean.getAlbum().getTitle());
                     ImageView imageView = holder.itemView.findViewById(R.id.mine_img_icon);
                     GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getPicture(true), imageView);
                 }
@@ -232,14 +250,15 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
         });
     }
 
-    protected void request() {
+    protected void request(boolean update) {
 
-        if (mDatas.size() > 0)
+        if (!update && mDatas.size() > 0)
             return;
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        mDatas.clear();
                         observableEmitter.onNext(true);
                     }
                 })
@@ -247,7 +266,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 .flatMap(new Function<Boolean, Observable<BaseBean<FavBean>>>() {
                     @Override
                     public Observable<BaseBean<FavBean>> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3, "1");
+                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3);
                     }
                 })
                 // 观看记录
@@ -344,7 +363,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         more.setItemType(TYPE_ITEM_MORE);
                         more.setJumpType(1);
                         more.setTitle("全部收藏");
-                        more.setIcon(R.drawable.ic_selector_common_fav);
+                        more.setIcon(R.drawable.ic_selector_common_favor2);
                         mDatas.add(more);
 
                         // 7 => title => 更多功能

@@ -15,7 +15,7 @@
         android:background="@drawable/bg_selector_common_search"
         android:drawableLeft="@drawable/ic_selector_common_search"
         android:drawablePadding="@dimen/dp_8"
-        android:focusable="true"
+        android:focusable="false"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
@@ -36,7 +36,7 @@
         android:background="@drawable/bg_selector_common_search"
         android:drawableLeft="@drawable/ic_selector_common_chao"
         android:drawablePadding="@dimen/dp_8"
-        android:focusable="true"
+        android:focusable="false"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
@@ -103,13 +103,13 @@
         android:paddingRight="@dimen/dp_48"
         android:paddingBottom="@dimen/dp_20" />
 
-    <!-- -->
+    <!-- noData -->
     <ImageView
         android:id="@+id/center_nodata"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_177"
-        android:visibility="gone"
         android:layout_centerInParent="true"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:visibility="gone" />
 
 </RelativeLayout>

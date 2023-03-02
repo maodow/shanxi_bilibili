@@ -43,12 +43,11 @@ import tv.huan.bilibili.bean.Media;
 import tv.huan.bilibili.bean.ProgramDetail;
 import tv.huan.bilibili.bean.ProgramInfoDetail;
 import tv.huan.bilibili.http.HttpClient;
-import tv.huan.bilibili.ui.detail.template.DetailTemplateFav;
+import tv.huan.bilibili.ui.detail.template.DetailTemplateFavor;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanJi;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.utils.Constants;
-import tv.huan.keyboard.KeyboardLinearLayout;
 
 public class DetailPresenter extends BasePresenterImpl<DetailView> {
     public DetailPresenter(@NonNull DetailView detailView) {
@@ -542,7 +541,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     public ProgramInfoDetail apply(ProgramInfoDetail data) {
                         VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
                         RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                        DetailTemplateFav.DetailTemplateFavList list = new DetailTemplateFav.DetailTemplateFavList();
+                        DetailTemplateFavor.DetailTemplateFavList list = new DetailTemplateFavor.DetailTemplateFavList();
                         try {
                             List<Album> recAlbums = data.getRecAlbums();
                             int size = recAlbums.size();
@@ -692,20 +691,16 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         observableEmitter.onNext(true);
                     }
                 })
-                .flatMap(new Function<Boolean, Observable<BaseBean<FavorBean>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseBean<Object>>>() {
                     @Override
-                    public Observable<BaseBean<FavorBean>> apply(Boolean aBoolean) {
+                    public Observable<BaseBean<Object>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
                     }
                 })
-                .map(new Function<BaseBean<FavorBean>, Boolean>() {
+                .map(new Function<BaseBean<Object>, Boolean>() {
                     @Override
-                    public Boolean apply(BaseBean<FavorBean> favorBeanBaseBean) {
-                        try {
-                            return favorBeanBaseBean.getData().isFavor();
-                        } catch (Exception e) {
-                            return false;
-                        }
+                    public Boolean apply(BaseBean<Object> favorBeanBaseBean) {
+                        return true;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)

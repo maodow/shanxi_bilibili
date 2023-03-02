@@ -44,6 +44,13 @@ public final class CommomDataView extends TextView {
         }
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        checkVip();
+    }
+
+
     private final void init() {
         setVisibility(View.INVISIBLE);
     }
@@ -63,11 +70,6 @@ public final class CommomDataView extends TextView {
     }
 
     private void updateVisibility(boolean succ) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                setVisibility(succ ? View.VISIBLE : View.INVISIBLE);
-            }
-        });
+        setVisibility(succ ? View.VISIBLE : View.INVISIBLE);
     }
 }
