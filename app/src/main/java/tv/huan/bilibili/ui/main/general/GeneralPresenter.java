@@ -23,6 +23,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
@@ -352,43 +353,33 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
             GetSubChannelsByChannelBean.ListBean bean = list.get(i);
             if (null == bean)
                 continue;
+
             List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
             int preTemplate = bean.getPreTemplate();
-            if (preTemplate == 3) {
-                addPresenter((ArrayObjectAdapter) objectAdapter, 1, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 2, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 3, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 4, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 5, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 6, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 7, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 8, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 9, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 10, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 11, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 12, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 13, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 14, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 15, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 16, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 17, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 18, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
-                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
-            }
 
-//            if (preTemplate <= 18) {
-//                addPresenter((ArrayObjectAdapter) objectAdapter, preTemplate, templateData);
-//            } else if (preTemplate == 19) {
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
-//            } else if (preTemplate == 20) {
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
-//            } else if (preTemplate == 21) {
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
-//            }
+            // 测试模板
+            if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
+                if (preTemplate == BuildConfig.HUAN_TEST_TEMPLATE_CODE) {
+                    for (int n = 1; n <= 22; n++) {
+                        addPresenter((ArrayObjectAdapter) objectAdapter, n, templateData);
+                    }
+                }
+                break;
+            }
+            // 正常显示
+            else {
+                if (preTemplate <= 18) {
+                    addPresenter((ArrayObjectAdapter) objectAdapter, preTemplate, templateData);
+                } else if (preTemplate == 19) {
+                    addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
+                } else if (preTemplate == 20) {
+                    addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
+                } else if (preTemplate == 21) {
+                    addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
+                }
+            }
         }
-        // 2
+        // 模板-回到顶部
         addPresenter((ArrayObjectAdapter) objectAdapter, -2, null);
     }
 

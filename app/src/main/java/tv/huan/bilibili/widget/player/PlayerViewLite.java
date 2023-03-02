@@ -14,7 +14,7 @@ import lib.kalu.mediaplayer.core.controller.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.controller.component.ComponentSpeed;
 import lib.kalu.mediaplayer.core.player.VideoLayout;
 
-public final class PlayerViewLite extends VideoLayout {
+public final class PlayerViewLite extends PlayerView {
 
     public PlayerViewLite(Context context) {
         super(context);
@@ -48,7 +48,8 @@ public final class PlayerViewLite extends VideoLayout {
         super.start(builder.build(), url);
     }
 
-    private void init() {
+    @Override
+    protected void init() {
 
         // 填充模式
 //        if (getId() == R.id.qvoice_video || getId() == R.id.qsquare_video || getId() == R.id.qreport_video) {

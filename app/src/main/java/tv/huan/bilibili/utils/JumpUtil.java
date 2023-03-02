@@ -88,9 +88,8 @@ public class JumpUtil {
     public static void nextSpecial(@NonNull Context context, @NonNull JumpBean data) {
         try {
             int specialId = data.getSpecialId();
-            int type = data.getSpecialType();
-            nextSpecial(context, specialId, 2);
-//            nextSpecial(specialId, type);
+//            int type = data.getSpecialType();
+            nextSpecial(context, specialId, 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,13 +138,6 @@ public class JumpUtil {
         Intent intent = new Intent(context, WebviewActivity.class);
         intent.putExtra(WebviewActivity.INTENT_HELP, true);
         intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 1);
-        context.startActivity(intent);
-    }
-
-    public static final void nextWebAbout(@NonNull Context context) {
-        Intent intent = new Intent(context, WebviewActivity.class);
-        intent.putExtra(WebviewActivity.INTENT_HELP, true);
-        intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 2);
         context.startActivity(intent);
     }
 }

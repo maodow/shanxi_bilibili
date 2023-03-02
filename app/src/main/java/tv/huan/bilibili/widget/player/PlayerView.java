@@ -18,8 +18,7 @@ import lib.kalu.mediaplayer.core.controller.component.ComponentSpeed;
 import lib.kalu.mediaplayer.core.player.VideoLayout;
 import tv.huan.bilibili.R;
 
-public final class PlayerView extends VideoLayout {
-
+public class PlayerView extends VideoLayout {
     public PlayerView(Context context) {
         super(context);
         init();
@@ -52,7 +51,7 @@ public final class PlayerView extends VideoLayout {
         super.start(builder.build(), url);
     }
 
-    private void init() {
+    protected void init() {
 
         // 填充模式
 //        if (getId() == R.id.qvoice_video || getId() == R.id.qsquare_video || getId() == R.id.qreport_video) {

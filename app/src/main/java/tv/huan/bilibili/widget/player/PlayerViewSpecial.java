@@ -13,30 +13,27 @@ import lib.kalu.mediaplayer.core.controller.ControllerEmpty;
 import lib.kalu.mediaplayer.core.controller.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.player.VideoLayout;
 
-public class PlayerViewSpecial extends VideoLayout {
+public class PlayerViewSpecial extends PlayerView {
 
     public PlayerViewSpecial(Context context) {
         super(context);
-        init();
     }
 
     public PlayerViewSpecial(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public PlayerViewSpecial(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public PlayerViewSpecial(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
     }
 
-    private void init() {
+    @Override
+    protected void init() {
 
         // 填充模式
 //        if (getId() == R.id.qvoice_video || getId() == R.id.qsquare_video || getId() == R.id.qreport_video) {
@@ -152,10 +149,5 @@ public class PlayerViewSpecial extends VideoLayout {
                 }
             }
         });
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        return false;
     }
 }
