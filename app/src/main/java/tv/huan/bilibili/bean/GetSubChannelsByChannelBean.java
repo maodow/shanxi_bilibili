@@ -1,6 +1,7 @@
 package tv.huan.bilibili.bean;
 
 import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.List;
@@ -62,6 +63,22 @@ public class GetSubChannelsByChannelBean implements Serializable {
         private int show; // 模板标题是否显示
         private List<TemplateBean> templateData; // 数据
 
+        public List<TemplateBean> getTemplateData() {
+            return templateData;
+        }
+
+        public void setTemplateData(List<TemplateBean> templateData) {
+            this.templateData = templateData;
+            if (null != this.templateData) {
+                for (TemplateBean t : templateData) {
+//                    t.setTempShow(true);
+//                    t.setTempTitle("模板" + preTemplate);
+                    t.setTempShow(show == 1);
+                    t.setTempTitle(name);
+                }
+            }
+        }
+
         public int getPreTemplate() {
             return preTemplate;
         }
@@ -86,19 +103,12 @@ public class GetSubChannelsByChannelBean implements Serializable {
             this.show = show;
         }
 
-        public List<TemplateBean> getTemplateData() {
-            return templateData;
-        }
-
-        public void setTemplateData(List<TemplateBean> templateData) {
-            this.templateData = templateData;
-        }
-
         @Keep
         public static class TemplateBean extends ImageBean implements JumpBean, TvPresenterRowBean, Serializable {
 
-            private int show;
-            private String title;
+            private boolean tempShow;
+            private String tempTitle;
+
             private String name;
             private String cid;
             private int classId;
@@ -131,20 +141,12 @@ public class GetSubChannelsByChannelBean implements Serializable {
                 this.classId = classId;
             }
 
-            public int getShow() {
-                return show;
+            public void setTempShow(boolean tempShow) {
+                this.tempShow = tempShow;
             }
 
-            public void setShow(int show) {
-                this.show = show;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
+            public void setTempTitle(String tempTitle) {
+                this.tempTitle = tempTitle;
             }
 
             public String getName() {
@@ -173,11 +175,17 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
             @Override
             public String getRowTitle() {
-                if (1 == getShow()) {
-                    return getTitle();
+                if (tempShow) {
+                    return tempTitle;
                 } else {
                     return null;
                 }
+            }
+
+            @NonNull
+            @Override
+            public String toString() {
+                return "rowTitle = " + getRowTitle();
             }
         }
     }

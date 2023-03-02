@@ -218,15 +218,11 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                 int size2 = datas2.size();
                                 if (size2 < 0)
                                     continue;
-                                String name = listBean.getName();
-                                int show = listBean.getShow();
                                 List<GetSubChannelsByChannelBean.ListBean.TemplateBean> result = new ArrayList<>();
                                 for (int j = 0; j < size2; j++) {
                                     GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = datas2.get(j);
                                     if (null == templateBean)
                                         continue;
-                                    templateBean.setTitle(name);
-                                    templateBean.setShow(show);
                                     templateBean.setClassId(classId);
                                     // 模板1
                                     int preTemplate = listBean.getPreTemplate();
@@ -358,39 +354,39 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                 continue;
             List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
             int preTemplate = bean.getPreTemplate();
-//            if (preTemplate == 17) {
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 1, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 2, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 3, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 4, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 5, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 6, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 7, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 8, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 9, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 10, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 11, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 12, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 13, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 14, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 15, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 16, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 17, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 18, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
-//            }
-
-            if (preTemplate <= 18) {
-                addPresenter((ArrayObjectAdapter) objectAdapter, preTemplate, templateData);
-            } else if (preTemplate == 19) {
+            if (preTemplate == 3) {
+                addPresenter((ArrayObjectAdapter) objectAdapter, 1, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 2, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 3, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 4, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 5, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 6, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 7, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 8, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 9, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 10, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 11, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 12, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 13, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 14, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 15, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 16, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 17, templateData);
+                addPresenter((ArrayObjectAdapter) objectAdapter, 18, templateData);
                 addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
-            } else if (preTemplate == 20) {
                 addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
-            } else if (preTemplate == 21) {
                 addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
             }
+
+//            if (preTemplate <= 18) {
+//                addPresenter((ArrayObjectAdapter) objectAdapter, preTemplate, templateData);
+//            } else if (preTemplate == 19) {
+//                addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
+//            } else if (preTemplate == 20) {
+//                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
+//            } else if (preTemplate == 21) {
+//                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
+//            }
         }
         // 2
         addPresenter((ArrayObjectAdapter) objectAdapter, -2, null);

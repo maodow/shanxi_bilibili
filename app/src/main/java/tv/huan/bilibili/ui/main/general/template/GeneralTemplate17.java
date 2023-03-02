@@ -607,7 +607,7 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
             }
             // 3
             TextView vDesc = v.findViewById(info);
-            vDesc.setText(templateBean.getTitle());
+            vDesc.setText(templateBean.getName());
             vDesc.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
         }
     }
