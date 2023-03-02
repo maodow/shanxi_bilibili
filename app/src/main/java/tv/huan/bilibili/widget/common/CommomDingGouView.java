@@ -1,13 +1,11 @@
 package tv.huan.bilibili.widget.common;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,19 +17,18 @@ import tv.huan.bilibili.R;
 import tv.huan.heilongjiang.HeilongjiangApi;
 import tv.huan.heilongjiang.OnCheckVipChangeListener;
 
-@SuppressLint("AppCompatCustomView")
-public final class CommomDataView extends TextView {
-    public CommomDataView(@NonNull Context context) {
+public final class CommomDingGouView extends TextViewPlus {
+    public CommomDingGouView(@NonNull Context context) {
         super(context);
         init();
     }
 
-    public CommomDataView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public CommomDingGouView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CommomDataView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CommomDingGouView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -44,8 +41,8 @@ public final class CommomDataView extends TextView {
         }
     }
 
-    private final void init() {
-        setVisibility(View.INVISIBLE);
+    private void init() {
+        setVisibility(View.GONE);
     }
 
     private void checkVip() {
@@ -66,7 +63,7 @@ public final class CommomDataView extends TextView {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                setVisibility(succ ? View.VISIBLE : View.INVISIBLE);
+                setVisibility(succ ? View.VISIBLE : View.GONE);
             }
         });
     }

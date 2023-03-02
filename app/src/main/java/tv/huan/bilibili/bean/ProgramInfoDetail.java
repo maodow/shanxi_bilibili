@@ -5,6 +5,7 @@ import java.util.List;
 
 public class ProgramInfoDetail implements Serializable {
 
+    private boolean isFavor;
     private boolean vipFree;
     private boolean vipPassDanDian;
     private boolean vipLinkDanDian;
@@ -12,6 +13,14 @@ public class ProgramInfoDetail implements Serializable {
     private boolean vipLinkZhouQi;
     private boolean vipPassZhuanQu;
     private boolean vipLinkZhuanQu;
+
+    public boolean isFavor() {
+        return isFavor;
+    }
+
+    public void setFavor(boolean favor) {
+        isFavor = favor;
+    }
 
     public boolean isVipLinkDanDian() {
         return vipLinkDanDian;

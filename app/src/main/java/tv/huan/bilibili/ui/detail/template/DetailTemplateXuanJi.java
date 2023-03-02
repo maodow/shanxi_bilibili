@@ -25,6 +25,7 @@ import lib.kalu.leanback.presenter.ListTvEpisodesPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.Media;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.widget.DetailGridView;
 
 public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
 
@@ -136,21 +137,10 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
 
     /*****/
 
-    protected final void startPosition(@NonNull View v, @NonNull Media media, @NonNull int psoition) {
+    protected final void startPosition(@NonNull View v, @NonNull Media media, @NonNull int position) {
         try {
-            // 1
-            String cdnUrl = media.getCdnUrl();
-            Toast.makeText(v.getContext(), "position => " + cdnUrl, Toast.LENGTH_SHORT).show();
-            // 2
-            VerticalGridView gridView = (VerticalGridView) v.getParent().getParent().getParent();
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) gridView.getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setPlayingIndex(psoition);
-            // 3
-            gridView.smoothScrollToPosition(0);
-            // 4
-            itemBridgeAdapter.notifyItemChanged(0);
+            DetailGridView gridView = (DetailGridView) v.getParent().getParent().getParent();
+            gridView.startPosition(media, position);
         } catch (Exception e) {
         }
     }

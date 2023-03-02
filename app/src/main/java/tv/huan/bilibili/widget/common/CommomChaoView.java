@@ -2,6 +2,8 @@ package tv.huan.bilibili.widget.common;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Toast;
@@ -60,12 +62,21 @@ public final class CommomChaoView extends TextViewPlus {
         HeilongjiangApi.checkVip(getContext(), new OnCheckVipChangeListener() {
             @Override
             public void onPass() {
-                setText(getResources().getString(R.string.menu_chao_yes));
+                updateText(true);
             }
 
             @Override
             public void onFail() {
-                setText(getResources().getString(R.string.menu_chao_no));
+                updateText(false);
+            }
+        });
+    }
+
+    private void updateText(boolean succ) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                setText(getResources().getString(succ ? R.string.menu_chao_yes : R.string.menu_chao_no));
             }
         });
     }

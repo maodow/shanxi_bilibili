@@ -15,7 +15,8 @@ public final class HttpInterceptor extends OkhttpInterceptorStandard {
         HttpUrl.Builder builder = request.url().newBuilder()
                 .addQueryParameter("prodId", String.valueOf(BoxUtil.getProdId()))
                 .addQueryParameter("userId", BoxUtil.getCa())
-                .addQueryParameter("huanId", BoxUtil.getCa());
+                .addQueryParameter("huanId", BoxUtil.getCa())
+                .addQueryParameter("productId", "1");
         Request req = request.newBuilder().url(builder.toString()).build();
         return super.analysisRequest(requestTime, connection, req);
     }

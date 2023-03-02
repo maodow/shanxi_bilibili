@@ -173,18 +173,19 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                             ArrayList<ClassBean> classApis = new ArrayList<>();
                             List<GetSubChannelsByChannelBean.ClassesBean> classes = response.getData().getClasses();
                             // 筛选
+                            String name = getView().getString(R.string.filter_name);
                             ClassBean shaixuanApi = new ClassBean();
-                            shaixuanApi.setDrawableChecked(R.drawable.ic_filter_active);
+                            shaixuanApi.setDrawableChecked(R.drawable.ic_filter_focus);
                             shaixuanApi.setDrawableHighlight(R.drawable.ic_filter_focus);
                             shaixuanApi.setDrawableNormal(R.drawable.ic_filter);
-                            shaixuanApi.setText("筛选");
+                            shaixuanApi.setText(name);
                             int classId = getView().getIntExtra(FilterActivity.INTENT_CLASSID, 0);
                             shaixuanApi.setCode(String.valueOf(classId));
                             String secondTag = getView().getStringExtra(FilterActivity.INTENT_SECOND_TAG);
                             if (null == secondTag || secondTag.length() <= 0) {
-                                secondTag = "筛选";
+                                secondTag = name;
                             }
-                            shaixuanApi.setChecked("筛选".equals(secondTag));
+                            shaixuanApi.setChecked(name.equals(secondTag));
                             classApis.add(shaixuanApi);
                             // item
                             for (int i = 0; i < classes.size(); i++) {

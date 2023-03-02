@@ -87,14 +87,14 @@ dependencies {
     // autosize
     api files('libs/lib_autosize_v1.2.1_release.aar')
     // mvp
-    api files('libs/lib_frame_mvp_release_20230220.aar')
+    api files('libs/lib_frame_mvp_release_20230302.aar')
     // leanback
     api files('libs/lib_leanback_r1-2-0-alpha02-release.aar')
     // keyboard
     api files('libs/lib_keyboard_release_20230227.aar')
 //    api project(path: ':module_keyboard')
     // player
-    api files('libs/lib_mediaplayer_ui_release_20230216.aar')
+    api files('libs/lib_mediaplayer_ui_release_20230302.aar')
     api files('libs/lib_mediaplayer_exo_r2.18.3_ff4.4_audio_release_20230222.aar')
     // heilongjiang
     api files('libs/lib_huan_heilongjiang_release_20230224.aar')

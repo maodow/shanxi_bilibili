@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.detail.template;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.leanback.widget.Presenter;
 
+import org.json.JSONObject;
+
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -23,17 +26,18 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.listener.OnChangeListener;
-import lib.kalu.mediaplayer.util.ActivityUtils;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.InfoDialog;
+import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerView;
 
-public class DetailTemplatePlayer extends Presenter {
+public final class DetailTemplatePlayer extends Presenter {
     @Override
     public void onViewAttachedToWindow(ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
@@ -62,18 +66,33 @@ public class DetailTemplatePlayer extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
         LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
-        showData(viewHolder, o);
+
+        boolean updateOnlyFavor;
+        try {
+            updateOnlyFavor = ((DetailTemplatePlayerObject) o).isUpdateOnlyFavor();
+            ((DetailTemplatePlayerObject) o).setUpdateOnlyFavor(false);
+        } catch (Exception e) {
+            updateOnlyFavor = false;
+        }
+
+        if (updateOnlyFavor) {
+            try {
+                TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_favor);
+                textView.setText(viewHolder.view.getResources().getString(((DetailTemplatePlayerObject) o).isFavorStatus() ? R.string.detail_favor_yes : R.string.detail_favor_no));
+            } catch (Exception e) {
+            }
+        } else {
+            stopFloat(viewHolder.view);
+            stopPlayer(viewHolder.view);
+            showWarning(viewHolder.view, o);
+            showData(viewHolder, o);
+        }
     }
 
-    private final void showData(ViewHolder viewHolder, Object o) {
+    private void showData(ViewHolder viewHolder, Object o) {
         Observable.create(new ObservableOnSubscribe<String>() {
                     @Override
                     public void subscribe(ObservableEmitter<String> observableEmitter) throws Exception {
-
-                        PlayerView videoLayout = viewHolder.view.findViewById(R.id.detail_player_item_video);
-                        String url = videoLayout.getUrl();
-                        if (null != url && url.length() > 0)
-                            throw new Exception();
 
                         String cdnUrl;
                         try {
@@ -90,20 +109,19 @@ public class DetailTemplatePlayer extends Presenter {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
-                        stopPlayer(viewHolder.view);
-                        showWarning(viewHolder.view, o);
+                        LogUtil.log("DetailTemplatePlayer => showData => doOnSubscribe");
                     }
                 })
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        PlayerView videoLayout = viewHolder.view.findViewById(R.id.detail_player_item_video);
-                        videoLayout.restart();
+                        LogUtil.log("DetailTemplatePlayer => showData => doOnError => " + throwable.getMessage());
                     }
                 })
                 .doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(String s) {
+                        LogUtil.log("DetailTemplatePlayer => showData => doOnNext => playUrl = " + s);
                         hideWarning(viewHolder.view);
                         startPlayer(viewHolder.view, s);
                     }
@@ -112,7 +130,8 @@ public class DetailTemplatePlayer extends Presenter {
 
     }
 
-    private final void showWarning(View view, Object o) {
+    private void showWarning(View view, Object o) {
+        LogUtil.log("DetailTemplatePlayer => showWarning");
         try {
             view.findViewById(R.id.detail_player_item_logo).setVisibility(View.VISIBLE);
             view.findViewById(R.id.detail_player_item_cover).setVisibility(View.VISIBLE);
@@ -124,6 +143,17 @@ public class DetailTemplatePlayer extends Presenter {
         try {
             ImageView imageView = view.findViewById(R.id.detail_player_item_cover);
             GlideUtils.loadHz(imageView.getContext(), ((DetailTemplatePlayerObject) o).getImageUrl(), imageView);
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = view.findViewById(R.id.detail_player_item_favor);
+            textView.setText(view.getResources().getString(((DetailTemplatePlayerObject) o).isFavorStatus() ? R.string.detail_favor_yes : R.string.detail_favor_no));
+
+            JSONObject object = new JSONObject();
+            object.put("cid", ((DetailTemplatePlayerObject) o).getCid());
+            object.put("recClassId", ((DetailTemplatePlayerObject) o).getRecClassId());
+            textView.setTag(R.id.detail_player_item_favor, object);
+
         } catch (Exception e) {
         }
         try {
@@ -175,7 +205,8 @@ public class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private final void hideWarning(View viewGroup) {
+    private void hideWarning(View viewGroup) {
+        LogUtil.log("DetailTemplatePlayer => hideWarning");
         try {
             viewGroup.findViewById(R.id.detail_player_item_logo).setVisibility(View.GONE);
             viewGroup.findViewById(R.id.detail_player_item_cover).setVisibility(View.GONE);
@@ -186,16 +217,17 @@ public class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private final void startPlayer(View view, String s) {
+    private void startPlayer(View view, String s) {
+        LogUtil.log("DetailTemplatePlayer => startPlayer");
         try {
-            s = "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
             PlayerView videoLayout = view.findViewById(R.id.detail_player_item_video);
             videoLayout.start(s);
         } catch (Exception e) {
         }
     }
 
-    private final void stopPlayer(View view) {
+    private void stopPlayer(View view) {
+        LogUtil.log("DetailTemplatePlayer => stopPlayer");
         try {
             PlayerView videoLayout = view.findViewById(R.id.detail_player_item_video);
             videoLayout.stop();
@@ -204,7 +236,7 @@ public class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private final void stopPlayer(ViewHolder viewHolder, Object o) {
+    private void stopPlayer(ViewHolder viewHolder, Object o) {
         try {
             ViewGroup viewGroup = (ViewGroup) viewHolder.view.getParent().getParent().getParent();
             PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
@@ -213,7 +245,7 @@ public class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private final void stopFloat(View view) {
+    private void stopFloat(View view) {
         try {
             ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
             PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
@@ -222,7 +254,7 @@ public class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private final void startFloat(View view) {
+    private void startFloat(View view) {
         try {
             ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
             PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
@@ -231,7 +263,7 @@ public class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private final ViewHolder createViewHolder(ViewGroup viewGroup) {
+    private ViewHolder createViewHolder(ViewGroup viewGroup) {
         try {
             Context context = viewGroup.getContext();
             View view = LayoutInflater.from(context).inflate(R.layout.activity_detail_item_player, viewGroup, false);
@@ -239,42 +271,52 @@ public class DetailTemplatePlayer extends Presenter {
             view.findViewById(R.id.detail_player_item_info).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // 1
-                    Activity activity = ActivityUtils.getActivity(v.getContext());
-                    if (null == activity)
-                        return;
-                    // 2
-                    ViewGroup group = (ViewGroup) v.getParent();
-                    TextView v1 = group.findViewById(R.id.detail_player_item_title);
-                    String s1 = v1.getText().toString();
-                    TextView v2 = group.findViewById(R.id.detail_player_item_tag);
-                    String s2 = v2.getText().toString();
-                    TextView v3 = group.findViewById(R.id.detail_player_item_info);
-                    String s3 = v3.getText().toString();
-                    // 3
-                    Bundle bundle = new Bundle();
-                    bundle.putString(InfoDialog.BUNDLE_NAME, s1);
-                    bundle.putString(InfoDialog.BUNDLE_DATA1, s2);
-                    bundle.putString(InfoDialog.BUNDLE_DATA2, s3);
-                    // 4
-                    InfoDialog dialog = new InfoDialog();
-                    dialog.setArguments(bundle);
-                    dialog.show(((AppCompatActivity) activity).getSupportFragmentManager(), null);
-                    Toast.makeText(v.getContext(), "简介", Toast.LENGTH_SHORT).show();
+                    Activity activity = WrapperUtil.getWrapperActivity(v.getContext());
+                    LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
+                    if (null != activity && activity instanceof DetailActivity) {
+                        ViewGroup group = (ViewGroup) v.getParent();
+                        TextView v1 = group.findViewById(R.id.detail_player_item_title);
+                        String s1 = v1.getText().toString();
+                        TextView v2 = group.findViewById(R.id.detail_player_item_tag);
+                        String s2 = v2.getText().toString();
+                        TextView v3 = group.findViewById(R.id.detail_player_item_info);
+                        String s3 = v3.getText().toString();
+                        ((DetailActivity) activity).showDialog(s1, s2, s3);
+                    }
                 }
             });
             // 会员
             view.findViewById(R.id.detail_player_item_vip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "会员", Toast.LENGTH_SHORT).show();
+                    Activity activity = WrapperUtil.getWrapperActivity(v.getContext());
+                    LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
+                    if (null != activity && activity instanceof DetailActivity) {
+                        ((DetailActivity) activity).jumpVip();
+                    }
                 }
             });
             // 收藏
             view.findViewById(R.id.detail_player_item_favor).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "收藏", Toast.LENGTH_SHORT).show();
+                    Activity activity = WrapperUtil.getWrapperActivity(v.getContext());
+                    LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
+                    if (null != activity && activity instanceof DetailActivity) {
+                        try {
+                            JSONObject object = (JSONObject) v.getTag(R.id.detail_player_item_favor);
+                            String cid = object.optString("cid", "");
+                            String recClassId = object.optString("recClassId", "");
+                            String text = ((TextView) v).getText().toString();
+                            String s = v.getResources().getString(R.string.detail_favor_no);
+                            if (s.equalsIgnoreCase(text)) {
+                                ((DetailActivity) activity).addFavor(cid, recClassId);
+                            } else {
+                                ((DetailActivity) activity).cancleFavor(cid, recClassId);
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
                 }
             });
             // 全屏
@@ -309,6 +351,12 @@ public class DetailTemplatePlayer extends Presenter {
 
     public static class DetailTemplatePlayerObject {
 
+        private boolean updateOnlyFavor = false;
+
+        private String cid;
+        private String recClassId;
+        private boolean favorStatus;
+
         private String tag;
         private String title;
         private String info;
@@ -317,10 +365,42 @@ public class DetailTemplatePlayer extends Presenter {
         private String imageUrl;
         private String videoUrl;
         private boolean showVip;
-        private int playingIndex = 1;
+        private int playingIndex = 0;
+
+        public boolean isFavorStatus() {
+            return favorStatus;
+        }
+
+        public void setFavorStatus(boolean favorStatus) {
+            this.favorStatus = favorStatus;
+        }
+
+        public String getCid() {
+            return cid;
+        }
+
+        public void setCid(String cid) {
+            this.cid = cid;
+        }
+
+        public String getRecClassId() {
+            return recClassId;
+        }
+
+        public void setRecClassId(String recClassId) {
+            this.recClassId = recClassId;
+        }
+
+        public boolean isUpdateOnlyFavor() {
+            return updateOnlyFavor;
+        }
+
+        public void setUpdateOnlyFavor(boolean updateOnlyFavor) {
+            this.updateOnlyFavor = updateOnlyFavor;
+        }
 
         public int getPlayingIndex() {
-            return playingIndex;
+            return playingIndex + 1;
         }
 
         public void setPlayingIndex(int playingIndex) {
@@ -367,16 +447,18 @@ public class DetailTemplatePlayer extends Presenter {
             this.showVip = showVip;
         }
 
-        public String getImageUrl() {
-            return imageUrl;
-        }
-
         public void setImageUrl(String imageUrl) {
             this.imageUrl = imageUrl;
         }
 
+        public String getImageUrl() {
+            return "https://img1.baidu.com/it/u=1966616150,2146512490&fm=253&fmt=auto&app=138&f=JPEG?w=751&h=500";
+//            return imageUrl;
+        }
+
         public String getVideoUrl() {
-            return videoUrl;
+            return "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
+//            return videoUrl;
         }
 
         public void setVideoUrl(String videoUrl) {

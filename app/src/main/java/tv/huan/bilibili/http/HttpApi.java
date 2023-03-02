@@ -8,8 +8,6 @@ import java.util.List;
 import io.reactivex.Observable;
 import lib.kalu.frame.mvp.interceptor.OkhttpInterceptorStandard;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -18,13 +16,12 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 import tv.huan.bilibili.bean.AccessToken;
-import tv.huan.bilibili.bean.AddHistory;
 import tv.huan.bilibili.bean.Auth2Bean;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.BlackList;
-import tv.huan.bilibili.bean.DataBean;
 import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.FavBean;
+import tv.huan.bilibili.bean.FavorBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
@@ -39,6 +36,21 @@ import tv.huan.bilibili.bean.SpecialBean;
 import tv.huan.bilibili.bean.UrlType;
 
 public interface HttpApi {
+
+    // 添加收藏
+    @GET("data/addFavorite")
+    Observable<BaseBean<FavorBean>> addFavorite(@Query("cid") String cid,
+                                                @Query("classId") String classId);
+
+
+    // 取消收藏
+    @GET("data/cancelFavorite")
+    Observable<BaseBean<FavorBean>> cancelFavorite(@Query("cid") String cid);
+
+    // 查询收藏
+    @GET("data/checkFavorite")
+    Observable<BaseBean<FavorBean>> checkFavorite(@Query("cid") String cid,
+                                                  @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("log/report")
@@ -71,44 +83,8 @@ public interface HttpApi {
      * @return
      */
     @GET("apk/getHuanId")
-    Observable<DataBean<HuanInfo>> getHuanId(@Query("uid") String uid);
+    Observable<BaseBean<HuanInfo>> getHuanId(@Query("uid") String uid);
 
-
-    /**
-     * 添加收藏
-     *
-     * @param productId
-     * @param cid
-     * @param classId
-     * @return
-     */
-    @GET("data/addFavorite")
-    Observable<DataBean<AddHistory>> addFavorite(@Query("productId") String productId,
-                                                 @Query("cid") String cid,
-                                                 @Query("classId") String classId);
-
-
-    /**
-     * 取消收藏
-     *
-     * @param productId
-     * @param cid
-     * @return
-     */
-    @GET("data/cancelFavorite")
-    Observable<DataBean<AddHistory>> cancelFavorite(@Query("productId") String productId,
-                                                    @Query("cid") String cid);
-
-    /**
-     * 查询收藏
-     *
-     * @param productId
-     * @param cid
-     * @return
-     */
-    @GET("data/checkFavorite")
-    Observable<DataBean<AddHistory>> checkFavorite(@Query("productId") String productId,
-                                                   @Query("cid") String cid);
 
 
     /**
@@ -117,7 +93,7 @@ public interface HttpApi {
      * @param cid 专辑ID
      */
     @GET("media/getMediasByCid/{cid}")
-    Observable<DataBean<ProgramInfoDetail>> getMediasByCid(@Path("cid") String cid);
+    Observable<BaseBean<ProgramInfoDetail>> getMediasByCid(@Path("cid") String cid);
 
     /**
      * 获取影片详情
@@ -145,7 +121,7 @@ public interface HttpApi {
      * @return
      */
     @GET("album/getRecAlbumByClassId/{classId}")
-    Observable<DataBean<ProgramInfo>> getRecAlbumByClassId(
+    Observable<BaseBean<ProgramInfo>> getRecAlbumByClassId(
             @Path("classId") String classId,
             @Query("page") String page,
             @Query("size") String size);
@@ -345,14 +321,14 @@ public interface HttpApi {
      * @return zx 或hw 中兴或华为
      */
     @GET("getPlayUrlType")
-    Observable<DataBean<UrlType>> getUrlType(@Query("uid") String uid);
+    Observable<BaseBean<UrlType>> getUrlType(@Query("uid") String uid);
 
 
     /**
      * 获取access_token
      */
     @GET("apk/get_token")
-    Observable<DataBean<AccessToken>> getAccessToken(@Query("uid") String uid);
+    Observable<BaseBean<AccessToken>> getAccessToken(@Query("uid") String uid);
 
 
     /**
@@ -365,7 +341,7 @@ public interface HttpApi {
      * 获取access_token
      */
     @GET("data/saveIssueBox")
-    Observable<DataBean> reportBlackDevInfo(@Query("mac") String mac,
+    Observable<BaseBean> reportBlackDevInfo(@Query("mac") String mac,
                                             @Query("boxType") String boxType,
                                             @Query("sysVersion") String sysVersion,
                                             @Query("osVersion") String osVersion);

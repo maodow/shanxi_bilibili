@@ -3,8 +3,6 @@ package tv.huan.bilibili.ui.detail;
 import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -17,7 +15,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +30,7 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.base.BasePresenterImpl;
+import tv.huan.bilibili.bean.FavorBean;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.bilibili.widget.player.PlayerView;
@@ -50,6 +48,7 @@ import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanJi;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.utils.Constants;
+import tv.huan.keyboard.KeyboardLinearLayout;
 
 public class DetailPresenter extends BasePresenterImpl<DetailView> {
     public DetailPresenter(@NonNull DetailView detailView) {
@@ -317,6 +316,32 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         return data;
                     }
                 })
+                // 收藏状态
+                .flatMap(new Function<ProgramInfoDetail, ObservableSource<BaseBean<FavorBean>>>() {
+                    @Override
+                    public ObservableSource<BaseBean<FavorBean>> apply(ProgramInfoDetail programInfoDetail) {
+                        String s = new Gson().toJson(programInfoDetail);
+                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                        return HttpClient.getHttpClient().getHttpApi().checkFavorite(cid, s);
+                    }
+                })
+                // 数据处理
+                .map(new Function<BaseBean<FavorBean>, ProgramInfoDetail>() {
+                    @Override
+                    public ProgramInfoDetail apply(BaseBean<FavorBean> favorBeanBaseBean) {
+                        ProgramInfoDetail programInfoDetail;
+                        try {
+                            programInfoDetail = new Gson().fromJson(favorBeanBaseBean.getExtra(), ProgramInfoDetail.class);
+                        } catch (Exception e) {
+                            programInfoDetail = new ProgramInfoDetail();
+                        }
+                        try {
+                            programInfoDetail.setFavor(favorBeanBaseBean.getData().isFavor());
+                        } catch (Exception e) {
+                        }
+                        return programInfoDetail;
+                    }
+                })
                 // 播放器
                 .map(new Function<ProgramInfoDetail, ProgramInfoDetail>() {
                     @Override
@@ -369,6 +394,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             object.setTitle(data.getAlbum().getTitle());
                             object.setInfo(data.getAlbum().getInfo());
                             object.setPicList(data.getAlbum().getPicList());
+                            object.setCid(data.getAlbum().getCid());
+                            object.setRecClassId(data.getRecClassId());
+                            object.setFavorStatus(data.isFavor());
                             ((ArrayObjectAdapter) objectAdapter).add(object);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -606,6 +634,102 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         getView().updateVip(aBoolean);
                     }
                 }).subscribe());
+    }
+
+    protected void addFavor(@NonNull String cid, @NonNull String recClassId) {
+
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        observableEmitter.onNext(true);
+                    }
+                })
+                .flatMap(new Function<Boolean, Observable<BaseBean<FavorBean>>>() {
+                    @Override
+                    public Observable<BaseBean<FavorBean>> apply(Boolean aBoolean) {
+                        return HttpClient.getHttpClient().getHttpApi().addFavorite(cid, recClassId);
+                    }
+                })
+                .map(new Function<BaseBean<FavorBean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseBean<FavorBean> favorBeanBaseBean) {
+                        try {
+                            return favorBeanBaseBean.getData().isFavor();
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                    }
+                })
+                .doOnNext(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) {
+                        getView().hideLoading();
+                        getView().updateFavor(true);
+                    }
+                })
+                .subscribe());
+    }
+
+    protected void cancleFavor(@NonNull String cid) {
+
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        observableEmitter.onNext(true);
+                    }
+                })
+                .flatMap(new Function<Boolean, Observable<BaseBean<FavorBean>>>() {
+                    @Override
+                    public Observable<BaseBean<FavorBean>> apply(Boolean aBoolean) {
+                        return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
+                    }
+                })
+                .map(new Function<BaseBean<FavorBean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseBean<FavorBean> favorBeanBaseBean) {
+                        try {
+                            return favorBeanBaseBean.getData().isFavor();
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                    }
+                })
+                .doOnNext(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) {
+                        getView().hideLoading();
+                        getView().updateFavor(false);
+                    }
+                })
+                .subscribe());
     }
 
     protected boolean dispatchEvent(KeyEvent event) {
