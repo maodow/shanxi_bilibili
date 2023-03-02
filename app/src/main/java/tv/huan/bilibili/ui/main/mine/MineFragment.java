@@ -23,7 +23,11 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
 
     @Override
     public void refreshContent(boolean update, int size) {
-        notifyItemRangeChanged(R.id.mine_list, 0, size);
+        if (update) {
+            notifyItemRangeChanged(R.id.mine_list, 0, size);
+        } else {
+            notifyDataSetChanged(R.id.mine_list);
+        }
     }
 
     @Override

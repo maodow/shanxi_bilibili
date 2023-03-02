@@ -77,6 +77,18 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
+    public void nextPlayer(@NonNull int position) {
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
+            playerObject.setPlayingIndex(position);
+            playerObject.setUpdateOnlyVideoStop(true);
+            itemBridgeAdapter.notifyItemChanged(0);
+        } catch (Exception e) {
+        }
+    }
+
     public boolean containsXuanJi() {
         boolean contains = false;
         try {

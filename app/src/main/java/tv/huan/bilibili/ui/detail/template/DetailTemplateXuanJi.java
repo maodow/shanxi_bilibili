@@ -94,7 +94,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
         try {
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null != activity && activity instanceof DetailActivity) {
-                ((DetailActivity) activity).stopPlayer();
+                ((DetailActivity) activity).nextPlayer(position);
                 ((DetailActivity) activity).delayPlayer(position);
             }
         } catch (Exception e) {
@@ -141,12 +141,4 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
 
     public static class DetailTemplateXuanJiList extends ArrayList<Media> {
     }
-
-//    protected final void startPosition(@NonNull View v, @NonNull Media media, @NonNull int position) {
-//        try {
-//            DetailGridView gridView = (DetailGridView) v.getParent().getParent().getParent();
-//            gridView.startPosition(media, position);
-//        } catch (Exception e) {
-//        }
-//    }
 }

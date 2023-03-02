@@ -165,7 +165,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                                 FavBean.ItemBean itemBean = mDatas.get(position);
                                 int jumpType = itemBean.getJumpType();
                                 Intent intent = new Intent(v.getContext(), CenterActivity.class);
-                                intent.putExtra(CenterActivity.INTENT_FAVORY, jumpType == 0);
+                                intent.putExtra(CenterActivity.INTENT_FAVORY, jumpType != 0);
                                 ((Fragment) getView()).getActivity().startActivityForResult(intent, 1001);
                             }
                         }

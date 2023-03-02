@@ -100,6 +100,12 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
+    public void nextPlayer(int position) {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.nextPlayer(position);
+    }
+
+    @Override
     public void stopPlayer() {
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.stopPlayer();

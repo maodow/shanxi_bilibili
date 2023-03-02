@@ -20,6 +20,6 @@ public interface DetailView extends BaseViewImpl {
 
     void delayPlayer(int position);
     void startPlayer(int position);
-
+    void nextPlayer(int position);
     void stopPlayer();
 }

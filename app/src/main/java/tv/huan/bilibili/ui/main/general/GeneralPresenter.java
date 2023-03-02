@@ -302,7 +302,7 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                             int channelId = getView().getIntExtra(GeneralFragment.BUNDLE_CHANNELID, 0);
                             String name = getView().getStringExtra(GeneralFragment.BUNDLE_NAME);
                             reportChannelLoadFinished(channelId, name);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                         }
                         return aBoolean;
                     }
@@ -351,17 +351,14 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
         // clean
         ((ArrayObjectAdapter) objectAdapter).clear(false);
 
-//        for (int i = 0; i < size; i++) {
-//            GetSubChannelsByChannelBean.ListBean bean = list.get(i);
-//            if (null == bean)
-//                continue;
-//            List<TemplateBean> templateData = bean.getTemplateData();
-//            int preTemplate = bean.getPreTemplate();
-//            if (preTemplate == 4) {
-//
-////                addPresenter((ArrayObjectAdapter) objectAdapter, -1, null);
-////                addPresenter((ArrayObjectAdapter) objectAdapter, -2, null);
-//
+        // 1
+        for (int i = 0; i < size; i++) {
+            GetSubChannelsByChannelBean.ListBean bean = list.get(i);
+            if (null == bean)
+                continue;
+            List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
+            int preTemplate = bean.getPreTemplate();
+//            if (preTemplate == 17) {
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 1, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 2, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 3, templateData);
@@ -380,25 +377,20 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 16, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 17, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 18, templateData);
-//                break;
-//            }
-//        }
-
-        // 1
-        for (int i = 0; i < size; i++) {
-            GetSubChannelsByChannelBean.ListBean bean = list.get(i);
-            if (null == bean)
-                continue;
-            List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
-            int preTemplate = bean.getPreTemplate();
-            if (preTemplate == 17) {
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
 //                addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 1, templateData);
-//                addPresenter((ArrayObjectAdapter) objectAdapter, 16, templateData);
+//                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
+//                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
+//            }
+
+            if (preTemplate <= 18) {
+                addPresenter((ArrayObjectAdapter) objectAdapter, preTemplate, templateData);
+            } else if (preTemplate == 19) {
+                addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
+            } else if (preTemplate == 20) {
+                addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
+            } else if (preTemplate == 21) {
+                addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
             }
-            addPresenter((ArrayObjectAdapter) objectAdapter, preTemplate, templateData);
         }
         // 2
         addPresenter((ArrayObjectAdapter) objectAdapter, -2, null);
@@ -524,6 +516,9 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
             GeneralTemplate18.GeneralTemplate18List list = new GeneralTemplate18.GeneralTemplate18List();
             list.addAll(datas);
             object = list;
+        }
+        // 模板19
+        else if (19 == templateCode) {
         }
         // 模板20
         else if (20 == templateCode) {
