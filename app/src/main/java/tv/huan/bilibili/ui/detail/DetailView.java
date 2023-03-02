@@ -8,8 +8,6 @@ public interface DetailView extends BaseViewImpl {
 
     void refreshContent();
 
-    void updateVip(boolean show);
-
     void showDialog(@NonNull String title, @NonNull String data1, @NonNull String data2);
 
     void cancleFavor(@NonNull String cid, @NonNull String recClassId);
@@ -19,4 +17,9 @@ public interface DetailView extends BaseViewImpl {
     void updateFavor(boolean status);
 
     void jumpVip();
+
+    void delayPlayer(int position);
+    void startPlayer(int position);
+
+    void stopPlayer();
 }

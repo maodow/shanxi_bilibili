@@ -31,6 +31,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         if (extra) {
             setResult(2002);
         }
+        stopPlayer();
         super.finish();
     }
 
@@ -52,20 +53,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public void refreshContent() {
         notifyDataSetChanged(R.id.detail_list);
-    }
-
-    @Override
-    public void updateVip(boolean show) {
-        try {
-            VerticalGridView gridView = findViewById(R.id.detail_list);
-            DetailTemplatePlayer.DetailTemplatePlayerObject adapter = gridView.getAdapter(0);
-            if (null != adapter) {
-                adapter.setShowVip(show);
-                gridView.smoothScrollToPosition(0);
-                gridView.notifyItemChanged(0);
-            }
-        } catch (Exception e) {
-        }
     }
 
     @Override
@@ -99,5 +86,22 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public void jumpVip() {
         HeilongjiangApi.jumpVip(getApplicationContext());
+    }
+
+    @Override
+    public void delayPlayer(int position) {
+        getPresenter().delayPlayer(position);
+    }
+
+    @Override
+    public void startPlayer(int position) {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.startPlayer(position);
+    }
+
+    @Override
+    public void stopPlayer() {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.stopPlayer();
     }
 }

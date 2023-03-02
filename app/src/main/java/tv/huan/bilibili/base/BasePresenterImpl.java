@@ -39,7 +39,6 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
         return (M) super.getView();
     }
 
-
     protected final void reportAppActivation() {
         boolean containsInstallTime = getView().containsInstallTime();
         if (containsInstallTime)

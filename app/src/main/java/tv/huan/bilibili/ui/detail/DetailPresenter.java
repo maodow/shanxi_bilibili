@@ -576,42 +576,43 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public Boolean apply(ProgramInfoDetail programInfoDetail) {
 
-                        boolean show;
-                        try {
-
-                            boolean passZhouQi = programInfoDetail.isVipPassZhouQi();
-                            boolean linkZhouQi = programInfoDetail.isVipLinkZhouQi();
-
-                            boolean linkZhuanQu = programInfoDetail.isVipLinkZhuanQu();
-                            boolean passZhuanQu = programInfoDetail.isVipPassZhuanQu();
-
-                            boolean linkDanDian = programInfoDetail.isVipLinkDanDian();
-                            boolean passDanDian = programInfoDetail.isVipPassDanDian();
-
-                            // 周期会员
-                            if (linkZhouQi && passZhouQi) {
-                                show = false;
-                            }
-                            // 专区会员
-                            else if (linkZhuanQu && passZhuanQu) {
-                                show = false;
-                            }
-                            // 单点会员
-                            else if (linkDanDian && passDanDian) {
-                                show = false;
-                            }
-                            // 存在关联, 未购买
-                            else if (linkZhouQi || linkZhuanQu || linkDanDian) {
-                                show = true;
-                            }
-                            // 其他情况, 隐藏
-                            else {
-                                show = false;
-                            }
-                        } catch (Exception e) {
-                            show = false;
-                        }
-                        return show;
+//                        boolean show;
+//                        try {
+//
+//                            boolean passZhouQi = programInfoDetail.isVipPassZhouQi();
+//                            boolean linkZhouQi = programInfoDetail.isVipLinkZhouQi();
+//
+//                            boolean linkZhuanQu = programInfoDetail.isVipLinkZhuanQu();
+//                            boolean passZhuanQu = programInfoDetail.isVipPassZhuanQu();
+//
+//                            boolean linkDanDian = programInfoDetail.isVipLinkDanDian();
+//                            boolean passDanDian = programInfoDetail.isVipPassDanDian();
+//
+//                            // 周期会员
+//                            if (linkZhouQi && passZhouQi) {
+//                                show = false;
+//                            }
+//                            // 专区会员
+//                            else if (linkZhuanQu && passZhuanQu) {
+//                                show = false;
+//                            }
+//                            // 单点会员
+//                            else if (linkDanDian && passDanDian) {
+//                                show = false;
+//                            }
+//                            // 存在关联, 未购买
+//                            else if (linkZhouQi || linkZhuanQu || linkDanDian) {
+//                                show = true;
+//                            }
+//                            // 其他情况, 隐藏
+//                            else {
+//                                show = false;
+//                            }
+//                        } catch (Exception e) {
+//                            show = false;
+//                        }
+                        delayPlayer(0);
+                        return true;
                     }
                 }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
@@ -627,10 +628,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(Boolean aBoolean) {
                         getView().hideLoading();
-                        // 1
                         getView().refreshContent();
-                        // 2
-                        getView().updateVip(aBoolean);
                     }
                 }).subscribe());
     }
@@ -749,5 +747,23 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
             }
         }
         return false;
+    }
+
+    protected final void delayPlayer(int position) {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        observableEmitter.onNext(true);
+                    }
+                })
+                .delay(4, TimeUnit.SECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnNext(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) {
+                        getView().startPlayer(position);
+                    }
+                })
+                .subscribe());
     }
 }

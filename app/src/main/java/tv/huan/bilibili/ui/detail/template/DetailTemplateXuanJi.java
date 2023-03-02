@@ -3,6 +3,7 @@
 package tv.huan.bilibili.ui.detail.template;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -21,9 +22,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.leanback.presenter.ListTvEpisodesPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.Media;
+import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 
@@ -89,7 +92,11 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
     @Override
     protected void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position) {
         try {
-            startPosition(v, item, position);
+            Activity activity = WrapperUtil.getWrapperActivity(context);
+            if (null != activity && activity instanceof DetailActivity) {
+                ((DetailActivity) activity).stopPlayer();
+                ((DetailActivity) activity).delayPlayer(position);
+            }
         } catch (Exception e) {
         }
     }
@@ -135,13 +142,11 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
     public static class DetailTemplateXuanJiList extends ArrayList<Media> {
     }
 
-    /*****/
-
-    protected final void startPosition(@NonNull View v, @NonNull Media media, @NonNull int position) {
-        try {
-            DetailGridView gridView = (DetailGridView) v.getParent().getParent().getParent();
-            gridView.startPosition(media, position);
-        } catch (Exception e) {
-        }
-    }
+//    protected final void startPosition(@NonNull View v, @NonNull Media media, @NonNull int position) {
+//        try {
+//            DetailGridView gridView = (DetailGridView) v.getParent().getParent().getParent();
+//            gridView.startPosition(media, position);
+//        } catch (Exception e) {
+//        }
+//    }
 }

@@ -66,69 +66,51 @@ public final class DetailTemplatePlayer extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
         LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
+        showData(viewHolder.view, o);
+    }
 
-        boolean updateOnlyFavor;
+    private void showData(View view, Object o) {
+        LogUtil.log("DetailTemplatePlayer => showData");
+
+        boolean updateOnlyFavor;  // 收藏状态
+        boolean updateOnlyVideoStop;  // 暂停视频
+        boolean updateOnlyVideoPlaying;  // 播放视频
         try {
             updateOnlyFavor = ((DetailTemplatePlayerObject) o).isUpdateOnlyFavor();
             ((DetailTemplatePlayerObject) o).setUpdateOnlyFavor(false);
         } catch (Exception e) {
             updateOnlyFavor = false;
         }
+        try {
+            updateOnlyVideoPlaying = ((DetailTemplatePlayerObject) o).isUpdateOnlyVideoPlaying();
+            ((DetailTemplatePlayerObject) o).setUpdateOnlyVideoPlaying(false);
+        } catch (Exception e) {
+            updateOnlyVideoPlaying = false;
+        }
+        try {
+            updateOnlyVideoStop = ((DetailTemplatePlayerObject) o).isUpdateOnlyVideoStop();
+            ((DetailTemplatePlayerObject) o).setUpdateOnlyVideoStop(false);
+        } catch (Exception e) {
+            updateOnlyVideoStop = false;
+        }
 
         if (updateOnlyFavor) {
             try {
-                TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_favor);
+                TextView textView = view.findViewById(R.id.detail_player_item_favor);
                 textView.setSelected(((DetailTemplatePlayerObject) o).isFavorStatus());
-                textView.setText(viewHolder.view.getResources().getString(((DetailTemplatePlayerObject) o).isFavorStatus() ? R.string.detail_favor_yes : R.string.detail_favor_no));
+                textView.setText(view.getResources().getString(((DetailTemplatePlayerObject) o).isFavorStatus() ? R.string.detail_favor_yes : R.string.detail_favor_no));
             } catch (Exception e) {
             }
+        } else if (updateOnlyVideoPlaying) {
+            hideWarning(view);
+            startPlayer(view, o);
+        } else if (updateOnlyVideoStop) {
+            showWarning(view, o);
+            stopFloat(view);
+            stopPlayer(view);
         } else {
-            stopFloat(viewHolder.view);
-            stopPlayer(viewHolder.view);
-            showWarning(viewHolder.view, o);
-            showData(viewHolder, o);
+            showWarning(view, o);
         }
-    }
-
-    private void showData(ViewHolder viewHolder, Object o) {
-        Observable.create(new ObservableOnSubscribe<String>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<String> observableEmitter) throws Exception {
-
-                        String cdnUrl;
-                        try {
-                            DetailTemplatePlayerObject data = (DetailTemplatePlayerObject) o;
-                            cdnUrl = data.getVideoUrl();
-                        } catch (Exception e) {
-                            cdnUrl = null;
-                        }
-                        observableEmitter.onNext(cdnUrl);
-                    }
-                })
-                .delay(4, TimeUnit.SECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) {
-                        LogUtil.log("DetailTemplatePlayer => showData => doOnSubscribe");
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        LogUtil.log("DetailTemplatePlayer => showData => doOnError => " + throwable.getMessage());
-                    }
-                })
-                .doOnNext(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) {
-                        LogUtil.log("DetailTemplatePlayer => showData => doOnNext => playUrl = " + s);
-                        hideWarning(viewHolder.view);
-                        startPlayer(viewHolder.view, s);
-                    }
-                })
-                .subscribe();
-
     }
 
     private void showWarning(View view, Object o) {
@@ -218,11 +200,13 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private void startPlayer(View view, String s) {
+    private void startPlayer(View view, Object o) {
         LogUtil.log("DetailTemplatePlayer => startPlayer");
         try {
+            DetailTemplatePlayerObject data = (DetailTemplatePlayerObject) o;
+            String cdnUrl = data.getVideoUrl();
             PlayerView videoLayout = view.findViewById(R.id.detail_player_item_video);
-            videoLayout.start(s);
+            videoLayout.start(cdnUrl);
         } catch (Exception e) {
         }
     }
@@ -353,6 +337,8 @@ public final class DetailTemplatePlayer extends Presenter {
     public static class DetailTemplatePlayerObject {
 
         private boolean updateOnlyFavor = false;
+        private boolean updateOnlyVideoPlaying = false;
+        private boolean updateOnlyVideoStop = false;
 
         private String cid;
         private String recClassId;
@@ -367,6 +353,22 @@ public final class DetailTemplatePlayer extends Presenter {
         private String videoUrl;
         private boolean showVip;
         private int playingIndex = 0;
+
+        public boolean isUpdateOnlyVideoPlaying() {
+            return updateOnlyVideoPlaying;
+        }
+
+        public void setUpdateOnlyVideoPlaying(boolean updateOnlyVideoPlaying) {
+            this.updateOnlyVideoPlaying = updateOnlyVideoPlaying;
+        }
+
+        public boolean isUpdateOnlyVideoStop() {
+            return updateOnlyVideoStop;
+        }
+
+        public void setUpdateOnlyVideoStop(boolean updateOnlyVideoStop) {
+            this.updateOnlyVideoStop = updateOnlyVideoStop;
+        }
 
         public boolean isFavorStatus() {
             return favorStatus;
@@ -453,8 +455,8 @@ public final class DetailTemplatePlayer extends Presenter {
         }
 
         public String getImageUrl() {
-            return "https://img1.baidu.com/it/u=1966616150,2146512490&fm=253&fmt=auto&app=138&f=JPEG?w=751&h=500";
-//            return imageUrl;
+//            return "https://img1.baidu.com/it/u=1966616150,2146512490&fm=253&fmt=auto&app=138&f=JPEG?w=751&h=500";
+            return imageUrl;
         }
 
         public String getVideoUrl() {

@@ -54,12 +54,24 @@ public final class DetailGridView extends LeanBackVerticalGridView {
 
     /*********/
 
-    public void startPosition(@NonNull Media media, @NonNull int position) {
+    public void stopPlayer() {
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
+            playerObject.setUpdateOnlyVideoStop(true);
+            itemBridgeAdapter.notifyItemChanged(0);
+        } catch (Exception e) {
+        }
+    }
+
+    public void startPlayer(@NonNull int position) {
         try {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
             DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
             playerObject.setPlayingIndex(position);
+            playerObject.setUpdateOnlyVideoPlaying(true);
             itemBridgeAdapter.notifyItemChanged(0);
         } catch (Exception e) {
         }
@@ -116,14 +128,4 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         } catch (Exception e) {
         }
     }
-
-//    public interface OnDetailFunctionChnageListener {
-//
-//        void startPosition(@NonNull int position);
-//        void showDiaog(@NonNull String s);
-//
-//        void startFavor();
-//
-//        void cancleFavor();
-//    }
 }
