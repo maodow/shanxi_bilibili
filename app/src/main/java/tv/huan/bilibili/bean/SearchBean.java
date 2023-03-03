@@ -2,6 +2,8 @@ package tv.huan.bilibili.bean;
 
 import androidx.annotation.Keep;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,60 +14,25 @@ import java.util.List;
 @Keep
 public class SearchBean implements Serializable {
 
-    private int page;
-    private int size;
-    private int total;
-    private Object pages;
-    private int offset;
-    private Object classification;
     private List<ItemBean> albums;
 
-    public int getPage() {
-        return page;
+    private List<KeyBean> keys;
+    private List<ItemBean> recommends;
+
+    public List<KeyBean> getKeys() {
+        return keys;
     }
 
-    public void setPage(int page) {
-        this.page = page;
+    public void setKeys(List<KeyBean> keys) {
+        this.keys = keys;
     }
 
-    public int getSize() {
-        return size;
+    public List<ItemBean> getRecommends() {
+        return recommends;
     }
 
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
-    public Object getPages() {
-        return pages;
-    }
-
-    public void setPages(Object pages) {
-        this.pages = pages;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
-    public Object getClassification() {
-        return classification;
-    }
-
-    public void setClassification(Object classification) {
-        this.classification = classification;
+    public void setRecommends(List<ItemBean> recommends) {
+        this.recommends = recommends;
     }
 
     public List<ItemBean> getAlbums() {
@@ -77,30 +44,118 @@ public class SearchBean implements Serializable {
     }
 
     @Keep
+    public static class KeyBean implements Serializable {
+
+        private int id;
+        private String name;
+        private String poster;
+        private int pos;
+        private int status;
+        private int classId;
+        private String cid;
+        private String jumpUrl;
+        private int platformId;
+        private String type;
+        private String payStatus;
+
+        public String getPayStatus() {
+            return payStatus;
+        }
+
+        public void setPayStatus(String payStatus) {
+            this.payStatus = payStatus;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPoster() {
+            return poster;
+        }
+
+        public void setPoster(String poster) {
+            this.poster = poster;
+        }
+
+        public int getPos() {
+            return pos;
+        }
+
+        public void setPos(int pos) {
+            this.pos = pos;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public int getClassId() {
+            return classId;
+        }
+
+        public void setClassId(int classId) {
+            this.classId = classId;
+        }
+
+        public String getCid() {
+            return cid;
+        }
+
+        public void setCid(String cid) {
+            this.cid = cid;
+        }
+
+        public String getJumpUrl() {
+            return jumpUrl;
+        }
+
+        public void setJumpUrl(String jumpUrl) {
+            this.jumpUrl = jumpUrl;
+        }
+
+        public int getPlatformId() {
+            return platformId;
+        }
+
+        public void setPlatformId(int platformId) {
+            this.platformId = platformId;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+    }
+
+    @Keep
     public static class ItemBean extends ImageBean implements JumpBean, Serializable {
 
         private String cid;
         private String title;
-        private int type;
-        private int payStatus;
-        private String publishDate;
-        private int productType;
-        private String pic;
+        private String name;
 
-        public String getPic() {
-            return pic;
-        }
-
-        public void setPic(String pic) {
-            this.pic = pic;
-        }
-
-        public int getProductType() {
-            return productType;
-        }
-
-        public void setProductType(int productType) {
-            this.productType = productType;
+        public void setName(String name) {
+            this.name = name;
         }
 
         @Override
@@ -117,45 +172,23 @@ public class SearchBean implements Serializable {
             return cid;
         }
 
-        @Override
-        public String getName() {
-            return getTitle();
-        }
-
         public void setCid(String cid) {
             this.cid = cid;
         }
 
-        public String getTitle() {
-            return title;
+        public String getName() {
+            if (null != title && title.length() > 0) {
+                return title;
+            } else if (null != name && name.length() > 0) {
+                return name;
+            } else {
+                return null;
+            }
         }
 
         public void setTitle(String title) {
             this.title = title;
         }
 
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public int getPayStatus() {
-            return payStatus;
-        }
-
-        public void setPayStatus(int payStatus) {
-            this.payStatus = payStatus;
-        }
-
-        public String getPublishDate() {
-            return publishDate;
-        }
-
-        public void setPublishDate(String publishDate) {
-            this.publishDate = publishDate;
-        }
     }
 }

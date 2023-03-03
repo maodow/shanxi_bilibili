@@ -65,6 +65,16 @@ public class JumpUtil {
         }
     }
 
+    public static void nextDetailFromSearch(@NonNull Context context, @NonNull String cid, @NonNull String keys) {
+        if (null != cid && cid.length() > 0) {
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra(DetailActivity.INTENT_CID, cid);
+            intent.putExtra(DetailActivity.INTENT_FROM_SEARCH, true);
+            intent.putExtra(DetailActivity.INTENT_FROM_SEARCH_KEY, keys);
+            context.startActivity(intent);
+        }
+    }
+
     public static void nextFilter(@NonNull Context context, @NonNull JumpBean data) {
         try {
             String name = data.getFilterSecondTag();

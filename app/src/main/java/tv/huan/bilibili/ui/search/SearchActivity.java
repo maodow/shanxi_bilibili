@@ -24,7 +24,7 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
         // adapter
         getPresenter().setAdapter();
         // request
-        getPresenter().getSearchRecommend();
+        getPresenter().request(null);
         // listener
         findViewById(R.id.search_clean).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,8 +44,8 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
         keyboardView.setOnKeyboardInputListener(new OnKeyboardInputListener() {
             @Override
             public void onInput(String s) {
-                setText(R.id.search_input, s);
-                getPresenter().searchBySpell();
+                showInput(s);
+                getPresenter().request(s);
             }
         });
     }
@@ -58,5 +58,10 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
     @Override
     public void showTitle(@NonNull String s) {
         setText(R.id.keyboard_title, s);
+    }
+
+    @Override
+    public void showInput(@NonNull String s) {
+        setText(R.id.search_input, s);
     }
 }

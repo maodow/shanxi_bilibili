@@ -165,10 +165,26 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public ObservableSource<Auth2Bean> apply(BaseBean<ProgramInfoDetail> programInfoDetailBaseBean) {
 
-                        // 上报
+                        // 上报 => 详情页加载完成
                         try {
-                            String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                            reportDetailLoadFinished(cid);
+                            String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
+                            if (null != cid && cid.length() > 0) {
+                                reportDetailLoadFinished(cid);
+                            }
+                        } catch (Exception e) {
+                        }
+                        // 上报 => 来自搜索
+                        try {
+                            boolean booleanExtra = getView().getBooleanExtra(DetailActivity.INTENT_FROM_SEARCH, false);
+                            if (booleanExtra) {
+                                String keys = getView().getStringExtra(DetailActivity.INTENT_FROM_SEARCH_KEY, null);
+                                if (null != keys && keys.length() > 0) {
+                                    String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
+                                    if (null != cid && cid.length() > 0) {
+                                        reportSearchResultItemClicked(keys, cid);
+                                    }
+                                }
+                            }
                         } catch (Exception e) {
                         }
 

@@ -4,7 +4,7 @@
 
     <string name="detail_warning">即将为您播放</string>
 
-    <string name="search_warning">请输入影片首字母或全拼</string>
+    <string name="search_input">请输入首字母</string>
     <string name="search_hot">热搜影片</string>
     <string name="search_clean">清空</string>
     <string name="search_delete">退格</string>

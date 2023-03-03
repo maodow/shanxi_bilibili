@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -28,11 +30,11 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.SearchBean;
-import tv.huan.bilibili.bean.SearchRecommendBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.keyboard.KeyboardLinearLayout;
 
 public class SearchPresenter extends BasePresenterImpl<SearchView> {
@@ -90,12 +92,10 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                             int position = holder.getAbsoluteAdapterPosition();
                             if (position >= 0) {
                                 SearchBean.ItemBean itemBean = mData.get(position);
-                                JumpUtil.next(v.getContext(), itemBean);
-                                String cid = itemBean.getCid();
                                 KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
                                 String result = keyboardView.getInput();
                                 String lowerCase = result.toLowerCase();
-                                reportSearchResultItemClicked(lowerCase, cid);
+                                JumpUtil.nextDetailFromSearch(v.getContext(), itemBean.getCid(), lowerCase);
                             }
                         }
                     });
@@ -137,33 +137,53 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
         });
     }
 
-    protected void searchBySpell() {
+    protected void request(String s) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        observableEmitter.onNext(true);
+                    public void subscribe(ObservableEmitter<Boolean> emitter) {
+                        emitter.onNext(null != s && s.length() >= 0);
                     }
                 })
                 .flatMap(new Function<Boolean, Observable<BaseBean<SearchBean>>>() {
                     @Override
                     public Observable<BaseBean<SearchBean>> apply(Boolean aBoolean) {
-                        KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
-                        String result = keyboardView.getInput();
-                        String lowerCase = result.toLowerCase();
-                        return HttpClient.getHttpClient().getHttpApi().searchBySpell(lowerCase, 0, Integer.MAX_VALUE);
+                        // 搜索key
+                        if (aBoolean) {
+                            return HttpClient.getHttpClient().getHttpApi().searchBySpell(s, 0, Integer.MAX_VALUE, "1");
+                        }
+                        // 搜索推荐
+                        else {
+                            return HttpClient.getHttpClient().getHttpApi().getSearchRecommend(BoxUtil.getProdId(), Integer.MAX_VALUE, "2");
+                        }
                     }
                 })
                 .map(new Function<BaseBean<SearchBean>, Boolean>() {
                     @Override
                     public Boolean apply(BaseBean<SearchBean> searchBeanBaseBean) {
-                        try {
-                            List<SearchBean.ItemBean> beans = searchBeanBaseBean.getData().getAlbums();
-                            mData.clear();
-                            mData.addAll(beans);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
+                        mData.clear();
+                        String extra = searchBeanBaseBean.getExtra();
+                        LogUtil.log("SearchPresenter => request => extra = " + extra);
+                        // 搜索key
+                        if ("1".equals(extra)) {
+                            LogUtil.log("SearchPresenter => request => 搜索key");
+                            List<SearchBean.ItemBean> albums = searchBeanBaseBean.getData().getAlbums();
+                            if (null != albums && albums.size() > 0) {
+                                mData.addAll(albums);
+                            }
                         }
+                        // 搜索推荐
+                        else if ("2".equals(extra)) {
+                            LogUtil.log("SearchPresenter => request => 搜索推荐");
+                            List<SearchBean.ItemBean> recommends = searchBeanBaseBean.getData().getRecommends();
+                            if (null != recommends && recommends.size() > 0) {
+                                mData.addAll(recommends);
+                            }
+                        }
+
+                        LogUtil.log("SearchPresenter => request => " + new Gson().toJson(mData));
+
                         return true;
                     }
                 })
@@ -171,14 +191,11 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                 .map(new Function<Boolean, String>() {
                     @Override
                     public String apply(Boolean aBoolean) {
-                        String s;
-                        try {
-                            KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
-                            s = keyboardView.getInput();
-                            String lowerCase = s.toLowerCase();
-                            reportSearchResultItemNum(lowerCase);
-                        } catch (Exception e) {
-                            s = null;
+                        if (null != s && s.length() > 0) {
+                            try {
+                                reportSearchResultItemNum(s);
+                            } catch (Exception e) {
+                            }
                         }
 
                         if (null == s || s.length() <= 0) {
@@ -212,86 +229,4 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                 })
                 .subscribe());
     }
-
-    protected void getSearchRecommend() {
-
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        observableEmitter.onNext(true);
-                    }
-                })
-                .flatMap(new Function<Boolean, Observable<BaseBean<SearchRecommendBean>>>() {
-                    @Override
-                    public Observable<BaseBean<SearchRecommendBean>> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().getSearchRecommend(BoxUtil.getProdId(), Integer.MAX_VALUE);
-                    }
-                })
-                .map(new Function<BaseBean<SearchRecommendBean>, String>() {
-                    @Override
-                    public String apply(BaseBean<SearchRecommendBean> searchRecommendBeanBaseBean) throws Exception {
-                        try {
-                            List<SearchRecommendBean.RecommendsBean> recommends = searchRecommendBeanBaseBean.getData().getRecommends();
-                            mData.clear();
-                            mData.addAll(recommends);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return getView().getString(R.string.search_hot);
-                    }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) {
-                        getView().showLoading();
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        getView().hideLoading();
-                    }
-                })
-                .doOnNext(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) {
-                        getView().hideLoading();
-                        getView().showTitle(s);
-                        getView().refreshContent();
-                    }
-                })
-                .subscribe());
-    }
-
-//    /**
-//     * 获取热搜推荐
-//     *
-//     * @param size 个数
-//     */
-//    public void getHotSearchRecommends(int size) {
-//
-//        int prod = HuanApp.getProd(null);
-//        mRepository.getSearchRecommend(new CallBack<SearchRecommendBean>() {
-//            @Override
-//            public void onNoNetWork() {
-//                loadState.postValue(StateConstants.NET_WORK_STATE);
-//            }
-//
-//            @Override
-//            public void onNext(SearchRecommendBean searchRecommendBean) {
-//                if (searchRecommendBean == null || searchRecommendBean.getData() == null || searchRecommendBean.getCode() != 200) {
-//                    loadState.postValue(StateConstants.ERROR_STATE);
-//                    return;
-//                }
-//                recommendsResult.postValue(searchRecommendBean.getData());
-//            }
-//
-//            @Override
-//            public void onError(String e) {
-//                loadState.postValue(StateConstants.ERROR_STATE);
-//            }
-//        }, prod, size);
-//    }
 }

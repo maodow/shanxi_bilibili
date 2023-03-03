@@ -31,7 +31,6 @@ import tv.huan.bilibili.bean.ProgramInfo;
 import tv.huan.bilibili.bean.ProgramInfoDetail;
 import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
 import tv.huan.bilibili.bean.SearchBean;
-import tv.huan.bilibili.bean.SearchRecommendBean;
 import tv.huan.bilibili.bean.SpecialBean;
 import tv.huan.bilibili.bean.UrlType;
 
@@ -90,7 +89,6 @@ public interface HttpApi {
     Observable<BaseBean<HuanInfo>> getHuanId(@Query("uid") String uid);
 
 
-
     /**
      * 获取影片详情
      *
@@ -143,7 +141,8 @@ public interface HttpApi {
     @GET("album/getAlbumBySpell2")
     Observable<BaseBean<SearchBean>> searchBySpell(@Query("spell") String spell,
                                                    @Query("offset") int offset,
-                                                   @Query("size") int size);
+                                                   @Query("size") int size,
+                                                   @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     /**
      * 获取热搜推荐
@@ -152,8 +151,9 @@ public interface HttpApi {
      * @return x
      */
     @GET("recomend/getSearchRecommendByProdId/{prodId}")
-    Observable<BaseBean<SearchRecommendBean>> getSearchRecommend(@Path("prodId") int prodId,
-                                                                 @Query("pageSize") int pageSize);
+    Observable<BaseBean<SearchBean>> getSearchRecommend(@Path("prodId") int prodId,
+                                                        @Query("pageSize") int pageSize,
+                                                        @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     /**
      * 根据classId获取筛选条件

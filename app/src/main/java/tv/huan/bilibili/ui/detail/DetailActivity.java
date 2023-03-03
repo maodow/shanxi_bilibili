@@ -18,6 +18,8 @@ import tv.huan.heilongjiang.HeilongjiangApi;
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 
     public static final String INTENT_CID = "intent_cid";
+    public static final String INTENT_FROM_SEARCH = "intent_from_search";
+    public static final String INTENT_FROM_SEARCH_KEY = "intent_from_search_key";
     private static final String INTENT_UPDATE = "intent_update";
 
     @Override
