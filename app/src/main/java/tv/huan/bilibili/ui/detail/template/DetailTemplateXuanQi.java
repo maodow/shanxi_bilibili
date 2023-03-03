@@ -57,7 +57,7 @@ public class DetailTemplateXuanQi extends ListTvGridPresenter<Media> {
                 if (position >= 0) {
                     Activity activity = WrapperUtil.getWrapperActivity(context);
                     if (null != activity && activity instanceof DetailActivity) {
-                        ((DetailActivity) activity).nextPlayer(position);
+                        ((DetailActivity) activity).updatePlayerInfo(position, list.get(position).getVid());
                         ((DetailActivity) activity).delayPlayer(position);
                     }
                 }

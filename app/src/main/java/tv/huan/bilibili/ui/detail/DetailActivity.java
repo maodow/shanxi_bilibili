@@ -10,8 +10,10 @@ import androidx.leanback.widget.VerticalGridView;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.Media;
 import tv.huan.bilibili.dialog.InfoDialog;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
+import tv.huan.bilibili.utils.TimeUtils;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.heilongjiang.HeilongjiangApi;
 
@@ -27,6 +29,8 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public static final String INTENT_FROM_SPECIAL_TOPID = "intent_from_special_topid";
     public static final String INTENT_FROM_SPECIAL_TOPNAME = "intent_from_special_topname";
     private static final String INTENT_UPDATE = "intent_update";
+    protected static final String INTENT_VID = "intent_vid";
+    protected static final String INTENT_START_TIME = "intent_start_time";
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -45,6 +49,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public int initLayout() {
+        putLongExtra(INTENT_START_TIME, System.currentTimeMillis());
         return R.layout.activity_detail;
     }
 
@@ -108,14 +113,21 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void nextPlayer(int position) {
+    public void stopPlayer() {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.stopPlayer();
+    }
+
+    @Override
+    public void updatePlayerInfo(int position, String vid) {
+        updateVid(vid);
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.nextPlayer(position);
     }
 
     @Override
-    public void stopPlayer() {
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.stopPlayer();
+    public void updateVid(String vid) {
+        putStringExtra(INTENT_VID, vid);
     }
+
 }

@@ -91,7 +91,14 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
         JSONObject object = ReportUtils.exitRetentionClick(prodId, cid, name);
         logReport(object);
     }
+
     public final void reportTopicEnterDetail(@NonNull String cid, int sceneId, int topicId, String topicName) {
+        int prodId = getView().getProdId();
+        JSONObject object = ReportUtils.topicEnterDetail(prodId, cid, sceneId, topicId, topicName);
+        logReport(object);
+    }
+
+    public final void reportTopicSubtypeClicked(@NonNull String cid, int sceneId, int topicId, String topicName) {
         int prodId = getView().getProdId();
         JSONObject object = ReportUtils.topicEnterDetail(prodId, cid, sceneId, topicId, topicName);
         logReport(object);
@@ -114,15 +121,23 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
         JSONObject object = ReportUtils.detailSelectionsButtonShow(prodId, cid);
         logReport(object);
     }
+
     public final void reportTopicLoadFinished(int sceneId) {
         int prodId = getView().getProdId();
         JSONObject object = ReportUtils.topicLoadFinished(prodId, sceneId);
         logReport(object);
     }
 
+    public final void reportPlayVodStop(String cid, String vid, long start, long end) {
+        int prodId = getView().getProdId();
+        JSONObject object = ReportUtils.playVodStop(prodId, cid, vid, start, end);
+        logReport(object);
+    }
+
     private final void logReport(@NonNull JSONObject object) {
 
-        addDisposable(Observable.create(new ObservableOnSubscribe<RequestBody>() {
+//        addDisposable(
+        Observable.create(new ObservableOnSubscribe<RequestBody>() {
                     @Override
                     public void subscribe(ObservableEmitter<RequestBody> emitter) {
                         String toString = object.toString();
@@ -161,6 +176,7 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
                         }
                     }
                 })
-                .subscribe());
+                .subscribe();
+//    );
     }
 }

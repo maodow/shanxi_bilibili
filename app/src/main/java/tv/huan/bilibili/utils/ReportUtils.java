@@ -196,27 +196,6 @@ public final class ReportUtils {
     }
 
 //    /**
-//     * 进入某专题列表页并加载数据完成
-//     *
-//     * @param sceneId   x
-//     * @param topicId   x
-//     * @param topicName x
-//     */
-//    public void topicSubtypeClicked(String sceneId, int topicId, String topicName) {
-//        try {
-//            JSONObject jsonObject = getBaseObject("topic_subtype_clicked");
-//            jsonObject.put("scene_id", sceneId);
-//            jsonObject.put("topic_id", topicId);
-//            jsonObject.put("topic_name", topicName);
-//            jsonObject.put("business_id", HuanApp.getProd(null));
-//            jsonObject.put("ver", BuildConfig.VERSION_NAME);
-//            actionReport(jsonObject);
-//        } catch (Exception e) {
-//        }
-//    }
-//
-
-//    /**
 //     * 频道下子分类切换量
 //     */
 //    public void channelTabClicked(int channelId, String channelName, String subType) {
@@ -443,11 +422,14 @@ public final class ReportUtils {
     /**
      * 播放记录
      */
-    public static JSONObject playVodStop(int prodId, String startTime, String endTime, String playTime, String cid, String vid) {
+    public static JSONObject playVodStop(int prodId, String cid, String vid, long start, long end) {
         JSONObject object = create("play_vod_stop", prodId);
         try {
+            String startTime = TimeUtils.millis2String(start).replace(":", "").replace("-", "").trim();
             object.put("start_time", startTime);
+            String endTime = TimeUtils.millis2String(end).replace(":", "").replace("-", "").trim();
             object.put("end_time", endTime);
+            String playTime = String.valueOf((end - start) / 1000);
             object.put("play_time", playTime);
             object.put("cid", cid);
             object.put("vid", vid);
@@ -466,6 +448,19 @@ public final class ReportUtils {
      */
     public static JSONObject topicEnterDetail(int prodId, String cid, int sceneId, int topicId, String topicName) {
         JSONObject object = create("topic_enter_detail", prodId);
+        try {
+            object.put("scene_id", sceneId);
+            object.put("topic_id", topicId);
+            object.put("topic_name", topicName);
+            object.put("cid", cid);
+        } catch (Exception e) {
+        }
+        return object;
+    }
+
+    // 进入某专题列表页并加载数据完成
+    public static JSONObject topicSubtypeClicked(int prodId, String cid, String sceneId, int topicId, String topicName) {
+        JSONObject object = create("topic_subtype_clicked", prodId);
         try {
             object.put("scene_id", sceneId);
             object.put("topic_id", topicId);

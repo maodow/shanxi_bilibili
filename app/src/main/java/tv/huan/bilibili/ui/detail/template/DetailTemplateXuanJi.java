@@ -94,7 +94,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
         try {
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null != activity && activity instanceof DetailActivity) {
-                ((DetailActivity) activity).nextPlayer(position);
+                ((DetailActivity) activity).updatePlayerInfo(position, item.getVid());
                 ((DetailActivity) activity).delayPlayer(position);
             }
         } catch (Exception e) {

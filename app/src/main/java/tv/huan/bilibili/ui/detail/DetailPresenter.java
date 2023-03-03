@@ -218,6 +218,12 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                         }
 
+                        // vid
+                        try {
+                            String vid = programInfoDetailBaseBean.getData().getMedias().get(0).getVid();
+                            getView().updateVid(vid);
+                        } catch (Exception e) {
+                        }
 
                         ProgramInfoDetail data = programInfoDetailBaseBean.getData();
                         boolean auth;
@@ -775,7 +781,15 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         // back
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             boolean checkPlayer = checkPlayer();
+            LogUtil.log("DetailPresenter => dispatchEvent => checkPlayer = " + checkPlayer);
             if (checkPlayer) {
+                // 1
+                long start = getView().getLongExtra(DetailActivity.INTENT_START_TIME, 0);
+                long end = System.currentTimeMillis();
+                String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
+                String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
+                reportPlayVodStop(cid, vid, start, end);
+                // 2
                 ((Activity) getView()).onBackPressed();
             }
             return true;
