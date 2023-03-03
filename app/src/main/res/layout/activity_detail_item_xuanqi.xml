@@ -1,34 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<lib.kalu.leanback.round.RoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<tv.huan.bilibili.widget.common.CommonRoundRelativeLayoutXuanQi xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="46dp"
+    android:layout_height="@dimen/dp_46"
     android:background="@drawable/bg_selector_common_noboard"
-    android:clickable="true"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:longClickable="false"
-    app:rl_corner_bottom_left="8dp"
-    app:rl_corner_bottom_right="8dp"
-    app:rl_corner_top_left="8dp"
-    app:rl_corner_top_right="8dp"
-
-    app:rl_rate_width="6.1"
-    app:rl_scale="1.04">
+    app:rl_rate_width="6.1">
 
     <!-- 标题 -->
-    <lib.kalu.leanback.auto.AutoTextView
+    <TextView
         android:id="@+id/detail_xuanqi_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        android:text="-"
-        android:textColor="#ffffff"
-        android:textSize="15sp"
-        app:fl_text_color_focus="#3c3c82"
-        app:fl_text_color_normal="#ffffff" />
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/sp_15" />
 
-</lib.kalu.leanback.round.RoundRelativeLayout>
+</tv.huan.bilibili.widget.common.CommonRoundRelativeLayoutXuanQi>

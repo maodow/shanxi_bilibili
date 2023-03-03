@@ -258,16 +258,8 @@ public class ExitDialog extends DialogFragment implements DialogInterface.OnKeyL
                     public void onClick(View v) {
                         int position = holder.getAbsoluteAdapterPosition();
                         ExitBean itemBean = list.get(position);
-                        JumpUtil.next(getContext(), itemBean);
+                        JumpUtil.nextDetailFromWanliu(getContext(), itemBean.getCid(), itemBean.getName());
                         dismiss();
-                        // 2
-                        try {
-                            JSONObject object = new JSONObject();
-                            object.put("cid", itemBean.getCid());
-                            object.put("name", itemBean.getName());
-                            ((MainActivity) getActivity()).onCall(9900, object);
-                        } catch (Exception e) {
-                        }
                     }
                 });
                 return holder;

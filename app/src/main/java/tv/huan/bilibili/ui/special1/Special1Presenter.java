@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +33,7 @@ import tv.huan.bilibili.bean.SpecialBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
 public class Special1Presenter extends BasePresenterImpl<Special1View> {
 
@@ -68,7 +71,7 @@ public class Special1Presenter extends BasePresenterImpl<Special1View> {
                     public void onClick(View v) {
                         int position = holder.getAbsoluteAdapterPosition();
                         SpecialBean.ItemBean itemBean = mData.get(position);
-                        JumpUtil.next(v.getContext(), itemBean);
+                        JumpUtil.nextDetailFromSpecial(v.getContext(), itemBean.getCid(), itemBean.getTempTopicId(), itemBean.getTempTopicId(), itemBean.getTempTopicName());
                     }
                 });
                 try {

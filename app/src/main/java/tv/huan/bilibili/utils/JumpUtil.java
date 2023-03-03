@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
+
 import tv.huan.bilibili.bean.JumpBean;
 import tv.huan.bilibili.ui.center.CenterActivity;
 import tv.huan.bilibili.ui.detail.DetailActivity;
@@ -61,16 +63,6 @@ public class JumpUtil {
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra(DetailActivity.INTENT_CID, cid);
 //            intent.putExtra(DetailActivity.INTENT_CLASSID, classId);
-            context.startActivity(intent);
-        }
-    }
-
-    public static void nextDetailFromSearch(@NonNull Context context, @NonNull String cid, @NonNull String keys) {
-        if (null != cid && cid.length() > 0) {
-            Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra(DetailActivity.INTENT_CID, cid);
-            intent.putExtra(DetailActivity.INTENT_FROM_SEARCH, true);
-            intent.putExtra(DetailActivity.INTENT_FROM_SEARCH_KEY, keys);
             context.startActivity(intent);
         }
     }
@@ -149,5 +141,39 @@ public class JumpUtil {
         intent.putExtra(WebviewActivity.INTENT_HELP, true);
         intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 1);
         context.startActivity(intent);
+    }
+
+    public static void nextDetailFromSearch(@NonNull Context context, @NonNull String cid, @NonNull String keys) {
+        if (null != cid && cid.length() > 0) {
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra(DetailActivity.INTENT_CID, cid);
+            intent.putExtra(DetailActivity.INTENT_FROM_SEARCH, true);
+            intent.putExtra(DetailActivity.INTENT_FROM_SEARCH_KEY, keys);
+            context.startActivity(intent);
+        }
+    }
+
+    public static void nextDetailFromWanliu(@NonNull Context context, @NonNull String cid, @NonNull String name) {
+        if (null != cid && cid.length() > 0) {
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra(DetailActivity.INTENT_CID, cid);
+            intent.putExtra(DetailActivity.INTENT_FROM_WANLIU, true);
+            intent.putExtra(DetailActivity.INTENT_FROM_WANLIU_KEY, name);
+            context.startActivity(intent);
+        }
+    }
+
+    public static void nextDetailFromSpecial(@NonNull Context context, @NonNull String cid, int sceneId, int topicId, String topicName) {
+
+        Log.e("JumpUtil", "nextDetailFromSpecial => cid = " + cid+", sceneId = "+sceneId+", topicId = "+topicId+", topicName = "+topicName);
+        if (null != cid && cid.length() > 0) {
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra(DetailActivity.INTENT_CID, cid);
+            intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL, true);
+            intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL_SCENEID, sceneId);
+            intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL_TOPID, topicId);
+            intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL_TOPNAME, topicName);
+            context.startActivity(intent);
+        }
     }
 }

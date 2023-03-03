@@ -145,11 +145,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     @Override
     public void onCall(@NonNull int code, @NonNull JSONObject object) {
         super.onCall(code, object);
-        if (code == 9900 && null != object) {
-            String cid = object.optString("cid", "");
-            String name = object.optString("name", "");
-            getPresenter().reportExitRetentionClick(cid, name);
-        } else if (code == 1100) {
+        if (code == 1100) {
             getPresenter().reportAppExit();
             onBackPressed();
         }

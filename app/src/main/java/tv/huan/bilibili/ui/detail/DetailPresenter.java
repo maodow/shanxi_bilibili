@@ -187,6 +187,36 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             }
                         } catch (Exception e) {
                         }
+                        // 上报 => 来自挽留
+                        try {
+                            boolean booleanExtra = getView().getBooleanExtra(DetailActivity.INTENT_FROM_WANLIU, false);
+                            if (booleanExtra) {
+                                String keys = getView().getStringExtra(DetailActivity.INTENT_FROM_WANLIU_KEY, null);
+                                if (null != keys && keys.length() > 0) {
+                                    String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
+                                    if (null != cid && cid.length() > 0) {
+                                        reportExitRetentionClick(cid, keys);
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                        }
+                        // 上报 => 来自专题
+                        try {
+                            boolean booleanExtra = getView().getBooleanExtra(DetailActivity.INTENT_FROM_SPECIAL, false);
+                            if (booleanExtra) {
+                                int sceneId = getView().getIntExtra(DetailActivity.INTENT_FROM_SPECIAL_SCENEID, -1);
+                                int topId = getView().getIntExtra(DetailActivity.INTENT_FROM_SPECIAL_TOPID, -1);
+                                String topName = getView().getStringExtra(DetailActivity.INTENT_FROM_SPECIAL_TOPNAME, null);
+                                if (null != topName && topName.length() > 0 && sceneId != -1 && topId != -1) {
+                                    String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
+                                    if (null != cid && cid.length() > 0) {
+                                        reportTopicEnterDetail(cid, sceneId, topId, topName);
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                        }
 
 
                         ProgramInfoDetail data = programInfoDetailBaseBean.getData();

@@ -91,6 +91,11 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
         JSONObject object = ReportUtils.exitRetentionClick(prodId, cid, name);
         logReport(object);
     }
+    public final void reportTopicEnterDetail(@NonNull String cid, int sceneId, int topicId, String topicName) {
+        int prodId = getView().getProdId();
+        JSONObject object = ReportUtils.topicEnterDetail(prodId, cid, sceneId, topicId, topicName);
+        logReport(object);
+    }
 
     public final void reportAppExit() {
         int prodId = getView().getProdId();

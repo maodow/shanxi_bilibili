@@ -464,7 +464,7 @@ public final class ReportUtils {
      * @param topicName x
      * @param cid       x
      */
-    public static JSONObject topicEnterDetail(int prodId, int sceneId, int topicId, String topicName, String cid) {
+    public static JSONObject topicEnterDetail(int prodId, String cid, int sceneId, int topicId, String topicName) {
         JSONObject object = create("topic_enter_detail", prodId);
         try {
             object.put("scene_id", sceneId);

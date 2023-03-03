@@ -26,7 +26,7 @@ public class CommonRoundRelativeLayout extends lib.kalu.leanback.round.RoundRela
         init();
     }
 
-    private final void init() {
+    protected void init() {
 //        int padding = getResources().getDimensionPixelOffset(R.dimen.dp_4);
 //        setPadding(padding, padding, padding, padding);
         int radius = getResources().getDimensionPixelOffset(R.dimen.dp_6);

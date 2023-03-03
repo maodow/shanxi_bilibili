@@ -1,7 +1,9 @@
 package tv.huan.bilibili.ui.detail.template;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,11 +17,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.Media;
+import tv.huan.bilibili.ui.detail.DetailActivity;
 
 public class DetailTemplateXuanQi extends ListTvGridPresenter<Media> {
+
+    @Override
+    protected String initRowTitle(Context context) {
+        return context.getResources().getString(R.string.detail_xuanqi);
+    }
 
     @Override
     public int initMagrinTop(@NonNull Context context) {
@@ -41,37 +50,26 @@ public class DetailTemplateXuanQi extends ListTvGridPresenter<Media> {
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<Media> list, @NonNull int i) {
-        try {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Media media = list.get(i);
-                    startPosition(v, media);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = viewHolder.getAbsoluteAdapterPosition();
+                if (position >= 0) {
+                    Activity activity = WrapperUtil.getWrapperActivity(context);
+                    if (null != activity && activity instanceof DetailActivity) {
+                        ((DetailActivity) activity).nextPlayer(position);
+                        ((DetailActivity) activity).delayPlayer(position);
+                    }
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected final void startPosition(@NonNull View v, @NonNull Media media) {
-//        try {
-//            // 1
-//            int position = media.getIndex();
-//            Toast.makeText(v.getContext(), "=> " + position, Toast.LENGTH_SHORT).show();
-//            String cdnUrl = media.getCdnUrl();
-//            // 2
-//            VerticalGridView gridView = (VerticalGridView) v.getParent().getParent().getParent();
-//            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) gridView.getAdapter();
-//            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-//            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-//            playerObject.setVideoUrl(cdnUrl);
-//            // 3
-//            gridView.smoothScrollToPosition(0);
-//            // 4
-//            itemBridgeAdapter.notifyItemChanged(0);
-//        } catch (Exception e) {
-//        }
+            }
+        });
+        view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                TextView textView = view.findViewById(R.id.detail_xuanqi_item_name);
+                textView.setTextColor(view.getResources().getColor(b ? R.color.color_black : R.color.color_white));
+            }
+        });
     }
 
     @Override
@@ -80,7 +78,6 @@ public class DetailTemplateXuanQi extends ListTvGridPresenter<Media> {
             TextView textView = view.findViewById(R.id.detail_xuanqi_item_name);
             textView.setText(media.getTitle());
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

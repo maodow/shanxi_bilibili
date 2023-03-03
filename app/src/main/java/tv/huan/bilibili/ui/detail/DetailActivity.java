@@ -20,6 +20,12 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public static final String INTENT_CID = "intent_cid";
     public static final String INTENT_FROM_SEARCH = "intent_from_search";
     public static final String INTENT_FROM_SEARCH_KEY = "intent_from_search_key";
+    public static final String INTENT_FROM_WANLIU = "intent_from_wanliu";
+    public static final String INTENT_FROM_WANLIU_KEY = "intent_from_wanliu_key";
+    public static final String INTENT_FROM_SPECIAL = "intent_from_special";
+    public static final String INTENT_FROM_SPECIAL_SCENEID = "intent_from_special_sceneid";
+    public static final String INTENT_FROM_SPECIAL_TOPID = "intent_from_special_topid";
+    public static final String INTENT_FROM_SPECIAL_TOPNAME = "intent_from_special_topname";
     private static final String INTENT_UPDATE = "intent_update";
 
     @Override
