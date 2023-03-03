@@ -67,6 +67,15 @@ public class FavBean implements Serializable {
         private String title;
         private int index;
         private int jumpType;
+        private String bannerUrl;
+
+        public String getBannerUrl() {
+            return bannerUrl;
+        }
+
+        public void setBannerUrl(String bannerUrl) {
+            this.bannerUrl = bannerUrl;
+        }
 
         public boolean isShowDel() {
             return showDel;

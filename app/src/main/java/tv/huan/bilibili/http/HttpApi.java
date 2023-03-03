@@ -36,6 +36,10 @@ import tv.huan.bilibili.bean.UrlType;
 
 public interface HttpApi {
 
+    // fileType为文件类型，1Banner， 2为帮助中心，3为关于我们
+    @GET("apk/getFileUrl")
+    Observable<BaseBean<String>> getFileUrl(@Query("fileType") int fileType);
+
     // 删除历史
     @GET("data/delBookmarkById")
     Observable<BaseBean<Object>> deleteBookmark(@Query("cid") String cid);
@@ -58,14 +62,6 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("log/report")
     Observable<BaseBean<Object>> logReport(@Body RequestBody requestBody);
-
-    /**
-     * fileType为文件类型，1为帮助中心，2为关于我们，可以测试下
-     *
-     * @return
-     */
-    @GET("apk/getFileUrl")
-    Observable<BaseBean<String>> getFileUrl(@Query("fileType") int fileType);
 
     /**
      * 获取频道

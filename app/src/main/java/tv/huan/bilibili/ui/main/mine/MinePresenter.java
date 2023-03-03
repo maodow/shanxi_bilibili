@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -45,6 +46,7 @@ import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
 @Keep
 public class MinePresenter extends BasePresenterImpl<MineView> {
@@ -187,8 +189,12 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             int position = holder.getAbsoluteAdapterPosition();
                             if (position > 0) {
                                 FavBean.ItemBean itemBean = mDatas.get(position);
-                                int jumpType = itemBean.getJumpType();
-                                JumpUtil.nextWebHelp(v.getContext());
+                                int index = itemBean.getIndex();
+                                if (index == 0) {
+                                    JumpUtil.nextWebHelp(v.getContext());
+                                } else {
+                                    JumpUtil.nextWebAbout(v.getContext());
+                                }
                             }
                         }
                     });
@@ -205,6 +211,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     getView().setText(holder.itemView, R.id.mine_head_uuid, BoxUtil.getCa());
                     String s = "<font color='#ff6699'>2021-01-01</font><font color='#ffffff'>&#160;&#160;到期</font>";
                     getView().setText(holder.itemView, R.id.mine_head_date, Html.fromHtml(s));
+                    FavBean.ItemBean itemBean = mDatas.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.mine_head_banner);
+                    GlideUtils.loadHz(imageView.getContext(), itemBean.getBannerUrl(), imageView);
                 }
                 // title
                 else if (itemViewType == TYPE_ITEM_TITLE) {
@@ -232,7 +241,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 }
                 // item-img
                 else if (itemViewType == TYPE_ITEM_IMG) {
-                    FavBean.ItemBean itemBean = mDatas.get(position);
+//                    FavBean.ItemBean itemBean = mDatas.get(position);
                 }
             }
 
@@ -286,9 +295,10 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 3, s);
                     }
                 })
-                .map(new Function<BaseBean<FavBean>, Integer>() {
+                // 数据处理
+                .map(new Function<BaseBean<FavBean>, Boolean>() {
                     @Override
-                    public Integer apply(BaseBean<FavBean> response) {
+                    public Boolean apply(BaseBean<FavBean> response) {
 
                         // clean
                         mDatas.clear();
@@ -391,6 +401,23 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             mDatas.add(itemBean);
                         }
 
+                        return true;
+                    }
+                })
+                // Banner
+                .flatMap(new Function<Boolean, ObservableSource<BaseBean<String>>>() {
+                    @Override
+                    public ObservableSource<BaseBean<String>> apply(Boolean integer) {
+                        return HttpClient.getHttpClient().getHttpApi().getFileUrl(1);
+                    }
+                })
+                .map(new Function<BaseBean<String>, Integer>() {
+                    @Override
+                    public Integer apply(BaseBean<String> baseBean) {
+                        try {
+                            mDatas.get(0).setBannerUrl(baseBean.getData());
+                        } catch (Exception e) {
+                        }
                         return mDatas.size();
                     }
                 })

@@ -139,7 +139,13 @@ public class JumpUtil {
     public static final void nextWebHelp(@NonNull Context context) {
         Intent intent = new Intent(context, WebviewActivity.class);
         intent.putExtra(WebviewActivity.INTENT_HELP, true);
-        intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 1);
+        intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 2);
+        context.startActivity(intent);
+    }
+    public static final void nextWebAbout(@NonNull Context context) {
+        Intent intent = new Intent(context, WebviewActivity.class);
+        intent.putExtra(WebviewActivity.INTENT_HELP, true);
+        intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 3);
         context.startActivity(intent);
     }
 
