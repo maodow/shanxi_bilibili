@@ -5,21 +5,21 @@ import android.util.AttributeSet;
 
 import tv.huan.bilibili.R;
 
-public class CommonRoundRelativeLayoutXuanQi extends CommonRoundRelativeLayout {
+public class CommonRoundRelativeLayoutNoboard extends CommonRoundRelativeLayout {
 
-    public CommonRoundRelativeLayoutXuanQi(Context context) {
+    public CommonRoundRelativeLayoutNoboard(Context context) {
         super(context);
     }
 
-    public CommonRoundRelativeLayoutXuanQi(Context context, AttributeSet attrs) {
+    public CommonRoundRelativeLayoutNoboard(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CommonRoundRelativeLayoutXuanQi(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CommonRoundRelativeLayoutNoboard(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public CommonRoundRelativeLayoutXuanQi(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CommonRoundRelativeLayoutNoboard(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

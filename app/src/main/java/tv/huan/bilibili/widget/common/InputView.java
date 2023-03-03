@@ -22,7 +22,6 @@ public class InputView extends TextViewPlus {
     public InputView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -31,6 +30,6 @@ public class InputView extends TextViewPlus {
         getPaint().setStrokeWidth(offset);
         int startY = getHeight() - offset;
         int endX = getWidth();
-        canvas.drawLine(0, endX, startY, startY, getPaint());
+        canvas.drawLine(0, startY, endX, startY, getPaint());
     }
 }

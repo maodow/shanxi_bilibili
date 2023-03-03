@@ -41,7 +41,7 @@ public class GeneralTemplateClass extends ListTvGridPresenter<GetSubChannelsByCh
                 public void onFocusChange(View v, boolean hasFocus) {
                     TextView textView = v.findViewById(R.id.template_class_name);
                     textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
-                    textView.setTextColor(v.getResources().getColor(hasFocus ? R.color.color_black : R.color.color_aaaaaa));
+                    textView.setTextColor(v.getResources().getColor(hasFocus ? R.color.color_black : R.color.color_white));
                 }
             });
         } catch (Exception e) {
