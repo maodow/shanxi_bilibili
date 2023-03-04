@@ -39,6 +39,7 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplate15;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate16;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate18;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate19;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate2;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate20;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate21;
@@ -360,8 +361,17 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
             // 测试模板
             if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
                 if (preTemplate == BuildConfig.HUAN_TEST_TEMPLATE_CODE) {
+//                    addPresenter((ArrayObjectAdapter) objectAdapter, 19, templateData);
                     for (int n = 1; n <= 22; n++) {
-                        addPresenter((ArrayObjectAdapter) objectAdapter, n, templateData);
+                        if(n == 19)
+                            continue;
+                        ArrayList<GetSubChannelsByChannelBean.ListBean.TemplateBean> temps = new ArrayList<>();
+                        for (GetSubChannelsByChannelBean.ListBean.TemplateBean temp :templateData) {
+                            GetSubChannelsByChannelBean.ListBean.TemplateBean clone = temp.clone();
+                            temps.add(clone);
+                        }
+                        temps.get(0).setTempTitle("模板"+n);
+                        addPresenter((ArrayObjectAdapter) objectAdapter, n, temps);
                     }
                 }
                 break;
@@ -380,7 +390,7 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
             }
         }
         // 模板-回到顶部
-        addPresenter((ArrayObjectAdapter) objectAdapter, -2, null);
+//        addPresenter((ArrayObjectAdapter) objectAdapter, -2, null);
     }
 
     private final void addPresenter(@NonNull ArrayObjectAdapter arrayObjectAdapter, @NonNull int templateCode, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> datas) {
@@ -506,6 +516,9 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
         }
         // 模板19
         else if (19 == templateCode) {
+            GeneralTemplate19.GeneralTemplate19List list = new GeneralTemplate19.GeneralTemplate19List();
+            list.addAll(datas);
+            object = list;
         }
         // 模板20
         else if (20 == templateCode) {

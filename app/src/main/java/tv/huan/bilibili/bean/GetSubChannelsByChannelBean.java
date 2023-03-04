@@ -9,6 +9,7 @@ import java.util.List;
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.presenter.ListTvRowPresenter;
 import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
+import tv.huan.bilibili.BuildConfig;
 
 @Keep
 public class GetSubChannelsByChannelBean implements Serializable {
@@ -69,14 +70,6 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
         public void setTemplateData(List<TemplateBean> templateData) {
             this.templateData = templateData;
-            if (null != this.templateData) {
-                for (TemplateBean t : templateData) {
-//                    t.setTempShow(true);
-//                    t.setTempTitle("模板" + preTemplate);
-                    t.setTempShow(show == 1);
-                    t.setTempTitle(name);
-                }
-            }
         }
 
         public int getPreTemplate() {
@@ -116,6 +109,21 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
             private List<LookBean> generalTemplate17Recs;
             private boolean generalTemplate17Selected = false;
+
+            public TemplateBean() {
+            }
+
+            public TemplateBean( String poster, String newPicVt, String newPicHz,boolean tempShow, String tempTitle, String name, String cid, int classId, int toType, List<LookBean> generalTemplate17Recs, boolean generalTemplate17Selected) {
+                super(poster, newPicVt, newPicHz);
+                this.tempShow = tempShow;
+                this.tempTitle = tempTitle;
+                this.name = name;
+                this.cid = cid;
+                this.classId = classId;
+                this.toType = toType;
+                this.generalTemplate17Recs = generalTemplate17Recs;
+                this.generalTemplate17Selected = generalTemplate17Selected;
+            }
 
             public List<LookBean> getGeneralTemplate17Recs() {
                 return generalTemplate17Recs;
@@ -175,7 +183,10 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
             @Override
             public String getRowTitle() {
-                if (tempShow) {
+                if(BuildConfig.HUAN_TEST_TEMPLATE_ENABLE){
+                    return tempTitle;
+                }
+                else if (tempShow){
                     return tempTitle;
                 } else {
                     return null;
@@ -186,6 +197,13 @@ public class GetSubChannelsByChannelBean implements Serializable {
             @Override
             public String toString() {
                 return "rowTitle = " + getRowTitle();
+            }
+
+            @Override
+            public TemplateBean clone() {
+                String picture = getPicture(false);
+                String picture1 = getPicture(true);
+                return new TemplateBean(picture, picture,picture1, tempShow, tempTitle, name, cid,classId, toType, generalTemplate17Recs,  generalTemplate17Selected);
             }
         }
     }

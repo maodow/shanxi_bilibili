@@ -26,4 +26,8 @@ public interface MainView extends BaseViewImpl {
     void contentScrollTop();
 
     void showDialog(@NonNull String data);
+
+    void startFullPlayer();
+
+    void stopFullPlayer();
 }

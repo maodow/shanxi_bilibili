@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- 全屏播放器 -->
+    <tv.huan.bilibili.widget.player.PlayerViewLite
+        android:id="@+id/main_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <!-- 搜索 -->
     <tv.huan.bilibili.widget.common.CommonSearchView
         android:id="@+id/main_search"

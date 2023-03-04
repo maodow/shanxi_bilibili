@@ -16,6 +16,16 @@ public class ImageBean implements Serializable {
 //    private String picVtPath;
 //    private String picHzPath;
 
+
+    public ImageBean() {
+    }
+
+    public ImageBean(String poster, String newPicVt, String newPicHz) {
+        this.poster = poster;
+        this.newPicVt = newPicVt;
+        this.newPicHz = newPicHz;
+    }
+
     public void setPoster(String poster) {
         this.poster = poster;
     }

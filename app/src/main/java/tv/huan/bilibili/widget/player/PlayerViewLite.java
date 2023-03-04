@@ -54,31 +54,15 @@ public final class PlayerViewLite extends PlayerView {
         // 填充模式
 //        if (getId() == R.id.qvoice_video || getId() == R.id.qsquare_video || getId() == R.id.qreport_video) {
         setScaleType(PlayerType.ScaleType.SCREEN_SCALE_16_9);
-//        } else {
-//            setScaleType(PlayerType.ScaleType.SCREEN_SCALE_MATCH_PARENT);
-//        }
-
-        // controller
-        ControllerEmpty controller = new ControllerEmpty(getContext());
-        setControllerLayout(controller);
 
         // loading
+        ControllerEmpty controller = new ControllerEmpty(getContext());
         ComponentLoading loading = new ComponentLoading(getContext());
         controller.addComponent(loading);
-
-        // pause
-//        ComponentPause pause = new ComponentPause(getContext());
-//        pause.setPauseImageResource(R.mipmap.ic_launcher);
-//        pause.setBackgroundColor(Color.parseColor("#66000000"));
-//        controller.addComponent(pause);
 
         // speed
         ComponentSpeed speed = new ComponentSpeed(getContext());
         controller.addComponent(speed);
-
-        // seekbar
-//        PlayerComponentSeek seek = new PlayerComponentSeek(getContext());
-//        controller.addComponent(seek);
 
         // 监听器
         setOnChangeListener(new lib.kalu.mediaplayer.listener.OnChangeListener() {

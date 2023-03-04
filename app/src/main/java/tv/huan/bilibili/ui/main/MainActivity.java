@@ -7,7 +7,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import org.json.JSONObject;
@@ -20,12 +19,10 @@ import lib.kalu.leanback.page.PageView;
 import lib.kalu.leanback.tab.TabLayout;
 import lib.kalu.leanback.tab.listener.OnTabChangeListener;
 import lib.kalu.leanback.tab.model.TabModel;
-import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.ExitDialog;
-import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.widget.GeneralGridView;
-import tv.huan.heilongjiang.HeilongjiangApi;
+import tv.huan.bilibili.widget.player.PlayerView;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
 
@@ -85,6 +82,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
             @Override
             public void onChecked(int i, int i1) {
+                stopFullPlayer();
                 getPresenter().showBackground(i);
                 getPresenter().showFragment(i);
             }
@@ -140,6 +138,20 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         bundle.putString(ExitDialog.BUNDLE_DATA, data);
         dialog.setArguments(bundle);
         dialog.show(fragmentManager, "");
+    }
+
+    @Override
+    public void startFullPlayer() {
+        stopFullPlayer();
+        PlayerView playerView = findViewById(R.id.main_player);
+        playerView.start("http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&amp;bizid=1023&amp;hy=SH&amp;fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400");
+    }
+
+    @Override
+    public void stopFullPlayer() {
+        PlayerView playerView = findViewById(R.id.main_player);
+        playerView.stop();
+        playerView.release();
     }
 
     @Override
