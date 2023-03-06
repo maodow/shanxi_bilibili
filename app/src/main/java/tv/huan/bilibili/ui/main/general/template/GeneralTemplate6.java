@@ -41,12 +41,10 @@ public class GeneralTemplate6 extends ListTvGridPresenter<GetSubChannelsByChanne
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i, @NonNull int i1) {
         try {
-            @IdRes
-            int txt = (i <= 3 ? R.id.album_item_name_template61 : R.id.album_item_name_template62);
+            @IdRes int txt = (i <= 3 ? R.id.album_item_name_template61 : R.id.album_item_name_template62);
             TextView textView = view.findViewById(txt);
             textView.setText(templateBean.getName());
-            @IdRes
-            int img = (i <= 3 ? R.id.album_item_img_template61 : R.id.album_item_img_template62);
+            @IdRes int img = (i <= 3 ? R.id.album_item_img_template61 : R.id.album_item_img_template62);
             ImageView imageView = view.findViewById(img);
             if (i <= 3) {
                 GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
@@ -114,21 +112,43 @@ public class GeneralTemplate6 extends ListTvGridPresenter<GetSubChannelsByChanne
                 int position = parent.getChildAdapterPosition(view);
 
                 if (position <= 3) {
-                    if (position == 3) {
-                        outRect.set(20, 0, 0, 20);
+                    int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72) / 8;
+
+                    if (position == 0) {
+                        outRect.set(0, 0, offset * 2, 0);
+                    } else if (position == 3) {
+                        outRect.set(offset * 2, 0, 0, 0);
                     } else {
-                        outRect.set(0, 0, 20, 20);
+                        outRect.set(offset, 0, offset, 0);
+                    }
+
+                    int transX = offset * 2 / 6;
+                    if (position == 1) {
+                        view.setTranslationX(-transX);
+                    } else if (position == 2) {
+                        view.setTranslationX(transX);
                     }
                 } else if (position <= 9) {
-                    if (position == 9) {
-                        outRect.set(20, 0, 0, 20);
-                    } else {
-                        outRect.set(0, 0, 20, 20);
-                    }
-                }
+                    int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_120) / 12;
 
-                if (position != 3 && position != 9 && position != 0 && position != 4) {
-                    view.setTranslationX(10);
+                    if (position == 4) {
+                        outRect.set(0, 0, offset * 2, 0);
+                    } else if (position == 9) {
+                        outRect.set(offset * 2, 0, 0, 0);
+                    } else {
+                        outRect.set(offset, 0, offset, 0);
+                    }
+
+                    int transX = offset * 2 / 10;
+                    if (position == 5) {
+                        view.setTranslationX(-transX);
+                    } else if (position == 6) {
+                        view.setTranslationX(-transX * 2);
+                    } else if (position == 7) {
+                        view.setTranslationX(transX * 2);
+                    } else if (position == 8) {
+                        view.setTranslationX(transX);
+                    }
                 }
             }
         };

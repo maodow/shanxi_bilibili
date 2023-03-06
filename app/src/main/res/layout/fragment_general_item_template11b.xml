@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
+    android:layout_marginBottom="@dimen/dp_24"
     app:rl_rate_height="1.5">
 
     <!-- 图片 -->
@@ -11,31 +12,20 @@
         android:id="@+id/album_item_img_template11b"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
     <!-- 标题 -->
-    <TextView
+    <tv.huan.bilibili.widget.common.CommonShandowTextView
         android:id="@+id/album_item_name_template11b"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="@dimen/dp_40"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:clickable="false"
         android:ellipsize="marquee"
         android:focusable="false"
-        android:focusableInTouchMode="false"
         android:gravity="bottom|left"
-        android:longClickable="false"
-        android:paddingLeft="9dp"
-        android:paddingRight="9dp"
-        android:paddingBottom="8dp"
-        android:singleLine="true"
-        android:text="-"
-        android:textColor="#ffffff"
-        android:textSize="12sp" />
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/sp_14" />
 
 </tv.huan.bilibili.widget.common.CommonRoundRelativeLayout>

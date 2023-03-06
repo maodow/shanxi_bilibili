@@ -26,7 +26,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:longClickable="false"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
     <!-- 标题 -->
     <lib.kalu.leanback.auto.AutoTextView

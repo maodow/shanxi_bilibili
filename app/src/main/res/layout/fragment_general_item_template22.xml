@@ -14,7 +14,7 @@
         android:layout_height="@dimen/dp_256"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginBottom="@dimen/dp_27"
-        android:background="@drawable/bg_selector_common_image"
+        android:background="@drawable/bg_selector_common_highlight"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:focusable="true">

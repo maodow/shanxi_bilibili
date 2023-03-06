@@ -106,26 +106,27 @@ public class GeneralTemplate8 extends ListTvGridPresenter<GetSubChannelsByChanne
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-
                 int position = parent.getChildAdapterPosition(view);
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_10);
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72) / 8;
+                int offset2 = view.getResources().getDimensionPixelOffset(R.dimen.dp_12);
 
-                if (position <= 1) {
-                    if (position == 1) {
-                        outRect.set(offset, 0, 0, offset);
-                    } else {
-                        outRect.set(0, 0, offset, offset);
-                    }
-                } else if (position <= 5) {
-                    if (position == 5) {
-                        outRect.set(offset, 0, 0, offset);
-                    } else {
-                        outRect.set(0, 0, offset, offset);
-                    }
+                if (position == 0) {
+                    outRect.set(0, 0, offset2, 0);
+                }else  if (position == 1) {
+                    outRect.set(offset2, 0, 0, 0);
+                } else if (position == 2) {
+                    outRect.set(0, 0, offset * 2, 0);
+                } else if (position == 5) {
+                    outRect.set(offset * 2, 0, 0, 0);
+                } else {
+                    outRect.set(offset, 0, offset, 0);
                 }
 
-                if (position != 0 && position != 1 && position != 5 && position != 2) {
-                    view.setTranslationX(offset / 2);
+                int transX = offset * 2 / 6;
+                if (position == 3) {
+                    view.setTranslationX(-transX);
+                } else if (position == 4) {
+                    view.setTranslationX(transX);
                 }
             }
         };

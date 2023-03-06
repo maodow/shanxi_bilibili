@@ -16,7 +16,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:longClickable="false"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
     <!-- 标题 -->
     <tv.huan.bilibili.widget.common.CommonShandowTextView

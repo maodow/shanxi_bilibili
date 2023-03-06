@@ -38,27 +38,16 @@ public class ImageBean implements Serializable {
         this.newPicHz = newPicHz;
     }
 
-//    public void setPic(String pic) {
-//        this.pic = pic;
-//    }
-
     public String getPicture(boolean hz) {
-        if (null != poster && poster.length() > 0) {
-            return poster;
-        } else if (hz && null != newPicHz && newPicHz.length() > 0) {
-            return newPicHz;
-        } else {
-            return newPicVt;
-        }
-    }
-
-//    public String getPictureFavor() {
 //        if (null != poster && poster.length() > 0) {
 //            return poster;
+//        } else if (hz && null != newPicHz && newPicHz.length() > 0) {
+//            return newPicHz;
 //        } else {
-//            return pic;
+//            return newPicVt;
 //        }
-//    }
+        return "http://123.59.196.222/hljbili/public/productCodePic/series91030010010000000000001819pic27875.jpg";
+    }
 
     public void copyPic(ImageBean data) {
         if (null == data)

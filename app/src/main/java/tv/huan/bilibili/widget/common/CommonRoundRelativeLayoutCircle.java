@@ -5,23 +5,23 @@ import android.util.AttributeSet;
 
 import tv.huan.bilibili.R;
 
-public class CommonRoundRelativeLayout extends lib.kalu.leanback.round.RoundRelativeLayout {
-    public CommonRoundRelativeLayout(Context context) {
+public class CommonRoundRelativeLayoutCircle extends lib.kalu.leanback.round.RoundRelativeLayout {
+    public CommonRoundRelativeLayoutCircle(Context context) {
         super(context);
         init();
     }
 
-    public CommonRoundRelativeLayout(Context context, AttributeSet attrs) {
+    public CommonRoundRelativeLayoutCircle(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CommonRoundRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CommonRoundRelativeLayoutCircle(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public CommonRoundRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CommonRoundRelativeLayoutCircle(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
@@ -29,9 +29,9 @@ public class CommonRoundRelativeLayout extends lib.kalu.leanback.round.RoundRela
     protected void init() {
 //        int padding = getResources().getDimensionPixelOffset(R.dimen.dp_4);
 //        setPadding(padding, padding, padding, padding);
-        int radius = getResources().getDimensionPixelOffset(R.dimen.dp_6);
+        int radius = getResources().getDimensionPixelOffset(R.dimen.dp_100);
         setRadius(radius, radius, radius, radius);
         setScale(1.1F);
-        setBackgroundResource(R.drawable.bg_selector_common_highlight);
+        setBackgroundResource(R.drawable.bg_selector_common_circle);
     }
 }

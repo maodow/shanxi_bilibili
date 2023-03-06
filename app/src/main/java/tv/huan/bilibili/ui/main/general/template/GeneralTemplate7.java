@@ -118,28 +118,24 @@ public class GeneralTemplate7 extends ListTvGridPresenter<TemplateBean> {
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
 
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72);
-                int v = offset / 8;
-                outRect.set(0, 0, offset, offset);
                 int position = parent.getChildAdapterPosition(view);
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72) / 8;
 
                 if (position == 0) {
                     outRect.set(0, 0, 0, 0);
                 } else if (position == 1) {
-                    outRect.set(0, 0, v * 2, 0);
+                    outRect.set(0, 0, offset * 2, 0);
                 } else if (position == 4) {
-                    outRect.set(v * 2, 0, 0, 0);
+                    outRect.set(offset * 2, 0, 0, 0);
                 } else {
-                    outRect.set(v, 0, v, 0);
+                    outRect.set(offset, 0, offset, 0);
                 }
 
-                int x = v * 2 / 3;
+                int transX = offset * 2 / 6;
                 if (position == 2) {
-                    view.setTranslationX(-x);
-                } else if (position == 5) {
-                    view.setTranslationX(x);
-                } else {
-                    view.setTranslationX(0);
+                    view.setTranslationX(-transX);
+                } else if (position == 3) {
+                    view.setTranslationX(transX);
                 }
             }
         };

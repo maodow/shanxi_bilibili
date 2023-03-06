@@ -34,7 +34,7 @@ public class RoundRelativeLayoutTemplate21 extends RoundRelativeLayout {
         int radius = getResources().getDimensionPixelOffset(R.dimen.dp_6);
         setRadius(radius, radius, radius, radius);
         setScale(1.06F);
-        setBackgroundResource(R.drawable.bg_selector_common_image);
+        setBackgroundResource(R.drawable.bg_selector_common_highlight);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class RoundRelativeLayoutTemplate21 extends RoundRelativeLayout {
             int right = verticalGridView.getPaddingRight();
             int offset = getResources().getDimensionPixelOffset(R.dimen.dp_20);
             int w = (((width - left - right) / 6) * 2) - offset;
-            int h = (int) (width * 0.4);
+            int h = (int) (width * 0.46);
             int specW = MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY);
             int specH = MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY);
             super.onMeasure(specW, specH);

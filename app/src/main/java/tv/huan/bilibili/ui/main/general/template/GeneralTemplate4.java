@@ -107,31 +107,26 @@ public class GeneralTemplate4 extends ListTvGridPresenter<GetSubChannelsByChanne
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
 
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_120);
-                int v = offset / 12;
-                outRect.set(0, 0, offset, offset);
                 int position = parent.getChildAdapterPosition(view);
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_120) / 12;
 
-                int i = position % 6;
-                if (i == 0) {
-                    outRect.set(0, 0, v * 2, 0);
-                } else if (i == 5) {
-                    outRect.set(v * 2, 0, 0, 0);
+                if (position % 6 == 0) {
+                    outRect.set(0, 0, offset * 2, 0);
+                } else if (position % 6 == 5) {
+                    outRect.set(offset * 2, 0, 0, 0);
                 } else {
-                    outRect.set(v, 0, v, 0);
+                    outRect.set(offset, 0, offset, 0);
                 }
 
-                int x = v * 2 / 5;
-                if (i == 1) {
-                    view.setTranslationX(-x);
-                } else if (i == 2) {
-                    view.setTranslationX(-x);
-                } else if (i == 4) {
-                    view.setTranslationX(x);
-                } else if (i == 5) {
-                    view.setTranslationX(x);
-                } else {
-                    view.setTranslationX(0);
+                int transX = offset * 2 / 10;
+                if (position % 6 == 1) {
+                    view.setTranslationX(-transX);
+                } else if (position % 6 == 2) {
+                    view.setTranslationX(-transX * 2);
+                } else if (position % 6 == 3) {
+                    view.setTranslationX(transX * 2);
+                } else if (position % 6 == 4) {
+                    view.setTranslationX(transX);
                 }
             }
         };

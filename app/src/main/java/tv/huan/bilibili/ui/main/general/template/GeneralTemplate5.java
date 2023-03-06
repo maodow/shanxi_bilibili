@@ -92,19 +92,22 @@ public class GeneralTemplate5 extends ListTvGridPresenter<GetSubChannelsByChanne
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
 
-                int span = initSpan();
                 int position = parent.getChildAdapterPosition(view);
-                int index = position % span;
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72) / 8;
 
-                // 超过1行
-                if (index + 1 == span) {
-                    outRect.set(20, 0, 0, 20);
+                if (position % 4 == 0) {
+                    outRect.set(0, 0, offset * 2, 0);
+                } else if (position % 4 == 3) {
+                    outRect.set(offset * 2, 0, 0, 0);
                 } else {
-                    outRect.set(0, 0, 20, 20);
+                    outRect.set(offset, 0, offset, 0);
                 }
 
-                if (index != 0 && (index + 1 != span)) {
-                    view.setTranslationX(10);
+                int transX = offset * 2 / 6;
+                if (position % 4 == 1) {
+                    view.setTranslationX(-transX);
+                } else if (position % 4 == 2) {
+                    view.setTranslationX(transX);
                 }
             }
         };
