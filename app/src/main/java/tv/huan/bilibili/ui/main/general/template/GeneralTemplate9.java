@@ -125,21 +125,21 @@ public class GeneralTemplate9 extends ListTvGridPresenter<GetSubChannelsByChanne
                     outRect.set(0, 0, 0, 0);
                 } else if (position == 1) {
                     outRect.set(0, 0, offset * 2, 0);
-                } else if (position == 2) {
+                } else if (position == 6) {
                     outRect.set(offset * 2, 0, 0, 0);
                 } else {
                     outRect.set(offset, 0, offset, 0);
                 }
 
-                int transX = offset * 2 / 10;
+                int transX = offset * 2 / (5 * 2);
                 if (position == 2) {
-                    view.setTranslationX(-transX);
-                } else if (position == 3) {
                     view.setTranslationX(-transX * 2);
+                } else if (position == 3) {
+                    view.setTranslationX(-transX);
                 } else if (position == 4) {
-                    view.setTranslationX(transX * 2);
-                } else if (position == 5) {
                     view.setTranslationX(transX);
+                } else if (position == 5) {
+                    view.setTranslationX(transX * 2);
                 }
             }
         };

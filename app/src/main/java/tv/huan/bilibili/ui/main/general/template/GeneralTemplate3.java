@@ -116,35 +116,33 @@ public class GeneralTemplate3 extends ListTvGridPresenter<GetSubChannelsByChanne
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
 
-                int offset1 = view.getResources().getDimensionPixelOffset(R.dimen.dp_48);
-                int v1 = offset1 / 6;
-                int offset2 = view.getResources().getDimensionPixelOffset(R.dimen.dp_72);
-                int v2 = offset2 / 8;
-
                 int position = parent.getChildAdapterPosition(view);
-                if (position == 0) {
-                    outRect.set(0, 0, v1 * 2, 0);
-                } else if (position == 1) {
-                    outRect.set(v1, 0, v1, 0);
-                } else if (position == 2) {
-                    outRect.set(v1 * 2, 0, 0, 0);
-                } else if (position == 3) {
-                    outRect.set(0, 0, v2 * 2, 0);
-                } else if (position == 4 || position == 5) {
-                    outRect.set(v2, 0, v2, 0);
-                } else if (position == 6) {
-                    outRect.set(v2 * 2, 0, 0, 0);
-                } else {
-                    outRect.set(0, 0, 0, 0);
-                }
+                if (position <= 2) {
+                    int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_48) / 6;
+                    if (position == 0) {
+                        outRect.set(0, 0, offset * 2, 0);
+                    } else if (position == 2) {
+                        outRect.set(offset * 2, 0, 0, 0);
+                    } else {
+                        outRect.set(offset, 0, offset, 0);
+                    }
+                } else if (position <= 6) {
 
-                int x = v2 / 3;
-                if (position == 4) {
-                    view.setTranslationX(-x);
-                } else if (position == 5) {
-                    view.setTranslationX(x);
-                } else {
-                    view.setTranslationX(0);
+                    int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72) / 8;
+                    if (position == 3) {
+                        outRect.set(0, 0, offset * 2, 0);
+                    } else if (position == 6) {
+                        outRect.set(offset * 2, 0, 0, 0);
+                    } else {
+                        outRect.set(offset, 0, offset, 0);
+                    }
+
+                    int transX = offset * 2 / (3 * 2);
+                    if (position == 4) {
+                        view.setTranslationX(-transX);
+                    } else if (position == 5) {
+                        view.setTranslationX(transX);
+                    }
                 }
             }
         };

@@ -50,7 +50,7 @@ android {
             buildConfigField("boolean", "HUAN_SKIN", "false")// 换肤skin
 //            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8188/mediaApi/\"")
-            buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false")
+            buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "true")
         }
         debug {
             signingConfig signingConfigs.release
@@ -67,7 +67,7 @@ android {
             buildConfigField("boolean", "HUAN_SKIN", "false")// 换肤skin
 //            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8188/mediaApi/\"")
-            buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false")
+            buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "true")
         }
     }
     sourceSets {

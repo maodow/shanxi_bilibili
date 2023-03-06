@@ -114,21 +114,35 @@ public class GeneralTemplate11 extends ListTvGridPresenter<GetSubChannelsByChann
                 int position = parent.getChildAdapterPosition(view);
 
                 if (position <= 2) {
-                    if (position == 2) {
-                        outRect.set(20, 0, 0, 20);
+                    int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_48) / 6;
+                    if (position == 0) {
+                        outRect.set(0, 0, offset * 2, 0);
+                    } else if (position == 2) {
+                        outRect.set(offset * 2, 0, 0, 0);
                     } else {
-                        outRect.set(0, 0, 20, 20);
+                        outRect.set(offset, 0, offset, 0);
                     }
                 } else if (position <= 8) {
-                    if (position == 8) {
-                        outRect.set(20, 0, 0, 20);
-                    } else {
-                        outRect.set(0, 0, 20, 20);
-                    }
-                }
+                    int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_120) / 12;
 
-                if (position != 2 && position != 8 && position != 0 && position != 3) {
-                    view.setTranslationX(10);
+                    if (position == 3) {
+                        outRect.set(0, 0, offset * 2, 0);
+                    } else if (position == 8) {
+                        outRect.set(offset * 2, 0, 0, 0);
+                    } else {
+                        outRect.set(offset, 0, offset, 0);
+                    }
+
+                    int transX = offset * 2 / (5810);
+                    if (position == 4) {
+                        view.setTranslationX(-transX * 2);
+                    } else if (position == 5) {
+                        view.setTranslationX(-transX);
+                    } else if (position == 6) {
+                        view.setTranslationX(transX);
+                    } else if (position == 7) {
+                        view.setTranslationX(transX * 2);
+                    }
                 }
             }
         };

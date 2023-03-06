@@ -109,7 +109,6 @@ public class GeneralTemplate4 extends ListTvGridPresenter<GetSubChannelsByChanne
 
                 int position = parent.getChildAdapterPosition(view);
                 int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_120) / 12;
-
                 if (position % 6 == 0) {
                     outRect.set(0, 0, offset * 2, 0);
                 } else if (position % 6 == 5) {
@@ -118,15 +117,15 @@ public class GeneralTemplate4 extends ListTvGridPresenter<GetSubChannelsByChanne
                     outRect.set(offset, 0, offset, 0);
                 }
 
-                int transX = offset * 2 / 10;
+                int transX = offset * 2 / (5 * 2);
                 if (position % 6 == 1) {
-                    view.setTranslationX(-transX);
-                } else if (position % 6 == 2) {
                     view.setTranslationX(-transX * 2);
-                } else if (position % 6 == 3) {
-                    view.setTranslationX(transX * 2);
-                } else if (position % 6 == 4) {
+                } else if (position % 6 == 2) {
+                    view.setTranslationX(-transX);
+                } else if (position == 3) {
                     view.setTranslationX(transX);
+                } else if (position == 4) {
+                    view.setTranslationX(transX * 2);
                 }
             }
         };

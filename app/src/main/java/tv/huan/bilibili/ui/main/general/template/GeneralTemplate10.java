@@ -121,7 +121,7 @@ public class GeneralTemplate10 extends ListTvGridPresenter<GetSubChannelsByChann
                     outRect.set(offset2, 0, 0, 0);
                 } else if (position == 2) {
                     outRect.set(0, 0, offset * 2, 0);
-                } else if (position == 3) {
+                } else if (position == 7) {
                     outRect.set(offset * 2, 0, 0, 0);
                 } else {
                     outRect.set(offset, 0, offset, 0);
@@ -129,13 +129,13 @@ public class GeneralTemplate10 extends ListTvGridPresenter<GetSubChannelsByChann
 
                 int transX = offset * 2 / 10;
                 if (position == 3) {
-                    view.setTranslationX(-transX);
-                } else if (position == 4) {
                     view.setTranslationX(-transX * 2);
+                } else if (position == 4) {
+                    view.setTranslationX(-transX);
                 } else if (position == 5) {
-                    view.setTranslationX(transX * 2);
-                } else if (position == 6) {
                     view.setTranslationX(transX);
+                } else if (position == 6) {
+                    view.setTranslationX(transX * 2);
                 }
             }
         };

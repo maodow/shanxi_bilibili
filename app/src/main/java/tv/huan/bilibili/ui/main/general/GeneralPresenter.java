@@ -369,6 +369,10 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                         GetSubChannelsByChannelBean.ListBean.TemplateBean clone = temp.clone();
                         temps.add(clone);
                     }
+                    for (GetSubChannelsByChannelBean.ListBean.TemplateBean temp : templateData) {
+                        GetSubChannelsByChannelBean.ListBean.TemplateBean clone = temp.clone();
+                        temps.add(clone);
+                    }
                     temps.get(0).setTempTitle("模板" + n);
                     addPresenter((ArrayObjectAdapter) objectAdapter, n, temps);
                 }
