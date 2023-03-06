@@ -64,4 +64,9 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
     public void showInput(@NonNull String s) {
         setText(R.id.search_input, s);
     }
+
+    @Override
+    public void checkNodata(boolean show) {
+        setVisibility(R.id.search_nodata, show ? View.VISIBLE : View.GONE);
+    }
 }

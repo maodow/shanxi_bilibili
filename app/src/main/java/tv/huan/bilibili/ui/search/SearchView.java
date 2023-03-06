@@ -11,4 +11,6 @@ public interface SearchView extends BaseViewImpl {
     void showTitle(@NonNull String s);
 
     void showInput(@NonNull String s);
+
+    void checkNodata(boolean show);
 }

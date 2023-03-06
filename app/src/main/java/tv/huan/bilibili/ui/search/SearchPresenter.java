@@ -144,8 +144,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                     public void subscribe(ObservableEmitter<Boolean> emitter) {
                         emitter.onNext(null != s && s.length() >= 0);
                     }
-                })
-                .flatMap(new Function<Boolean, Observable<BaseBean<SearchBean>>>() {
+                }).flatMap(new Function<Boolean, Observable<BaseBean<SearchBean>>>() {
                     @Override
                     public Observable<BaseBean<SearchBean>> apply(Boolean aBoolean) {
                         // 搜索key
@@ -157,8 +156,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                             return HttpClient.getHttpClient().getHttpApi().getSearchRecommend(BoxUtil.getProdId(), Integer.MAX_VALUE, "2");
                         }
                     }
-                })
-                .map(new Function<BaseBean<SearchBean>, Boolean>() {
+                }).map(new Function<BaseBean<SearchBean>, Boolean>() {
                     @Override
                     public Boolean apply(BaseBean<SearchBean> searchBeanBaseBean) {
 
@@ -204,29 +202,25 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                             return getView().getString(R.string.search_title, s);
                         }
                     }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
+                }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
+                        getView().checkNodata(false);
                         getView().showLoading();
                     }
-                })
-                .doOnError(new Consumer<Throwable>() {
+                }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                     }
-                })
-                .doOnNext(new Consumer<String>() {
+                }).doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(String s) {
                         getView().hideLoading();
+                        getView().checkNodata(mData.size() <= 0);
                         getView().showTitle(s);
                         getView().refreshContent();
                     }
-                })
-                .subscribe());
+                }).subscribe());
     }
 }

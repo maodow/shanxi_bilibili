@@ -99,18 +99,37 @@
         android:textSize="@dimen/sp_18" />
 
     <!-- 搜索结果 -->
-    <lib.kalu.leanback.list.RecyclerViewGrid
-        android:id="@+id/search_list"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/keyboard_title"
         android:layout_toRightOf="@id/search_input"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:focusable="false"
-        android:paddingLeft="@dimen/dp_48"
-        android:paddingTop="@dimen/dp_14"
-        android:paddingRight="@dimen/dp_48"
-        android:paddingBottom="@dimen/dp_14" />
+        android:focusable="false">
+
+        <lib.kalu.leanback.list.RecyclerViewGrid
+            android:id="@+id/search_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:focusable="false"
+            android:paddingLeft="@dimen/dp_48"
+            android:paddingTop="@dimen/dp_14"
+            android:paddingRight="@dimen/dp_48"
+            android:paddingBottom="@dimen/dp_14" />
+
+        <!-- noData -->
+        <ImageView
+            android:id="@+id/search_nodata"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_177"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_nodata"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
