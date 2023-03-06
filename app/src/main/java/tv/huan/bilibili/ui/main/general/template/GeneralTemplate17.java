@@ -38,7 +38,7 @@ import tv.huan.bilibili.utils.LogUtil;
 
 public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
-    private final void refreshCenter(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
+    private final void refreshBanner(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
         try {
             GetSubChannelsByChannelBean.ListBean.TemplateBean news = list.get(position);
             GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(1);
@@ -220,7 +220,7 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
                             // selected
                             refreshSelected(list, position);
                             // center
-                            refreshCenter((View) objects[0], list, position);
+                            refreshBanner((View) objects[0], list, position);
                             // item
                             notifyItemRangeChanged((View) objects[0], 2, size - 2);
                             // loop
@@ -520,7 +520,7 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
                         // selected
                         refreshSelected(list, position);
                         // center
-                        refreshCenter(v, list, position);
+                        refreshBanner(v, list, position);
                         // right
                         refreshRight(v, hasFocus);
                     }
@@ -579,24 +579,10 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
         }
         // right
         else {
-            @IdRes
-            int name;
-            @IdRes
-            int info;
-            if (viewType == 3) {
-                name = R.id.general_template17c_name;
-                info = R.id.general_template17c_desc;
-            } else if (viewType == 4) {
-                name = R.id.general_template17e_name;
-                info = R.id.general_template17e_desc;
-            } else {
-                name = R.id.general_template17d_name;
-                info = R.id.general_template17d_desc;
-            }
             boolean hasFocus = v.hasFocus();
             boolean selected = templateBean.isGeneralTemplate17Selected();
             // 2
-            TextView vName = v.findViewById(name);
+            TextView vName = v.findViewById(R.id.general_template17_name);
             vName.setText(templateBean.getName());
             if (hasFocus) {
                 vName.setTextColor(v.getResources().getColor(R.color.color_black));
@@ -606,7 +592,7 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
                 vName.setTextColor(v.getResources().getColor(R.color.color_aaaaaa));
             }
             // 3
-            TextView vDesc = v.findViewById(info);
+            TextView vDesc = v.findViewById(R.id.general_template17_desc);
             vDesc.setText(templateBean.getName());
             vDesc.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
         }

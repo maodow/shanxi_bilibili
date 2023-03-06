@@ -9,7 +9,7 @@
 
     <!-- 图片 -->
     <ImageView
-        android:id="@+id/album_item_template01a_img"
+        android:id="@+id/album_item_template01_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="false"

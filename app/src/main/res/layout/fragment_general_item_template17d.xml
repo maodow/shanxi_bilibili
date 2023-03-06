@@ -11,7 +11,7 @@
     app:rl_scale="1.06">
 
     <TextView
-        android:id="@+id/general_template17d_name"
+        android:id="@+id/general_template17_name"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1.5"
@@ -23,7 +23,7 @@
         android:textSize="@dimen/sp_14" />
 
     <TextView
-        android:id="@+id/general_template17d_desc"
+        android:id="@+id/general_template17_desc"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

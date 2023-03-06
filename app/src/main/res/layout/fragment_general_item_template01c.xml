@@ -1,46 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv.huan.bilibili.widget.template1.Template1LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<tv.huan.bilibili.widget.template17.RoundLinearLayoutTemplate173 xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_selector_template17d"
     android:focusable="true"
-    android:orientation="horizontal"
-    app:rl_corner_top_right="8dp"
-
+    android:paddingLeft="@dimen/dp_16"
+    android:paddingRight="@dimen/dp_16"
+    android:orientation="vertical"
     app:rl_scale="1.06">
 
-    <View
-        android:id="@+id/general_item_template01c_tag"
-        android:layout_width="4dp"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="1dp"
-        android:background="#ffc988" />
-
     <TextView
-        android:id="@+id/general_item_template01c_name"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:id="@+id/album_item_template01_name"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1.5"
         android:ellipsize="end"
         android:focusable="false"
         android:gravity="center_vertical|left"
-        android:paddingLeft="16dp"
         android:singleLine="true"
-        android:textColor="#ffffff"
-        android:textSize="16sp" />
+        android:textColor="@color/color_aaaaaa"
+        android:textSize="@dimen/sp_14" />
 
     <TextView
-        android:id="@+id/general_item_template01c_info"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:id="@+id/album_item_template01_desc"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:ellipsize="end"
         android:focusable="false"
-        android:gravity="center_vertical|left"
-        android:paddingLeft="4dp"
+        android:visibility="gone"
+        android:gravity="top|left"
         android:singleLine="true"
-        android:textColor="#ffffff"
-        android:textSize="12sp" />
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/sp_11" />
 
-</tv.huan.bilibili.widget.template1.Template1LinearLayout>
+</tv.huan.bilibili.widget.template17.RoundLinearLayoutTemplate173>

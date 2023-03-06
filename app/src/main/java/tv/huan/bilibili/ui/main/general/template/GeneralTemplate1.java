@@ -3,9 +3,11 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,54 +17,39 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import lib.kalu.frame.mvp.util.CacheUtil;
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.round.RoundLinearLayout;
 import lib.kalu.leanback.round.RoundRelativeLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
+import tv.huan.bilibili.bean.LookBean;
+import tv.huan.bilibili.bean.MessageBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
-public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> implements Handler.Callback {
+public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
-    private boolean mHasFocus = false;
-    private final Handler mHandler = new Handler(this);
-
-    private final void refreshCenter(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
+    private final void refreshBanner(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
         try {
             GetSubChannelsByChannelBean.ListBean.TemplateBean news = list.get(position);
-            GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(0);
+            GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(1);
             olds.copyPic(news);
-            notifyItemRangeChanged(v, 0, 1);
+            notifyItemRangeChanged(v, 1, 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private final void refreshRight(@NonNull View v, @NonNull boolean hasFocus) {
-
-        // tag info
-//        @IdRes
-//        int tag;
-//        @IdRes
-//        int info;
-//        if (position == 2) {
-//            tag = R.id.general_item_template17c_tag;
-//            info = R.id.general_item_template17c_info;
-//        } else if (position == 6) {
-//            tag = R.id.general_item_template17e_tag;
-//            info = R.id.general_item_template17e_info;
-//        } else {
-//            tag = R.id.general_item_template17d_tag;
-//            info = R.id.general_item_template17d_info;
-//        }
-//        View vTag = v.findViewById(tag);
-//        vTag.setVisibility(leave ? View.VISIBLE : View.INVISIBLE);
-//        View vInfo = v.findViewById(info);
-//        vInfo.setVisibility(leave || hasFocus ? View.VISIBLE : View.INVISIBLE);
 
         // refresh
         notifyItemRangeChanged(v, 1, 5);
@@ -113,9 +100,9 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
                 GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
                 boolean selected = bean.isGeneralTemplate17Selected();
                 if (selected) {
-                    if (i >= 5) {
-                        if (size >= 2) {
-                            position = 1;
+                    if (i >= 6) {
+                        if (size >= 3) {
+                            position = 2;
                         }
                     } else {
                         position = i + 1;
@@ -129,129 +116,213 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
         return position;
     }
 
-    @Override
-    public boolean handleMessage(@NonNull Message msg) {
-        // 0x10011
-        if (msg.what == 0x10011) {
-
-            // not loop
-            if (mHasFocus) {
-                Object[] objects = (Object[]) msg.obj;
-                nextLoop(objects[0], objects[1], 0x10021, false);
+    private final int selectPosition(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
+        int position = -1;
+        try {
+            int size = list.size();
+            if (size > 6) {
+                size = 6;
             }
-            // loop
-            else {
-                Object[] objects = (Object[]) msg.obj;
-                List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list = (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) objects[1];
-                if (null != list) {
-                    int position = nextPosition(list);
-                    if (position == -1) {
-                        position = 2;
-                        refreshSelected(list, 2);
-                    }
-//                    Log.e("GeneralTemplate17", "handleMessage => position = " + position);
-                    int size = list.size();
-                    if (size > 7) {
-                        size = 7;
-                    }
-                    // selected
-                    refreshSelected(list, position);
-                    // center
-                    refreshCenter((View) objects[0], list, position);
-                    // item
-                    notifyItemRangeChanged((View) objects[0], 2, size - 2);
-                    // loop
-                    nextLoop(objects[0], list, 0x10011, false);
+            for (int i = 1; i < size; i++) {
+                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
+                boolean selected = bean.isGeneralTemplate17Selected();
+                if (selected) {
+                    position = i;
+                    break;
                 }
             }
+        } catch (Exception e) {
         }
-        // 0x10021
-        else if (msg.what == 0x10021) {
-            // not loop
-            if (mHasFocus) {
-                Object[] objects = (Object[]) msg.obj;
-                nextLoop(objects[0], objects[1], 0x10021, false);
-            }
-            // loop
-            else {
-                Object[] objects = (Object[]) msg.obj;
-                nextLoop(objects[0], objects[1], 0x10031, true);
-            }
-        }
-        // 0x10031
-        else if (msg.what == 0x10031) {
-            Object[] objects = (Object[]) msg.obj;
-            nextLoop(objects[0], objects[1], 0x10011, false);
-        }
-        return false;
+        return position;
     }
 
     private final void nextLoop(@NonNull Object obj0, @NonNull Object obj1, @NonNull int what, boolean start) {
+        LogUtil.log("GeneralTemplate1", "nextLoop => what = " + what);
         Message message = new Message();
         Object[] objects = new Object[2];
         objects[0] = obj0;
         objects[1] = obj1;
         message.obj = objects;
         message.what = what;
+        mHandler.removeMessages(what);
         mHandler.sendMessageDelayed(message, start ? 0 : 2000);
     }
 
     private final void cleanLoop() {
-        mHandler.removeMessages(0x10011);
-        mHandler.removeMessages(0x10021);
-        mHandler.removeMessages(0x10031);
+        LogUtil.log("GeneralTemplate1", "cleanLoop =>");
+        mHandler.removeMessages(0x10013);
+        mHandler.removeMessages(0x10023);
+        mHandler.removeMessages(0x10033);
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
+    private boolean mPause = false;
+    private boolean mHasFocus = false;
+    private MessageBean[] mMessage = new MessageBean[1];
+    private final Handler mHandler = new Handler(Looper.myLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            LogUtil.log("GeneralTemplate1", "handleMessage => what = " + msg.what);
+
+            if (mPause) {
+                mHandler.removeCallbacksAndMessages(null);
+                MessageBean bean = new MessageBean();
+                bean.setWhat(msg.what);
+                bean.setObj(msg.obj);
+                bean.setArg1(msg.arg1);
+                bean.setArg2(msg.arg2);
+                mMessage[0] = bean;
+            } else {
+                // 0x10013
+                if (msg.what == 0x10013) {
+
+                    // not loop
+                    if (mHasFocus) {
+                        Object[] objects = (Object[]) msg.obj;
+                        nextLoop(objects[0], objects[1], 0x10023, false);
+                    }
+                    // loop
+                    else {
+                        Object[] objects = (Object[]) msg.obj;
+                        List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list = (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) objects[1];
+                        if (null != list) {
+                            int position = nextPosition(list);
+                            if (position == -1) {
+                                position = 1;
+                                refreshSelected(list, 1);
+                            }
+//                    Log.e("GeneralTemplate1", "handleMessage => position = " + position);
+                            int size = list.size();
+                            if (size > 6) {
+                                size = 6;
+                            }
+                            // selected
+                            refreshSelected(list, position);
+                            // center
+                            refreshBanner((View) objects[0], list, position);
+                            // item
+                            notifyItemRangeChanged((View) objects[0], 1, size - 1);
+                            // loop
+                            nextLoop(objects[0], list, 0x10013, false);
+                        }
+                    }
+                }
+                // 0x10023
+                else if (msg.what == 0x10023) {
+                    // not loop
+                    if (mHasFocus) {
+                        Object[] objects = (Object[]) msg.obj;
+                        nextLoop(objects[0], objects[1], 0x10023, false);
+                    }
+                    // loop
+                    else {
+                        Object[] objects = (Object[]) msg.obj;
+                        nextLoop(objects[0], objects[1], 0x10033, true);
+                    }
+                }
+                // 0x10033
+                else if (msg.what == 0x10033) {
+                    Object[] objects = (Object[]) msg.obj;
+                    nextLoop(objects[0], objects[1], 0x10013, false);
+                }
+            }
+        }
+    };
+
+    public final void pauseMessage() {
+        mPause = true;
+        LogUtil.log("GeneralTemplate1", "pauseMessage =>");
+    }
+
+    public final void resumeMessage() {
+        mPause = false;
+        if (null != mMessage && null != mMessage[0]) {
+            Message message = new Message();
+            message.what = mMessage[0].getWhat();
+            message.obj = mMessage[0].getObj();
+            message.arg1 = mMessage[0].getArg1();
+            message.arg2 = mMessage[0].getArg2();
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler.sendMessageDelayed(message, 2000);
+            LogUtil.log("GeneralTemplate1", "resumeMessage =>");
+        }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        LogUtil.log("GeneralTemplate1", "onViewAttachedToWindow =>");
+        mHasFocus = false;
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        LogUtil.log("GeneralTemplate1", "onViewDetachedFromWindow =>");
+        mHasFocus = true;
     }
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
         super.onUnbindViewHolder(viewHolder);
-        cleanLoop();
+        LogUtil.log("GeneralTemplate1", "onUnbindViewHolder =>");
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
         super.onBindViewHolder(viewHolder, item);
-//        refreshRecs(context, (List<TemplateBean>) item);
-        nextLoop(viewHolder.view, item, 0x10011, true);
+        cleanLoop();
+        nextLoop(viewHolder.view, item, 0x10013, true);
     }
 
     @Override
-    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int viewType) {
-        try {
-            if (viewType > 1) {
-                view.setOnKeyListener(new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                            notifyItemRangeChanged(v, 1, 5);
-                        }
-                        return false;
-                    }
-                });
-                view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
+    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
 
-                        int position = viewHolder.getAbsoluteAdapterPosition();
-                        // focus
-                        mHasFocus = hasFocus;
-                        // selected
-                        refreshSelected(list, position);
-                        // center
-                        refreshCenter(v, list, position);
-                        // right
-                        refreshRight(v, hasFocus);
+        if (i == 1)
+            return;
+
+        try {
+            view.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                        notifyItemRangeChanged(v, 1, 5);
                     }
-                });
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = viewHolder.getAbsoluteAdapterPosition();
-                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                        JumpUtil.next(v.getContext(), bean);
-                    }
-                });
-            }
+                    return false;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+
+                    int position = viewHolder.getAbsoluteAdapterPosition();
+                    // focus
+                    mHasFocus = hasFocus;
+                    // selected
+                    refreshSelected(list, position);
+                    // center
+                    refreshBanner(v, list, position);
+                    // right
+                    refreshRight(v, hasFocus);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = viewHolder.getAbsoluteAdapterPosition();
+                    GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+                    JumpUtil.next(v.getContext(), bean);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -259,46 +330,32 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
 
     @Override
     protected void onBindHolder(@NonNull View v, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
+
+//        Log.e("GeneralTemplate1", "onBindHolder => position = " + i + ", data = " + new Gson().toJson(templateBean));
+//        Log.e("GeneralPresenter", "onBindHolder => i = "+i+", templateBean = "+templateBean);
         // left
         if (viewType == 1) {
-            ImageView vImg = v.findViewById(R.id.album_item_template01a_img);
-            GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
+            ImageView vImg = v.findViewById(R.id.album_item_template01_img);
+            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
         }
         // right
         else {
-            @IdRes
-            int name;
-            @IdRes
-            int info;
-            @IdRes
-            int tag;
-            if (viewType == 2) {
-                name = R.id.general_item_template01b_name;
-                info = R.id.general_item_template01b_info;
-                tag = R.id.general_item_template01b_tag;
-            } else if (viewType == 4) {
-                name = R.id.general_item_template01d_name;
-                info = R.id.general_item_template01d_info;
-                tag = R.id.general_item_template01d_tag;
-            } else {
-                name = R.id.general_item_template01c_name;
-                info = R.id.general_item_template01c_info;
-                tag = R.id.general_item_template01c_tag;
-            }
             boolean hasFocus = v.hasFocus();
             boolean selected = templateBean.isGeneralTemplate17Selected();
             // 2
-            View vTag = v.findViewById(tag);
-            vTag.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
-            // 3
-            TextView vName = v.findViewById(name);
+            TextView vName = v.findViewById(R.id.album_item_template01_name);
             vName.setText(templateBean.getName());
-            vName.setTextColor(Color.parseColor(hasFocus ? "#3c3c82" : (selected ? "#ffc988" : "#ffffff")));
-            // 4
-            TextView vInfo = v.findViewById(info);
-            vInfo.setText("" + position);
-            vInfo.setTextColor(Color.parseColor(hasFocus ? "#3c3c82" : (selected ? "#ffc988" : "#ffffff")));
-            vInfo.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
+            if (hasFocus) {
+                vName.setTextColor(v.getResources().getColor(R.color.color_black));
+            } else if (selected) {
+                vName.setTextColor(v.getResources().getColor(R.color.color_ff6699));
+            } else {
+                vName.setTextColor(v.getResources().getColor(R.color.color_aaaaaa));
+            }
+            // 3
+            TextView vDesc = v.findViewById(R.id.album_item_template01_desc);
+            vDesc.setText(templateBean.getName());
+            vDesc.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -319,7 +376,11 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
 
     @Override
     protected int initSpanSize(int position) {
-        return position == 0 ? 5 : 1;
+        if (position == 0) {
+            return 5;
+        } else {
+            return 1;
+        }
     }
 
     @Override
@@ -339,9 +400,9 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
         } else if (position == 1) {
             return 2;
         } else if (position == 5) {
-            return 4;
-        } else {
             return 3;
+        } else {
+            return 4;
         }
     }
 
@@ -351,7 +412,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
             return R.layout.fragment_general_item_template01a;
         } else if (viewType == 2) {
             return R.layout.fragment_general_item_template01b;
-        } else if (viewType == 4) {
+        } else if (viewType == 3) {
             return R.layout.fragment_general_item_template01d;
         } else {
             return R.layout.fragment_general_item_template01c;
@@ -377,47 +438,6 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
     public String initHeadAssetTTF(@NonNull Context context) {
         return null;
     }
-
-//    @Override
-//    protected RecyclerView.ItemDecoration initItemDecoration() {
-//
-//        return new RecyclerView.ItemDecoration() {
-//
-//            @Override
-//            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-//                super.getItemOffsets(outRect, view, parent, state);
-//
-//                Context context = view.getContext();
-//                int position = parent.getChildAdapterPosition(view);
-//
-//                // 0
-//                if (position == 0) {
-//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
-//                    outRect.set(0, 0, offset, 0);
-//                }
-//                // 1
-//                else if (position == 1) {
-//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_6);
-//                    outRect.set(offset, 0, offset / 3 * 2, offset / 3);
-//                }
-//                // 2
-//                else if (position == 2) {
-//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_6);
-//                    outRect.set(offset, offset / 3, offset / 3 * 2, 0);
-//                }
-//                // 3
-//                else if (position == 3) {
-//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_4);
-//                    outRect.set(offset, 0, 0, offset / 2);
-//                }
-//                // 4
-//                else if (position == 4) {
-//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_4);
-//                    outRect.set(offset, offset / 2, 0, 0);
-//                }
-//            }
-//        };
-//    }
 
     public static class GeneralTemplate1List extends ArrayList {
     }
