@@ -10,6 +10,7 @@ import java.util.Map;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import lib.kalu.leanback.clazz.ClassBean;
+import lib.kalu.leanback.clazz.VerticalClassLayout;
 import lib.kalu.leanback.list.RecyclerView;
 import lib.kalu.leanback.tags.TagsLayout;
 import lib.kalu.leanback.tags.listener.OnTagsChangeListener;
@@ -40,7 +41,7 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
     @Override
     public void refreshClass(@NonNull List<ClassBean> classApis, @NonNull String className) {
         setText(R.id.filter_title, className);
-        lib.kalu.leanback.clazz.VerticalClassLayout classLayout = findViewById(R.id.filter_second);
+        VerticalClassLayout classLayout = findViewById(R.id.filter_second);
         classLayout.update(classApis, false);
         classLayout.setOnCheckedChangeListener(new lib.kalu.leanback.clazz.VerticalClassLayout.OnCheckedChangeListener() {
             @Override

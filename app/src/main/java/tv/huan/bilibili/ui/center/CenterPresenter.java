@@ -138,34 +138,30 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
     protected final void requestTabs() {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<ArrayList<ClassBean>>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<ArrayList<ClassBean>> observableEmitter) {
+            @Override
+            public void subscribe(ObservableEmitter<ArrayList<ClassBean>> observableEmitter) {
 
 //                        int position = getView().getIntExtra(CenterActivity.INTENT_SELECT, 0);
 //                        if (position < 0 || position < 1) {
 //                            position = 0;
 //                        }
-                        ArrayList<lib.kalu.leanback.clazz.ClassBean> apis = new ArrayList<>();
-                        for (int i = 0; i < 2; i++) {
-                            lib.kalu.leanback.clazz.ClassBean classApi = new lib.kalu.leanback.clazz.ClassBean();
-                            classApi.setChecked(i == 0);
-                            classApi.setText(i == 0 ? "观看历史" : "我的收藏");
-                            apis.add(classApi);
-                        }
-                        observableEmitter.onNext(apis);
-                    }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnNext(new Consumer<ArrayList<ClassBean>>() {
-                    @Override
-                    public void accept(ArrayList<ClassBean> classBeans) {
-                        boolean extra = getView().getBooleanExtra(CenterActivity.INTENT_FAVORY, false);
-                        getView().updateTab(classBeans, extra ? 1 : 0);
-                        getView().updateFocus();
-                    }
-                })
-                .subscribe());
+                ArrayList<lib.kalu.leanback.clazz.ClassBean> apis = new ArrayList<>();
+                for (int i = 0; i < 2; i++) {
+                    lib.kalu.leanback.clazz.ClassBean classApi = new lib.kalu.leanback.clazz.ClassBean();
+                    classApi.setChecked(i == 0);
+                    classApi.setText(i == 0 ? "观看历史" : "我的收藏");
+                    apis.add(classApi);
+                }
+                observableEmitter.onNext(apis);
+            }
+        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnNext(new Consumer<ArrayList<ClassBean>>() {
+            @Override
+            public void accept(ArrayList<ClassBean> classBeans) {
+                boolean extra = getView().getBooleanExtra(CenterActivity.INTENT_FAVORY, false);
+                getView().updateTab(classBeans, extra ? 1 : 0);
+                getView().updateFocus();
+            }
+        }).subscribe());
     }
 
     protected void showWarning() {
@@ -183,102 +179,95 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         int checkedIndex = classLayout.getCheckedIndex();
                         observableEmitter.onNext(checkedIndex == 0);
                     }
-                })
-                .flatMap(new Function<Boolean, Observable<BaseBean<FavBean>>>() {
+                }).flatMap(new Function<Boolean, Observable<BaseBean<FavBean>>>() {
                     @Override
                     public Observable<BaseBean<FavBean>> apply(Boolean v) {
+                        // 观看历史
                         if (v) {
-                            return HttpClient.getHttpClient().getHttpApi().getFavList(0, Integer.MAX_VALUE);
-                        } else {
                             return HttpClient.getHttpClient().getHttpApi().getBookmark(0, Integer.MAX_VALUE, null);
                         }
+                        // 我的收藏
+                        else {
+                            return HttpClient.getHttpClient().getHttpApi().getFavList(0, Integer.MAX_VALUE);
+                        }
                     }
-                })
-                .map(new Function<BaseBean<FavBean>, Boolean>() {
+                }).map(new Function<BaseBean<FavBean>, Boolean>() {
                     @Override
                     public Boolean apply(BaseBean<FavBean> response) {
                         try {
-                            List<FavBean.ItemBean> rows = response.getData().getRows();
                             mDatas.clear();
+                        } catch (Exception e) {
+                        }
+                        try {
+                            List<FavBean.ItemBean> rows = response.getData().getRows();
                             mDatas.addAll(rows);
                         } catch (Exception e) {
                         }
-                        return mDatas.size() > 0;
+                        return mDatas.size() <= 0;
                     }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
+                }).delay(40, TimeUnit.MILLISECONDS)
                 .compose(ComposeSchedulers.io_main())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
+                        getView().checkNodata(false);
                         getView().showLoading();
                     }
-                })
-                .doOnError(new Consumer<Throwable>() {
+                }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                     }
-                })
-                .doOnNext(new Consumer<Boolean>() {
+                }).doOnNext(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) {
                         getView().hideLoading();
                         getView().refreshContent();
                         getView().checkNodata(aBoolean);
                     }
-                })
-                .subscribe());
+                }).subscribe());
     }
 
     private void delData(@NonNull String cid, @NonNull int position) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        HorizontalClassLayout classLayout = getView().findViewById(R.id.center_tabs);
-                        int checkedIndex = classLayout.getCheckedIndex();
-                        observableEmitter.onNext(checkedIndex == 0);
-                    }
-                })
-                .flatMap(new Function<Boolean, Observable<BaseBean<Object>>>() {
-                    @Override
-                    public Observable<BaseBean<Object>> apply(Boolean v) {
-                        if (v) {
-                            return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
-                        } else {
-                            return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
-                        }
-                    }
-                })
-                .map(new Function<BaseBean<Object>, Integer>() {
-                    @Override
-                    public Integer apply(BaseBean<Object> objectBaseBean) {
-                        return position;
-                    }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) {
-                        getView().showLoading();
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        getView().hideLoading();
-                    }
-                })
-                .doOnNext(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer i) {
-                        getView().hideLoading();
-                        getView().deletePosition(i);
-                    }
-                })
-                .subscribe());
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                HorizontalClassLayout classLayout = getView().findViewById(R.id.center_tabs);
+                int checkedIndex = classLayout.getCheckedIndex();
+                observableEmitter.onNext(checkedIndex == 0);
+            }
+        }).flatMap(new Function<Boolean, Observable<BaseBean<Object>>>() {
+            @Override
+            public Observable<BaseBean<Object>> apply(Boolean v) {
+                if (v) {
+                    return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
+                } else {
+                    return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
+                }
+            }
+        }).map(new Function<BaseBean<Object>, Integer>() {
+            @Override
+            public Integer apply(BaseBean<Object> objectBaseBean) {
+                return position;
+            }
+        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) {
+                getView().showLoading();
+            }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                getView().hideLoading();
+            }
+        }).doOnNext(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer i) {
+                getView().hideLoading();
+                getView().deletePosition(i);
+            }
+        }).subscribe());
 
 //        ClassLayout classLayout = getView().findViewById(R.id.center_class);
 //        int index = classLayout.getCheckedIndex();
@@ -371,40 +360,6 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
 //    }
 
     protected boolean dispatchKey(KeyEvent event) {
-//        // enter
-//        if (event.getRepeatCount() > 0 && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-//            boolean hasDel = false;
-//            int size = mDatas.size();
-//            for (int i = 0; i < size; i++) {
-//                FavBean.ItemBean itemBean = mDatas.get(i);
-//                if (null == itemBean)
-//                    continue;
-//                hasDel = itemBean.isShowDel();
-//                if (hasDel)
-//                    break;
-//            }
-//            if (!hasDel) {
-//                refreshDel(true);
-//                return true;
-//            }
-//        }
-//        // back
-//        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-//            boolean hasDel = false;
-//            int size = mDatas.size();
-//            for (int i = 0; i < size; i++) {
-//                FavBean.ItemBean itemBean = mDatas.get(i);
-//                if (null == itemBean)
-//                    continue;
-//                hasDel = itemBean.isShowDel();
-//                if (hasDel)
-//                    break;
-//            }
-//            if (hasDel) {
-//                refreshDel(false);
-//                return true;
-//            }
-//        }
         // up
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
             int focusId = getView().getCurrentFocusId();
@@ -427,6 +382,12 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 LogUtil.log("CenterPresenter => dispatchKeyEvent => down_action_down => ");
                 getView().setFocusable(R.id.center_vip, false);
                 getView().setFocusable(R.id.center_search, false);
+                getView().requestTab();
+                return true;
+            } else if (focusId == R.id.center_tabs) {
+                if (mDatas.size() <= 0) {
+                    return true;
+                }
             }
         }
         // right
@@ -439,6 +400,12 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 return true;
             } else if (focusId == R.id.center_vip) {
                 return true;
+            } else if (focusId == R.id.center_tabs) {
+                HorizontalClassLayout classLayout = (HorizontalClassLayout) getView().getCurrentFocus();
+                int index = classLayout.getCheckedIndex();
+                if (index >= 1) {
+                    return true;
+                }
             }
         }
         // left
@@ -451,6 +418,12 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 return true;
             } else if (focusId == R.id.center_search) {
                 return true;
+            } else if (focusId == R.id.center_tabs) {
+                HorizontalClassLayout classLayout = (HorizontalClassLayout) getView().getCurrentFocus();
+                int index = classLayout.getCheckedIndex();
+                if (index <= 0) {
+                    return true;
+                }
             }
         }
         return false;

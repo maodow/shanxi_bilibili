@@ -62,6 +62,11 @@ public class GeneralTemplate22 extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
         try {
+            TextView textView = viewHolder.view.findViewById(R.id.general_template22_title);
+            textView.setText("模板22");
+        } catch (Exception e) {
+        }
+        try {
             // 1
             startPlayer(viewHolder.view);
             // 2

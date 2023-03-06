@@ -110,6 +110,7 @@
         android:layout_height="@dimen/dp_177"
         android:layout_centerInParent="true"
         android:scaleType="fitCenter"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:src="@drawable/ic_nodata"/>
 
 </RelativeLayout>

@@ -48,6 +48,11 @@ public class GeneralTemplate21 extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
         try {
+            TextView textView = viewHolder.view.findViewById(R.id.general_template21_title);
+            textView.setText("模板21");
+        } catch (Exception e) {
+        }
+        try {
             // 1
             startPlayer(viewHolder.view);
             // 2
@@ -68,8 +73,7 @@ public class GeneralTemplate21 extends Presenter {
 
     private void startPlayer(View inflate) {
 
-        if (null == inflate)
-            return;
+        if (null == inflate) return;
 
         VideoLayout playerView = inflate.findViewById(R.id.general_template21_player);
         String url = "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
@@ -78,8 +82,7 @@ public class GeneralTemplate21 extends Presenter {
 
     private void setAdapter(View view) {
 
-        if (null == view)
-            return;
+        if (null == view) return;
 
         RecyclerView recyclerView = view.findViewById(R.id.general_template21_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false) {

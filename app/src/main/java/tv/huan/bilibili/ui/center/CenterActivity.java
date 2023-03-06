@@ -49,13 +49,13 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     public void updateTab(ArrayList<ClassBean> data, int select) {
         HorizontalClassLayout classLayout = findViewById(R.id.center_tabs);
         classLayout.update(data);
-        classLayout.requestFocusTab(select);
         classLayout.setOnCheckedChangeListener(new HorizontalClassLayout.OnCheckedChangeListener() {
             @Override
             public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
                 getPresenter().request();
             }
         });
+        classLayout.requestFocus(select, true);
     }
 
     @Override
@@ -85,5 +85,11 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
         putBooleanExtra(INTENT_UPDATE, true);
         RecyclerView recyclerView = findViewById(R.id.center_list);
         recyclerView.getAdapter().notifyItemRangeRemoved(position, 1);
+    }
+
+    @Override
+    public void requestTab() {
+        HorizontalClassLayout classLayout = findViewById(R.id.center_tabs);
+        classLayout.requestFocus(false);
     }
 }
