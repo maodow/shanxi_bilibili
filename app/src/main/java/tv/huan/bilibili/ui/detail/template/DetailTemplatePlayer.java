@@ -125,7 +125,7 @@ public final class DetailTemplatePlayer extends Presenter {
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_vip);
-            textView.setVisibility(((DetailTemplatePlayerObject) o).isVip() ? View.VISIBLE : View.GONE);
+            textView.setVisibility(((DetailTemplatePlayerObject) o).isVip() ? View.GONE : View.VISIBLE);
         } catch (Exception e) {
         }
         try {
@@ -156,8 +156,14 @@ public final class DetailTemplatePlayer extends Presenter {
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_index);
-            String string = textView.getResources().getString(R.string.detail_playing_index, ((DetailTemplatePlayerObject) o).getTitle(), ((DetailTemplatePlayerObject) o).getPlayingIndex());
-            textView.setText(string);
+            int playingIndex = ((DetailTemplatePlayerObject) o).getPlayingIndex();
+            String title = ((DetailTemplatePlayerObject) o).getTitle();
+            if (playingIndex >= 1) {
+                String string = textView.getResources().getString(R.string.detail_playing_index, title, playingIndex);
+                textView.setText(string);
+            } else {
+                textView.setText(title);
+            }
         } catch (Exception e) {
         }
         try {

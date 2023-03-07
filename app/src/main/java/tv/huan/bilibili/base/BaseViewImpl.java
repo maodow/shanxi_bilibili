@@ -24,8 +24,10 @@ public interface BaseViewImpl extends BaseView {
 
     default void showToast(@NonNull String s) {
         try {
-            Context context = getContext();
-            Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+            if (null != s && s.length() > 0) {
+                Context context = getContext();
+                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+            }
         } catch (Exception e) {
         }
     }
