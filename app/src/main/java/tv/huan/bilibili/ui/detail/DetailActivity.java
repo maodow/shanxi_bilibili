@@ -98,6 +98,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void updatePlayer(@NonNull MediaBean data) {
+        getPresenter().checkPlayer(data);
         stopPlayer();
         updateVid(data);
         DetailGridView gridView = findViewById(R.id.detail_list);

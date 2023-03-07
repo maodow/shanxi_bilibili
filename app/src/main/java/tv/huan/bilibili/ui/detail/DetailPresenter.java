@@ -443,7 +443,18 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             List<MediaBean> medias = data.getMedias();
                             return medias.get(position);
                         } catch (Exception e) {
-                            throw e;
+                            MediaBean bean = new MediaBean();
+                            bean.setTempIndex(-1);
+                            bean.setTempVip(data.isVip());
+                            bean.setTempFavor(data.isFavor());
+                            bean.setTempPlayType(data.getPlayType());
+                            bean.setTempRecClassId(data.getRecClassId());
+                            bean.setTempTag(data.getAlbum().getSplitTag());
+                            bean.setTempTitle(data.getAlbum().getTitle());
+                            bean.setTemoInfo(data.getAlbum().getInfo());
+                            bean.setTempImageUrl(data.getAlbum().getPicture(true));
+                            bean.setTempVideoUrl(null);
+                            return bean;
                         }
                     }
                 })
@@ -596,63 +607,66 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     }
 
     protected final void delayPlayer(@NonNull MediaBean data) {
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Integer>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        boolean isVip = data.isTempVip();
-                        LogUtil.log("DetailPresenter", "delayPlayer => isVip = " + isVip);
-                        // 免费
-                        if (isVip) {
-                            observableEmitter.onNext(true);
-                        }
-                        // 播放策略
-                        else {
+                    public void subscribe(ObservableEmitter<Integer> emitter) {
+                        String videoUrl = data.getTempVideoUrl();
+                        if (null == videoUrl || videoUrl.length() <= 0) {
+                            emitter.onNext(0);
+                        } else {
+                            boolean isVip = data.isTempVip();
                             int playType = data.getTempPlayType();
                             int index = data.getTempIndex();
-                            LogUtil.log("DetailPresenter", "delayPlayer => playType = " + playType + ", index = " + index);
-                            if (index <= playType) {
-                                observableEmitter.onNext(true);
+                            if (!isVip && index > playType) {
+                                emitter.onNext(1);
                             } else {
-                                observableEmitter.onNext(false);
+                                emitter.onNext(2);
                             }
                         }
                     }
                 })
                 .delay(4, TimeUnit.SECONDS)
                 .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
+                .doOnNext(new Consumer<Integer>() {
                     @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        boolean isVip = data.isTempVip();
-                        int playType = data.getTempPlayType();
-                        int index = data.getTempIndex();
-                        if (!isVip && playType <= 0) {
-                            throw new Exception("需要开通vip");
-                        } else if (!isVip && index > playType) {
-                            throw new Exception("第" + index + "集, 需要开通vip");
-                        }
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        if (null != throwable) {
-                            String s = throwable.getMessage();
-                            if (null != s && s.length() > 0) {
-                                getView().showToast(s);
-                            }
-                        }
-                        getView().jumpVip();
-                    }
-                })
-                .doOnNext(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) {
-                        if (aBoolean) {
+                    public void accept(Integer v) {
+                        if (v == 2) {
                             getView().startPlayer(data);
-                        } else {
+                        } else if (v == 1) {
                             getView().jumpVip();
                         }
+                    }
+                })
+                .subscribe());
+    }
+
+    protected final void checkPlayer(@NonNull MediaBean data) {
+        addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<String> emitter) {
+
+                        String videoUrl = data.getTempVideoUrl();
+                        if (null == videoUrl || videoUrl.length() <= 0) {
+                            emitter.onNext("视频url错误");
+                        } else {
+                            boolean isVip = data.isTempVip();
+                            int playType = data.getTempPlayType();
+                            int index = data.getTempIndex();
+                            if (!isVip && playType <= 0) {
+                                emitter.onNext("需要开通vip");
+                            } else if (!isVip && index > playType) {
+                                emitter.onNext("第" + index + "集, 需要开通vip");
+                            } else {
+                                emitter.onNext("");
+                            }
+                        }
+                    }
+                })
+                .compose(ComposeSchedulers.io_main())
+                .doOnNext(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) {
+                        getView().showToast(s);
                     }
                 })
                 .subscribe());

@@ -43,7 +43,6 @@ public class Special1Presenter extends BasePresenterImpl<Special1View> {
         super(specialView);
     }
 
-
     protected void setAdapter() {
         Context context = getView().getContext();
         RecyclerView recyclerView = getView().findViewById(R.id.special1_list);
