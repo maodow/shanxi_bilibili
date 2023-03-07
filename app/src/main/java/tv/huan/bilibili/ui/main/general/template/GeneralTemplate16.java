@@ -3,15 +3,14 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,12 +28,14 @@ import lib.kalu.leanback.round.RoundRelativeLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.LookBean;
+import tv.huan.bilibili.bean.MessageBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
-public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> implements Handler.Callback {
+public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
-    private final void refreshCenter(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
+    private final void refreshBanner(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
         try {
             GetSubChannelsByChannelBean.ListBean.TemplateBean news = list.get(position);
             GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(1);
@@ -148,99 +149,150 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return position;
     }
 
-    private boolean mHasFocus = false;
-    private final Handler mHandler = new Handler(this);
-
-    @Override
-    public boolean handleMessage(@NonNull Message msg) {
-        // 0x10012
-        if (msg.what == 0x10012) {
-
-            // not loop
-            if (mHasFocus) {
-                Object[] objects = (Object[]) msg.obj;
-                nextLoop(objects[0], objects[1], 0x10022, false);
-            }
-            // loop
-            else {
-                Object[] objects = (Object[]) msg.obj;
-                List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list = (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) objects[1];
-                if (null != list) {
-                    int position = nextPosition(list);
-                    if (position == -1) {
-                        position = 2;
-                        refreshSelected(list, 2);
-                    }
-//                    Log.e("GeneralTemplate17", "handleMessage => position = " + position);
-                    int size = list.size();
-                    if (size > 7) {
-                        size = 7;
-                    }
-                    // selected
-                    refreshSelected(list, position);
-                    // center
-                    refreshCenter((View) objects[0], list, position);
-                    // item
-                    notifyItemRangeChanged((View) objects[0], 2, size - 2);
-                    // loop
-                    nextLoop(objects[0], list, 0x10012, false);
-                }
-            }
-        }
-        // 0x10022
-        else if (msg.what == 0x10022) {
-            // not loop
-            if (mHasFocus) {
-                Object[] objects = (Object[]) msg.obj;
-                nextLoop(objects[0], objects[1], 0x10022, false);
-            }
-            // loop
-            else {
-                Object[] objects = (Object[]) msg.obj;
-                nextLoop(objects[0], objects[1], 0x10032, true);
-            }
-        }
-        // 0x10032
-        else if (msg.what == 0x10032) {
-            Object[] objects = (Object[]) msg.obj;
-            nextLoop(objects[0], objects[1], 0x10012, false);
-        }
-        return false;
-    }
-
     private final void nextLoop(@NonNull Object obj0, @NonNull Object obj1, @NonNull int what, boolean start) {
+        LogUtil.log("GeneralTemplate16", "nextLoop => what = " + what);
         Message message = new Message();
         Object[] objects = new Object[2];
         objects[0] = obj0;
         objects[1] = obj1;
         message.obj = objects;
         message.what = what;
+        mHandler.removeMessages(what);
         mHandler.sendMessageDelayed(message, start ? 0 : 2000);
     }
 
     private final void cleanLoop() {
-        mHandler.removeMessages(0x10012);
-        mHandler.removeMessages(0x10022);
-        mHandler.removeMessages(0x10032);
+        LogUtil.log("GeneralTemplate16", "cleanLoop =>");
+        mHandler.removeMessages(0x10013);
+        mHandler.removeMessages(0x10023);
+        mHandler.removeMessages(0x10033);
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
+    private boolean mPause = false;
+    private boolean mHasFocus = false;
+    private MessageBean[] mMessage = new MessageBean[1];
+    private final Handler mHandler = new Handler(Looper.myLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            LogUtil.log("GeneralTemplate16", "handleMessage => what = " + msg.what);
+
+            if (mPause) {
+                mHandler.removeCallbacksAndMessages(null);
+                MessageBean bean = new MessageBean();
+                bean.setWhat(msg.what);
+                bean.setObj(msg.obj);
+                bean.setArg1(msg.arg1);
+                bean.setArg2(msg.arg2);
+                mMessage[0] = bean;
+            } else {
+                // 0x10013
+                if (msg.what == 0x10013) {
+
+                    // not loop
+                    if (mHasFocus) {
+                        Object[] objects = (Object[]) msg.obj;
+                        nextLoop(objects[0], objects[1], 0x10023, false);
+                    }
+                    // loop
+                    else {
+                        Object[] objects = (Object[]) msg.obj;
+                        List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list = (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) objects[1];
+                        if (null != list) {
+                            int position = nextPosition(list);
+                            if (position == -1) {
+                                position = 2;
+                                refreshSelected(list, 2);
+                            }
+//                    Log.e("GeneralTemplate16", "handleMessage => position = " + position);
+                            int size = list.size();
+                            if (size > 7) {
+                                size = 7;
+                            }
+                            // selected
+                            refreshSelected(list, position);
+                            // center
+                            refreshBanner((View) objects[0], list, position);
+                            // item
+                            notifyItemRangeChanged((View) objects[0], 2, size - 2);
+                            // loop
+                            nextLoop(objects[0], list, 0x10013, false);
+                        }
+                    }
+                }
+                // 0x10023
+                else if (msg.what == 0x10023) {
+                    // not loop
+                    if (mHasFocus) {
+                        Object[] objects = (Object[]) msg.obj;
+                        nextLoop(objects[0], objects[1], 0x10023, false);
+                    }
+                    // loop
+                    else {
+                        Object[] objects = (Object[]) msg.obj;
+                        nextLoop(objects[0], objects[1], 0x10033, true);
+                    }
+                }
+                // 0x10033
+                else if (msg.what == 0x10033) {
+                    Object[] objects = (Object[]) msg.obj;
+                    nextLoop(objects[0], objects[1], 0x10013, false);
+                }
+            }
+        }
+    };
+
+    public final void pauseMessage() {
+        mPause = true;
+        LogUtil.log("GeneralTemplate16", "pauseMessage =>");
+    }
+
+    public final void resumeMessage() {
+        mPause = false;
+        if (null != mMessage && null != mMessage[0]) {
+            Message message = new Message();
+            message.what = mMessage[0].getWhat();
+            message.obj = mMessage[0].getObj();
+            message.arg1 = mMessage[0].getArg1();
+            message.arg2 = mMessage[0].getArg2();
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler.sendMessageDelayed(message, 2000);
+            LogUtil.log("GeneralTemplate16", "resumeMessage =>");
+        }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        LogUtil.log("GeneralTemplate16", "onViewAttachedToWindow =>");
+        mHasFocus = false;
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        LogUtil.log("GeneralTemplate16", "onViewDetachedFromWindow =>");
+        mHasFocus = true;
     }
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
         super.onUnbindViewHolder(viewHolder);
-        cleanLoop();
+        LogUtil.log("GeneralTemplate16", "onUnbindViewHolder =>");
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
         super.onBindViewHolder(viewHolder, item);
+        cleanLoop();
         Context context = viewHolder.view.getContext();
         refreshRecs(context, (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) item);
-        nextLoop(viewHolder.view, item, 0x10012, true);
+        nextLoop(viewHolder.view, item, 0x10013, true);
     }
 
     public final void refreshRecs(@NonNull Context context, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
@@ -261,65 +313,46 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
     }
 
     @Override
-    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int viewType) {
+    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
         try {
 
             // 左侧
-            if (viewType == 1) {
-                int[] ids = new int[]{R.id.general_item_template16a_rec1,
-                        R.id.general_item_template16a_rec2,
-                        R.id.general_item_template16a_rec3,
-                        R.id.general_item_template16a_rec4,
-                        R.id.general_item_template16a_rec5};
-                int length = ids.length;
-                for (int j = 0; j < length; j++) {
-                    view.findViewById(ids[j]).setOnKeyListener(new View.OnKeyListener() {
-                        @Override
-                        public boolean onKey(View v, int keyCode, KeyEvent event) {
-                            // right
-                            if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                                try {
-                                    int position = selectPosition(list);
-                                    requestFocus(v, position);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                return true;
-                            }
-                            return false;
-                        }
-                    });
-                    view.findViewById(ids[j]).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+            if (i == 1) {
 
-                            int id = v.getId();
-                            int index = -1;
-                            if (id == R.id.general_item_template16a_rec1) {
-                                index = 0;
-                            } else if (id == R.id.general_item_template16a_rec2) {
-                                index = 1;
-                            } else if (id == R.id.general_item_template16a_rec3) {
-                                index = 2;
-                            } else if (id == R.id.general_item_template16a_rec4) {
-                                index = 3;
-                            } else if (id == R.id.general_item_template16a_rec5) {
-                                index = 4;
-                            }
-                            if (index == -1)
-                                return;
-
-                            int position = viewHolder.getAbsoluteAdapterPosition();
-                            GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                            List<LookBean> lookBeans = bean.getGeneralTemplate17Recs();
-                            LookBean lookBean = lookBeans.get(index);
-                            JumpUtil.next(v.getContext(), lookBean);
-                        }
-                    });
-                }
+//                    view.findViewById(ids[j]).setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            int id = v.getId();
+//                            // img
+//                            if (id == R.id.general_item_template17a_img) {
+//                                int position = viewHolder.getAbsoluteAdapterPosition();
+//                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+//                                JumpUtil.next(v.getContext(), bean);
+//                            }
+//                            // all
+//                            else if (id == R.id.general_item_template17a_class1_all || id == R.id.general_item_template17a_class2_all || id == R.id.general_item_template17a_class3_all) {
+//                                JumpUtil.nextCenter(v.getContext(), true);
+//                            }
+//                            // rec1
+//                            else if (id == R.id.general_item_template17a_class2_rec1 || id == R.id.general_item_template17a_class3_rec1) {
+//                                int position = viewHolder.getAbsoluteAdapterPosition();
+//                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+//                                List<LookBean> lookBeans = bean.getGeneralTemplate17Recs();
+//                                LookBean lookBean = lookBeans.get(0);
+//                                JumpUtil.next(v.getContext(), lookBean);
+//                            }
+//                            // rec2
+//                            else if (id == R.id.general_item_template17a_class3_rec2) {
+//                                int position = viewHolder.getAbsoluteAdapterPosition();
+//                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+//                                List<LookBean> lookBeans = bean.getGeneralTemplate17Recs();
+//                                LookBean lookBean = lookBeans.get(1);
+//                                JumpUtil.next(v.getContext(), lookBean);
+//                            }
+//                        }
             }
             // 中间
-            else if (viewType == 2) {
+            else if (i == 2) {
 
             }
             // 右侧
@@ -327,7 +360,33 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
                 view.setOnKeyListener(new View.OnKeyListener() {
                     @Override
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                        // left
+//                        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+//                            v.setTag(true);
+//                        }
+//                        // right
+//                        else if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+//                            v.setTag(true);
+//                        }
+//                        // down
+//                        else if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+//                            int position = viewHolder.getAbsoluteAdapterPosition();
+//                            int size = list.size();
+//                            if (position + 1 == size) {
+//                                v.setTag(true);
+//                            }
+//                        }
+//                        // up
+//                        else if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+//                            int position = viewHolder.getAbsoluteAdapterPosition();
+//                            if (position == 2) {
+//                                v.setTag(true);
+//                            }
+//                        }
+                        // up-in, right-in, down-in, left-in
+//                        else if (event.getAction() == KeyEvent.ACTION_UP && (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_LEFT)) {
                         if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+//                            int position = selectPosition(list);
                             notifyItemRangeChanged(v, 2, 5);
                         }
                         return false;
@@ -343,7 +402,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
                         // selected
                         refreshSelected(list, position);
                         // center
-                        refreshCenter(v, list, position);
+                        refreshBanner(v, list, position);
                         // right
                         refreshRight(v, hasFocus);
                     }
@@ -364,88 +423,57 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
 
     @Override
     protected void onBindHolder(@NonNull View v, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
+
         // left
         if (viewType == 1) {
-            // 1
-            List<LookBean> list = templateBean.getGeneralTemplate17Recs();
-            int size = list.size();
-            // 2
-            if (size <= 0) {
-
-            } else {
-                @IdRes
-                int nameId;
-                @IdRes
-                int positionId;
-                for (int i = 0; i < 5; i++) {
-                    if (i + 1 >= size)
-                        continue;
-                    if (i == 0) {
-                        nameId = R.id.general_item_template16a_rec1_name;
-                        positionId = R.id.general_item_template16a_rec1_position;
-                    } else if (i == 1) {
-                        nameId = R.id.general_item_template16a_rec2_name;
-                        positionId = R.id.general_item_template16a_rec2_position;
-                    } else if (i == 2) {
-                        nameId = R.id.general_item_template16a_rec3_name;
-                        positionId = R.id.general_item_template16a_rec3_position;
-                    } else if (i == 3) {
-                        nameId = R.id.general_item_template16a_rec4_name;
-                        positionId = R.id.general_item_template16a_rec4_position;
-                    } else {
-                        nameId = R.id.general_item_template16a_rec5_name;
-                        positionId = R.id.general_item_template16a_rec5_position;
-                    }
-                    LookBean lookBean = list.get(i);
-                    if (null == lookBean)
-                        continue;
-                    TextView vName = v.findViewById(nameId);
-                    vName.setText(lookBean.getCid());
-                    TextView vPosition = v.findViewById(positionId);
-                    vPosition.setText("看至" + i + "%");
-                }
-            }
+//            // a
+//            TextView vTxt = v.findViewById(R.id.general_item_template17a_name);
+//            vTxt.setText(templateBean.getName());
+//            // b
+//            ImageView vImg = v.findViewById(R.id.general_item_template17a_img);
+//            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+//            // c
+//            int num = 2;
+//            v.findViewById(R.id.general_template17a_type1_item1).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+//            v.findViewById(R.id.general_template17a_type1_item2).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+//            v.findViewById(R.id.general_template17a_type1_item3).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+//            v.findViewById(R.id.general_template17a_type2_item1).setVisibility(num == 1 ? View.VISIBLE : View.GONE);
+//            v.findViewById(R.id.general_template17a_type2_item2).setVisibility(num == 1 ? View.VISIBLE : View.GONE);
+//            v.findViewById(R.id.general_template17a_type3).setVisibility(num <= 0 ? View.VISIBLE : View.GONE);
+//            if (num >= 1) {
+//                ((TextView) v.findViewById(R.id.general_template17a_type1_item1_name)).setText("1");
+//                ((TextView) v.findViewById(R.id.general_template17a_type1_item1_date)).setText("观看至：1");
+//                ((TextView) v.findViewById(R.id.general_template17a_type2_item1_name)).setText("1");
+//                ((TextView) v.findViewById(R.id.general_template17a_type2_item1_date)).setText("观看至：1");
+//            }
+//            if (num >= 2) {
+//                ((TextView) v.findViewById(R.id.general_template17a_type1_item2_name)).setText("2");
+//                ((TextView) v.findViewById(R.id.general_template17a_type1_item2_date)).setText("观看至：2");
+//            }
         }
         // center
         else if (viewType == 2) {
-            ImageView vImg = v.findViewById(R.id.general_item_template16b_img);
-                GlideUtils.loadHz(vImg.getContext(), templateBean.getPicture(true), vImg);
+            ImageView vImg = v.findViewById(R.id.general_item_template16_img);
+            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
         }
         // right
         else {
-            @IdRes
-            int name;
-            @IdRes
-            int info;
-            @IdRes
-            int tag;
-            if (viewType == 3) {
-                name = R.id.general_item_template16c_name;
-                info = R.id.general_item_template16c_info;
-                tag = R.id.general_item_template16c_tag;
-            } else if (viewType == 4) {
-                name = R.id.general_item_template16e_name;
-                info = R.id.general_item_template16e_info;
-                tag = R.id.general_item_template16e_tag;
-            } else {
-                name = R.id.general_item_template16d_name;
-                info = R.id.general_item_template16d_info;
-                tag = R.id.general_item_template16d_tag;
-            }
             boolean hasFocus = v.hasFocus();
             boolean selected = templateBean.isGeneralTemplate17Selected();
             // 2
-            View vTag = v.findViewById(tag);
-            vTag.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
-            // 3
-            TextView vName = v.findViewById(name);
+            TextView vName = v.findViewById(R.id.general_template16_name);
             vName.setText(templateBean.getName());
-            vName.setTextColor(Color.parseColor(hasFocus ? "#3c3c82" : (selected ? "#ffc988" : "#ffffff")));
-            // 4
-            TextView vInfo = v.findViewById(info);
-            vInfo.setText("" + position);
-            vInfo.setTextColor(Color.parseColor(hasFocus ? "#3c3c82" : (selected ? "#ffc988" : "#ffffff")));
-            vInfo.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
+            if (hasFocus) {
+                vName.setTextColor(v.getResources().getColor(R.color.color_black));
+            } else if (selected) {
+                vName.setTextColor(v.getResources().getColor(R.color.color_ff6699));
+            } else {
+                vName.setTextColor(v.getResources().getColor(R.color.color_aaaaaa));
+            }
+            // 3
+            TextView vDesc = v.findViewById(R.id.general_template16_desc);
+            vDesc.setText(templateBean.getName());
+            vDesc.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
         }
     }
 

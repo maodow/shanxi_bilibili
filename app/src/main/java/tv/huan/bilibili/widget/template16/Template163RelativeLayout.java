@@ -1,29 +1,28 @@
 package tv.huan.bilibili.widget.template16;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.ViewParent;
-import android.widget.LinearLayout;
 
-import androidx.annotation.RequiresApi;
 import androidx.leanback.widget.VerticalGridView;
 
-public class Template16LinearLayoutRec extends LinearLayout {
-    public Template16LinearLayoutRec(Context context) {
+import lib.kalu.leanback.round.RoundLinearLayout;
+import tv.huan.bilibili.widget.template17.RoundRelativeLayoutTemplate172;
+
+public class Template163RelativeLayout extends RoundLinearLayout {
+    public Template163RelativeLayout(Context context) {
         super(context);
     }
 
-    public Template16LinearLayoutRec(Context context, AttributeSet attrs) {
+    public Template163RelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public Template16LinearLayoutRec(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Template163RelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public Template16LinearLayoutRec(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public Template163RelativeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -35,14 +34,13 @@ public class Template16LinearLayoutRec extends LinearLayout {
             int width = verticalGridView.getWidth();
             int left = verticalGridView.getPaddingLeft();
             int right = verticalGridView.getPaddingRight();
-            int w = (int) ((int) ((width - left - right) / 10) * 2.5);
-            int h = (int) width / 4;
+            int w = (int) (((width - left - right) / 10) * 2.5);
+            int h = (width / 4) / 5;
             int specW = MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY);
             int specH = MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY);
             super.onMeasure(specW, specH);
             setMeasuredDimension(w, h);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

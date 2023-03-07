@@ -38,12 +38,149 @@ import tv.huan.bilibili.utils.LogUtil;
 
 public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
+    @Override
+    public void onViewAttachedToWindow(ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        LogUtil.log("GeneralTemplate1", "onViewAttachedToWindow =>");
+        mHasFocus = false;
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        LogUtil.log("GeneralTemplate1", "onViewDetachedFromWindow =>");
+        mHasFocus = true;
+    }
+
+    @Override
+    public void onUnbindViewHolder(ViewHolder viewHolder) {
+        super.onUnbindViewHolder(viewHolder);
+        LogUtil.log("GeneralTemplate1", "onUnbindViewHolder =>");
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, Object item) {
+        super.onBindViewHolder(viewHolder, item);
+        cleanLoop();
+        nextLoop(viewHolder.view, item, 0x10013, true);
+    }
+
+    @Override
+    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
+
+        // 图片
+        if (i == 1) {
+        }
+        // 文字
+        else {
+            try {
+                view.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                            notifyItemRangeChanged(v, 1, 5);
+                        }
+                        return false;
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+
+                        int position = viewHolder.getAbsoluteAdapterPosition();
+                        // focus
+                        mHasFocus = hasFocus;
+                        // center
+                        refreshBanner(v, list, position);
+                        // selected
+                        refreshSelected(list, position);
+                        // right
+                        refreshRight(v, hasFocus);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = viewHolder.getAbsoluteAdapterPosition();
+                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+                        JumpUtil.next(v.getContext(), bean);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void onBindHolder(@NonNull View v, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
+
+        // 图片
+        if (viewType == 1) {
+            ImageView vImg = v.findViewById(R.id.album_item_template01_img);
+            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+        }
+        // 文字
+        else {
+            boolean hasFocus = v.hasFocus();
+            boolean selected = templateBean.isGeneralTemplate17Selected();
+            // 2
+            TextView vName = v.findViewById(R.id.album_item_template01_name);
+            vName.setText(templateBean.getName());
+            if (hasFocus) {
+                vName.setTextColor(v.getResources().getColor(R.color.color_black));
+            } else if (selected) {
+                vName.setTextColor(v.getResources().getColor(R.color.color_ff6699));
+            } else {
+                vName.setTextColor(v.getResources().getColor(R.color.color_aaaaaa));
+            }
+            // 3
+            TextView vDesc = v.findViewById(R.id.album_item_template01_desc);
+            vDesc.setText(templateBean.getName());
+            vDesc.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    @Override
+    protected int initItemViewType(int position, GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean) {
+        if (position == 0) {
+            return 1;
+        } else if (position == 1) {
+            return 2;
+        } else if (position == 5) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
+    @Override
+    protected int initLayout(int viewType) {
+        if (viewType == 1) {
+            return R.layout.fragment_general_item_template01a;
+        } else if (viewType == 2) {
+            return R.layout.fragment_general_item_template01b;
+        } else if (viewType == 3) {
+            return R.layout.fragment_general_item_template01d;
+        } else {
+            return R.layout.fragment_general_item_template01c;
+        }
+    }
+
     private final void refreshBanner(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
         try {
             GetSubChannelsByChannelBean.ListBean.TemplateBean news = list.get(position);
-            GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(1);
+            GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(0);
             olds.copyPic(news);
-            notifyItemRangeChanged(v, 1, 1);
+            notifyItemRangeChanged(v, 0, 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -250,116 +387,6 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
     }
 
     @Override
-    public void onViewAttachedToWindow(ViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-        LogUtil.log("GeneralTemplate1", "onViewAttachedToWindow =>");
-        mHasFocus = false;
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(ViewHolder holder) {
-        super.onViewDetachedFromWindow(holder);
-        LogUtil.log("GeneralTemplate1", "onViewDetachedFromWindow =>");
-        mHasFocus = true;
-    }
-
-    @Override
-    public void onUnbindViewHolder(ViewHolder viewHolder) {
-        super.onUnbindViewHolder(viewHolder);
-        LogUtil.log("GeneralTemplate1", "onUnbindViewHolder =>");
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        super.onBindViewHolder(viewHolder, item);
-        cleanLoop();
-        nextLoop(viewHolder.view, item, 0x10013, true);
-    }
-
-    @Override
-    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
-
-        if (i == 1)
-            return;
-
-        try {
-            view.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                        notifyItemRangeChanged(v, 1, 5);
-                    }
-                    return false;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-
-                    int position = viewHolder.getAbsoluteAdapterPosition();
-                    // focus
-                    mHasFocus = hasFocus;
-                    // selected
-                    refreshSelected(list, position);
-                    // center
-                    refreshBanner(v, list, position);
-                    // right
-                    refreshRight(v, hasFocus);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = viewHolder.getAbsoluteAdapterPosition();
-                    GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                    JumpUtil.next(v.getContext(), bean);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onBindHolder(@NonNull View v, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
-
-//        Log.e("GeneralTemplate1", "onBindHolder => position = " + i + ", data = " + new Gson().toJson(templateBean));
-//        Log.e("GeneralPresenter", "onBindHolder => i = "+i+", templateBean = "+templateBean);
-        // left
-        if (viewType == 1) {
-            ImageView vImg = v.findViewById(R.id.album_item_template01_img);
-            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
-        }
-        // right
-        else {
-            boolean hasFocus = v.hasFocus();
-            boolean selected = templateBean.isGeneralTemplate17Selected();
-            // 2
-            TextView vName = v.findViewById(R.id.album_item_template01_name);
-            vName.setText(templateBean.getName());
-            if (hasFocus) {
-                vName.setTextColor(v.getResources().getColor(R.color.color_black));
-            } else if (selected) {
-                vName.setTextColor(v.getResources().getColor(R.color.color_ff6699));
-            } else {
-                vName.setTextColor(v.getResources().getColor(R.color.color_aaaaaa));
-            }
-            // 3
-            TextView vDesc = v.findViewById(R.id.album_item_template01_desc);
-            vDesc.setText(templateBean.getName());
-            vDesc.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    @Override
     protected int initSpan() {
         return 5;
     }
@@ -391,32 +418,6 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
     @Override
     protected boolean initScrollVertically() {
         return false;
-    }
-
-    @Override
-    protected int initItemViewType(int position, GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean) {
-        if (position == 0) {
-            return 1;
-        } else if (position == 1) {
-            return 2;
-        } else if (position == 5) {
-            return 3;
-        } else {
-            return 4;
-        }
-    }
-
-    @Override
-    protected int initLayout(int viewType) {
-        if (viewType == 1) {
-            return R.layout.fragment_general_item_template01a;
-        } else if (viewType == 2) {
-            return R.layout.fragment_general_item_template01b;
-        } else if (viewType == 3) {
-            return R.layout.fragment_general_item_template01d;
-        } else {
-            return R.layout.fragment_general_item_template01c;
-        }
     }
 
     @Override

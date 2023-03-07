@@ -1,4 +1,3 @@
-
 package tv.huan.bilibili.widget.template16;
 
 import android.content.Context;
@@ -9,20 +8,20 @@ import androidx.leanback.widget.VerticalGridView;
 
 import lib.kalu.leanback.round.RoundRelativeLayout;
 
-public class RoundRelativeLayoutTemplate162 extends RoundRelativeLayout {
-    public RoundRelativeLayoutTemplate162(Context context) {
+public class Template162RelativeLayout extends RoundRelativeLayout {
+    public Template162RelativeLayout(Context context) {
         super(context);
     }
 
-    public RoundRelativeLayoutTemplate162(Context context, AttributeSet attrs) {
+    public Template162RelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public RoundRelativeLayoutTemplate162(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Template162RelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public RoundRelativeLayoutTemplate162(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public Template162RelativeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -41,7 +40,6 @@ public class RoundRelativeLayoutTemplate162 extends RoundRelativeLayout {
             super.onMeasure(specW, specH);
             setMeasuredDimension(w, h);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

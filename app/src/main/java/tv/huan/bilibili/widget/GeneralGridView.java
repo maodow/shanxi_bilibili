@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import lib.kalu.leanback.list.LeanBackVerticalGridView;
 import lib.kalu.leanback.list.RecyclerView;
 import lib.kalu.leanback.util.LeanBackUtil;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate1;
+import tv.huan.bilibili.ui.main.general.template.GeneralTemplate16;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
 import tv.huan.bilibili.utils.GlideUtils;
 
@@ -135,12 +137,28 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
         if (null != template17) {
             template17.pauseMessage();
         }
+        GeneralTemplate16 template16 = getPresenter(GeneralTemplate16.class);
+        if (null != template16) {
+            template16.pauseMessage();
+        }
+        GeneralTemplate1 template1 = getPresenter(GeneralTemplate1.class);
+        if (null != template1) {
+            template1.pauseMessage();
+        }
     }
 
     public void resumeMessage() {
         GeneralTemplate17 template17 = getPresenter(GeneralTemplate17.class);
         if (null != template17) {
             template17.resumeMessage();
+        }
+        GeneralTemplate16 template16 = getPresenter(GeneralTemplate16.class);
+        if (null != template16) {
+            template16.resumeMessage();
+        }
+        GeneralTemplate1 template1 = getPresenter(GeneralTemplate1.class);
+        if (null != template1) {
+            template1.resumeMessage();
         }
     }
 

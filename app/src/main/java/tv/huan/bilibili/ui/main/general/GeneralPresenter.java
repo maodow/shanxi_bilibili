@@ -13,12 +13,14 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -28,6 +30,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
+import tv.huan.bilibili.bean.format.GeneralBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate1;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate10;
@@ -115,6 +118,7 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                         observableEmitter.onNext(true);
                     }
                 })
+                // 瀑布流
                 .flatMap(new Function<Boolean, Observable<BaseBean<GetSubChannelsByChannelBean>>>() {
                     @Override
                     public Observable<BaseBean<GetSubChannelsByChannelBean>> apply(Boolean b) {
@@ -122,187 +126,219 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                         return HttpClient.getHttpClient().getHttpApi().getSubChannelsByChannel(channelId, 0, Integer.MAX_VALUE);
                     }
                 })
-                // second class
-                .flatMap(new Function<BaseBean<GetSubChannelsByChannelBean>, Observable<BaseBean<GetSubChannelsByChannelBean>>>() {
+                // 瀑布流 => 数据处理
+                .map(new Function<BaseBean<GetSubChannelsByChannelBean>, GeneralBean>() {
                     @Override
-                    public Observable<BaseBean<GetSubChannelsByChannelBean>> apply(BaseBean<GetSubChannelsByChannelBean> response) {
-                        int classId = getView().getIntExtra(GeneralFragment.BUNDLE_CLASSID, 0);
-                        if (classId > 0) {
-                            String extra;
-                            try {
-                                extra = new Gson().toJson(response.getData());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                extra = "{}";
-                            }
-                            return HttpClient.getHttpClient().getHttpApi().getClassByPrentId(classId, extra);
-                        } else {
-                            return Observable.create(new ObservableOnSubscribe<BaseBean<GetSubChannelsByChannelBean>>() {
-                                @Override
-                                public void subscribe(ObservableEmitter<BaseBean<GetSubChannelsByChannelBean>> observableEmitter) {
-                                    BaseBean<GetSubChannelsByChannelBean> baseBean = new BaseBean<>();
-                                    String extra;
-                                    try {
-                                        extra = new Gson().toJson(response.getData());
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        extra = "{}";
-                                    }
-                                    baseBean.setExtra(extra);
-                                    observableEmitter.onNext(baseBean);
-                                }
-                            });
+                    public GeneralBean apply(BaseBean<GetSubChannelsByChannelBean> data) {
+
+                        GeneralBean generalBean = new GeneralBean();
+
+                        // 瀑布流
+                        try {
+                            generalBean.setDatas(data.getData().getList());
+                        } catch (Exception e) {
+                            generalBean.setDatas(new ArrayList<>());
                         }
+
+                        // classId
+                        try {
+                            int classId = getView().getIntExtra(GeneralFragment.BUNDLE_CLASSID, -1);
+                            if (classId == -1)
+                                throw new Exception();
+                            generalBean.setClassId(classId);
+                        } catch (Exception e) {
+                            generalBean.setClassId(0);
+                        }
+
+                        // 上报
+//                        try {
+//                            int channelId = getView().getIntExtra(GeneralFragment.BUNDLE_CHANNELID, 0);
+//                            String name = getView().getStringExtra(GeneralFragment.BUNDLE_NAME);
+//                            reportChannelLoadFinished(channelId, name);
+//                        } catch (Exception e) {
+//                        }
+
+                        return generalBean;
                     }
                 })
-                .map(new Function<BaseBean<GetSubChannelsByChannelBean>, List<GetSubChannelsByChannelBean.ListBean>>() {
+                // 二级菜单
+                .flatMap(new Function<GeneralBean, ObservableSource<BaseBean<GetSubChannelsByChannelBean>>>() {
                     @Override
-                    public List<GetSubChannelsByChannelBean.ListBean> apply(BaseBean<GetSubChannelsByChannelBean> response) {
-                        ArrayList<GetSubChannelsByChannelBean.ListBean> list = new ArrayList<>();
+                    public ObservableSource<BaseBean<GetSubChannelsByChannelBean>> apply(GeneralBean data) {
+                        int classId = data.getClassId();
+                        String s = new Gson().toJson(data);
+                        return HttpClient.getHttpClient().getHttpApi().getClassByPrentId(classId, s);
+                    }
+                })
+                // 二级菜单 => 数据处理
+                .map(new Function<BaseBean<GetSubChannelsByChannelBean>, GeneralBean>() {
+                    @Override
+                    public GeneralBean apply(BaseBean<GetSubChannelsByChannelBean> resp) {
+                        GeneralBean generalBean;
                         try {
+                            generalBean = new Gson().fromJson(resp.getExtra(), GeneralBean.class);
+                        } catch (Exception e) {
+                            generalBean = new GeneralBean();
+                        }
 
-                            String extra = response.getExtra();
-//                            Log.e("GeneralPresenter", "getClassByPrentId => extra = " + extra);
-//                            Type type = new TypeToken<List<User>>(){}.getType();
-                            GetSubChannelsByChannelBean data = new Gson().fromJson(extra, GetSubChannelsByChannelBean.class);
-                            List<GetSubChannelsByChannelBean.ListBean> datas1 = data.getList();
-//                            Log.e("GeneralPresenter", "getClassByPrentId => datas1 = " + datas1);
-                            int size1 = datas1.size();
-                            int classId = getView().getIntExtra(GeneralFragment.BUNDLE_CLASSID, 0);
-                            for (int i = 0; i < size1; i++) {
+                        List<GetSubChannelsByChannelBean.ListBean> newsData = new LinkedList<>();
+                        List<GetSubChannelsByChannelBean.ListBean> oldsData = generalBean.getDatas();
+                        int size = oldsData.size();
+                        // 模板 => 遍历
+                        for (int i = 0; i < size; i++) {
 
-                                // 二级分类
-                                if (i == 1) {
-                                    GetSubChannelsByChannelBean data1 = response.getData();
-                                    if (null != data1) {
-                                        List<GetSubChannelsByChannelBean.ClassesBean> classes = data1.getClasses();
-                                        if (null != classes) {
-                                            GetSubChannelsByChannelBean.ListBean classBean = new GetSubChannelsByChannelBean.ListBean();
-                                            classBean.setPreTemplate(-1);
-                                            int size = classes.size();
-                                            if (size > 5) {
-                                                size = 5;
+                            // 二级分类[固定第二个]
+                            if (i == 1) {
+                                GetSubChannelsByChannelBean classData = resp.getData();
+                                if (null != classData) {
+                                    List<GetSubChannelsByChannelBean.ClassesBean> classes = classData.getClasses();
+                                    if (null != classes) {
+                                        int num = classes.size();
+                                        if (num > 0) {
+                                            // 1
+                                            GetSubChannelsByChannelBean.ListBean generalClass = new GetSubChannelsByChannelBean.ListBean();
+                                            generalClass.setPreTemplate(-1);
+                                            // 2
+                                            if (num > 5) {
+                                                num = 5;
                                             }
-                                            ArrayList<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateBeans = new ArrayList<>();
-                                            if (size > 0) {
-                                                for (int j = 0; j < size; j++) {
-                                                    GetSubChannelsByChannelBean.ClassesBean temp = classes.get(j);
-                                                    if (null == temp)
-                                                        continue;
-                                                    String name = temp.getName();
-                                                    GetSubChannelsByChannelBean.ListBean.TemplateBean bean = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
-                                                    bean.setName(name);
-                                                    bean.setClassId(data1.getParent().getId());
-                                                    bean.setToType(2);
-                                                    templateBeans.add(bean);
-                                                }
+                                            // 3
+                                            ArrayList<GetSubChannelsByChannelBean.ListBean.TemplateBean> tempList = new ArrayList<>();
+                                            for (int n = 0; n < num; n++) {
+                                                GetSubChannelsByChannelBean.ClassesBean temp = classes.get(n);
+                                                if (null == temp)
+                                                    continue;
+                                                String name = temp.getName();
+                                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
+                                                bean.setName(name);
+                                                bean.setClassId(resp.getData().getParent().getId());
+                                                bean.setToType(2);
+                                                tempList.add(bean);
                                             }
-
-                                            // 更多分类
+                                            // 4
                                             GetSubChannelsByChannelBean.ListBean.TemplateBean bean = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
                                             bean.setName("更多分类");
-                                            bean.setClassId(data1.getParent().getId());
+                                            bean.setClassId(resp.getData().getParent().getId());
                                             bean.setToType(2);
-                                            templateBeans.add(bean);
-
-                                            classBean.setTemplateData(templateBeans);
-                                            list.add(classBean);
+                                            tempList.add(bean);
+                                            // 5
+                                            generalClass.setTemplateData(tempList);
+                                            // 6
+                                            newsData.add(generalClass);
                                         }
                                     }
                                 }
-
-                                GetSubChannelsByChannelBean.ListBean listBean = datas1.get(i);
-                                if (null == listBean)
-                                    continue;
-                                List<GetSubChannelsByChannelBean.ListBean.TemplateBean> datas2 = listBean.getTemplateData();
-                                if (null == datas2)
-                                    continue;
-                                int size2 = datas2.size();
-                                if (size2 < 0)
-                                    continue;
-                                List<GetSubChannelsByChannelBean.ListBean.TemplateBean> result = new ArrayList<>();
-                                for (int j = 0; j < size2; j++) {
-                                    GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = datas2.get(j);
-                                    if (null == templateBean)
-                                        continue;
-                                    templateBean.setClassId(classId);
-                                    // 模板1
-                                    int preTemplate = listBean.getPreTemplate();
-                                    if (1 == preTemplate) {
-                                        int size = result.size();
-                                        // left
-                                        if (size == 0) {
-                                            GetSubChannelsByChannelBean.ListBean.TemplateBean temp = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
-                                            temp.copyPic(templateBean);
-                                            result.add(temp);
-                                        }
-                                    }
-                                    // 模板16
-                                    else if (16 == preTemplate && result.isEmpty()) {
-                                        int size = result.size();
-                                        // center
-                                        if (size == 1) {
-                                            GetSubChannelsByChannelBean.ListBean.TemplateBean temp = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
-                                            temp.copyPic(templateBean);
-                                            result.add(temp);
-                                        }
-                                    }
-                                    // 模板17
-                                    else if (17 == preTemplate) {
-
-                                        int size = result.size();
-                                        // left
-                                        if (size == 0) {
-//                                            Context context = getView().getContext();
-//                                            String s = CacheUtil.getCache(context, "user_look");
-//                                            Type type = new TypeToken<ArrayList<LookBean>>() {
-//                                            }.getType();
-//                                            ArrayList<LookBean> recs = new Gson().fromJson(s, type);
-//                                            if (null == recs) {
-//                                                recs = new ArrayList<>();
-//                                            }
-//                                            templateBean.setGeneralTemplate17Recs(recs);
-                                        }
-                                        // center
-                                        else if (size == 1) {
-                                            GetSubChannelsByChannelBean.ListBean.TemplateBean temp = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
-//                                            temp.setNewPicHz(templateBean.getNewPicHz());
-//                                            temp.setNewPicVt(templateBean.getNewPicVt());
-                                            result.add(temp);
-                                        }
-                                    }
-                                    result.add(templateBean);
-                                }
-                                listBean.setTemplateData(result);
-                                list.add(listBean);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
+                            GetSubChannelsByChannelBean.ListBean listBean = oldsData.get(i);
+                            if (null == listBean)
+                                continue;
+                            List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = listBean.getTemplateData();
+                            if (null == templateData)
+                                continue;
+                            int num = templateData.size();
+                            if (num <= 0)
+                                continue;
+                            List<GetSubChannelsByChannelBean.ListBean.TemplateBean> tempList = new ArrayList<>();
+                            for (int n = 0; n < num; n++) {
+                                GetSubChannelsByChannelBean.ListBean.TemplateBean temp = templateData.get(n);
+                                if (null == temp)
+                                    continue;
+                                temp.setClassId(generalBean.getClassId());
+                                int preTemplate = listBean.getPreTemplate();
+                                // 模板1
+                                if (1 == preTemplate) {
+                                    if (n == 0) {
+                                        tempList.add(temp);
+                                    }
+                                }
+                                // 模板16
+                                else if (16 == preTemplate) {
+                                    if (n == 0) {
+                                        tempList.add(new GetSubChannelsByChannelBean.ListBean.TemplateBean());
+                                        tempList.add(temp);
+                                    }
+                                }
+                                // 模板17
+                                else if (17 == preTemplate) {
+                                    if (n == 1) {
+                                        tempList.add(temp);
+                                    }
+                                }
+                                tempList.add(temp);
+                            }
+                            listBean.setTemplateData(tempList);
+                            newsData.add(listBean);
                         }
-                        return list;
+                        return generalBean;
                     }
                 })
-                .map(new Function<List<GetSubChannelsByChannelBean.ListBean>, Boolean>() {
+                // 瀑布流 => 填充数据
+                .map(new Function<GeneralBean, Boolean>() {
                     @Override
-                    public Boolean apply(List<GetSubChannelsByChannelBean.ListBean> listBeans) {
+                    public Boolean apply(GeneralBean generalBean) {
                         try {
-                            addPresenters(listBeans);
+                            List<GetSubChannelsByChannelBean.ListBean> datas = generalBean.getDatas();
+                            if (null != datas) {
+                                int size = datas.size();
+                                if (size > 0) {
+                                    VerticalGridView verticalGridView = getView().findViewById(R.id.general_list);
+                                    RecyclerView.Adapter adapter = verticalGridView.getAdapter();
+                                    if (null != adapter && adapter instanceof ItemBridgeAdapter) {
+                                        ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+                                        if (null != objectAdapter && objectAdapter instanceof ArrayObjectAdapter) {
+                                            // 1
+                                            ((ArrayObjectAdapter) objectAdapter).clear(false);
+                                            // 2
+                                            for (int i = 0; i < size; i++) {
+                                                GetSubChannelsByChannelBean.ListBean bean = datas.get(i);
+                                                if (null == bean)
+                                                    continue;
+
+                                                List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
+                                                int preTemplate = bean.getPreTemplate();
+
+                                                // 测试模板
+                                                if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
+                                                    for (int n = 1; n <= 22; n++) {
+                                                        if (n == 19)
+                                                            continue;
+                                                        if (n != 1 && n != 16 && n != 17)
+                                                            continue;
+                                                        ArrayList<GetSubChannelsByChannelBean.ListBean.TemplateBean> temps = new ArrayList<>();
+                                                        for (GetSubChannelsByChannelBean.ListBean.TemplateBean temp : templateData) {
+                                                            GetSubChannelsByChannelBean.ListBean.TemplateBean clone = temp.clone();
+                                                            temps.add(clone);
+                                                        }
+                                                        for (GetSubChannelsByChannelBean.ListBean.TemplateBean temp : templateData) {
+                                                            GetSubChannelsByChannelBean.ListBean.TemplateBean clone = temp.clone();
+                                                            temps.add(clone);
+                                                        }
+                                                        temps.get(0).setTempTitle("模板" + n);
+                                                        addPresenter((ArrayObjectAdapter) objectAdapter, n, temps);
+                                                    }
+                                                    break;
+                                                }
+                                                // 正常显示
+                                                else {
+                                                    if (preTemplate <= 18) {
+                                                        addPresenter((ArrayObjectAdapter) objectAdapter, preTemplate, templateData);
+                                                    } else if (preTemplate == 19) {
+                                                        addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
+                                                    } else if (preTemplate == 20) {
+                                                        addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
+                                                    } else if (preTemplate == 21) {
+                                                        addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         } catch (Exception e) {
                         }
                         return true;
-                    }
-                })
-                // 上报
-                .map(new Function<Boolean, Boolean>() {
-                    @Override
-                    public Boolean apply(Boolean aBoolean) {
-                        try {
-                            int channelId = getView().getIntExtra(GeneralFragment.BUNDLE_CHANNELID, 0);
-                            String name = getView().getStringExtra(GeneralFragment.BUNDLE_NAME);
-                            reportChannelLoadFinished(channelId, name);
-                        } catch (Exception e) {
-                        }
-                        return aBoolean;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -316,14 +352,12 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-//                        Log.e("GeneralPresenter", throwable.getMessage(), throwable);
                         getView().hideLoading();
                     }
                 })
                 .doOnNext(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean data) {
-//                        Log.e("GeneralPresenter", "getSubChannelsByChannel => " + new Gson().toJson(list));
                         getView().hideLoading();
                         getView().refreshContent();
                     }
@@ -331,71 +365,9 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                 .subscribe());
     }
 
-    protected final void addPresenters(@NonNull List<GetSubChannelsByChannelBean.ListBean> list) {
-        if (null == list)
-            return;
-        int size = list.size();
-        if (size <= 0)
-            return;
-
-        VerticalGridView verticalGridView = getView().findViewById(R.id.general_list);
-        RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-        if (null == adapter || !(adapter instanceof ItemBridgeAdapter))
-            return;
-        ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-        if (null == objectAdapter || !(objectAdapter instanceof ArrayObjectAdapter))
-            return;
-
-        // clean
-        ((ArrayObjectAdapter) objectAdapter).clear(false);
-
-        // 1
-        for (int i = 0; i < size; i++) {
-            GetSubChannelsByChannelBean.ListBean bean = list.get(i);
-            if (null == bean)
-                continue;
-
-            List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
-            int preTemplate = bean.getPreTemplate();
-
-            // 测试模板
-            if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
-//                    addPresenter((ArrayObjectAdapter) objectAdapter, 19, templateData);
-                for (int n = 1; n <= 22; n++) {
-                    if (n == 19)
-                        continue;
-                    ArrayList<GetSubChannelsByChannelBean.ListBean.TemplateBean> temps = new ArrayList<>();
-                    for (GetSubChannelsByChannelBean.ListBean.TemplateBean temp : templateData) {
-                        GetSubChannelsByChannelBean.ListBean.TemplateBean clone = temp.clone();
-                        temps.add(clone);
-                    }
-                    for (GetSubChannelsByChannelBean.ListBean.TemplateBean temp : templateData) {
-                        GetSubChannelsByChannelBean.ListBean.TemplateBean clone = temp.clone();
-                        temps.add(clone);
-                    }
-                    temps.get(0).setTempTitle("模板" + n);
-                    addPresenter((ArrayObjectAdapter) objectAdapter, n, temps);
-                }
-                break;
-            }
-            // 正常显示
-            else {
-                if (preTemplate <= 18) {
-                    addPresenter((ArrayObjectAdapter) objectAdapter, preTemplate, templateData);
-                } else if (preTemplate == 19) {
-                    addPresenter((ArrayObjectAdapter) objectAdapter, 20, templateData);
-                } else if (preTemplate == 20) {
-                    addPresenter((ArrayObjectAdapter) objectAdapter, 21, templateData);
-                } else if (preTemplate == 21) {
-                    addPresenter((ArrayObjectAdapter) objectAdapter, 22, templateData);
-                }
-            }
-        }
-        // 模板-回到顶部
-//        addPresenter((ArrayObjectAdapter) objectAdapter, -2, null);
-    }
-
-    private final void addPresenter(@NonNull ArrayObjectAdapter arrayObjectAdapter, @NonNull int templateCode, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> datas) {
+    private final void addPresenter(@NonNull ArrayObjectAdapter arrayObjectAdapter,
+                                    @NonNull int templateCode,
+                                    @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> datas) {
         Collection collection = null;
         Object object = null;
         // 返回顶部
