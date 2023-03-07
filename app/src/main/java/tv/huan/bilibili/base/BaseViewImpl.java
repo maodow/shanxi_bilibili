@@ -22,16 +22,6 @@ public interface BaseViewImpl extends BaseView {
 
     String KEY_INSTALL_TIME = "install_time";
 
-    default void showToast(@NonNull String s) {
-        try {
-            if (null != s && s.length() > 0) {
-                Context context = getContext();
-                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-        }
-    }
-
     default void setImageUrl(@IdRes int id, @NonNull String url) {
         try {
             ImageView imageView = findViewById(id);

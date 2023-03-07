@@ -2,6 +2,7 @@
     <string name="app_name">云视听小电视11</string>
 
 
+    <string name="welcome_warning">获取用户信息失败，请稍后重试</string>
     <string name="detail_warning">即将为您播放</string>
 
     <string name="search_input">请输入首字母</string>

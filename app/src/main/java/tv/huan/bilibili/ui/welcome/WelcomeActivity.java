@@ -35,13 +35,7 @@ public class WelcomeActivity extends BaseActivity<WelcomeView, WelcomePresenter>
     }
 
     @Override
-    public void showWarning(@NonNull String s) {
-        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-        onBackPressed();
-    }
-
-    @Override
-    public void refreshBackground(String backgroundUrl) {
+    public void refreshAD(String backgroundUrl) {
         setVisibility(R.id.welcome_img, View.VISIBLE);
         ImageView imageView = findViewById(R.id.welcome_img);
         GlideUtils.load(getContext(), backgroundUrl, imageView);

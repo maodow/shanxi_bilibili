@@ -21,16 +21,8 @@ public final class WelcomeBean implements Serializable {
         this.data = data;
     }
 
-    public int getAdTime() {
-        return adTime;
-    }
-
     public void setAdTime(int adTime) {
         this.adTime = adTime;
-    }
-
-    public String getAdUrl() {
-        return adUrl;
     }
 
     public void setAdUrl(String adUrl) {
@@ -79,5 +71,16 @@ public final class WelcomeBean implements Serializable {
 
     public boolean containsAd() {
         return null != adUrl && adUrl.length() > 0 && adTime > 0;
+//        return true;
+    }
+
+    public int getAdTime() {
+        return adTime;
+//        return 10;
+    }
+
+    public String getAdUrl() {
+//        return "https://picnew11.photophoto.cn/20170513/huwaidaxingguanggaopaiyangjizhanshihaibaotadengxiangjufuxuanchuan-26754205_1.jpg";
+        return adUrl;
     }
 }

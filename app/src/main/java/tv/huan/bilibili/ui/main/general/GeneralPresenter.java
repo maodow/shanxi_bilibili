@@ -303,8 +303,6 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                                     for (int n = 1; n <= 22; n++) {
                                                         if (n == 19)
                                                             continue;
-                                                        if (n != 1 && n != 16 && n != 17)
-                                                            continue;
                                                         ArrayList<GetSubChannelsByChannelBean.ListBean.TemplateBean> temps = new ArrayList<>();
                                                         for (GetSubChannelsByChannelBean.ListBean.TemplateBean temp : templateData) {
                                                             GetSubChannelsByChannelBean.ListBean.TemplateBean clone = temp.clone();

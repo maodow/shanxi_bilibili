@@ -22,6 +22,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.BuildConfig;
+import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.WelcomeBean;
 import tv.huan.bilibili.ui.main.MainActivity;
@@ -108,8 +109,11 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                             if (BuildConfig.HUAN_CHECK_USERID) {
                                 Context context = getView().getContext();
                                 String userId = HeilongjiangApi.getUserId(context);
-                                if (null == userId || userId.length() <= 0)
-                                    throw new Exception("获取userId失败, 请稍后重试");
+                                LogUtil.log("WelcomePresenter => request => userId = " + userId);
+                                if (null == userId || userId.length() <= 0) {
+                                    String s = getView().getString(R.string.welcome_warning);
+                                    throw new Exception(s);
+                                }
                             }
                             return data;
                         } catch (Exception e) {
@@ -231,22 +235,18 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        LogUtil.log("WelcomePresenter => request => doOnError");
-                        try {
-                            String s = throwable.getMessage();
-                            if (null != s && s.length() > 0) {
-                               getView().showWarning(s);
-                            }
-                        } catch (Exception e) {
-                        }
+                        String s = throwable.getMessage();
+                        LogUtil.log("WelcomePresenter => request => doOnError => s = " + s);
+                        getView().showToast(s);
+                        getView().finishActivity();
                     }
                 })
                 .doOnNext(new Consumer<WelcomeBean>() {
                     @Override
                     public void accept(WelcomeBean data) {
-                        LogUtil.log("WelcomePresenter => request => doOnNext => "+new Gson().toJson(data));
+                        LogUtil.log("WelcomePresenter => request => doOnNext => " + new Gson().toJson(data));
                         if (data.containsAd()) {
-                            getView().refreshBackground(data.getAdUrl());
+                            getView().refreshAD(data.getAdUrl());
                             intervalTime(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
                         } else {
                             getView().next(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag());
@@ -271,7 +271,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                             getView().next(data, select, type, cid, classId, secondTag);
                         } else {
                             int num = (int) (time - aLong);
-                            getView().refreshTime("广告:" + num + "s");
+                            getView().refreshTime(num + "s");
                         }
                     }
                 })
