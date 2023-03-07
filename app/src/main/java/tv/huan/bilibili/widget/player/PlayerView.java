@@ -81,48 +81,5 @@ public class PlayerView extends VideoLayout {
         // seekbar
         ComponentSeek seek = new ComponentSeek(getContext());
         controller.addComponent(seek);
-
-        // 监听器
-        setOnChangeListener(new lib.kalu.mediaplayer.listener.OnChangeListener() {
-
-            @Override
-            public void onProgress(@NonNull long position, @NonNull long durning) {
-            }
-
-            @Override
-            public void onChange(int playState) {
-                switch (playState) {
-                    //播放未开始，初始化
-                    case PlayerType.StateType.STATE_INIT:
-                        break;
-                    //开始播放中止
-                    case PlayerType.StateType.STATE_START_ABORT:
-                        break;
-                    //播放准备就绪
-                    case PlayerType.StateType.STATE_LOADING_STOP:
-                        break;
-                    //播放错误
-                    case PlayerType.StateType.STATE_ERROR:
-                        break;
-                    //正在缓冲
-                    case PlayerType.StateType.STATE_BUFFERING_START:
-                        break;
-                    //播放准备中
-                    case PlayerType.StateType.STATE_LOADING_START:
-                        //正在播放
-                    case PlayerType.StateType.STATE_START:
-                        break;
-                    //暂停播放
-                    case PlayerType.StateType.STATE_PAUSE:
-                        break;
-                    //暂停缓冲
-                    case PlayerType.StateType.STATE_BUFFERING_STOP:
-                        break;
-                    //播放完成
-                    case PlayerType.StateType.STATE_END:
-                        break;
-                }
-            }
-        });
     }
 }

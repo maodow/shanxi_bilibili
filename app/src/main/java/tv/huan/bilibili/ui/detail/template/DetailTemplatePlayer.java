@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.leanback.widget.Presenter;
 
@@ -339,6 +340,28 @@ public final class DetailTemplatePlayer extends Presenter {
                     }
                 }
             });
+            // 播放器
+            try {
+                PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+                playerView.setOnChangeListener(new lib.kalu.mediaplayer.listener.OnChangeListener() {
+                    @Override
+                    public void onChange(int playState) {
+                        switch (playState) {
+                            //播放错误
+                            case PlayerType.StateType.STATE_ERROR:
+                                //播放完成
+                            case PlayerType.StateType.STATE_END:
+                                Activity activity = WrapperUtil.getWrapperActivity(context);
+                                LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
+                                if (null != activity && activity instanceof DetailActivity) {
+                                    ((DetailActivity) activity).completePlayer();
+                                }
+                                break;
+                        }
+                    }
+                });
+            } catch (Exception e) {
+            }
             return new ViewHolder(view);
         } catch (Exception e) {
             return null;

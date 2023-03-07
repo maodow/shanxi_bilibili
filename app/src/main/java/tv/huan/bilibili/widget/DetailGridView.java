@@ -151,5 +151,23 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             itemBridgeAdapter.notifyItemChanged(0);
         } catch (Exception e) {
         }
+        int tempIndex = data.getTempIndex();
+        startPosition(tempIndex - 1);
+    }
+
+    public void startNext() {
+        DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+        LogUtil.log("DetailGridView", "startNext => presenter = " + presenter);
+        if (null == presenter)
+            return;
+        presenter.startNext(this);
+    }
+
+    public void startPosition(int position) {
+        DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+        LogUtil.log("DetailGridView", "startPosition => presenter = " + presenter);
+        if (null == presenter)
+            return;
+        presenter.startPosition(this, position);
     }
 }
