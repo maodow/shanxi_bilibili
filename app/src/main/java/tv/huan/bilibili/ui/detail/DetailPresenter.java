@@ -28,26 +28,24 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.frame.mvp.util.CacheUtil;
-import tv.huan.bilibili.BuildConfig;
-import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.FavorBean;
-import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.bilibili.widget.DetailGridView;
-import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.R;
-import tv.huan.bilibili.bean.Album;
+import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.Auth2Bean;
 import tv.huan.bilibili.bean.BaseBean;
+import tv.huan.bilibili.bean.FavorBean;
+import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.LookBean;
-import tv.huan.bilibili.bean.Media;
-import tv.huan.bilibili.bean.ProgramDetail;
-import tv.huan.bilibili.bean.ProgramInfoDetail;
+import tv.huan.bilibili.bean.MediaBean;
+import tv.huan.bilibili.bean.MediaDetailBean;
+import tv.huan.bilibili.bean.format.DetailBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateFavor;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanJi;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
-import tv.huan.bilibili.utils.Constants;
+import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.widget.DetailGridView;
+import tv.huan.bilibili.widget.player.PlayerView;
 
 public class DetailPresenter extends BasePresenterImpl<DetailView> {
     public DetailPresenter(@NonNull DetailView detailView) {
@@ -95,45 +93,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         }
     }
 
-    protected void refreshLook() {
-
-        String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-        if (null == cid || cid.length() <= 0) return;
-
-        Context context = getView().getContext();
-        String s = CacheUtil.getCache(context, "user_look");
-        if (null == s || s.length() <= 0) {
-            s = "[]";
-        }
-        Type type = new TypeToken<List<LookBean>>() {
-        }.getType();
-        List<LookBean> recs = new Gson().fromJson(s, type);
-        int position = -1;
-        int size = recs.size();
-        for (int i = 0; i < size; i++) {
-            LookBean temp = recs.get(i);
-            if (null == temp) continue;
-            String str = temp.getCid();
-            if (cid.equals(str)) {
-                position = i;
-                break;
-            }
-        }
-        LinkedList<LookBean> list = new LinkedList<>();
-        list.addAll(recs);
-        // exist
-        if (position != -1) {
-            LookBean bean = list.remove(position);
-            list.addFirst(bean);
-        } else {
-            LookBean bean = new LookBean();
-            bean.setCid(cid);
-            list.addFirst(bean);
-        }
-        String s1 = new Gson().toJson(list);
-        CacheUtil.setCache(context, "user_look", s1);
-    }
-
     protected final void setAdapter() {
         VerticalGridView gridView = getView().findViewById(R.id.detail_list);
         DetailSelectorPresenter selectorPresenter = new DetailSelectorPresenter();
@@ -150,9 +109,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 媒资数据
-                .flatMap(new Function<Boolean, ObservableSource<BaseBean<ProgramInfoDetail>>>() {
+                .flatMap(new Function<Boolean, ObservableSource<BaseBean<GetMediasByCid2Bean>>>() {
                     @Override
-                    public ObservableSource<BaseBean<ProgramInfoDetail>> apply(Boolean o) {
+                    public ObservableSource<BaseBean<GetMediasByCid2Bean>> apply(Boolean o) {
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                         if (null == cid) {
                             cid = "";
@@ -160,11 +119,10 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         return HttpClient.getHttpClient().getHttpApi().getMediasByCid2(cid);
                     }
                 })
-                // 媒资鉴权
-                .flatMap(new Function<BaseBean<ProgramInfoDetail>, ObservableSource<Auth2Bean>>() {
+                // 媒资数据 => 数据处理
+                .map(new Function<BaseBean<GetMediasByCid2Bean>, DetailBean>() {
                     @Override
-                    public ObservableSource<Auth2Bean> apply(BaseBean<ProgramInfoDetail> programInfoDetailBaseBean) {
-
+                    public DetailBean apply(BaseBean<GetMediasByCid2Bean> getMediasByCid2BeanBaseBean) {
                         // 上报 => 详情页加载完成
                         try {
                             String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
@@ -218,455 +176,280 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                         }
 
-                        // vid
+                        DetailBean detailBean = new DetailBean();
+
+                        // recClassId
                         try {
-                            String vid = programInfoDetailBaseBean.getData().getMedias().get(0).getVid();
-                            getView().updateVid(vid);
+                            detailBean.setRecClassId(getMediasByCid2BeanBaseBean.getData().getRecClassId());
                         } catch (Exception e) {
+                            detailBean.setRecClassId("");
                         }
 
-                        ProgramInfoDetail data = programInfoDetailBaseBean.getData();
-                        boolean auth;
+                        // 免费/收费
                         try {
-                            ProgramDetail album = data.getAlbum();
-                            // 付费
-                            if (0 != album.getProductType()) {
-                                auth = true;
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseBean.getData();
+                            MediaDetailBean album = data.getAlbum();
+                            if (0 == album.getProductType()) {
+                                detailBean.setVip(true);
                             } else {
-                                auth = false;
+                                detailBean.setVip(false);
                             }
                         } catch (Exception e) {
-                            auth = false;
+                            detailBean.setVip(false);
                         }
 
-                        if (auth) { //专区请求周期返回专区购买的列表
-                            String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                            if (null == cid) {
-                                cid = "";
-                            }
-                            String s = new Gson().toJson(data);
-                            LogUtil.log("DetailPresenter => s = " + s);
-                            return HttpClient.getHttpClient().getHttpApi().auth2(cid, s);
-                        } else {
-                            return Observable.create(new ObservableOnSubscribe<Auth2Bean>() {
-                                @Override
-                                public void subscribe(ObservableEmitter<Auth2Bean> emitter) {
-                                    Auth2Bean bean = new Auth2Bean();
-                                    bean.setFree(true);
-                                    String s = new Gson().toJson(data);
-                                    bean.setExtra(s);
-                                    emitter.onNext(bean);
-                                }
-                            });
+                        // 播放策略
+                        try {
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseBean.getData();
+                            MediaDetailBean album = data.getAlbum();
+                            detailBean.setPlayType(album.getPlayType());
+                        } catch (Exception e) {
+                            detailBean.setPlayType(0);
                         }
+
+                        // 详情
+                        try {
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseBean.getData();
+                            detailBean.setAlbum(data.getAlbum());
+                        } catch (Exception e) {
+                            detailBean.setAlbum(null);
+                        }
+
+                        // 剧集
+                        try {
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseBean.getData();
+                            detailBean.setMedias(data.getMedias());
+                        } catch (Exception e) {
+                            detailBean.setMedias(null);
+                        }
+
+                        // 猜你喜欢
+                        try {
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseBean.getData();
+                            detailBean.setRecAlbums(data.getRecAlbums());
+                        } catch (Exception e) {
+                            detailBean.setAlbum(null);
+                        }
+                        return detailBean;
                     }
                 })
-                // 数据处理
-                .map(new Function<Auth2Bean, ProgramInfoDetail>() {
+                // 白名单
+                .flatMap(new Function<DetailBean, ObservableSource<Auth2Bean>>() {
                     @Override
-                    public ProgramInfoDetail apply(Auth2Bean auth2Bean) {
-
-                        String s;
-                        try {
-                            String extra = auth2Bean.getExtra();
-                            if (null != extra && extra.length() > 0) {
-                                s = extra;
-                            } else {
-                                s = "{}";
-                            }
-                        } catch (Exception e) {
-                            s = "{}";
-                        }
-                        ProgramInfoDetail data = new Gson().fromJson(s, ProgramInfoDetail.class);
-                        String whiteListVip = auth2Bean.getWhiteListVip();
-
-                        // 免费 || 白名单
-                        if (auth2Bean.isFree() || "1".equals(whiteListVip)) {
-                            data.setVipFree(true);
-                        }
-                        // 付费
-                        else {
-
-                            ProgramDetail album = data.getAlbum();
-                            // 关联产品编码计费包
-                            List<ProgramDetail.Item> productCodes = album.getProductCodes();
-                            int length;
-                            try {
-                                length = productCodes.size();
-                            } catch (Exception e) {
-                                length = 0;
-                            }
-
-                            // 单点会员
-                            try {
-                                for (int i = 0; i < length; i++) {
-                                    ProgramDetail.Item item = productCodes.get(i);
-                                    if (null == item) continue;
-                                    int productType = item.getProductType();
-                                    if (1 != productType) continue;
-                                    String code = item.getCode();
-                                    if (null == code || code.length() <= 0) continue;
-                                    data.setVipLinkDanDian(true);
-                                    String singleAuth = auth2Bean.getSingleAuth();
-                                    if ("1".equals(singleAuth)) {
-                                        data.setVipPassDanDian(true);
-                                        break;
-                                    }
-                                }
-                            } catch (Exception e) {
-                            }
-
-                            // 周期会员
-                            try {
-                                for (int i = 0; i < length; i++) {
-                                    ProgramDetail.Item item = productCodes.get(i);
-                                    if (null == item) continue;
-                                    int productType = item.getProductType();
-                                    if (3 != productType) continue;
-                                    String code = item.getCode();
-                                    if (null == code || code.length() <= 0) continue;
-                                    data.setVipLinkZhouQi(true);
-                                    String vip = auth2Bean.getVip();
-                                    if ("1".equals(vip)) {
-                                        data.setVipPassZhouQi(true);
-                                        break;
-                                    }
-                                }
-                            } catch (Exception e) {
-                            }
-
-                            // 专区会员
-                            try {
-                                for (int i = 0; i < length; i++) {
-                                    ProgramDetail.Item item = productCodes.get(i);
-                                    if (null == item) continue;
-                                    int productType = item.getProductType();
-                                    if (4 != productType) continue;
-                                    String code = item.getCode();
-                                    if (null == code || code.length() <= 0) continue;
-                                    data.setVipLinkZhuanQu(true);
-                                    List<Auth2Bean.VipBean> specialList = auth2Bean.getVipSpecialList();
-                                    int size;
-                                    try {
-                                        size = specialList.size();
-                                    } catch (Exception e) {
-                                        size = 0;
-                                    }
-                                    for (int j = 0; j < size; j++) {
-                                        Auth2Bean.VipBean vipBean = specialList.get(j);
-                                        String v = vipBean.getCode();
-                                        if (null == v || v.length() <= 0) continue;
-                                        if (v.equals(code)) {
-                                            data.setVipPassZhuanQu(true);
-                                        }
-                                    }
-                                }
-                            } catch (Exception e) {
-                            }
-                        }
-                        return data;
+                    public ObservableSource<Auth2Bean> apply(DetailBean detailBean) {
+                        String s = new Gson().toJson(detailBean);
+                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
+                        return HttpClient.getHttpClient().getHttpApi().auth2(cid, s);
                     }
                 })
-                // 收藏状态
-                .flatMap(new Function<ProgramInfoDetail, ObservableSource<BaseBean<FavorBean>>>() {
+                // 白名单 => 数据处理
+                .map(new Function<Auth2Bean, DetailBean>() {
                     @Override
-                    public ObservableSource<BaseBean<FavorBean>> apply(ProgramInfoDetail programInfoDetail) {
-                        String s = new Gson().toJson(programInfoDetail);
+                    public DetailBean apply(Auth2Bean auth2Bean) {
+
+                        DetailBean detailBean;
+                        try {
+                            detailBean = new Gson().fromJson(auth2Bean.getExtra(), DetailBean.class);
+                        } catch (Exception e) {
+                            detailBean = new DetailBean();
+                        }
+
+                        // 白名单
+                        try {
+                            boolean whiteUser = auth2Bean.isWhiteUser();
+                            if (whiteUser) {
+                                detailBean.setPlayType(Integer.MAX_VALUE);
+                            }
+                        } catch (Exception e) {
+                        }
+
+                        return detailBean;
+                    }
+                })
+                // 收藏
+                .flatMap(new Function<DetailBean, ObservableSource<BaseBean<FavorBean>>>() {
+                    @Override
+                    public ObservableSource<BaseBean<FavorBean>> apply(DetailBean detailBean) {
+                        String s = new Gson().toJson(detailBean);
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                         return HttpClient.getHttpClient().getHttpApi().checkFavorite(cid, s);
                     }
                 })
-                // 数据处理
-                .map(new Function<BaseBean<FavorBean>, ProgramInfoDetail>() {
+                // 收藏 => 数据处理
+                .map(new Function<BaseBean<FavorBean>, DetailBean>() {
                     @Override
-                    public ProgramInfoDetail apply(BaseBean<FavorBean> favorBeanBaseBean) {
-                        ProgramInfoDetail programInfoDetail;
+                    public DetailBean apply(BaseBean<FavorBean> data) {
+
+                        DetailBean detailBean;
                         try {
-                            programInfoDetail = new Gson().fromJson(favorBeanBaseBean.getExtra(), ProgramInfoDetail.class);
+                            detailBean = new Gson().fromJson(data.getExtra(), DetailBean.class);
                         } catch (Exception e) {
-                            programInfoDetail = new ProgramInfoDetail();
+                            detailBean = new DetailBean();
                         }
+
+                        // 收藏状态
                         try {
-                            programInfoDetail.setFavor(favorBeanBaseBean.getData().isFavor());
+                            detailBean.setFavor(data.getData().isFavor());
                         } catch (Exception e) {
                         }
-                        return programInfoDetail;
+                        return detailBean;
                     }
                 })
-                // 播放器
-                .map(new Function<ProgramInfoDetail, ProgramInfoDetail>() {
+                // 播放器 => 数据处理
+                .map(new Function<DetailBean, DetailBean>() {
                     @Override
-                    public ProgramInfoDetail apply(ProgramInfoDetail data) {
+                    public DetailBean apply(DetailBean data) {
                         try {
-
+                            DetailTemplatePlayer.DetailTemplatePlayerObject playerData = new DetailTemplatePlayer.DetailTemplatePlayerObject();
                             VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
                             RecyclerView.Adapter adapter = verticalGridView.getAdapter();
                             ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+                            ((ArrayObjectAdapter) objectAdapter).add(playerData);
+                        } catch (Exception e) {
+                        }
+                        return data;
+                    }
+                })
+                // 选期列表 => 数据处理
+                .map(new Function<DetailBean, DetailBean>() {
+                    @Override
+                    public DetailBean apply(DetailBean data) {
+                        try {
+                            MediaDetailBean detail = data.getAlbum();
+                            boolean xuanQi = detail.isXuanQi();
+                            if (xuanQi) {
+                                List<MediaBean> medias = data.getMedias();
+                                if (null != medias) {
+                                    int size = medias.size();
+                                    if (size > 0) {
+                                        // 1 上报 => 选期
+                                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                                        reportDetailSelectionsButtonShow(cid);
 
-                            DetailTemplatePlayer.DetailTemplatePlayerObject object = new DetailTemplatePlayer.DetailTemplatePlayerObject();
-
-                            // aaaMediaAuth
-                            boolean aaaPass = false;
-                            if (BuildConfig.HUAN_AUTH) {
-                                try {
-                                    boolean vipFree = data.isVipFree();
-                                    if (vipFree) {
-                                        aaaPass = true;
-                                    } else {
-                                        // 关联产品编码计费包
-                                        ProgramDetail album = data.getAlbum();
-                                        List<ProgramDetail.Item> productCodes = album.getProductCodes();
-                                        int num = productCodes.size();
-                                        for (int i = 0; i < num; i++) {
-                                            if (aaaPass) break;
-                                            ProgramDetail.Item item = productCodes.get(i);
-                                            if (null == item) continue;
-                                            String code = item.getCode();
-                                            if (null == code || code.length() <= 0) continue;
-                                            try {
-                                                aaaPass = false;
-                                            } catch (Exception e) {
-                                            }
+                                        // 2
+                                        DetailTemplateXuanQi.DetailTemplateXuanQiList xuanqiData = new DetailTemplateXuanQi.DetailTemplateXuanQiList();
+                                        for (int i = 0; i < size; i++) {
+                                            MediaBean bean = medias.get(i);
+                                            if (null == bean)
+                                                continue;
+                                            bean.setTempIndex(i + 1);
+                                            bean.setTempVip(data.isVip());
+                                            bean.setTempFavor(data.isFavor());
+                                            bean.setTempPlayType(data.getPlayType());
+                                            bean.setTempTag(detail.getSplitTag());
+                                            bean.setTempTitle(detail.getTitle());
+                                            bean.setTemoInfo(detail.getInfo());
+                                            bean.setTempRecClassId(data.getRecClassId());
+                                            bean.setTempImageUrl(detail.getPicture(true));
+                                            xuanqiData.add(bean);
                                         }
+                                        VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
+                                        RecyclerView.Adapter adapter = verticalGridView.getAdapter();
+                                        ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+                                        ((ArrayObjectAdapter) objectAdapter).add(xuanqiData);
                                     }
-                                } catch (Exception e) {
-                                    aaaPass = false;
                                 }
-                            } else {
-                                aaaPass = true;
                             }
-                            if (aaaPass) {
-                                object.setVideoUrl("");
-                            } else {
-                                object.setVideoUrl(null);
-                            }
-                            object.setImageUrl(data.getAlbum().getPicture(true));
-                            object.setTag(data.getAlbum().getSplitTag());
-                            object.setTitle(data.getAlbum().getTitle());
-                            object.setInfo(data.getAlbum().getInfo());
-                            object.setPicList(data.getAlbum().getPicList());
-                            object.setCid(data.getAlbum().getCid());
-                            object.setRecClassId(data.getRecClassId());
-                            object.setFavorStatus(data.isFavor());
-                            ((ArrayObjectAdapter) objectAdapter).add(object);
                         } catch (Exception e) {
-                            e.printStackTrace();
                         }
                         return data;
                     }
                 })
-                // 选期列表
-                .map(new Function<ProgramInfoDetail, ProgramInfoDetail>() {
+                // 选集列表 => 数据处理
+                .map(new Function<DetailBean, DetailBean>() {
                     @Override
-                    public ProgramInfoDetail apply(ProgramInfoDetail data) {
+                    public DetailBean apply(DetailBean data) {
 
-                        boolean show;
                         try {
-                            List<Media> medias = data.getMedias();
-                            ProgramDetail detail = data.getAlbum();
+                            MediaDetailBean detail = data.getAlbum();
+                            boolean xuanJi = detail.isXuanJi();
+                            if (xuanJi) {
+                                List<MediaBean> medias = data.getMedias();
+                                if (null != medias) {
+                                    int size = medias.size();
+                                    if (size > 0) {
 
-                            // 容错1
-                            if (detail.getType() != Constants.AlbumType.FILM && medias == null) {
-                                show = false;
-                            }
-                            // 容错2
-                            else if (detail.getType() != Constants.AlbumType.FILM && medias.size() == 0) {
-                                show = false;
-                            }
-                            // 电影
-                            else if (detail.getType() == Constants.AlbumType.FILM) {
-                                show = false;
-                            }
-                            //  选期 => 教育、体育、综艺
-                            else if (detail.getType() == Constants.AlbumType.EDUCATION || detail.getType() == Constants.AlbumType.SPORTS || detail.getType() == Constants.AlbumType.VARIETY) {
-                                show = true;
-                            }
-                            // 选集
-                            else {
-                                show = false;
-                            }
-                        } catch (Exception e) {
-                            show = false;
-                        }
+                                        // 上报
+                                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                                        reportDetailSelectionsButtonShow(cid);
 
-                        if (show) {
-                            try {
-                                VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                                RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                                ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                                DetailTemplateXuanQi.DetailTemplateXuanQiList list = new DetailTemplateXuanQi.DetailTemplateXuanQiList();
-                                List<Media> medias = data.getMedias();
-                                int size = medias.size();
-                                for (int i = 0; i < size; i++) {
-                                    Media media = medias.get(i);
-                                    if (null == media)
-                                        continue;
-                                    list.add(media);
+                                        // 2
+                                        DetailTemplateXuanJi.DetailTemplateXuanJiList xuanjiData = new DetailTemplateXuanJi.DetailTemplateXuanJiList();
+                                        for (int i = 0; i < size; i++) {
+                                            MediaBean bean = medias.get(i);
+                                            if (null == bean)
+                                                continue;
+                                            bean.setTempIndex(i + 1);
+                                            bean.setTempVip(data.isVip());
+                                            bean.setTempFavor(data.isFavor());
+                                            bean.setTempPlayType(data.getPlayType());
+                                            bean.setTempTag(detail.getSplitTag());
+                                            bean.setTempTitle(detail.getTitle());
+                                            bean.setTemoInfo(detail.getInfo());
+                                            bean.setTempRecClassId(data.getRecClassId());
+                                            bean.setTempImageUrl(detail.getPicture(true));
+                                            xuanjiData.add(bean);
+                                        }
+                                        VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
+                                        RecyclerView.Adapter adapter = verticalGridView.getAdapter();
+                                        ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+                                        ((ArrayObjectAdapter) objectAdapter).add(xuanjiData);
+                                    }
                                 }
-                                ((ArrayObjectAdapter) objectAdapter).add(list);
-                            } catch (Exception e) {
-                            }
-                        }
-
-                        // 上报
-                        try {
-                            if (show) {
-                                String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                                reportDetailSelectionsButtonShow(cid);
                             }
                         } catch (Exception e) {
                         }
-
                         return data;
                     }
                 })
-                // 选集列表
-                .map(new Function<ProgramInfoDetail, ProgramInfoDetail>() {
+                // 猜你喜欢 => 数据处理
+                .map(new Function<DetailBean, DetailBean>() {
                     @Override
-                    public ProgramInfoDetail apply(ProgramInfoDetail data) {
-
-                        boolean show = true;
+                    public DetailBean apply(DetailBean data) {
                         try {
-                            List<Media> medias = data.getMedias();
-                            ProgramDetail detail = data.getAlbum();
+                            List<MediaBean> albums = data.getRecAlbums();
+                            if (null != albums) {
+                                int size = albums.size();
+                                if (size > 0) {
+                                    // 上报
+                                    String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                                    reportDetailRecommendShow(cid);
 
-                            // 容错1
-                            if (detail.getType() != Constants.AlbumType.FILM && medias == null) {
-                                show = false;
-                            }
-                            // 容错2
-                            else if (detail.getType() != Constants.AlbumType.FILM && medias.size() == 0) {
-                                show = false;
-                            }
-                            // 电影
-                            else if (detail.getType() == Constants.AlbumType.FILM) {
-                                show = false;
-                            }
-                            //  选期 => 教育、体育、综艺
-                            else if (detail.getType() == Constants.AlbumType.EDUCATION || detail.getType() == Constants.AlbumType.SPORTS || detail.getType() == Constants.AlbumType.VARIETY) {
-                                show = false;
-                            }
-                            // 选集
-                            else {
-                                show = true;
-                            }
-                        } catch (Exception e) {
-                            show = false;
-                        }
-
-                        if (show) {
-                            try {
-
-                                DetailTemplateXuanJi.DetailTemplateXuanJiList list = new DetailTemplateXuanJi.DetailTemplateXuanJiList();
-                                List<Media> medias = data.getMedias();
-                                int size = medias.size();
-                                for (int i = 0; i < size; i++) {
-                                    Media t = medias.get(i);
-                                    t.setName(String.valueOf(i + 1));
+                                    // 2
+                                    DetailTemplateFavor.DetailTemplateFavList favorData = new DetailTemplateFavor.DetailTemplateFavList();
+                                    for (int i = 0; i < size; i++) {
+                                        MediaBean bean = albums.get(i);
+                                        if (null == bean)
+                                            continue;
+                                        favorData.add(bean);
+                                    }
+                                    VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
+                                    RecyclerView.Adapter adapter = verticalGridView.getAdapter();
+                                    ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+                                    ((ArrayObjectAdapter) objectAdapter).add(favorData);
                                 }
-                                list.addAll(medias);
-
-                                VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                                RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                                ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                                ((ArrayObjectAdapter) objectAdapter).add(list);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        // 上报
-                        try {
-                            if (show) {
-                                String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                                reportDetailSelectionsButtonShow(cid);
                             }
                         } catch (Exception e) {
                         }
-
                         return data;
                     }
                 })
-                // 猜你喜欢
-                .map(new Function<ProgramInfoDetail, ProgramInfoDetail>() {
+                // 默认position => 数据处理
+                .map(new Function<DetailBean, MediaBean>() {
                     @Override
-                    public ProgramInfoDetail apply(ProgramInfoDetail data) {
-                        VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                        RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                        DetailTemplateFavor.DetailTemplateFavList list = new DetailTemplateFavor.DetailTemplateFavList();
+                    public MediaBean apply(DetailBean data) {
                         try {
-                            List<Album> recAlbums = data.getRecAlbums();
-                            int size = recAlbums.size();
-                            for (int i = 0; i < size; i++) {
-                                Album album = recAlbums.get(i);
-                                if (null == album) continue;
-                                album.setHead("猜你喜欢");
-                                list.add(album);
-                            }
+                            int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
+                            List<MediaBean> medias = data.getMedias();
+                            return medias.get(position);
                         } catch (Exception e) {
+                            throw e;
                         }
-
-                        if (list.size() > 0) {
-                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            ((ArrayObjectAdapter) objectAdapter).add(list);
-                        }
-
-                        // 上报
-                        try {
-                            if (list.size() > 0) {
-                                String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                                reportDetailRecommendShow(cid);
-                            }
-                        } catch (Exception e) {
-                        }
-
-                        return data;
                     }
                 })
-                // 是否显示vip按钮
-                .map(new Function<ProgramInfoDetail, Boolean>() {
-                    @Override
-                    public Boolean apply(ProgramInfoDetail programInfoDetail) {
-
-//                        boolean show;
-//                        try {
-//
-//                            boolean passZhouQi = programInfoDetail.isVipPassZhouQi();
-//                            boolean linkZhouQi = programInfoDetail.isVipLinkZhouQi();
-//
-//                            boolean linkZhuanQu = programInfoDetail.isVipLinkZhuanQu();
-//                            boolean passZhuanQu = programInfoDetail.isVipPassZhuanQu();
-//
-//                            boolean linkDanDian = programInfoDetail.isVipLinkDanDian();
-//                            boolean passDanDian = programInfoDetail.isVipPassDanDian();
-//
-//                            // 周期会员
-//                            if (linkZhouQi && passZhouQi) {
-//                                show = false;
-//                            }
-//                            // 专区会员
-//                            else if (linkZhuanQu && passZhuanQu) {
-//                                show = false;
-//                            }
-//                            // 单点会员
-//                            else if (linkDanDian && passDanDian) {
-//                                show = false;
-//                            }
-//                            // 存在关联, 未购买
-//                            else if (linkZhouQi || linkZhuanQu || linkDanDian) {
-//                                show = true;
-//                            }
-//                            // 其他情况, 隐藏
-//                            else {
-//                                show = false;
-//                            }
-//                        } catch (Exception e) {
-//                            show = false;
-//                        }
-                        delayPlayer(0);
-                        return true;
-                    }
-                }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
                         getView().showLoading();
@@ -675,12 +458,15 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
+                        getView().refreshContent();
                     }
-                }).doOnNext(new Consumer<Boolean>() {
+                }).doOnNext(new Consumer<MediaBean>() {
                     @Override
-                    public void accept(Boolean aBoolean) {
+                    public void accept(MediaBean data) {
                         getView().hideLoading();
                         getView().refreshContent();
+                        getView().updatePlayer(data);
+                        getView().initPlayer(data);
                     }
                 }).subscribe());
     }
@@ -809,19 +595,64 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         return false;
     }
 
-    protected final void delayPlayer(int position) {
+    protected final void delayPlayer(@NonNull MediaBean data) {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        observableEmitter.onNext(true);
+                        boolean isVip = data.isTempVip();
+                        LogUtil.log("DetailPresenter", "delayPlayer => isVip = " + isVip);
+                        // 免费
+                        if (isVip) {
+                            observableEmitter.onNext(true);
+                        }
+                        // 播放策略
+                        else {
+                            int playType = data.getTempPlayType();
+                            int index = data.getTempIndex();
+                            LogUtil.log("DetailPresenter", "delayPlayer => playType = " + playType + ", index = " + index);
+                            if (index <= playType) {
+                                observableEmitter.onNext(true);
+                            } else {
+                                observableEmitter.onNext(false);
+                            }
+                        }
                     }
                 })
                 .delay(4, TimeUnit.SECONDS)
                 .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        boolean isVip = data.isTempVip();
+                        int playType = data.getTempPlayType();
+                        int index = data.getTempIndex();
+                        if (!isVip && playType <= 0) {
+                            throw new Exception("需要开通vip");
+                        } else if (!isVip && index > playType) {
+                            throw new Exception("第" + index + "集, 需要开通vip");
+                        }
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        if (null != throwable) {
+                            String s = throwable.getMessage();
+                            if (null != s && s.length() > 0) {
+                                getView().showToast(s);
+                            }
+                        }
+                        getView().jumpVip();
+                    }
+                })
                 .doOnNext(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) {
-                        getView().startPlayer(position);
+                        if (aBoolean) {
+                            getView().startPlayer(data);
+                        } else {
+                            getView().jumpVip();
+                        }
                     }
                 })
                 .subscribe());

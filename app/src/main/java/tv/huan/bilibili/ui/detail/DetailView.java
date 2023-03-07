@@ -3,7 +3,7 @@ package tv.huan.bilibili.ui.detail;
 import androidx.annotation.NonNull;
 
 import tv.huan.bilibili.base.BaseViewImpl;
-import tv.huan.bilibili.bean.Media;
+import tv.huan.bilibili.bean.MediaBean;
 
 public interface DetailView extends BaseViewImpl {
 
@@ -17,14 +17,14 @@ public interface DetailView extends BaseViewImpl {
 
     void updateFavor(boolean status);
 
-    void jumpVip();
+    void updateVid(@NonNull MediaBean data);
+    void updatePlayer(@NonNull MediaBean data);
 
-    void delayPlayer(int position);
+    void initPlayer(@NonNull MediaBean data);
 
-    void startPlayer(int position);
+    void startPlayer(@NonNull MediaBean data);
 
     void stopPlayer();
 
-    void updatePlayerInfo(int position, String vid);
-    void updateVid(String vid);
+    void jumpVip();
 }

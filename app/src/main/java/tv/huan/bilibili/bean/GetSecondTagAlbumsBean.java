@@ -23,7 +23,7 @@ public class GetSecondTagAlbumsBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean extends ImageBean implements JumpBean, Serializable {
+    public static class ItemBean extends MediaBaseImageBean implements JumpBean, Serializable {
         private String cid;
         private String title;
         private int type;

@@ -13,7 +13,7 @@ public class ProgramInfo implements Serializable {
     private int page ;
     private String pages ;
     private HomeTag classification ;
-    private List<Album> albums ;
+    private List<MediaBean> albums ;
 
     @Override
     public String toString() {
@@ -89,11 +89,11 @@ public class ProgramInfo implements Serializable {
         this.classification = classification;
     }
 
-    public List<Album> getAlbums() {
+    public List<MediaBean> getAlbums() {
         return albums;
     }
 
-    public void setAlbums(List<Album> albums) {
+    public void setAlbums(List<MediaBean> albums) {
         this.albums = albums;
     }
 }

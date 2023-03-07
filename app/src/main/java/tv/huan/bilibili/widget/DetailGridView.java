@@ -2,27 +2,18 @@ package tv.huan.bilibili.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.ViewParent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ItemBridgeAdapter;
-import androidx.leanback.widget.VerticalGridView;
 
 import lib.kalu.leanback.list.LeanBackVerticalGridView;
-import lib.kalu.leanback.list.RecyclerView;
-import lib.kalu.leanback.presenter.ListTvEpisodesPresenter;
-import lib.kalu.leanback.util.LeanBackUtil;
-import retrofit2.http.Streaming;
-import tv.huan.bilibili.bean.Media;
+import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanJi;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
-import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
-import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 
 public final class DetailGridView extends LeanBackVerticalGridView {
@@ -60,18 +51,6 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
             DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
             playerObject.setUpdateOnlyVideoStop(true);
-            itemBridgeAdapter.notifyItemChanged(0);
-        } catch (Exception e) {
-        }
-    }
-
-    public void startPlayer(@NonNull int position) {
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setPlayingIndex(position);
-            playerObject.setUpdateOnlyVideoPlaying(true);
             itemBridgeAdapter.notifyItemChanged(0);
         } catch (Exception e) {
         }
@@ -135,7 +114,40 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
             DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
             playerObject.setUpdateOnlyFavor(true);
-            playerObject.setFavorStatus(status);
+            playerObject.setFavor(status);
+            itemBridgeAdapter.notifyItemChanged(0);
+        } catch (Exception e) {
+        }
+    }
+
+    public void updatePlayer(@NonNull MediaBean data) {
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
+            playerObject.setFavor(data.isTempFavor());
+            playerObject.setVip(data.isTempVip());
+            playerObject.setPlayingIndex(data.getTempIndex());
+            playerObject.setImageUrl(data.getTempImageUrl());
+            playerObject.setTag(data.getTempTag());
+            playerObject.setTitle(data.getTempTitle());
+            playerObject.setCid(data.getCid());
+            playerObject.setInfo(data.getTemoInfo());
+            playerObject.setRecClassId(data.getTempRecClassId());
+            playerObject.setPicList(data.getTempPicList());
+            itemBridgeAdapter.notifyItemChanged(0);
+        } catch (Exception e) {
+        }
+    }
+
+    public void startPlayer(@NonNull MediaBean data) {
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            DetailTemplatePlayer.DetailTemplatePlayerObject playerData = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
+            playerData.setUpdateOnlyVideoPlaying(true);
+            playerData.setPlayingIndex(data.getTempIndex());
+            playerData.setVideoUrl(data.getTempVideoUrl());
             itemBridgeAdapter.notifyItemChanged(0);
         } catch (Exception e) {
         }

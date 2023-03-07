@@ -28,7 +28,7 @@ import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.HuanInfo;
 import tv.huan.bilibili.bean.LoadPageIcon;
 import tv.huan.bilibili.bean.ProgramInfo;
-import tv.huan.bilibili.bean.ProgramInfoDetail;
+import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
 import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.bean.SpecialBean;
@@ -91,15 +91,7 @@ public interface HttpApi {
      * @param cid 专辑ID
      */
     @GET("media/getMediasByCid/{cid}")
-    Observable<BaseBean<ProgramInfoDetail>> getMediasByCid(@Path("cid") String cid);
-
-    /**
-     * 获取影片详情
-     *
-     * @param cid 专辑ID
-     */
-    @GET("media/getMediasByCid2/{cid}")
-    Observable<BaseBean<ProgramInfoDetail>> getMediasByCid2(@Path("cid") String cid);
+    Observable<BaseBean<GetMediasByCid2Bean>> getMediasByCid(@Path("cid") String cid);
 
     /**
      * 河北用户周期鉴权接口
@@ -109,6 +101,14 @@ public interface HttpApi {
     @POST("apk/auth2")
     Observable<Auth2Bean> auth2(@Query("cid") String cid,
                                 @Query(OkhttpInterceptorStandard.EXTRA) String extra);
+
+    /**
+     * 获取影片详情
+     *
+     * @param cid 专辑ID
+     */
+    @GET("media/getMediasByCid2/{cid}")
+    Observable<BaseBean<GetMediasByCid2Bean>> getMediasByCid2(@Path("cid") String cid);
 
     /**
      * 获取详情页推荐

@@ -2,6 +2,7 @@ package tv.huan.bilibili.base;
 
 import android.content.Context;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -15,10 +16,19 @@ import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.dialog.LoadingDialog;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
+import tv.huan.bilibili.utils.ToastUtils;
 
 public interface BaseViewImpl extends BaseView {
 
     String KEY_INSTALL_TIME = "install_time";
+
+    default void showToast(@NonNull String s) {
+        try {
+            Context context = getContext();
+            Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+        }
+    }
 
     default void setImageUrl(@IdRes int id, @NonNull String url) {
         try {

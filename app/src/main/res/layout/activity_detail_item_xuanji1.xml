@@ -33,8 +33,8 @@
         android:id="@+id/detail_xuanji1_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:focusable="false"
         android:layout_centerInParent="true"
+        android:focusable="false"
         android:textColor="@color/color_aaaaaa"
         android:textSize="@dimen/sp_16"
         android:visibility="gone" />
@@ -44,8 +44,21 @@
         android:id="@+id/detail_xuanji1_item_img"
         android:layout_width="@dimen/dp_16"
         android:layout_height="@dimen/dp_20"
-        android:src="@drawable/ic_playing"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:src="@drawable/ic_playing"
+        android:visibility="gone" />
+
+    <!-- 会员标识 -->
+    <ImageView
+        android:id="@+id/detail_xuanji1_item_vip"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_14"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginRight="@dimen/dp_4"
+        android:scaleType="fitEnd"
+        android:src="@drawable/ic_huiyuan"
+        android:visibility="gone" />
 
 </RelativeLayout>

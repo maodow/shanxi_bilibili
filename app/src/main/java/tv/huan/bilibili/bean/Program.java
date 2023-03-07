@@ -8,7 +8,7 @@ public class Program implements Serializable {
     private String albumName ;
     private String HuanId ;
     private int productId ;
-    private Album album ;
+    private MediaBean album ;
     private int endFlag ;
     private String markTime ;
     private String vid ;
@@ -75,11 +75,11 @@ public class Program implements Serializable {
         this.productId = productId;
     }
 
-    public Album getAlbum() {
+    public MediaBean getAlbum() {
         return album;
     }
 
-    public void setAlbum(Album album) {
+    public void setAlbum(MediaBean album) {
         this.album = album;
     }
 

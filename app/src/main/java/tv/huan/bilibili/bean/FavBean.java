@@ -198,7 +198,7 @@ public class FavBean implements Serializable {
         }
 
         @Keep
-        public static class InfoBean extends ImageBean implements Serializable {
+        public static class InfoBean extends MediaBaseImageBean implements Serializable {
 
             private String code;
             private String title;

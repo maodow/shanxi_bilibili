@@ -97,8 +97,8 @@ public final class DetailTemplatePlayer extends Presenter {
         if (updateOnlyFavor) {
             try {
                 TextView textView = view.findViewById(R.id.detail_player_item_favor);
-                textView.setSelected(((DetailTemplatePlayerObject) o).isFavorStatus());
-                textView.setText(view.getResources().getString(((DetailTemplatePlayerObject) o).isFavorStatus() ? R.string.detail_favor_yes : R.string.detail_favor_no));
+                textView.setSelected(((DetailTemplatePlayerObject) o).isFavor());
+                textView.setText(view.getResources().getString(((DetailTemplatePlayerObject) o).isFavor() ? R.string.detail_favor_yes : R.string.detail_favor_no));
             } catch (Exception e) {
             }
         } else if (updateOnlyVideoPlaying) {
@@ -124,14 +124,19 @@ public final class DetailTemplatePlayer extends Presenter {
         } catch (Exception e) {
         }
         try {
+            TextView textView = view.findViewById(R.id.detail_player_item_vip);
+            textView.setVisibility(((DetailTemplatePlayerObject) o).isVip() ? View.VISIBLE : View.GONE);
+        } catch (Exception e) {
+        }
+        try {
             ImageView imageView = view.findViewById(R.id.detail_player_item_cover);
             GlideUtils.loadHz(imageView.getContext(), ((DetailTemplatePlayerObject) o).getImageUrl(), imageView);
         } catch (Exception e) {
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_favor);
-            textView.setSelected(((DetailTemplatePlayerObject) o).isFavorStatus());
-            textView.setText(view.getResources().getString(((DetailTemplatePlayerObject) o).isFavorStatus() ? R.string.detail_favor_yes : R.string.detail_favor_no));
+            textView.setSelected(((DetailTemplatePlayerObject) o).isFavor());
+            textView.setText(view.getResources().getString(((DetailTemplatePlayerObject) o).isFavor() ? R.string.detail_favor_yes : R.string.detail_favor_no));
             JSONObject object = new JSONObject();
             object.put("cid", ((DetailTemplatePlayerObject) o).getCid());
             object.put("recClassId", ((DetailTemplatePlayerObject) o).getRecClassId());
@@ -342,7 +347,8 @@ public final class DetailTemplatePlayer extends Presenter {
 
         private String cid;
         private String recClassId;
-        private boolean favorStatus;
+        private boolean favor;
+        private boolean vip;
 
         private String tag;
         private String title;
@@ -351,8 +357,23 @@ public final class DetailTemplatePlayer extends Presenter {
 
         private String imageUrl;
         private String videoUrl;
-        private boolean showVip;
         private int playingIndex = 0;
+
+        public boolean isFavor() {
+            return favor;
+        }
+
+        public void setFavor(boolean favor) {
+            this.favor = favor;
+        }
+
+        public boolean isVip() {
+            return vip;
+        }
+
+        public void setVip(boolean vip) {
+            this.vip = vip;
+        }
 
         public boolean isUpdateOnlyVideoPlaying() {
             return updateOnlyVideoPlaying;
@@ -368,14 +389,6 @@ public final class DetailTemplatePlayer extends Presenter {
 
         public void setUpdateOnlyVideoStop(boolean updateOnlyVideoStop) {
             this.updateOnlyVideoStop = updateOnlyVideoStop;
-        }
-
-        public boolean isFavorStatus() {
-            return favorStatus;
-        }
-
-        public void setFavorStatus(boolean favorStatus) {
-            this.favorStatus = favorStatus;
         }
 
         public String getCid() {
@@ -403,7 +416,7 @@ public final class DetailTemplatePlayer extends Presenter {
         }
 
         public int getPlayingIndex() {
-            return playingIndex + 1;
+            return playingIndex;
         }
 
         public void setPlayingIndex(int playingIndex) {
@@ -442,27 +455,16 @@ public final class DetailTemplatePlayer extends Presenter {
             this.title = title;
         }
 
-        public boolean isShowVip() {
-            return showVip;
-        }
-
-        public void setShowVip(boolean showVip) {
-            this.showVip = showVip;
-        }
-
         public void setImageUrl(String imageUrl) {
             this.imageUrl = imageUrl;
         }
 
         public String getImageUrl() {
-//            return "https://img1.baidu.com/it/u=1966616150,2146512490&fm=253&fmt=auto&app=138&f=JPEG?w=751&h=500";
             return imageUrl;
         }
 
         public String getVideoUrl() {
-//            return "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
-//            return videoUrl;
-            return "http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&amp;bizid=1023&amp;hy=SH&amp;fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400";
+            return videoUrl;
         }
 
         public void setVideoUrl(String videoUrl) {

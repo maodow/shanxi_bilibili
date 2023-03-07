@@ -2,12 +2,8 @@ package tv.huan.bilibili.bean;
 
 import androidx.annotation.Keep;
 
-import com.google.gson.Gson;
-
 import java.io.Serializable;
 import java.util.List;
-
-import tv.huan.bilibili.utils.LogUtil;
 
 @Keep
 public class SpecialBean implements Serializable {
@@ -72,7 +68,7 @@ public class SpecialBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean extends ImageBean implements JumpBean, Serializable {
+    public static class ItemBean extends MediaBaseImageBean implements JumpBean, Serializable {
         private String cid;
         private String bindName;
         private int tempTopicId;

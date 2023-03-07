@@ -1,19 +1,14 @@
 package tv.huan.bilibili.bean;
 
-import android.view.View;
-import android.widget.TextView;
-
 import androidx.annotation.Keep;
 
 import java.io.Serializable;
-import java.util.List;
 
-import tv.huan.bilibili.R;
 import tv.huan.bilibili.utils.Constants;
 
-public class ProgramDetail extends ImageBean implements Serializable {
+@Keep
+public final class MediaDetailBean extends MediaBaseImageBean implements Serializable {
 
-    private String id;
     private String cid;
     private String title;
     private String columnId;
@@ -33,7 +28,6 @@ public class ProgramDetail extends ImageBean implements Serializable {
     private String publishDate;
     private String episodeAll;
     private String episodeUpdated;
-    private int payStatus; //0周期，-1免费，其他单点
     private String areaName;
     private String year;
     private String videoIds;
@@ -50,8 +44,6 @@ public class ProgramDetail extends ImageBean implements Serializable {
 
 
     private String code;//计费吗
-    private String pic;//角标
-    private String pic2;//角标
     private String splitTag;//标签
     private String[] picList; // 标签集合
 
@@ -97,14 +89,6 @@ public class ProgramDetail extends ImageBean implements Serializable {
         return stringBuilder.toString();
     }
 
-    public String getPic2() {
-        return pic2;
-    }
-
-    public void setPic2(String pic2) {
-        this.pic2 = pic2;
-    }
-
     public String[] getPicList() {
         return picList;
     }
@@ -135,14 +119,6 @@ public class ProgramDetail extends ImageBean implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
     }
 
     public int getProductType() {
@@ -184,10 +160,6 @@ public class ProgramDetail extends ImageBean implements Serializable {
 
     public void setPlayType(int playType) {
         this.playType = playType;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getCid() {
@@ -354,14 +326,6 @@ public class ProgramDetail extends ImageBean implements Serializable {
         this.episodeUpdated = episodeUpdated;
     }
 
-    public int getPayStatus() {
-        return payStatus;
-    }
-
-    public void setPayStatus(int payStatus) {
-        this.payStatus = payStatus;
-    }
-
     public String getAreaName() {
         return areaName;
     }
@@ -422,65 +386,27 @@ public class ProgramDetail extends ImageBean implements Serializable {
         this.encryptionType = encryptionType;
     }
 
-
-    // 新加2021年10月26日
-    private List<Item> productCodes; // 计费类型【0免费，1单点，2专区单点，3周期，4专区周期】
-
-    public List<Item> getProductCodes() {
-        return productCodes;
+    public boolean isXuanQi() {
+        //  选期 => 教育、体育、综艺
+        if (type == Constants.AlbumType.EDUCATION || type == Constants.AlbumType.SPORTS || type == Constants.AlbumType.VARIETY) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void setProductCodes(List<Item> productCodes) {
-        this.productCodes = productCodes;
-    }
-
-    @Keep
-    public static class Item {
-
-        private int status;
-        private int id;
-        private int productType;
-        private String name;
-        private String code;
-
-        public int getStatus() {
-            return status;
+    public boolean isXuanJi() {
+        // 电影
+        if (type == Constants.AlbumType.FILM) {
+            return false;
         }
-
-        public void setStatus(int status) {
-            this.status = status;
+        //  选期 => 教育、体育、综艺
+        else if (type == Constants.AlbumType.EDUCATION || type == Constants.AlbumType.SPORTS || type == Constants.AlbumType.VARIETY) {
+            return false;
         }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public int getProductType() {
-            return productType;
-        }
-
-        public void setProductType(int productType) {
-            this.productType = productType;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
+        // 选集
+        else {
+            return true;
         }
     }
 }

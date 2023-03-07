@@ -26,4 +26,14 @@
         android:textColor="@color/color_white"
         android:textSize="@dimen/sp_14" />
 
+    <!-- 会员标识 -->
+    <tv.huan.bilibili.widget.common.CommonVipView
+        android:id="@+id/detail_fav_item_vip"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_14"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginRight="@dimen/dp_4" />
+
 </tv.huan.bilibili.widget.common.CommonRoundRelativeLayout>

@@ -1,36 +1,26 @@
-
-
 package tv.huan.bilibili.ui.detail.template;
 
 
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.leanback.widget.ArrayObjectAdapter;
-import androidx.leanback.widget.ItemBridgeAdapter;
-import androidx.leanback.widget.VerticalGridView;
-
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.leanback.presenter.ListTvEpisodesPresenter;
 import tv.huan.bilibili.R;
-import tv.huan.bilibili.bean.Media;
+import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
+import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.bilibili.widget.DetailGridView;
 
-public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
+public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<MediaBean> {
 
     @Override
     public int initMagrinTop(@NonNull Context context) {
@@ -51,7 +41,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
     }
 
     @Override
-    protected void onBindViewHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {
+    protected void onBindViewHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {
         LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked + ", data = " + item.toString());
         try {
             View view = v.findViewById(R.id.detail_xuanji1_item_img);
@@ -61,21 +51,40 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji1_item_name);
             textView.setVisibility(isPlaying ? View.GONE : View.VISIBLE);
-            textView.setText(item.getName());
+            textView.setText(String.valueOf(item.getTempIndex()));
             textView.setTextColor(context.getResources().getColor(isChecked ? R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji1_item_popu);
-            textView.setText(item.getTitle());
+            textView.setText(item.getName());
             textView.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
             textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+        } catch (Exception e) {
+        }
+        try {
+            ImageView imageView = v.findViewById(R.id.detail_xuanji1_item_vip);
+            boolean isVip = item.isTempVip();
+            // 免费
+            if (isVip) {
+                imageView.setVisibility(View.GONE);
+            }
+            // 播放策略
+            else {
+                int playType = item.getTempPlayType();
+                int index = item.getTempIndex();
+                if (playType > 0 && index <= playType) {
+                    imageView.setVisibility(View.GONE);
+                } else {
+                    imageView.setVisibility(View.VISIBLE);
+                }
+            }
         } catch (Exception e) {
         }
     }
 
     @Override
-    protected void onBindViewHolderRange(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {
+    protected void onBindViewHolderRange(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {
         LogUtil.log("DetailTemplateXuanJi => onBindViewHolderRange => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked);
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji2_item_name);
@@ -90,12 +99,12 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
     }
 
     @Override
-    protected void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull Media item, @NonNull int position) {
+    protected void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position) {
         try {
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null != activity && activity instanceof DetailActivity) {
-                ((DetailActivity) activity).updatePlayerInfo(position, item.getVid());
-                ((DetailActivity) activity).delayPlayer(position);
+                ((DetailActivity) activity).updatePlayer(item);
+                ((DetailActivity) activity).initPlayer(item);
             }
         } catch (Exception e) {
         }
@@ -139,6 +148,6 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<Media> {
         return offset;
     }
 
-    public static class DetailTemplateXuanJiList extends ArrayList<Media> {
+    public static class DetailTemplateXuanJiList extends ArrayList<MediaBean> {
     }
 }

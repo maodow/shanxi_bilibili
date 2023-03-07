@@ -16,11 +16,11 @@ import java.util.List;
 
 import lib.kalu.leanback.presenter.ListTvRowPresenter;
 import tv.huan.bilibili.R;
-import tv.huan.bilibili.bean.Album;
+import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
-public class DetailTemplateFavor extends ListTvRowPresenter<Album> {
+public class DetailTemplateFavor extends ListTvRowPresenter<MediaBean> {
 
 
     @Override
@@ -47,13 +47,13 @@ public class DetailTemplateFavor extends ListTvRowPresenter<Album> {
     }
 
     @Override
-    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<Album> list) {
+    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<MediaBean> list) {
         try {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = viewHolder.getAbsoluteAdapterPosition();
-                    Album album = list.get(position);
+                    MediaBean album = list.get(position);
                     JumpUtil.next(v.getContext(), album);
                 }
             });
@@ -72,7 +72,7 @@ public class DetailTemplateFavor extends ListTvRowPresenter<Album> {
     }
 
     @Override
-    protected void onBindHolder(@NonNull View view, @NonNull Album album, @NonNull int i, @NonNull int i1) {
+    protected void onBindHolder(@NonNull View view, @NonNull MediaBean album, @NonNull int i, @NonNull int i1) {
         try {
             TextView textView = view.findViewById(R.id.detail_fav_item_name);
             textView.setText(album.getName());
@@ -83,11 +83,16 @@ public class DetailTemplateFavor extends ListTvRowPresenter<Album> {
             GlideUtils.loadVt(imageView.getContext(), album.getPicture(false), imageView);
         } catch (Exception e) {
         }
+        try {
+            ImageView imageView = view.findViewById(R.id.detail_fav_item_vip);
+            GlideUtils.loadVt(imageView.getContext(), album.getVipUrl(), imageView);
+        } catch (Exception e) {
+        }
     }
 
     @Override
     protected int initLayout(int i) {
-        return R.layout.activity_detail_item_fav;
+        return R.layout.activity_detail_item_favor;
     }
 
     @Override

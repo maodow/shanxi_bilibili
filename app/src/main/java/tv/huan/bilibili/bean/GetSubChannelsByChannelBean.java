@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 import java.util.List;
 
-import lib.kalu.leanback.presenter.ListTvGridPresenter;
-import lib.kalu.leanback.presenter.ListTvRowPresenter;
 import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
 import tv.huan.bilibili.BuildConfig;
 
@@ -97,7 +95,7 @@ public class GetSubChannelsByChannelBean implements Serializable {
         }
 
         @Keep
-        public static class TemplateBean extends ImageBean implements JumpBean, TvPresenterRowBean, Serializable {
+        public static class TemplateBean extends MediaBaseImageBean implements JumpBean, TvPresenterRowBean, Serializable {
 
             private boolean tempShow;
             private String tempTitle;

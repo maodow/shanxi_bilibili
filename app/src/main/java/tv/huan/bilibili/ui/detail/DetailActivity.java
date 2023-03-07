@@ -3,22 +3,19 @@ package tv.huan.bilibili.ui.detail;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.leanback.widget.VerticalGridView;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
-import tv.huan.bilibili.bean.Media;
+import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
-import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
-import tv.huan.bilibili.utils.TimeUtils;
 import tv.huan.bilibili.widget.DetailGridView;
-import tv.huan.heilongjiang.HeilongjiangApi;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 
+    public static final String INTENT_POSITION = "intent_position";
     public static final String INTENT_CID = "intent_cid";
     public static final String INTENT_FROM_SEARCH = "intent_from_search";
     public static final String INTENT_FROM_SEARCH_KEY = "intent_from_search_key";
@@ -59,8 +56,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         getPresenter().setAdapter();
         // request
         getPresenter().request();
-        // look
-        getPresenter().refreshLook();
     }
 
     @Override
@@ -97,19 +92,27 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void jumpVip() {
-        HeilongjiangApi.jumpVip(getApplicationContext());
+    public void updateVid(@NonNull MediaBean data) {
+        putStringExtra(INTENT_VID, data.getVid());
     }
 
     @Override
-    public void delayPlayer(int position) {
-        getPresenter().delayPlayer(position);
-    }
-
-    @Override
-    public void startPlayer(int position) {
+    public void updatePlayer(@NonNull MediaBean data) {
+        stopPlayer();
+        updateVid(data);
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.startPlayer(position);
+        gridView.updatePlayer(data);
+    }
+
+    @Override
+    public void initPlayer(@NonNull MediaBean data) {
+        getPresenter().delayPlayer(data);
+    }
+
+    @Override
+    public void startPlayer(@NonNull MediaBean data) {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.startPlayer(data);
     }
 
     @Override
@@ -119,15 +122,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void updatePlayerInfo(int position, String vid) {
-        updateVid(vid);
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.nextPlayer(position);
+    public void jumpVip() {
+//        HeilongjiangApi.jumpVip(getApplicationContext());
     }
-
-    @Override
-    public void updateVid(String vid) {
-        putStringExtra(INTENT_VID, vid);
-    }
-
 }
