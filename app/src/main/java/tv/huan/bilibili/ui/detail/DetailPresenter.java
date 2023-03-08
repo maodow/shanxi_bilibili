@@ -633,7 +633,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         }
                     }
                 })
-                .delay(isFromUser ? 4000 : 1, TimeUnit.MILLISECONDS)
+//                .delay(isFromUser ? 4000 : 1, TimeUnit.MILLISECONDS)
                 .compose(ComposeSchedulers.io_main())
                 .doOnError(new Consumer<Throwable>() {
                     @Override

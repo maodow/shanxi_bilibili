@@ -81,5 +81,9 @@ public class PlayerView extends VideoLayout {
         // seekbar
         ComponentSeek seek = new ComponentSeek(getContext());
         controller.addComponent(seek);
+
+        // init
+        PlayerComponentInit init = new PlayerComponentInit(getContext());
+        controller.addComponent(init);
     }
 }

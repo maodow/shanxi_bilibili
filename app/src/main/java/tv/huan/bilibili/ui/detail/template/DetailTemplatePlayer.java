@@ -29,6 +29,8 @@ import io.reactivex.functions.Consumer;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.player.PlayerType;
+import lib.kalu.mediaplayer.config.start.StartBuilder;
+import lib.kalu.mediaplayer.core.controller.base.ControllerLayout;
 import lib.kalu.mediaplayer.listener.OnChangeListener;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.InfoDialog;
@@ -37,6 +39,7 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.utils.ToastUtils;
 import tv.huan.bilibili.widget.common.CommonPicView;
+import tv.huan.bilibili.widget.player.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.PlayerView;
 
 public final class DetailTemplatePlayer extends Presenter {
@@ -121,21 +124,25 @@ public final class DetailTemplatePlayer extends Presenter {
     private void showWarning(View view, Object o) {
         LogUtil.log("DetailTemplatePlayer => showWarning");
         try {
-            view.findViewById(R.id.detail_player_item_logo).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.detail_player_item_cover).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.detail_player_item_warning).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.detail_player_item_index).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.detail_player_item_sign).setVisibility(View.VISIBLE);
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
+            componentInit.show();
         } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => showWarning => " + e.getMessage());
+        }
+        try {
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
+            String imageUrl = ((DetailTemplatePlayerObject) o).getImageUrl();
+            String title = ((DetailTemplatePlayerObject) o).getTitle();
+            int playingIndex = ((DetailTemplatePlayerObject) o).getPlayingIndex();
+            componentInit.setData(imageUrl, title, playingIndex);
+        }catch (Exception e){
+            LogUtil.log("DetailTemplatePlayer => showWarning => " + e.getMessage());
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_vip);
             textView.setVisibility(((DetailTemplatePlayerObject) o).isVip() ? View.GONE : View.VISIBLE);
-        } catch (Exception e) {
-        }
-        try {
-            ImageView imageView = view.findViewById(R.id.detail_player_item_cover);
-            GlideUtils.loadHz(imageView.getContext(), ((DetailTemplatePlayerObject) o).getImageUrl(), imageView);
         } catch (Exception e) {
         }
         try {
@@ -157,18 +164,6 @@ public final class DetailTemplatePlayer extends Presenter {
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_title);
             textView.setText(((DetailTemplatePlayerObject) o).getTitle());
-        } catch (Exception e) {
-        }
-        try {
-            TextView textView = view.findViewById(R.id.detail_player_item_index);
-            int playingIndex = ((DetailTemplatePlayerObject) o).getPlayingIndex();
-            String title = ((DetailTemplatePlayerObject) o).getTitle();
-            if (playingIndex >= 1) {
-                String string = textView.getResources().getString(R.string.detail_playing_index, title, playingIndex);
-                textView.setText(string);
-            } else {
-                textView.setText(title);
-            }
         } catch (Exception e) {
         }
         try {
@@ -206,13 +201,21 @@ public final class DetailTemplatePlayer extends Presenter {
 
     private void hideWarning(View viewGroup) {
         LogUtil.log("DetailTemplatePlayer => hideWarning");
+//        try {
+//            viewGroup.findViewById(R.id.detail_player_item_logo).setVisibility(View.GONE);
+//            viewGroup.findViewById(R.id.detail_player_item_cover).setVisibility(View.GONE);
+//            viewGroup.findViewById(R.id.detail_player_item_warning).setVisibility(View.GONE);
+//            viewGroup.findViewById(R.id.detail_player_item_index).setVisibility(View.GONE);
+//            viewGroup.findViewById(R.id.detail_player_item_sign).setVisibility(View.GONE);
+//        } catch (Exception e) {
+//        }
+
         try {
-            viewGroup.findViewById(R.id.detail_player_item_logo).setVisibility(View.GONE);
-            viewGroup.findViewById(R.id.detail_player_item_cover).setVisibility(View.GONE);
-            viewGroup.findViewById(R.id.detail_player_item_warning).setVisibility(View.GONE);
-            viewGroup.findViewById(R.id.detail_player_item_index).setVisibility(View.GONE);
-            viewGroup.findViewById(R.id.detail_player_item_sign).setVisibility(View.GONE);
+            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
+            componentInit.gone();
         } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => hideWarning => " + e.getMessage());
         }
     }
 
@@ -222,7 +225,10 @@ public final class DetailTemplatePlayer extends Presenter {
             DetailTemplatePlayerObject data = (DetailTemplatePlayerObject) o;
             String cdnUrl = data.getVideoUrl();
             PlayerView videoLayout = view.findViewById(R.id.detail_player_item_video);
-            videoLayout.start(cdnUrl);
+            StartBuilder.Builder builder = new StartBuilder.Builder();
+            builder.setLoop(false);
+            builder.setDelay(4000);
+            videoLayout.start(builder.build(), cdnUrl);
         } catch (Exception e) {
         }
     }

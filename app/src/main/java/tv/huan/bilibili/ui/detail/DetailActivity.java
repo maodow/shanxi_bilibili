@@ -57,7 +57,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void initData() {
-        putIntExtra(DetailActivity.INTENT_POSITION, 9);
+//        putIntExtra(DetailActivity.INTENT_POSITION, 9);
         // adapter
         getPresenter().setAdapter();
         // request
