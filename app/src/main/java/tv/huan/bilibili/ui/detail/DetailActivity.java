@@ -57,7 +57,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void initData() {
-//        putIntExtra(DetailActivity.INTENT_POSITION, 9);
         // adapter
         getPresenter().setAdapter();
         // request
@@ -123,9 +122,9 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void startPlayerNext() {
+    public void startPlayerNext1() {
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.startNext();
+        gridView.startNext1();
     }
 
     @Override

@@ -19,6 +19,7 @@ import androidx.leanback.widget.Presenter;
 
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -350,30 +351,6 @@ public final class DetailTemplatePlayer extends Presenter {
                     }
                 }
             });
-            // 播放器
-            try {
-                PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
-                playerView.setOnChangeListener(new lib.kalu.mediaplayer.listener.OnChangeListener() {
-
-                    @Override
-                    public void onProgress(@NonNull long position, @NonNull long duration) {
-                    }
-
-                    @Override
-                    public void onChange(int playState) {
-                        switch (playState) {
-                            case PlayerType.StateType.STATE_END: //播放完成
-                                Activity activity = WrapperUtil.getWrapperActivity(context);
-                                LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
-                                if (null != activity && activity instanceof DetailActivity) {
-                                    ((DetailActivity) activity).completePlayer();
-                                }
-                                break;
-                        }
-                    }
-                });
-            } catch (Exception e) {
-            }
             return new ViewHolder(view);
         } catch (Exception e) {
             return null;

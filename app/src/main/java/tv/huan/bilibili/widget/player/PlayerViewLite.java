@@ -38,6 +38,10 @@ public final class PlayerViewLite extends PlayerView {
     }
 
     @Override
+    protected void addListeren() {
+    }
+
+    @Override
     public void start(@NonNull String url) {
         // 1
         release();

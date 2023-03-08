@@ -161,7 +161,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public void startNext() {
+    public void startNext1() {
         DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
         LogUtil.log("DetailGridView", "startNext => presenter = " + presenter);
         if (null == presenter)

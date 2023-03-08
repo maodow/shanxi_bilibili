@@ -1,5 +1,6 @@
 package tv.huan.bilibili.widget.player;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
@@ -8,6 +9,7 @@ import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
 import lib.kalu.mediaplayer.core.controller.ControllerEmpty;
@@ -17,27 +19,33 @@ import lib.kalu.mediaplayer.core.controller.component.ComponentSeek;
 import lib.kalu.mediaplayer.core.controller.component.ComponentSpeed;
 import lib.kalu.mediaplayer.core.player.VideoLayout;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.ui.detail.DetailActivity;
+import tv.huan.bilibili.utils.LogUtil;
 
 public class PlayerView extends VideoLayout {
     public PlayerView(Context context) {
         super(context);
         init();
+        addListeren();
     }
 
     public PlayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+        addListeren();
     }
 
     public PlayerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+        addListeren();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public PlayerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
+        addListeren();
     }
 
     @Override
@@ -49,6 +57,29 @@ public class PlayerView extends VideoLayout {
         builder.setLive(false);
         builder.setLoop(true);
         super.start(builder.build(), url);
+    }
+
+    protected void addListeren(){
+        LogUtil.log("PlayerView => addListeren =>");
+        setOnChangeListener(new lib.kalu.mediaplayer.listener.OnChangeListener() {
+
+            @Override
+            public void onProgress(@NonNull long position, @NonNull long duration) {
+            }
+
+            @Override
+            public void onChange(int playState) {
+                switch (playState) {
+                    case PlayerType.StateType.STATE_END: //播放完成
+                        Activity activity = WrapperUtil.getWrapperActivity(getContext());
+                        LogUtil.log("PlayerView => addListeren => onChange => activity = " + activity);
+                        if (null != activity && activity instanceof DetailActivity) {
+                            ((DetailActivity) activity).completePlayer();
+                        }
+                        break;
+                }
+            }
+        });
     }
 
     protected void init() {

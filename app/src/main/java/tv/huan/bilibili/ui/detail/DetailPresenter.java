@@ -684,7 +684,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         String s = getView().getString(R.string.detail_warning_next, integer);
                         LogUtil.log("DetailPresenter => checkPlayerNext => s = " + s);
                         getView().showToast(s);
-                        getView().startPlayerNext();
+                        getView().startPlayerNext1();
                     }
                 })
                 .subscribe());
