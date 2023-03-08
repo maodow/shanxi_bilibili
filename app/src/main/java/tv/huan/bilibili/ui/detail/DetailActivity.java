@@ -2,15 +2,20 @@ package tv.huan.bilibili.ui.detail;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
@@ -52,6 +57,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void initData() {
+        putIntExtra(DetailActivity.INTENT_POSITION, 9);
         // adapter
         getPresenter().setAdapter();
         // request
@@ -97,23 +103,29 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void updatePlayer(@NonNull MediaBean data) {
-        getPresenter().checkPlayer(data);
-        stopPlayer();
-        updateVid(data);
+    public void updateData(@NonNull MediaBean data, boolean isFromUser) {
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.updatePlayer(data);
+        if (!isFromUser) {
+            gridView.updatePlayerPosition(data);
+        }
     }
 
     @Override
-    public void initPlayer(@NonNull MediaBean data) {
-        getPresenter().delayPlayer(data);
+    public void delayPlayer(@NonNull MediaBean data, boolean isFromUser) {
+        getPresenter().delayPlayer(data, isFromUser);
     }
 
     @Override
-    public void startPlayer(@NonNull MediaBean data) {
+    public void startPlayer(@NonNull MediaBean data, boolean isFromUser) {
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.startPlayer(data);
+        gridView.startPlayer(data, isFromUser);
+    }
+
+    @Override
+    public void startPlayerNext() {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.startNext();
     }
 
     @Override
@@ -124,8 +136,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void completePlayer() {
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.startNext();
+       getPresenter().checkPlayerNext();
     }
 
     @Override

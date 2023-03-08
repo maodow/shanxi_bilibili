@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
@@ -99,12 +101,15 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<MediaBean> {
     }
 
     @Override
-    protected void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position) {
+    protected void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position, boolean isFromUser) {
+        LogUtil.log("DetailTemplateXuanJi => onClickEpisode => position = " + position + ", isFromUser = " + isFromUser);
         try {
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null != activity && activity instanceof DetailActivity) {
-                ((DetailActivity) activity).updatePlayer(item);
-                ((DetailActivity) activity).initPlayer(item);
+                ((DetailActivity) activity).stopPlayer();
+                ((DetailActivity) activity).updateVid(item);
+                ((DetailActivity) activity).updateData(item, true);
+                ((DetailActivity) activity).delayPlayer(item, true);
             }
         } catch (Exception e) {
         }

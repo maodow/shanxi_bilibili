@@ -35,6 +35,7 @@ import tv.huan.bilibili.dialog.InfoDialog;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.utils.ToastUtils;
 import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerView;
 
@@ -94,6 +95,9 @@ public final class DetailTemplatePlayer extends Presenter {
         } catch (Exception e) {
             updateOnlyVideoStop = false;
         }
+        LogUtil.log("DetailTemplatePlayer => showData => updateOnlyFavor = " + updateOnlyFavor);
+        LogUtil.log("DetailTemplatePlayer => showData => updateOnlyVideoStop = " + updateOnlyVideoStop);
+        LogUtil.log("DetailTemplatePlayer => showData => updateOnlyVideoPlaying = " + updateOnlyVideoPlaying);
 
         if (updateOnlyFavor) {
             try {
@@ -344,13 +348,15 @@ public final class DetailTemplatePlayer extends Presenter {
             try {
                 PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
                 playerView.setOnChangeListener(new lib.kalu.mediaplayer.listener.OnChangeListener() {
+
+                    @Override
+                    public void onProgress(@NonNull long position, @NonNull long duration) {
+                    }
+
                     @Override
                     public void onChange(int playState) {
                         switch (playState) {
-                            //播放错误
-                            case PlayerType.StateType.STATE_ERROR:
-                                //播放完成
-                            case PlayerType.StateType.STATE_END:
+                            case PlayerType.StateType.STATE_END: //播放完成
                                 Activity activity = WrapperUtil.getWrapperActivity(context);
                                 LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
                                 if (null != activity && activity instanceof DetailActivity) {

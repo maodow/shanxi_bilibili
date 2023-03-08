@@ -53,8 +53,10 @@ public class DetailTemplateXuanQi extends ListTvGridPresenter<MediaBean> {
                     Activity activity = WrapperUtil.getWrapperActivity(context);
                     if (null != activity && activity instanceof DetailActivity) {
                         MediaBean bean = list.get(position);
-                        ((DetailActivity) activity).updatePlayer(bean);
-                        ((DetailActivity) activity).initPlayer(bean);
+                        ((DetailActivity) activity).stopPlayer();
+                        ((DetailActivity) activity).updateVid(bean);
+                        ((DetailActivity) activity).updateData(bean, true);
+                        ((DetailActivity) activity).delayPlayer(bean, true);
                     }
                 }
             }

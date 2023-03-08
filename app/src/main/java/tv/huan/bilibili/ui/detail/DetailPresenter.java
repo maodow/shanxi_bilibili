@@ -475,9 +475,10 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(MediaBean data) {
                         getView().hideLoading();
+                        getView().updateVid(data);
                         getView().refreshContent();
-                        getView().updatePlayer(data);
-                        getView().initPlayer(data);
+                        getView().updateData(data, false);
+                        getView().delayPlayer(data, false);
                     }
                 }).subscribe());
     }
@@ -606,32 +607,47 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         return false;
     }
 
-    protected final void delayPlayer(@NonNull MediaBean data) {
+    protected final void delayPlayer(@NonNull MediaBean data, boolean isFromUser) {
         addDisposable(Observable.create(new ObservableOnSubscribe<Integer>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Integer> emitter) {
+                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+
                         String videoUrl = data.getTempVideoUrl();
                         if (null == videoUrl || videoUrl.length() <= 0) {
-                            emitter.onNext(0);
+                            throw new Exception("视频url错误");
                         } else {
                             boolean isVip = data.isTempVip();
                             int playType = data.getTempPlayType();
                             int index = data.getTempIndex();
-                            if (!isVip && index > playType) {
-                                emitter.onNext(1);
+                            if (!isVip && playType <= 0) {
+                                throw new Exception("需要开通vip");
+                            } else if (!isVip && index > playType) {
+                                throw new Exception("第" + index + "集, 需要开通vip");
                             } else {
-                                emitter.onNext(2);
+                                if (!isVip && index > playType) {
+                                    emitter.onNext(1);
+                                } else {
+                                    emitter.onNext(isFromUser ? 21 : 22);
+                                }
                             }
                         }
                     }
                 })
-                .delay(4, TimeUnit.SECONDS)
+                .delay(isFromUser ? 4000 : 1, TimeUnit.MILLISECONDS)
                 .compose(ComposeSchedulers.io_main())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().showToast(throwable);
+                    }
+                })
                 .doOnNext(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer v) {
-                        if (v == 2) {
-                            getView().startPlayer(data);
+                        if (v == 21) {
+                            getView().startPlayer(data, true);
+                        } else if (v == 22) {
+                            getView().startPlayer(data, false);
                         } else if (v == 1) {
                             getView().jumpVip();
                         }
@@ -640,33 +656,35 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 .subscribe());
     }
 
-    protected final void checkPlayer(@NonNull MediaBean data) {
-        addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
+    protected void checkPlayerNext() {
+        LogUtil.log("DetailPresenter => checkPlayerNext =>");
+        addDisposable(Observable.create(new ObservableOnSubscribe<Integer>() {
                     @Override
-                    public void subscribe(ObservableEmitter<String> emitter) {
-
-                        String videoUrl = data.getTempVideoUrl();
-                        if (null == videoUrl || videoUrl.length() <= 0) {
-                            emitter.onNext("视频url错误");
-                        } else {
-                            boolean isVip = data.isTempVip();
-                            int playType = data.getTempPlayType();
-                            int index = data.getTempIndex();
-                            if (!isVip && playType <= 0) {
-                                emitter.onNext("需要开通vip");
-                            } else if (!isVip && index > playType) {
-                                emitter.onNext("第" + index + "集, 需要开通vip");
-                            } else {
-                                emitter.onNext("");
-                            }
-                        }
+                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                        DetailGridView gridView = getView().findViewById(R.id.detail_list);
+                        boolean playingEnd = gridView.isPlayingEnd();
+                        if (playingEnd)
+                            throw new Exception("播放结束");
+                        int nextPosition = gridView.getPlayerNextPosition();
+                        if (nextPosition < 0)
+                            throw new Exception("播放结束1");
+                        emitter.onNext(nextPosition + 1);
                     }
                 })
                 .compose(ComposeSchedulers.io_main())
-                .doOnNext(new Consumer<String>() {
+                .doOnError(new Consumer<Throwable>() {
                     @Override
-                    public void accept(String s) {
+                    public void accept(Throwable throwable) {
+                        getView().showToast(throwable);
+                    }
+                })
+                .doOnNext(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) {
+                        String s = getView().getString(R.string.detail_warning_next, integer);
+                        LogUtil.log("DetailPresenter => checkPlayerNext => s = " + s);
                         getView().showToast(s);
+                        getView().startPlayerNext();
                     }
                 })
                 .subscribe());
