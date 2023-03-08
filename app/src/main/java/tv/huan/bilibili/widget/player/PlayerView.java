@@ -18,6 +18,8 @@ import lib.kalu.mediaplayer.core.controller.component.ComponentPause;
 import lib.kalu.mediaplayer.core.controller.component.ComponentSeek;
 import lib.kalu.mediaplayer.core.controller.component.ComponentSpeed;
 import lib.kalu.mediaplayer.core.player.VideoLayout;
+import lib.kalu.mediaplayer.listener.OnChangeListener;
+import lib.kalu.mediaplayer.util.MPLogUtil;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.LogUtil;
@@ -61,7 +63,7 @@ public class PlayerView extends VideoLayout {
 
     protected void addListeren(){
         LogUtil.log("PlayerView => addListeren =>");
-        setOnChangeListener(new lib.kalu.mediaplayer.listener.OnChangeListener() {
+        OnChangeListener listener = new OnChangeListener() {
 
             @Override
             public void onProgress(@NonNull long position, @NonNull long duration) {
@@ -79,7 +81,9 @@ public class PlayerView extends VideoLayout {
                         break;
                 }
             }
-        });
+        };
+        MPLogUtil.log("PlayerApiBase => callPlayerState => l = " + listener);
+        setOnChangeListener(listener);
     }
 
     protected void init() {

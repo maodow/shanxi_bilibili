@@ -50,7 +50,7 @@ public final class HuanApp extends Application {
 
     private void initPlayer() {
         PlayerBuilder build = new PlayerBuilder.Builder()
-                .setLog(false)
+                .setLog(true)
                 .setKernel(PlayerType.KernelType.EXO)
                 .setRender(PlayerType.RenderType.TEXTURE_VIEW)
                 .setCacheType(PlayerType.CacheType.NONE)
