@@ -61,7 +61,7 @@ public final class ReportUtils {
         JSONObject object = create("app_activation", prodId);
         try {
             object.put("mac", mac);
-            object.put("ip", AppUtils.getEtherNetIP());
+            object.put("ip", BoxUtil.getEtherNetIP());
             object.put("ver", BuildConfig.VERSION_NAME);
         } catch (Exception e) {
         }
@@ -481,8 +481,8 @@ public final class ReportUtils {
             object.put("model", Build.MODEL);
             object.put("ver", BuildConfig.VERSION_NAME);
             object.put("business_id", prodId);
-            object.put("ip", AppUtils.getEtherNetIP());
-            object.put("area_code", AppUtils.getEtherNetIP());
+            object.put("ip", BoxUtil.getEtherNetIP());
+            object.put("area_code", BoxUtil.getEtherNetIP());
         } catch (Exception e) {
         }
         return object;

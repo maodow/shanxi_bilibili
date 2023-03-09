@@ -8,6 +8,7 @@ import java.util.List;
 
 import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
 import tv.huan.bilibili.BuildConfig;
+import tv.huan.bilibili.bean.format.LookBean;
 
 @Keep
 public class GetSubChannelsByChannelBean implements Serializable {

@@ -2,7 +2,6 @@ package tv.huan.bilibili.base;
 
 import android.content.Context;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.dialog.LoadingDialog;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
-import tv.huan.bilibili.utils.ToastUtils;
 
 public interface BaseViewImpl extends BaseView {
 

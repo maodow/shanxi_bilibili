@@ -1,8 +1,10 @@
-package tv.huan.bilibili.bean;
+package tv.huan.bilibili.bean.format;
 
 import androidx.annotation.Keep;
 
 import java.io.Serializable;
+
+import tv.huan.bilibili.bean.JumpBean;
 
 @Keep
 public final class LookBean implements Serializable, JumpBean {

@@ -1,25 +1,15 @@
 package tv.huan.bilibili.ui.webview;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.os.Build;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 
-import org.checkerframework.checker.units.qual.C;
-
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -27,10 +17,8 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
-import tv.huan.bilibili.bean.FavBean;
-import tv.huan.bilibili.bean.WebviewBean;
+import tv.huan.bilibili.bean.format.WebviewBean;
 import tv.huan.bilibili.http.HttpClient;
-import tv.huan.bilibili.ui.center.CenterActivity;
 
 public class WebviewPresenter extends BasePresenterImpl<WebviewView> {
 

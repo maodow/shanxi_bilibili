@@ -4,7 +4,7 @@ import androidx.annotation.Keep;
 
 import java.io.Serializable;
 
-import tv.huan.bilibili.utils.Constants;
+import tv.huan.bilibili.BuildConfig;
 
 @Keep
 public final class MediaDetailBean extends MediaBaseImageBean implements Serializable {
@@ -52,24 +52,24 @@ public final class MediaDetailBean extends MediaBaseImageBean implements Seriali
         StringBuilder stringBuilder = new StringBuilder();
         try {
             // 电影，电视剧
-            if (type == Constants.AlbumType.FILM || type == Constants.AlbumType.TELEPLAY) {
+            if (type == BuildConfig.HUAN_TYPE_FILM || type == BuildConfig.HUAN_TYPE_TELEPLAY) {
                 stringBuilder.append("导   演： " + getDirector());
                 stringBuilder.append("\n");
                 stringBuilder.append("主   演： " + getLeadingActor());
                 stringBuilder.append("\n");
             }
             // 综艺，体育
-            else if (type == Constants.AlbumType.VARIETY || type == Constants.AlbumType.SPORTS) {
+            else if (type == BuildConfig.HUAN_TYPE_VARIETY || type == BuildConfig.HUAN_TYPE_SPORTS) {
                 stringBuilder.append("嘉   宾： " + getGuests());
                 stringBuilder.append("\n");
             }
             // 少儿，动漫
-            else if (type == Constants.AlbumType.ANIME || type == Constants.AlbumType.CHILDREN) {
+            else if (type == BuildConfig.HUAN_TYPE_ANIME || type == BuildConfig.HUAN_TYPE_CHILDREN) {
                 stringBuilder.append("导   演： " + getDirector());
                 stringBuilder.append("\n");
             }
             // 教育
-            else if (type == Constants.AlbumType.EDUCATION) {
+            else if (type == BuildConfig.HUAN_TYPE_EDUCATION) {
             }
             // 默认
             else {
@@ -388,7 +388,7 @@ public final class MediaDetailBean extends MediaBaseImageBean implements Seriali
 
     public boolean isXuanQi() {
         //  选期 => 教育、体育、综艺
-        if (type == Constants.AlbumType.EDUCATION || type == Constants.AlbumType.SPORTS || type == Constants.AlbumType.VARIETY) {
+        if (type == BuildConfig.HUAN_TYPE_EDUCATION || type == BuildConfig.HUAN_TYPE_SPORTS || type == BuildConfig.HUAN_TYPE_VARIETY) {
             return true;
         } else {
             return false;
@@ -397,11 +397,11 @@ public final class MediaDetailBean extends MediaBaseImageBean implements Seriali
 
     public boolean isXuanJi() {
         // 电影
-        if (type == Constants.AlbumType.FILM) {
+        if (type == BuildConfig.HUAN_TYPE_FILM) {
             return false;
         }
         //  选期 => 教育、体育、综艺
-        else if (type == Constants.AlbumType.EDUCATION || type == Constants.AlbumType.SPORTS || type == Constants.AlbumType.VARIETY) {
+        else if (type == BuildConfig.HUAN_TYPE_EDUCATION || type == BuildConfig.HUAN_TYPE_SPORTS || type == BuildConfig.HUAN_TYPE_VARIETY) {
             return false;
         }
         // 选集

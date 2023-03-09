@@ -1,4 +1,4 @@
-package tv.huan.bilibili.bean;
+package tv.huan.bilibili.bean.format;
 
 import org.json.JSONObject;
 

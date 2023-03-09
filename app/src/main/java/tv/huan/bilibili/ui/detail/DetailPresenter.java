@@ -1,7 +1,6 @@
 package tv.huan.bilibili.ui.detail;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
@@ -12,10 +11,7 @@ import androidx.leanback.widget.VerticalGridView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,14 +23,12 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
-import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.Auth2Bean;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.FavorBean;
 import tv.huan.bilibili.bean.GetMediasByCid2Bean;
-import tv.huan.bilibili.bean.LookBean;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.format.DetailBean;

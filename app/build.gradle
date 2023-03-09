@@ -51,6 +51,17 @@ android {
             buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false") // 测试模板1-22
 //            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8188/mediaApi/\"")
+            buildConfigField("int", "HUAN_TYPE_GETFISH", "310")//垂钓
+            buildConfigField("int", "HUAN_TYPE_LIFE", "309")//茶文化
+            buildConfigField("int", "HUAN_TYPE_SPORTS", "308")//体育
+            buildConfigField("int", "HUAN_TYPE_SPORTSLIFE", "307")//健身
+            buildConfigField("int", "HUAN_TYPE_EDUCATION", "306")//教育
+            buildConfigField("int", "HUAN_TYPE_DOCUMENTARY", "305")//纪录片
+            buildConfigField("int", "HUAN_TYPE_VARIETY", "304")//综艺
+            buildConfigField("int", "HUAN_TYPE_ANIME", "303")//动漫
+            buildConfigField("int", "HUAN_TYPE_CHILDREN", "302")//少儿
+            buildConfigField("int", "HUAN_TYPE_TELEPLAY", "301")//电视剧
+            buildConfigField("int", "HUAN_TYPE_FILM", "300")//电影
         }
         debug {
             signingConfig signingConfigs.release
@@ -68,6 +79,17 @@ android {
             buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false") // 测试模板1-22
 //            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8188/mediaApi/\"")
+            buildConfigField("int", "HUAN_TYPE_GETFISH", "310")//垂钓
+            buildConfigField("int", "HUAN_TYPE_LIFE", "309")//茶文化
+            buildConfigField("int", "HUAN_TYPE_SPORTS", "308")//体育
+            buildConfigField("int", "HUAN_TYPE_SPORTSLIFE", "307")//健身
+            buildConfigField("int", "HUAN_TYPE_EDUCATION", "306")//教育
+            buildConfigField("int", "HUAN_TYPE_DOCUMENTARY", "305")//纪录片
+            buildConfigField("int", "HUAN_TYPE_VARIETY", "304")//综艺
+            buildConfigField("int", "HUAN_TYPE_ANIME", "303")//动漫
+            buildConfigField("int", "HUAN_TYPE_CHILDREN", "302")//少儿
+            buildConfigField("int", "HUAN_TYPE_TELEPLAY", "301")//电视剧
+            buildConfigField("int", "HUAN_TYPE_FILM", "300")//电影
         }
     }
     sourceSets {
@@ -89,7 +111,7 @@ dependencies {
     // autosize
     api files('libs/lib_autosize_v1.2.1_release.aar')
     // mvp
-    api files('libs/lib_frame_mvp_release_20230308.aar')
+    api files('libs/lib_frame_mvp_release_20230309.aar')
     // leanback
     api files('libs/lib_leanback_r1-2-0-alpha02-release.aar')
     // keyboard
