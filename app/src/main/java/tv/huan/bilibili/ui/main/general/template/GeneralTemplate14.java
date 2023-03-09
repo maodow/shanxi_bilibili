@@ -42,12 +42,22 @@ public class GeneralTemplate14 extends ListTvRowPresenter<GetSubChannelsByChanne
         try {
             TextView textIndex = view.findViewById(R.id.album_item_index_template14);
             textIndex.setText("TOP" + (i + 1));
-            TextView textView = view.findViewById(R.id.album_item_name_template14);
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = view.findViewById(R.id.common_poster_name);
             textView.setText(templateBean.getName());
-            ImageView imageView = view.findViewById(R.id.album_item_img_template14);
+        } catch (Exception e) {
+        }
+        try {
+            ImageView imageView = view.findViewById(R.id.common_poster_img);
             GlideUtils.loadVt(imageView.getContext(), templateBean.getPicture(false), imageView);
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+        try {
+            ImageView imageView = view.findViewById(R.id.common_poster_vip);
+            GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
+        } catch (Exception e) {
         }
     }
 

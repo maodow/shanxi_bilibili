@@ -270,12 +270,21 @@ public class ExitDialog extends DialogFragment implements DialogInterface.OnKeyL
 
                 try {
                     ExitBean itemBean = list.get(position);
-                    TextView textView = holder.itemView.findViewById(R.id.dialog_exit_item_name);
+                    TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
                     textView.setText(itemBean.getName());
-                    ImageView imageView = holder.itemView.findViewById(R.id.dialog_exit_item_img);
+                } catch (Exception e) {
+                }
+                try {
+                    ExitBean itemBean = list.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
                     GlideUtils.loadHz(imageView.getContext(), itemBean.getImgs().getPoster(), imageView);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                }
+                try {
+//                    ExitBean itemBean = list.get(position);
+//                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
+//                    GlideUtils.loadVt(imageView.getContext(), itemBean.getVipUrl(), imageView);
+                } catch (Exception e) {
                 }
             }
 

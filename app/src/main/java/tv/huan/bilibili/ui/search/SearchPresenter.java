@@ -105,7 +105,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                     inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                         @Override
                         public void onFocusChange(View view, boolean b) {
-                            TextView textView = view.findViewById(R.id.search_item_name);
+                            TextView textView = view.findViewById(R.id.common_poster_name);
                             textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
                         }
                     });
@@ -118,14 +118,20 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
                 try {
                     SearchBean.ItemBean itemBean = mData.get(position);
-                    TextView textView = holder.itemView.findViewById(R.id.search_item_name);
+                    TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
                     textView.setText(itemBean.getName());
                 } catch (Exception e) {
                 }
                 try {
                     SearchBean.ItemBean itemBean = mData.get(position);
-                    ImageView imageView = holder.itemView.findViewById(R.id.search_item_img);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
                     GlideUtils.loadVt(imageView.getContext(), itemBean.getPicture(false), imageView);
+                } catch (Exception e) {
+                }
+                try {
+                    SearchBean.ItemBean itemBean = mData.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
+                    GlideUtils.loadVt(imageView.getContext(), itemBean.getVipUrl(), imageView);
                 } catch (Exception e) {
                 }
             }

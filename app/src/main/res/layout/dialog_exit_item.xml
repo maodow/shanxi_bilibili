@@ -16,40 +16,9 @@
     app:rl_rate_height="0.7"
     app:rl_scale="1.1">
 
-    <!-- 图片 -->
-    <ImageView
-        android:id="@+id/dialog_exit_item_img"
+    <include
+        layout="@layout/common_poster"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="27dp"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        android:scaleType="centerCrop" />
-
-    <!-- 标题 -->
-    <lib.kalu.leanback.auto.AutoTextView
-        android:id="@+id/dialog_exit_item_name"
-        android:layout_width="match_parent"
-        android:layout_height="27dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:clickable="false"
-        android:ellipsize="marquee"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:gravity="center_vertical|left"
-        android:longClickable="false"
-        android:paddingLeft="9dp"
-        android:paddingRight="9dp"
-        android:singleLine="true"
-        android:text="-"
-        android:textColor="#ffffff"
-        android:textSize="15sp"
-        app:fl_bg_color_focus="#f1f1f1"
-        app:fl_bg_color_normal="#5458A4"
-        app:fl_text_color_focus="#3c3c82"
-        app:fl_text_color_normal="#ffffff" />
+        android:layout_height="match_parent" />
 
 </lib.kalu.leanback.round.RoundRelativeLayout>

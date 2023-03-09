@@ -153,34 +153,26 @@ public class GeneralTemplate20 extends ListTvGridPresenter<GetSubChannelsByChann
     @Override
     protected void onBindHolder(@NonNull View v, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i, @NonNull int i1) {
 
-        // type0
-        if (i1 == 0) {
-            try {
-                TextView textView = v.findViewById(R.id.general_template20a_name);
-                textView.setText(templateBean.getName());
-            } catch (Exception e) {
-            }
-            try {
-                ImageView imageView = v.findViewById(R.id.general_template20a_img);
-                GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
-            } catch (Exception e) {
-            }
-        }
         // type1
-        else if (i1 == 1) {
+       if (i1 == 1) {
         }
         //  type2
         else {
-            try {
-                TextView textView = v.findViewById(R.id.general_template20c_name);
-                textView.setText(templateBean.getName());
-            } catch (Exception e) {
-            }
-            try {
-                ImageView imageView = v.findViewById(R.id.general_template20c_img);
-                GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
-            } catch (Exception e) {
-            }
+           try {
+               TextView textView = v.findViewById(R.id.common_poster_name);
+               textView.setText(templateBean.getName());
+           } catch (Exception e) {
+           }
+           try {
+               ImageView imageView = v.findViewById(R.id.common_poster_img);
+               GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
+           } catch (Exception e) {
+           }
+           try {
+               ImageView imageView = v.findViewById(R.id.common_poster_vip);
+               GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
+           } catch (Exception e) {
+           }
         }
     }
 

@@ -22,7 +22,6 @@ import tv.huan.bilibili.utils.JumpUtil;
 
 public class DetailTemplateFavor extends ListTvRowPresenter<MediaBean> {
 
-
     @Override
     protected String initRowTitle(Context context) {
         return context.getResources().getString(R.string.detail_cai);
@@ -63,7 +62,7 @@ public class DetailTemplateFavor extends ListTvRowPresenter<MediaBean> {
             view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    TextView textView = view.findViewById(R.id.detail_fav_item_name);
+                    TextView textView = view.findViewById(R.id.common_poster_name);
                     textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
                 }
             });
@@ -74,17 +73,17 @@ public class DetailTemplateFavor extends ListTvRowPresenter<MediaBean> {
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull MediaBean album, @NonNull int i, @NonNull int i1) {
         try {
-            TextView textView = view.findViewById(R.id.detail_fav_item_name);
+            TextView textView = view.findViewById(R.id.common_poster_name);
             textView.setText(album.getName());
         } catch (Exception e) {
         }
         try {
-            ImageView imageView = view.findViewById(R.id.detail_fav_item_img);
+            ImageView imageView = view.findViewById(R.id.common_poster_img);
             GlideUtils.loadVt(imageView.getContext(), album.getPicture(false), imageView);
         } catch (Exception e) {
         }
         try {
-            ImageView imageView = view.findViewById(R.id.detail_fav_item_vip);
+            ImageView imageView = view.findViewById(R.id.common_poster_vip);
             GlideUtils.loadVt(imageView.getContext(), album.getVipUrl(), imageView);
         } catch (Exception e) {
         }

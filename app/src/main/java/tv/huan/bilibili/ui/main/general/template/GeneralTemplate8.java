@@ -41,14 +41,18 @@ public class GeneralTemplate8 extends ListTvGridPresenter<GetSubChannelsByChanne
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i, @NonNull int i1) {
         try {
-            @IdRes
-            int txt = (i <= 1 ? R.id.album_item_name_template81 : R.id.album_item_name_template82);
-            TextView textView = view.findViewById(txt);
+            TextView textView = view.findViewById(R.id.common_poster_name);
             textView.setText(templateBean.getName());
-            @IdRes
-            int img = (i <= 1 ? R.id.album_item_img_template81 : R.id.album_item_img_template82);
-            ImageView imageView = view.findViewById(img);
+        } catch (Exception e) {
+        }
+        try {
+            ImageView imageView = view.findViewById(R.id.common_poster_img);
             GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
+        } catch (Exception e) {
+        }
+        try {
+            ImageView imageView = view.findViewById(R.id.common_poster_vip);
+            GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
         } catch (Exception e) {
         }
     }

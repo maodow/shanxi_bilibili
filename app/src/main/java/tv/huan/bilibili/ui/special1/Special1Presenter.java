@@ -29,6 +29,7 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
+import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.bean.SpecialBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -77,7 +78,7 @@ public class Special1Presenter extends BasePresenterImpl<Special1View> {
                     inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                         @Override
                         public void onFocusChange(View view, boolean b) {
-                            TextView textView = view.findViewById(R.id.special1_item_name);
+                            TextView textView = view.findViewById(R.id.common_poster_name);
                             textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
                         }
                     });
@@ -90,10 +91,20 @@ public class Special1Presenter extends BasePresenterImpl<Special1View> {
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
                 try {
                     SpecialBean.ItemBean itemBean = mData.get(position);
-                    TextView textView = holder.itemView.findViewById(R.id.special1_item_name);
+                    TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
                     textView.setText(itemBean.getName());
-                    ImageView imageView = holder.itemView.findViewById(R.id.special1_item_img);
+                } catch (Exception e) {
+                }
+                try {
+                    SpecialBean.ItemBean itemBean = mData.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
                     GlideUtils.loadVt(imageView.getContext(), itemBean.getPicture(false), imageView);
+                } catch (Exception e) {
+                }
+                try {
+                    SpecialBean.ItemBean itemBean = mData.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
+                    GlideUtils.loadVt(imageView.getContext(), itemBean.getVipUrl(), imageView);
                 } catch (Exception e) {
                 }
             }

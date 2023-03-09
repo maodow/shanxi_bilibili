@@ -120,10 +120,24 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     FavBean.ItemBean itemBean = mDatas.get(position);
                     View view = holder.itemView.findViewById(R.id.center_item_del);
                     view.setVisibility(itemBean.isShowDel() ? View.VISIBLE : View.INVISIBLE);
-                    TextView textView = holder.itemView.findViewById(R.id.center_item_name);
+                } catch (Exception e) {
+                }
+                try {
+                    FavBean.ItemBean itemBean = mDatas.get(position);
+                    TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
                     textView.setText(itemBean.getName());
-                    ImageView imageView = holder.itemView.findViewById(R.id.center_item_img);
+                } catch (Exception e) {
+                }
+                try {
+                    FavBean.ItemBean itemBean = mDatas.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
                     GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getPicture(true), imageView);
+                } catch (Exception e) {
+                }
+                try {
+//                    FavBean.ItemBean itemBean = mDatas.get(position);
+//                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
+//                    GlideUtils.loadVt(imageView.getContext(), itemBean.getVipUrl(), imageView);
                 } catch (Exception e) {
                 }
             }

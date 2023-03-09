@@ -115,14 +115,20 @@ public class GeneralTemplate21 extends Presenter {
 
                 try {
                     GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = (GetSubChannelsByChannelBean.ListBean.TemplateBean) mData.get(position);
-                    TextView textView = holder.itemView.findViewById(R.id.general_template21_item_name);
+                    TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
                     textView.setText(templateBean.getName());
                 } catch (Exception e) {
                 }
                 try {
                     GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = (GetSubChannelsByChannelBean.ListBean.TemplateBean) mData.get(position);
-                    ImageView imageView = holder.itemView.findViewById(R.id.general_template21_item_img);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
                     GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
+                } catch (Exception e) {
+                }
+                try {
+                    GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = (GetSubChannelsByChannelBean.ListBean.TemplateBean) mData.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
+                    GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
                 } catch (Exception e) {
                 }
             }

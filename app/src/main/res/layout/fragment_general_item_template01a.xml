@@ -7,12 +7,9 @@
     app:rl_corner_bottom_left="8dp"
     app:rl_corner_top_left="8dp">
 
-    <!-- 图片 -->
-    <ImageView
-        android:id="@+id/album_item_template01_img"
+    <include
+        layout="@layout/common_poster"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="false"
-        android:scaleType="centerCrop" />
+        android:layout_height="match_parent" />
 
 </tv.huan.bilibili.widget.template1.Template1RelativeLayout>

@@ -44,6 +44,7 @@ import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
+import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.FilterBean;
 import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
@@ -118,7 +119,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                         @Override
                         public void onFocusChange(View view, boolean b) {
-                            TextView textView = view.findViewById(R.id.filter_item_name);
+                            TextView textView = view.findViewById(R.id.common_poster_name);
                             textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
                         }
                     });
@@ -131,10 +132,20 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
                 try {
                     GetSecondTagAlbumsBean.ItemBean itemBean = mData.get(position);
-                    TextView textView = holder.itemView.findViewById(R.id.filter_item_name);
+                    TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
                     textView.setText(itemBean.getName());
-                    ImageView imageView = holder.itemView.findViewById(R.id.filter_item_img);
+                } catch (Exception e) {
+                }
+                try {
+                    GetSecondTagAlbumsBean.ItemBean itemBean = mData.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
                     GlideUtils.loadVt(imageView.getContext(), itemBean.getPicture(false), imageView);
+                } catch (Exception e) {
+                }
+                try {
+                    GetSecondTagAlbumsBean.ItemBean itemBean = mData.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
+                    GlideUtils.loadVt(imageView.getContext(), itemBean.getVipUrl(), imageView);
                 } catch (Exception e) {
                 }
             }

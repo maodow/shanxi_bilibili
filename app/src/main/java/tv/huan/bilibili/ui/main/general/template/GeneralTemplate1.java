@@ -29,6 +29,7 @@ import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.round.RoundLinearLayout;
 import lib.kalu.leanback.round.RoundRelativeLayout;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.LookBean;
 import tv.huan.bilibili.bean.MessageBean;
@@ -125,8 +126,22 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
 
         // 图片
         if (viewType == 1) {
-            ImageView vImg = v.findViewById(R.id.album_item_template01_img);
-            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+
+            try {
+                TextView textView = v.findViewById(R.id.common_poster_name);
+                textView.setText(templateBean.getName());
+            } catch (Exception e) {
+            }
+            try {
+                ImageView vImg = v.findViewById(R.id.common_poster_img);
+                GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+            } catch (Exception e) {
+            }
+            try {
+                ImageView imageView = v.findViewById(R.id.common_poster_vip);
+                GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
+            } catch (Exception e) {
+            }
         }
         // 文字
         else {

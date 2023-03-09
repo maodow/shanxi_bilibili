@@ -18,30 +18,10 @@
         android:focusable="true"
         app:rl_rate_height="0.56">
 
-        <!-- 图片 -->
-        <ImageView
-            android:id="@+id/general_item_template17a_img"
+        <include
+            layout="@layout/common_poster"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="false"
-            android:scaleType="centerCrop" />
-
-        <!-- 标题 -->
-        <tv.huan.bilibili.widget.common.CommonShandowTextView
-            android:id="@+id/general_item_template17a_name"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:ellipsize="marquee"
-            android:focusable="false"
-            android:gravity="bottom|left"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingRight="@dimen/dp_12"
-            android:paddingBottom="@dimen/dp_8"
-            android:singleLine="true"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/sp_14" />
+            android:layout_height="match_parent" />
 
     </tv.huan.bilibili.widget.common.CommonRoundRelativeLayout>
 

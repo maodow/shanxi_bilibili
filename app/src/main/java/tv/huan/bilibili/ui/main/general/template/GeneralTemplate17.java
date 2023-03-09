@@ -548,11 +548,22 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
         // left
         if (viewType == 1) {
             // a
-            TextView vTxt = v.findViewById(R.id.general_item_template17a_name);
-            vTxt.setText(templateBean.getName());
+            try {
+                TextView vTxt = v.findViewById(R.id.common_poster_name);
+                vTxt.setText(templateBean.getName());
+            } catch (Exception e) {
+            }
             // b
-            ImageView vImg = v.findViewById(R.id.general_item_template17a_img);
-            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+            try {
+                ImageView vImg = v.findViewById(R.id.common_poster_img);
+                GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+            } catch (Exception e) {
+            }
+            try {
+                ImageView imageView = v.findViewById(R.id.common_poster_vip);
+                GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
+            } catch (Exception e) {
+            }
             // c
             int num = 2;
             v.findViewById(R.id.general_template17a_type1_item1).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);

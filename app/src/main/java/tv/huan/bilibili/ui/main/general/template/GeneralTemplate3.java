@@ -44,7 +44,7 @@ public class GeneralTemplate3 extends ListTvGridPresenter<GetSubChannelsByChanne
                 public void onFocusChange(View view, boolean b) {
                     int position = viewHolder.getAbsoluteAdapterPosition();
                     if (position >= 0) {
-                        TextView textView = view.findViewById(R.id.general_template3_name);
+                        TextView textView = view.findViewById(R.id.common_poster_name);
                         textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
                     }
                 }
@@ -56,13 +56,18 @@ public class GeneralTemplate3 extends ListTvGridPresenter<GetSubChannelsByChanne
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i, @NonNull int i1) {
         try {
-            TextView textView = view.findViewById(R.id.general_template3_name);
+            TextView textView = view.findViewById(R.id.common_poster_name);
             textView.setText(templateBean.getName());
         } catch (Exception e) {
         }
         try {
-            ImageView imageView = view.findViewById(R.id.general_template3_img);
+            ImageView imageView = view.findViewById(R.id.common_poster_img);
             GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
+        } catch (Exception e) {
+        }
+        try {
+            ImageView imageView = view.findViewById(R.id.common_poster_vip);
+            GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
         } catch (Exception e) {
         }
     }

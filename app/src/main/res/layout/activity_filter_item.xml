@@ -7,24 +7,9 @@
     android:focusable="true"
     app:rl_rate_height="1.4">
 
-    <!-- 图片 -->
-    <ImageView
-        android:id="@+id/filter_item_img"
+    <include
+        layout="@layout/common_poster"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="false"
-        android:scaleType="centerCrop" />
-
-    <!-- 标题 -->
-    <tv.huan.bilibili.widget.common.CommonShandowTextView
-        android:id="@+id/filter_item_name"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:focusable="false"
-        android:gravity="bottom|left"
-        android:textColor="@color/color_white"
-        android:textSize="@dimen/sp_14" />
+        android:layout_height="match_parent" />
 
 </tv.huan.bilibili.widget.common.CommonRoundRelativeLayout>
