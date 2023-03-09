@@ -3,42 +3,22 @@ package tv.huan.bilibili.ui.detail.template;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.leanback.widget.Presenter;
 
 import org.json.JSONObject;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.frame.mvp.util.WrapperUtil;
-import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
-import lib.kalu.mediaplayer.core.controller.base.ControllerLayout;
-import lib.kalu.mediaplayer.listener.OnChangeListener;
 import tv.huan.bilibili.R;
-import tv.huan.bilibili.dialog.InfoDialog;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.bilibili.utils.ToastUtils;
 import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.PlayerView;
@@ -202,15 +182,6 @@ public final class DetailTemplatePlayer extends Presenter {
 
     private void hideWarning(View viewGroup) {
         LogUtil.log("DetailTemplatePlayer => hideWarning");
-//        try {
-//            viewGroup.findViewById(R.id.detail_player_item_logo).setVisibility(View.GONE);
-//            viewGroup.findViewById(R.id.detail_player_item_cover).setVisibility(View.GONE);
-//            viewGroup.findViewById(R.id.detail_player_item_warning).setVisibility(View.GONE);
-//            viewGroup.findViewById(R.id.detail_player_item_index).setVisibility(View.GONE);
-//            viewGroup.findViewById(R.id.detail_player_item_sign).setVisibility(View.GONE);
-//        } catch (Exception e) {
-//        }
-
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
@@ -335,18 +306,6 @@ public final class DetailTemplatePlayer extends Presenter {
                     PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
                     String url = playerView.getUrl();
                     if (null != url && url.length() > 0) {
-                        playerView.setOnChangeListener(new OnChangeListener() {
-                            @Override
-                            public void onWindow(int state) {
-                                if (state == PlayerType.WindowType.FULL) {
-                                    playerView.setFocusable(true);
-                                    playerView.requestFocus();
-                                } else if (state == PlayerType.WindowType.NORMAL) {
-                                    playerView.setFocusable(false);
-                                    v.requestFocus();
-                                }
-                            }
-                        });
                         playerView.startFull();
                     }
                 }

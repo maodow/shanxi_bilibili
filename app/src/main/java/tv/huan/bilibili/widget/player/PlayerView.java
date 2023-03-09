@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -12,19 +13,17 @@ import androidx.annotation.RequiresApi;
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
-import lib.kalu.mediaplayer.core.controller.ControllerEmpty;
-import lib.kalu.mediaplayer.core.controller.component.ComponentLoading;
-import lib.kalu.mediaplayer.core.controller.component.ComponentPause;
-import lib.kalu.mediaplayer.core.controller.component.ComponentSeek;
-import lib.kalu.mediaplayer.core.controller.component.ComponentSpeed;
-import lib.kalu.mediaplayer.core.player.VideoLayout;
-import lib.kalu.mediaplayer.listener.OnChangeListener;
-import lib.kalu.mediaplayer.util.MPLogUtil;
+import lib.kalu.mediaplayer.core.component.ComponentLoading;
+import lib.kalu.mediaplayer.core.component.ComponentPause;
+import lib.kalu.mediaplayer.core.component.ComponentSeek;
+import lib.kalu.mediaplayer.core.component.ComponentSpeed;
+import lib.kalu.mediaplayer.core.player.PlayerLayout;
+import lib.kalu.mediaplayer.listener.OnPlayerChangeListener;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class PlayerView extends VideoLayout {
+public class PlayerView extends PlayerLayout {
     public PlayerView(Context context) {
         super(context);
         init();
@@ -50,20 +49,21 @@ public class PlayerView extends VideoLayout {
         addListeren();
     }
 
-    @Override
-    public void start(@NonNull String url) {
-        // 1
-        release();
-        // 2
-        StartBuilder.Builder builder = new StartBuilder.Builder();
-        builder.setLive(false);
-        builder.setLoop(true);
-        super.start(builder.build(), url);
-    }
 
-    protected void addListeren(){
+//    @Override
+//    public void start(@NonNull String url) {
+//        // 1
+//        release();
+//        // 2
+//        StartBuilder.Builder builder = new StartBuilder.Builder();
+//        builder.setLive(false);
+//        builder.setLoop(true);
+//        super.start(builder.build(), url);
+//    }
+
+    protected void addListeren() {
         LogUtil.log("PlayerView => addListeren =>");
-        OnChangeListener listener = new OnChangeListener() {
+        setPlayerChangeListener(new OnPlayerChangeListener() {
 
             @Override
             public void onProgress(@NonNull long position, @NonNull long duration) {
@@ -81,9 +81,7 @@ public class PlayerView extends VideoLayout {
                         break;
                 }
             }
-        };
-        MPLogUtil.log("PlayerApiBase => callPlayerState => l = " + listener);
-        setOnChangeListener(listener);
+        });
     }
 
     protected void init() {
@@ -95,30 +93,26 @@ public class PlayerView extends VideoLayout {
 //            setScaleType(PlayerType.ScaleType.SCREEN_SCALE_MATCH_PARENT);
 //        }
 
-        // controller
-        ControllerEmpty controller = new ControllerEmpty(getContext());
-        setControllerLayout(controller);
-
         // loading
         ComponentLoading loading = new ComponentLoading(getContext());
-        controller.addComponent(loading);
+        addComponent(loading);
 
         // pause
         ComponentPause pause = new ComponentPause(getContext());
         pause.setPauseImageResource(R.mipmap.ic_launcher);
         pause.setBackgroundColor(Color.parseColor("#66000000"));
-        controller.addComponent(pause);
+        addComponent(pause);
 
         // speed
         ComponentSpeed speed = new ComponentSpeed(getContext());
-        controller.addComponent(speed);
+        addComponent(speed);
 
         // seekbar
         ComponentSeek seek = new ComponentSeek(getContext());
-        controller.addComponent(seek);
+        addComponent(seek);
 
         // init
         PlayerComponentInit init = new PlayerComponentInit(getContext());
-        controller.addComponent(init);
+        addComponent(init);
     }
 }

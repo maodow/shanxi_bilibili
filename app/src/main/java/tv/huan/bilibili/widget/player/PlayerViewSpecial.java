@@ -3,15 +3,11 @@ package tv.huan.bilibili.widget.player;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import lib.kalu.mediaplayer.config.player.PlayerType;
-import lib.kalu.mediaplayer.core.controller.ControllerEmpty;
-import lib.kalu.mediaplayer.core.controller.component.ComponentLoading;
-import lib.kalu.mediaplayer.core.player.VideoLayout;
+import lib.kalu.mediaplayer.core.component.ComponentLoading;
 
 public class PlayerViewSpecial extends PlayerView {
 
@@ -48,12 +44,6 @@ public class PlayerViewSpecial extends PlayerView {
 
         // loading
         ComponentLoading loading = new ComponentLoading(getContext());
-
-        // component
-        ControllerEmpty controller = new ControllerEmpty(getContext());
-        controller.addComponent(loading);
-
-        // add
-        setControllerLayout(controller);
+        addComponent(loading);
     }
 }

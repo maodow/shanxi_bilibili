@@ -592,15 +592,25 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
             }
             return true;
         }
-        // down
-        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
-            int focusId = getView().getCurrentFocusId();
-            if (focusId == R.id.detail_player_item_vip || focusId == R.id.detail_player_item_full || focusId == R.id.detail_player_item_favor) {
-                DetailGridView gridView = getView().findViewById(R.id.detail_list);
-                boolean containsXuanJi = gridView.containsXuanJi();
-                if (containsXuanJi) {
-                    gridView.requestFocusEpisodePlayingItem();
-                    return true;
+        // left right up down
+        else if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+            PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
+            boolean isFull = playerView.isFull();
+            // full
+            if (isFull) {
+                playerView.dispatchKeyEvent(event);
+                return true;
+            }
+            // down
+            else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+                int focusId = getView().getCurrentFocusId();
+                if (focusId == R.id.detail_player_item_vip || focusId == R.id.detail_player_item_full || focusId == R.id.detail_player_item_favor) {
+                    DetailGridView gridView = getView().findViewById(R.id.detail_list);
+                    boolean containsXuanJi = gridView.containsXuanJi();
+                    if (containsXuanJi) {
+                        gridView.requestFocusEpisodePlayingItem();
+                        return true;
+                    }
                 }
             }
         }

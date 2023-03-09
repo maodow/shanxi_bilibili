@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.kalu.mediaplayer.core.player.VideoLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -90,7 +89,7 @@ public class GeneralTemplate22 extends Presenter {
         if (null == inflate)
             return;
 
-        VideoLayout playerView = inflate.findViewById(R.id.general_template22_player);
+        PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
         playerView.pause();
     }
 
@@ -99,7 +98,7 @@ public class GeneralTemplate22 extends Presenter {
         if (null == inflate)
             return;
 
-        VideoLayout playerView = inflate.findViewById(R.id.general_template22_player);
+        PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
         playerView.resume();
     }
 
@@ -108,7 +107,7 @@ public class GeneralTemplate22 extends Presenter {
         if (null == inflate)
             return;
 
-        VideoLayout playerView = inflate.findViewById(R.id.general_template22_player);
+        PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
         String url = "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
         playerView.start(url);
     }

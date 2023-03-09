@@ -9,10 +9,8 @@ import androidx.annotation.RequiresApi;
 
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
-import lib.kalu.mediaplayer.core.controller.ControllerEmpty;
-import lib.kalu.mediaplayer.core.controller.component.ComponentLoading;
-import lib.kalu.mediaplayer.core.controller.component.ComponentSpeed;
-import lib.kalu.mediaplayer.core.player.VideoLayout;
+import lib.kalu.mediaplayer.core.component.ComponentLoading;
+import lib.kalu.mediaplayer.core.component.ComponentSpeed;
 
 public final class PlayerViewLite extends PlayerView {
 
@@ -41,16 +39,16 @@ public final class PlayerViewLite extends PlayerView {
     protected void addListeren() {
     }
 
-    @Override
-    public void start(@NonNull String url) {
-        // 1
-        release();
-        // 2
-        StartBuilder.Builder builder = new StartBuilder.Builder();
-        builder.setLive(false);
-        builder.setLoop(true);
-        super.start(builder.build(), url);
-    }
+//    @Override
+//    public void start(@NonNull String url) {
+//        // 1
+//        release();
+//        // 2
+//        StartBuilder.Builder builder = new StartBuilder.Builder();
+//        builder.setLive(false);
+//        builder.setLoop(true);
+//        super.start(builder.build(), url);
+//    }
 
     @Override
     protected void init() {
@@ -60,12 +58,11 @@ public final class PlayerViewLite extends PlayerView {
         setScaleType(PlayerType.ScaleType.SCREEN_SCALE_16_9);
 
         // loading
-        ControllerEmpty controller = new ControllerEmpty(getContext());
         ComponentLoading loading = new ComponentLoading(getContext());
-        controller.addComponent(loading);
+        addComponent(loading);
 
         // speed
         ComponentSpeed speed = new ComponentSpeed(getContext());
-        controller.addComponent(speed);
+        addComponent(speed);
     }
 }
