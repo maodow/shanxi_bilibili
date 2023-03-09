@@ -31,4 +31,6 @@ public interface DetailView extends BaseViewImpl {
     void completePlayer();
 
     void jumpVip();
+
+    void stopFull();
 }

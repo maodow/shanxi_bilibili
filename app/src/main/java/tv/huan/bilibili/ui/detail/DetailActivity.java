@@ -135,11 +135,17 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void completePlayer() {
-       getPresenter().checkPlayerNext();
+        getPresenter().checkPlayerNext();
     }
 
     @Override
     public void jumpVip() {
 //        HeilongjiangApi.jumpVip(getApplicationContext());
+    }
+
+    @Override
+    public void stopFull() {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.stopFull();
     }
 }

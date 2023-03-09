@@ -139,6 +139,16 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         } catch (Exception e) {
         }
     }
+    public void stopFull() {
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
+            playerObject.setUpdateOnlyStopFull(true);
+            itemBridgeAdapter.notifyItemChanged(0);
+        } catch (Exception e) {
+        }
+    }
 
     public void startPlayer(@NonNull MediaBean data, boolean isFromUser) {
         LogUtil.log("DetailGridView", "startPlayer => isFromUser = " + isFromUser);

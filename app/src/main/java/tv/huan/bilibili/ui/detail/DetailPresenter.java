@@ -686,6 +686,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().showToast(throwable);
+                        getView().stopFull();
                     }
                 })
                 .doOnNext(new Consumer<Integer>() {

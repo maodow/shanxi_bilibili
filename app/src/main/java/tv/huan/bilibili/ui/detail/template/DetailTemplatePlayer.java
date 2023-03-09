@@ -58,9 +58,16 @@ public final class DetailTemplatePlayer extends Presenter {
     private void showData(View view, Object o) {
         LogUtil.log("DetailTemplatePlayer => showData");
 
+        boolean updateOnlyStopFull;  // 收藏状态
         boolean updateOnlyFavor;  // 收藏状态
         boolean updateOnlyVideoStop;  // 暂停视频
         boolean updateOnlyVideoPlaying;  // 播放视频
+        try {
+            updateOnlyStopFull = ((DetailTemplatePlayerObject) o).isUpdateOnlyStopFull();
+            ((DetailTemplatePlayerObject) o).setUpdateOnlyStopFull(false);
+        } catch (Exception e) {
+            updateOnlyStopFull = false;
+        }
         try {
             updateOnlyFavor = ((DetailTemplatePlayerObject) o).isUpdateOnlyFavor();
             ((DetailTemplatePlayerObject) o).setUpdateOnlyFavor(false);
@@ -83,7 +90,9 @@ public final class DetailTemplatePlayer extends Presenter {
         LogUtil.log("DetailTemplatePlayer => showData => updateOnlyVideoStop = " + updateOnlyVideoStop);
         LogUtil.log("DetailTemplatePlayer => showData => updateOnlyVideoPlaying = " + updateOnlyVideoPlaying);
 
-        if (updateOnlyFavor) {
+        if (updateOnlyStopFull) {
+            stopFull(view);
+        } else if (updateOnlyFavor) {
             try {
                 TextView textView = view.findViewById(R.id.detail_player_item_favor);
                 textView.setSelected(((DetailTemplatePlayerObject) o).isFavor());
@@ -118,7 +127,7 @@ public final class DetailTemplatePlayer extends Presenter {
             String title = ((DetailTemplatePlayerObject) o).getTitle();
             int playingIndex = ((DetailTemplatePlayerObject) o).getPlayingIndex();
             componentInit.setData(imageUrl, title, playingIndex);
-        }catch (Exception e){
+        } catch (Exception e) {
             LogUtil.log("DetailTemplatePlayer => showWarning => " + e.getMessage());
         }
         try {
@@ -224,6 +233,15 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
+    private void stopFull(View view) {
+        try {
+            ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
+            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            playerView.stopFull();
+        } catch (Exception e) {
+        }
+    }
+
     private void stopFloat(View view) {
         try {
             ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
@@ -318,6 +336,7 @@ public final class DetailTemplatePlayer extends Presenter {
 
     public static class DetailTemplatePlayerObject {
 
+        private boolean updateOnlyStopFull = false;
         private boolean updateOnlyFavor = false;
         private boolean updateOnlyVideoPlaying = false;
         private boolean updateOnlyVideoStop = false;
@@ -350,6 +369,14 @@ public final class DetailTemplatePlayer extends Presenter {
 
         public void setVip(boolean vip) {
             this.vip = vip;
+        }
+
+        public boolean isUpdateOnlyStopFull() {
+            return updateOnlyStopFull;
+        }
+
+        public void setUpdateOnlyStopFull(boolean updateOnlyStopFull) {
+            this.updateOnlyStopFull = updateOnlyStopFull;
         }
 
         public boolean isUpdateOnlyVideoPlaying() {
