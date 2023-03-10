@@ -26,12 +26,7 @@ import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.PlayerView;
 
-public final class DetailTemplatePlayer extends Presenter implements ListTvPresenterImpl {
-
-    @Override
-    public int initPaddingBottom(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
-    }
+public final class DetailTemplatePlayer extends Presenter {
 
     @Override
     public void onViewAttachedToWindow(ViewHolder holder) {
@@ -50,8 +45,6 @@ public final class DetailTemplatePlayer extends Presenter implements ListTvPrese
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
         LogUtil.log("DetailTemplatePlayer => onCreateViewHolder");
-        setPadding(viewGroup.getContext(), viewGroup);
-        setBackgroundColor(viewGroup.getContext(), viewGroup);
         return createViewHolder(viewGroup);
     }
 

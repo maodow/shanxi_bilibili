@@ -39,7 +39,7 @@ public class DetailTemplateXuanQi extends ListTvGridPresenter<MediaBean> {
     }
 
     @Override
-    public int initPaddingBottom(@NonNull Context context) {
+    public int initPaddingTop(@NonNull Context context) {
         return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
     }
 
