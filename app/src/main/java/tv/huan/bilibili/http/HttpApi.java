@@ -140,10 +140,11 @@ public interface HttpApi {
     @GET("data/savePlayHistory")
     Observable<BaseBean<Object>> savePlayHistory(@Query("vid") String vid,
                                                  @Query("cid") String cid,
-                                                 @Query("playTime") long playTime, //当前播放时长
                                                  @Query("endFlag") int endFlag, //是否播放完成  0未完  1观看结束
                                                  @Query("classId") String classId,
-                                                 @Query("pos") int pos); //集数从0开始
+                                                 @Query("pos") int pos, //集数从0开始
+                                                 @Query("playTime") long playTime, //当前播放时长
+                                                 @Query("playLength") long playLength); //当前视频时长
 
     //    // 获取HuanId
 //    @GET("apk/getHuanId")

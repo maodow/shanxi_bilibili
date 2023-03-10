@@ -32,8 +32,11 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public static final String INTENT_FROM_SPECIAL_TOPNAME = "intent_from_special_topname";
     private static final String INTENT_UPDATE = "intent_update";
     protected static final String INTENT_VID = "intent_vid";
+    protected static final String INTENT_INDEX = "intent_index";
     protected static final String INTENT_REC_CLASSID = "intent_rec_classid";
     protected static final String INTENT_START_TIME = "intent_start_time";
+    protected static final String INTENT_CUR_POSITION = "intent_cur_position";
+    protected static final String INTENT_CUR_DURATION = "intent_cur_duration";
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -105,7 +108,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public void updateVidAndClassId(@NonNull MediaBean data) {
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
-        putIntExtra(INTENT_POSITION, data.getTempIndex());
+        putIntExtra(INTENT_INDEX, data.getTempIndex());
         putStringExtra(INTENT_VID, data.getVid());
     }
 

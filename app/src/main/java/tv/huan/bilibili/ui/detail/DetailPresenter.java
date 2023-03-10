@@ -1,6 +1,5 @@
 package tv.huan.bilibili.ui.detail;
 
-import android.app.Activity;
 import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
@@ -554,6 +553,13 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         }
         // back
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
+            long position = playerView.getPosition();
+            long duration = playerView.getDuration();
+            LogUtil.log("DetailPresenter => onBack => duration = " + duration);
+            LogUtil.log("DetailPresenter => onBack => position = " + position);
+            getView().putLongExtra(DetailActivity.INTENT_CUR_POSITION, position);
+            getView().putLongExtra(DetailActivity.INTENT_CUR_DURATION, duration);
             getView().callOnBackPressed();
             return true;
         }
@@ -649,9 +655,10 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void subscribe(ObservableEmitter<PlayBean> emitter) {
 
-                        PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
-                        long duration = playerView.getDuration();
-                        long position = playerView.getPosition();
+                        long duration = getView().getLongExtra(DetailActivity.INTENT_CUR_DURATION, 0);
+                        long position = getView().getLongExtra(DetailActivity.INTENT_CUR_POSITION, 0);
+                        LogUtil.log("DetailPresenter => uploadBackupPress => duration = " + duration);
+                        LogUtil.log("DetailPresenter => uploadBackupPress => position = " + position);
 
                         PlayBean playBean = new PlayBean();
                         playBean.setDuration(duration);
@@ -665,17 +672,17 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     public Observable<BaseBean<Object>> apply(PlayBean data) {
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
                         String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
-                        String classId = getView().getStringExtra(DetailActivity.INTENT_REC_CLASSID, "");
-                        int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
-                        int pos = position + 1;
-                        long playTime = data.getPosition();
-                        int endFlag = data.isEnd() ? 0 : 1;
                         // 1
                         long start = getView().getLongExtra(DetailActivity.INTENT_START_TIME, 0);
                         long end = System.currentTimeMillis();
                         reportPlayVodStop(cid, vid, start, end);
                         // 2
-                        return HttpClient.getHttpClient().getHttpApi().savePlayHistory(vid, cid, playTime, endFlag, classId, pos);
+                        String classId = getView().getStringExtra(DetailActivity.INTENT_REC_CLASSID, "");
+                        int pos = getView().getIntExtra(DetailActivity.INTENT_INDEX, 1);
+                        int endFlag = data.isEnd() ? 0 : 1;
+                        long duration = data.getDuration();
+                        long position = data.getPosition();
+                        return HttpClient.getHttpClient().getHttpApi().savePlayHistory(vid, cid, endFlag, classId, pos, position, duration);
                     }
                 })
                 .compose(ComposeSchedulers.io_main())
