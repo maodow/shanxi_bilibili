@@ -675,22 +675,15 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) {
-                        getView().showLoading();
-                    }
-                })
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        getView().hideLoading();
+                        getView().callFinish();
                     }
                 })
                 .doOnNext(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) {
-                        getView().hideLoading();
                         getView().callFinish();
                     }
                 })
