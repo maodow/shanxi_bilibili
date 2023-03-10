@@ -5,6 +5,7 @@ import java.util.List;
 
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
+import tv.huan.bilibili.bean.RecMediaBean;
 
 public class DetailBean implements Serializable {
 
@@ -15,7 +16,7 @@ public class DetailBean implements Serializable {
 
     private MediaDetailBean album; //媒资详情
     private List<MediaBean> medias; //剧集
-    private List<MediaBean> recAlbums; //猜你喜欢
+    private List<RecMediaBean> recAlbums; //猜你喜欢
 
     public MediaDetailBean getAlbum() {
         return album;
@@ -33,11 +34,11 @@ public class DetailBean implements Serializable {
         this.medias = medias;
     }
 
-    public List<MediaBean> getRecAlbums() {
+    public List<RecMediaBean> getRecAlbums() {
         return recAlbums;
     }
 
-    public void setRecAlbums(List<MediaBean> recAlbums) {
+    public void setRecAlbums(List<RecMediaBean> recAlbums) {
         this.recAlbums = recAlbums;
     }
 

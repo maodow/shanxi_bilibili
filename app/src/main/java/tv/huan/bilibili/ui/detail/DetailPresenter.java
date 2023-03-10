@@ -30,6 +30,7 @@ import tv.huan.bilibili.bean.FavorBean;
 import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
+import tv.huan.bilibili.bean.RecMediaBean;
 import tv.huan.bilibili.bean.format.DetailBean;
 import tv.huan.bilibili.bean.format.OptBean;
 import tv.huan.bilibili.http.HttpClient;
@@ -360,7 +361,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public DetailBean apply(DetailBean data) {
                         try {
-                            List<MediaBean> albums = data.getRecAlbums();
+                            List<RecMediaBean> albums = data.getRecAlbums();
                             if (null != albums) {
                                 int size = albums.size();
                                 if (size > 0) {

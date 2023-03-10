@@ -11,7 +11,7 @@ public final class GetMediasByCid2Bean implements Serializable {
     private String recClassId; //?
     private MediaDetailBean album; //媒资详情
     private List<MediaBean> medias; //剧集
-    private List<MediaBean> recAlbums; //猜你喜欢
+    private List<RecMediaBean> recAlbums; //猜你喜欢
 
     public String getRecClassId() {
         return recClassId;
@@ -37,11 +37,11 @@ public final class GetMediasByCid2Bean implements Serializable {
         this.medias = medias;
     }
 
-    public List<MediaBean> getRecAlbums() {
+    public List<RecMediaBean> getRecAlbums() {
         return recAlbums;
     }
 
-    public void setRecAlbums(List<MediaBean> recAlbums) {
+    public void setRecAlbums(List<RecMediaBean> recAlbums) {
         this.recAlbums = recAlbums;
     }
 }
