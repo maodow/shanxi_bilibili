@@ -32,7 +32,6 @@ import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.format.DetailBean;
 import tv.huan.bilibili.bean.format.OptBean;
-import tv.huan.bilibili.bean.format.PlayBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateFavor;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
@@ -652,25 +651,11 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     }
 
     protected void uploadBackupPress() {
-        addDisposable(Observable.create(new ObservableOnSubscribe<PlayBean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+                    // 上报数据
                     @Override
-                    public void subscribe(ObservableEmitter<PlayBean> emitter) {
+                    public void subscribe(ObservableEmitter<Boolean> emitter) {
 
-                        long duration = getView().getLongExtra(DetailActivity.INTENT_CUR_DURATION, 0);
-                        long position = getView().getLongExtra(DetailActivity.INTENT_CUR_POSITION, 0);
-                        LogUtil.log("DetailPresenter => uploadBackupPress => duration = " + duration);
-                        LogUtil.log("DetailPresenter => uploadBackupPress => position = " + position);
-
-                        PlayBean playBean = new PlayBean();
-                        playBean.setDuration(duration);
-                        playBean.setPosition(position);
-                        emitter.onNext(playBean);
-                    }
-                })
-                // 播放记录
-                .flatMap(new Function<PlayBean, Observable<BaseBean<Object>>>() {
-                    @Override
-                    public Observable<BaseBean<Object>> apply(PlayBean data) {
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
                         String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
                         // 1
@@ -678,12 +663,15 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         long end = System.currentTimeMillis();
                         reportPlayVodStop(cid, vid, start, end);
                         // 2
+                        long duration = getView().getLongExtra(DetailActivity.INTENT_CUR_DURATION, 0);
+                        long position = getView().getLongExtra(DetailActivity.INTENT_CUR_POSITION, 0);
+                        boolean isEnd = position > 0 && duration > 0 && position >= duration;
                         String classId = getView().getStringExtra(DetailActivity.INTENT_REC_CLASSID, "");
                         int pos = getView().getIntExtra(DetailActivity.INTENT_INDEX, 1);
-                        int endFlag = data.isEnd() ? 0 : 1;
-                        long duration = data.getDuration();
-                        long position = data.getPosition();
-                        return HttpClient.getHttpClient().getHttpApi().savePlayHistory(vid, cid, endFlag, classId, pos, position, duration);
+                        int endFlag = isEnd ? 0 : 1;
+                        uploadPlayHistory(cid, vid, classId, pos, endFlag, duration, position);
+                        // 3
+                        emitter.onNext(true);
                     }
                 })
                 .compose(ComposeSchedulers.io_main())
@@ -699,9 +687,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         getView().hideLoading();
                     }
                 })
-                .doOnNext(new Consumer<BaseBean<Object>>() {
+                .doOnNext(new Consumer<Boolean>() {
                     @Override
-                    public void accept(BaseBean<Object> resp) {
+                    public void accept(Boolean aBoolean) {
                         getView().hideLoading();
                         getView().callFinish();
                     }

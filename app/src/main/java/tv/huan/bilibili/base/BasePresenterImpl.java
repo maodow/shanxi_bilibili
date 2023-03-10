@@ -24,6 +24,7 @@ import retrofit2.Call;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.http.HttpClient;
+import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.utils.ReportUtils;
 import tv.huan.heilongjiang.HeilongjiangApi;
@@ -178,5 +179,46 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
                 })
                 .subscribe();
 //    );
+    }
+    protected final void uploadPlayHistory(String cid, String vid, String classId, int pos, int endFlag, long duration, long position) {
+
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> emitter) {
+                        emitter.onNext(true);
+                    }
+                })
+                .flatMap(new Function<Boolean, Observable<BaseBean<Object>>>() {
+                    @Override
+                    public Observable<BaseBean<Object>> apply(Boolean aBoolean) {
+                        return HttpClient.getHttpClient().getHttpApi().savePlayHistory(vid, cid, endFlag, classId, pos, position, duration);
+                    }
+                })
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        if (BuildConfig.HUAN_LOG) {
+                            LogUtil.log("BasePresenterImpl", "uploadPlayHistory => doOnStart =>");
+                        }
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        if (BuildConfig.HUAN_LOG) {
+                            LogUtil.log("BasePresenterImpl", "uploadPlayHistory => doOnError => " + throwable.getMessage());
+                        }
+                    }
+                })
+                .doOnNext(new Consumer<BaseBean<Object>>() {
+                    @Override
+                    public void accept(BaseBean<Object> response) {
+                        if (BuildConfig.HUAN_LOG) {
+                            LogUtil.log("BasePresenterImpl", "uploadPlayHistory => doOnNext => " + new Gson().toJson(response));
+                        }
+                    }
+                })
+                .subscribe();
     }
 }
