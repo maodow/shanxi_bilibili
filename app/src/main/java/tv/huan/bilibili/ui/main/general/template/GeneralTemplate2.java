@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,6 +22,31 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
 public class GeneralTemplate2 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+        Context context = view.getContext();
+        int position = parent.getChildAdapterPosition(view);
+        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
+
+        if (position == 0) {
+            outRect.set(0, 0, offset * 2, 0);
+        } else if (position % 2 == 1) {
+            outRect.set(position <= 2 ? 0 : offset * 2, 0, 0, offset);
+        } else if (position % 2 == 0) {
+            outRect.set(position <= 2 ? 0 : offset * 2, offset, 0, 0);
+        }
+    }
+
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
+    public int initTitlePaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+    }
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
@@ -112,50 +138,6 @@ public class GeneralTemplate2 extends ListTvGridPresenter<GetSubChannelsByChanne
     @Override
     protected int initItemViewType(int position, GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean) {
         return position == 0 ? 0 : 1;
-    }
-
-    @Override
-    public int initMagrinTop(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadPadding(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadTextSize(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.sp_24);
-    }
-
-    @Override
-    public String initHeadAssetTTF(@NonNull Context context) {
-        return null;
-    }
-
-    @Override
-    protected RecyclerView.ItemDecoration initItemDecoration() {
-
-        return new RecyclerView.ItemDecoration() {
-
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-
-                Context context = view.getContext();
-                int position = parent.getChildAdapterPosition(view);
-                int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-
-                if (position == 0) {
-                    outRect.set(0, 0, offset * 2, 0);
-                } else if (position % 2 == 1) {
-                    outRect.set(position <= 2 ? 0 : offset * 2, 0, 0, offset);
-                } else if (position % 2 == 0) {
-                    outRect.set(position <= 2 ? 0 : offset * 2, offset, 0, 0);
-                }
-            }
-        };
     }
 
     public static class GeneralTemplate2List extends ArrayList {

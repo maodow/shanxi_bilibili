@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.center;
 
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,15 +77,14 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
 
     @Override
     public void updatePosition(int position) {
-        RecyclerView recyclerView = findViewById(R.id.center_list);
-        recyclerView.getAdapter().notifyItemRangeChanged(position, 1);
+        notifyItemRangeChanged(R.id.center_list, position, 1);
     }
 
     @Override
     public void deletePosition(int position) {
+        Toast.makeText(getContext(), "position = " + position, Toast.LENGTH_SHORT).show();
         putBooleanExtra(INTENT_UPDATE, true);
-        RecyclerView recyclerView = findViewById(R.id.center_list);
-        recyclerView.getAdapter().notifyItemRangeRemoved(position, 1);
+        notifyItemRemoved(R.id.center_list, position);
     }
 
     @Override

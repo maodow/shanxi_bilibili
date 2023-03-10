@@ -21,20 +21,39 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import lib.kalu.leanback.presenter.ListTvPresenterImpl;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.widget.player.PlayerView;
 
-public class GeneralTemplate21 extends Presenter {
+public class GeneralTemplate21 extends Presenter implements ListTvPresenterImpl {
 
     private GeneralTemplate21List mData = new GeneralTemplate21List();
+
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
+    public int initTitlePaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
         try {
             Context context = viewGroup.getContext();
-            View inflate = LayoutInflater.from(context).inflate(R.layout.fragment_general_item_template21, viewGroup, false);
+            ViewGroup inflate = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.fragment_general_item_template21, viewGroup, false);
+            setPadding(context, inflate);
+            setBackgroundColor(context, inflate);
+            setContentBackgroundColor(context, inflate, R.id.general_template21_list);
+            setTitlePadding(context, inflate, R.id.general_template21_title);
+            setTitleTextColor(context, inflate, R.id.general_template21_title);
+            setTitleTextSize(context, inflate, R.id.general_template21_title);
+            setTitleAssetTTF(context, inflate, R.id.general_template21_title);
+            setTitleBackgroundColor(context, inflate, R.id.general_template21_title);
             setAdapter(inflate);
             return new ViewHolder(inflate);
         } catch (Exception e) {

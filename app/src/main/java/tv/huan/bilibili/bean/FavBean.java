@@ -69,6 +69,22 @@ public class FavBean implements Serializable {
         private int jumpType;
         private String bannerUrl;
 
+        private String playTime;
+        private String playLength;
+        private int pos;
+
+        public void setPlayTime(String playTime) {
+            this.playTime = playTime;
+        }
+
+        public void setPlayLength(String playLength) {
+            this.playLength = playLength;
+        }
+
+        public void setPos(int pos) {
+            this.pos = pos;
+        }
+
         public String getBannerUrl() {
             return bannerUrl;
         }
@@ -190,6 +206,18 @@ public class FavBean implements Serializable {
                 return getAlbum().getTitle();
             } catch (Exception e) {
                 return "";
+            }
+        }
+
+        public String getStatus() {
+            try {
+                long position = Long.parseLong(playTime);
+                long duration = Long.parseLong(playLength);
+                if (position <= 0 && duration <= 0)
+                    throw new Exception();
+                return "观看至 " + (int) position * 100 / duration + "%";
+            } catch (Exception e) {
+                return "已看完";
             }
         }
 

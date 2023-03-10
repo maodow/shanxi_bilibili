@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +20,16 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
 public class GeneralTemplate15 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
+    public int initTitlePaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+    }
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
@@ -68,26 +79,6 @@ public class GeneralTemplate15 extends ListTvGridPresenter<GetSubChannelsByChann
     @Override
     protected int initLayout(int viewType) {
         return R.layout.fragment_general_item_template15;
-    }
-
-    @Override
-    public int initMagrinTop(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadPadding(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadTextSize(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.sp_24);
-    }
-
-    @Override
-    public String initHeadAssetTTF(@NonNull Context context) {
-        return null;
     }
 
     public static class GeneralTemplate15List extends ArrayList {

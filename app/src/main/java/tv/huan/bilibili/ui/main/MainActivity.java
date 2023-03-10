@@ -166,10 +166,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1001 && resultCode == 1002) {
-            getPresenter().updateFragment(0);
-        } else if (requestCode == 2001 && resultCode == 2002) {
-            getPresenter().updateFragment(0);
-        }
+//        if (requestCode == 1001 && resultCode == 1002) {
+//            getPresenter().updateFragment(0);
+//        } else if (requestCode == 2001 && resultCode == 2002) {
+//            getPresenter().updateFragment(0);
+//        }
     }
 }

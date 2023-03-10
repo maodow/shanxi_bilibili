@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +20,23 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
 public class GeneralTemplate13 extends ListTvRowPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+        Context context = view.getContext();
+        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+        outRect.set(0, 0, offset, 0);
+    }
+
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
+    public int initTitlePaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+    }
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
@@ -48,39 +66,6 @@ public class GeneralTemplate13 extends ListTvRowPresenter<GetSubChannelsByChanne
     @Override
     protected int initLayout(int i) {
         return R.layout.fragment_general_item_template13;
-    }
-
-    @Override
-    public int initMagrinTop(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadPadding(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadTextSize(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.sp_24);
-    }
-
-    @Override
-    public String initHeadAssetTTF(@NonNull Context context) {
-        return null;
-    }
-
-    @Override
-    protected RecyclerView.ItemDecoration initItemDecoration() {
-        return new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                Context context = view.getContext();
-                int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_20);
-                outRect.set(0, 0, offset, 0);
-            }
-        };
     }
 
     public static class GeneralTemplate13List extends ArrayList {

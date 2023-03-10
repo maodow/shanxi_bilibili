@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_200"
     android:focusable="true"
-    android:layout_marginBottom="@dimen/dp_24"
     app:rl_rate_width="0.74">
 
     <include

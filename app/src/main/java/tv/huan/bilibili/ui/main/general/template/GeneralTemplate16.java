@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -34,6 +35,16 @@ import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
 public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
+    public int initTitlePaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+    }
 
     private final void refreshBanner(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
         try {
@@ -541,26 +552,6 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
         } else {
             return R.layout.fragment_general_item_template16d;
         }
-    }
-
-    @Override
-    public int initMagrinTop(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadPadding(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadTextSize(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.sp_24);
-    }
-
-    @Override
-    public String initHeadAssetTTF(@NonNull Context context) {
-        return null;
     }
 
     public static class GeneralTemplate16List extends ArrayList {

@@ -1,9 +1,14 @@
 package tv.huan.bilibili.ui.center;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +38,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.BaseBean;
 import tv.huan.bilibili.bean.FavBean;
+import tv.huan.bilibili.bean.format.OptBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
@@ -124,8 +130,23 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 }
                 try {
                     FavBean.ItemBean itemBean = mDatas.get(position);
+                    String name = itemBean.getName();
+                    int length = name.length();
+                    if (length > 8) {
+                        name = name.substring(0, 9) + "...";
+                    }
+                    SpannableStringBuilder spannableString = new SpannableStringBuilder();
+                    spannableString.append(name);
+                    int length1 = spannableString.length();
+                    spannableString.setSpan(new AbsoluteSizeSpan(30), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#ffffff")), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    String status = itemBean.getStatus();
+                    spannableString.append("  " + status);
+                    int length2 = spannableString.length();
+                    spannableString.setSpan(new AbsoluteSizeSpan(22), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#303030")), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
-                    textView.setText(itemBean.getName());
+                    textView.setText(spannableString);
                 } catch (Exception e) {
                 }
                 try {
@@ -135,9 +156,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 } catch (Exception e) {
                 }
                 try {
-//                    FavBean.ItemBean itemBean = mDatas.get(position);
-//                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
-//                    GlideUtils.loadVt(imageView.getContext(), itemBean.getVipUrl(), imageView);
+                    FavBean.ItemBean itemBean = mDatas.get(position);
+                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
+                    GlideUtils.loadVt(imageView.getContext(), itemBean.getAlbum().getVipUrl(), imageView);
                 } catch (Exception e) {
                 }
             }
@@ -245,43 +266,53 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
     private void delData(@NonNull String cid, @NonNull int position) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                HorizontalClassLayout classLayout = getView().findViewById(R.id.center_tabs);
-                int checkedIndex = classLayout.getCheckedIndex();
-                observableEmitter.onNext(checkedIndex == 0);
-            }
-        }).flatMap(new Function<Boolean, Observable<BaseBean<Object>>>() {
-            @Override
-            public Observable<BaseBean<Object>> apply(Boolean v) {
-                if (v) {
-                    return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
-                } else {
-                    return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
-                }
-            }
-        }).map(new Function<BaseBean<Object>, Integer>() {
-            @Override
-            public Integer apply(BaseBean<Object> objectBaseBean) {
-                return position;
-            }
-        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
-            @Override
-            public void accept(Disposable disposable) {
-                getView().showLoading();
-            }
-        }).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) {
-                getView().hideLoading();
-            }
-        }).doOnNext(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer i) {
-                getView().hideLoading();
-                getView().deletePosition(i);
-            }
-        }).subscribe());
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        HorizontalClassLayout classLayout = getView().findViewById(R.id.center_tabs);
+                        int checkedIndex = classLayout.getCheckedIndex();
+                        observableEmitter.onNext(checkedIndex == 0);
+                    }
+                }).flatMap(new Function<Boolean, Observable<BaseBean<OptBean>>>() {
+                    @Override
+                    public Observable<BaseBean<OptBean>> apply(Boolean v) {
+                        if (v) {
+                            return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
+                        } else {
+                            return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
+                        }
+                    }
+                }).map(new Function<BaseBean<OptBean>, Integer>() {
+                    @Override
+                    public Integer apply(BaseBean<OptBean> resp) throws Exception {
+                        try {
+                            boolean succ = resp.getData().isSucc();
+                            if (!succ)
+                                throw new Exception("操作失败");
+                            return position;
+                        } catch (Exception e) {
+                            throw e;
+                        }
+                    }
+                }).delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                }).doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                        getView().showToast(throwable);
+                    }
+                }).doOnNext(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer i) {
+                        getView().hideLoading();
+                        getView().deletePosition(i);
+                    }
+                }).subscribe());
 
 //        ClassLayout classLayout = getView().findViewById(R.id.center_class);
 //        int index = classLayout.getCheckedIndex();

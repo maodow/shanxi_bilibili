@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,6 +37,37 @@ import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
 public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+        Context context = view.getContext();
+        int position = parent.getChildAdapterPosition(view);
+
+        if (position == 0) {
+            int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+            outRect.set(0, 0, offset, 0);
+        }
+//                else if (position == 2) {
+//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_1);
+//                    outRect.set(0, 0, 0, offset);
+//                } else if (position == 6) {
+//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_1);
+//                    outRect.set(0, offset, 0, 0);
+//                } else if (position == 3 || position == 4 || position == 5) {
+//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_1);
+//                    outRect.set(0, offset, 0, offset);
+//                }
+    }
+
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
+    public int initTitlePaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+    }
 
     private final void refreshBanner(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
         try {
@@ -672,56 +704,6 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
         } else {
             return R.layout.fragment_general_item_template17d;
         }
-    }
-
-    @Override
-    public int initMagrinTop(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadPadding(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    public int initHeadTextSize(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.sp_24);
-    }
-
-    @Override
-    public String initHeadAssetTTF(@NonNull Context context) {
-        return null;
-    }
-
-    @Override
-    protected RecyclerView.ItemDecoration initItemDecoration() {
-
-        return new RecyclerView.ItemDecoration() {
-
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-
-                Context context = view.getContext();
-                int position = parent.getChildAdapterPosition(view);
-
-                if (position == 0) {
-                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_26);
-                    outRect.set(0, 0, offset, 0);
-                }
-//                else if (position == 2) {
-//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_1);
-//                    outRect.set(0, 0, 0, offset);
-//                } else if (position == 6) {
-//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_1);
-//                    outRect.set(0, offset, 0, 0);
-//                } else if (position == 3 || position == 4 || position == 5) {
-//                    int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_1);
-//                    outRect.set(0, offset, 0, offset);
-//                }
-            }
-        };
     }
 
     public static class GeneralTemplate17List extends ArrayList {

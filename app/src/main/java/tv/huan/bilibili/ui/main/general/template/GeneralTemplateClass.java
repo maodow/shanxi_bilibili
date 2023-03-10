@@ -21,6 +21,26 @@ import tv.huan.bilibili.utils.JumpUtil;
 public class GeneralTemplateClass extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
     @Override
+    public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+        Context context = view.getContext();
+        int position = parent.getChildAdapterPosition(view);
+        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_5);
+
+        // 0
+        if (position == 0) {
+            outRect.set(0, 0, offset, 0);
+        }
+        // 5
+        else if (position == 5) {
+            outRect.set(offset, 0, 0, 0);
+        }
+        // 4
+        else {
+            outRect.set(offset, 0, offset, 0);
+        }
+    }
+
+    @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
         try {
             view.setOnClickListener(new View.OnClickListener() {
@@ -70,40 +90,6 @@ public class GeneralTemplateClass extends ListTvGridPresenter<GetSubChannelsByCh
     @Override
     protected int initLayout(int viewType) {
         return R.layout.fragment_general_item_template_class;
-    }
-
-    @Override
-    public int initMagrinTop(@NonNull Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-    }
-
-    @Override
-    protected RecyclerView.ItemDecoration initItemDecoration() {
-
-        return new RecyclerView.ItemDecoration() {
-
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-
-                Context context = view.getContext();
-                int position = parent.getChildAdapterPosition(view);
-                int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_5);
-
-                // 0
-                if (position == 0) {
-                    outRect.set(0, 0, offset, 0);
-                }
-                // 5
-                else if (position == 5) {
-                    outRect.set(offset, 0, 0, 0);
-                }
-                // 4
-                else {
-                    outRect.set(offset, 0, offset, 0);
-                }
-            }
-        };
     }
 
     public static class GeneralTemplateClassList extends ArrayList {

@@ -4,13 +4,19 @@ package tv.huan.bilibili.ui.main.mine;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Keep;
@@ -222,10 +228,32 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 }
                 // item-img
                 else if (itemViewType == TYPE_ITEM_IMG) {
-                    FavBean.ItemBean itemBean = mDatas.get(position);
-                    getView().setText(holder.itemView, R.id.mine_img_name, itemBean.getAlbum().getTitle());
-                    ImageView imageView = holder.itemView.findViewById(R.id.mine_img_icon);
-                    GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getPicture(true), imageView);
+                    try {
+                        FavBean.ItemBean itemBean = mDatas.get(position);
+                        String name = itemBean.getName();
+                        int length = name.length();
+                        if (length > 8) {
+                            name = name.substring(0, 9) + "...";
+                        }
+                        SpannableStringBuilder spannableString = new SpannableStringBuilder();
+                        spannableString.append(name);
+                        int length1 = spannableString.length();
+                        spannableString.setSpan(new AbsoluteSizeSpan(30), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#ffffff")), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                        String status = itemBean.getStatus();
+                        spannableString.append("  " + status);
+                        int length2 = spannableString.length();
+                        spannableString.setSpan(new AbsoluteSizeSpan(22), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#303030")), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                        getView().setText(holder.itemView, R.id.mine_img_name, spannableString);
+                    }catch (Exception e){
+                    }
+                    try {
+                        FavBean.ItemBean itemBean = mDatas.get(position);
+                        ImageView imageView = holder.itemView.findViewById(R.id.mine_img_icon);
+                        GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getPicture(true), imageView);
+                    }catch (Exception e){
+                    }
                 }
                 // item-more
                 else if (itemViewType == TYPE_ITEM_MORE) {
@@ -238,10 +266,6 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     FavBean.ItemBean itemBean = mDatas.get(position);
                     getView().setText(holder.itemView, R.id.mine_web_name, itemBean.getTitle());
                     getView().setImageResource(holder.itemView, R.id.mine_web_icon, itemBean.getIcon());
-                }
-                // item-img
-                else if (itemViewType == TYPE_ITEM_IMG) {
-//                    FavBean.ItemBean itemBean = mDatas.get(position);
                 }
             }
 

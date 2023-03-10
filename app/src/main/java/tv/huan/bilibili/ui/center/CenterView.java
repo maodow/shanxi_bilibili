@@ -1,7 +1,5 @@
 package tv.huan.bilibili.ui.center;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 
 import lib.kalu.leanback.clazz.ClassBean;

@@ -23,27 +23,35 @@ import tv.huan.bilibili.utils.JumpUtil;
 public class DetailTemplateFavor extends ListTvRowPresenter<MediaBean> {
 
     @Override
-    protected String initRowTitle(Context context) {
+    public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+        Context context = view.getContext();
+        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+        outRect.set(0, 0, offset, 0);
+    }
+
+    @Override
+    public String initRowTitle(Context context) {
         return context.getResources().getString(R.string.detail_cai);
     }
 
-    @Override
-    public int initMagrinTop(@NonNull Context context) {
-        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_30);
-        return offset;
-    }
 
-    @Override
-    public int initHeadPadding(@NonNull Context context) {
-        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-        return offset;
-    }
-
-    @Override
-    public int initHeadTextSize(@NonNull Context context) {
-        int offset = context.getResources().getDimensionPixelOffset(R.dimen.sp_24);
-        return offset;
-    }
+//    @Override
+//    public int initMagrinTop(@NonNull Context context) {
+//        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_30);
+//        return offset;
+//    }
+//
+//    @Override
+//    public int initHeadPadding(@NonNull Context context) {
+//        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
+//        return offset;
+//    }
+//
+//    @Override
+//    public int initHeadTextSize(@NonNull Context context) {
+//        int offset = context.getResources().getDimensionPixelOffset(R.dimen.sp_24);
+//        return offset;
+//    }
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<MediaBean> list) {
@@ -92,19 +100,6 @@ public class DetailTemplateFavor extends ListTvRowPresenter<MediaBean> {
     @Override
     protected int initLayout(int i) {
         return R.layout.activity_detail_item_favor;
-    }
-
-    @Override
-    protected RecyclerView.ItemDecoration initItemDecoration() {
-        return new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                Context context = view.getContext();
-                int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
-                outRect.set(0, 0, offset, 0);
-            }
-        };
     }
 
     public static class DetailTemplateFavList extends ArrayList {

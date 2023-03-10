@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,22 @@ import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
 public final class GeneralTemplate19 extends ListTvFullPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+        int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+        outRect.set(0, 0, offset, 0);
+    }
+
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
+    public int initTitlePaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+    }
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
@@ -82,18 +99,6 @@ public final class GeneralTemplate19 extends ListTvFullPresenter<GetSubChannelsB
     @Override
     protected int initItemHeight(Context context) {
         return context.getResources().getDimensionPixelOffset(R.dimen.dp_110);
-    }
-
-    @Override
-    protected RecyclerView.ItemDecoration initItemDecoration() {
-        return new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_20);
-                outRect.set(0, 0, offset, 0);
-            }
-        };
     }
 
     public static class GeneralTemplate19List extends ArrayList {
