@@ -24,23 +24,15 @@ import tv.huan.bilibili.utils.LogUtil;
 
 public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<MediaBean> {
 
-//    @Override
-//    public int initMagrinTop(@NonNull Context context) {
-//        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_30);
-//        return offset;
-//    }
-//
-//    @Override
-//    public int initHeadPadding(@NonNull Context context) {
-//        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-//        return offset;
-//    }
-//
-//    @Override
-//    public int initHeadTextSize(@NonNull Context context) {
-//        int offset = context.getResources().getDimensionPixelOffset(R.dimen.sp_24);
-//        return offset;
-//    }
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
+    public int initTitlePaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+    }
 
     @Override
     protected void onBindViewHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {

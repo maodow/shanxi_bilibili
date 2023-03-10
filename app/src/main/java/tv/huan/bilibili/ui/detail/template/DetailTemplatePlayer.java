@@ -9,11 +9,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import org.json.JSONObject;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
+import lib.kalu.leanback.presenter.ListTvPresenterImpl;
+import lib.kalu.leanback.presenter.bean.TvPresenterRowBeanImpl;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.ui.detail.DetailActivity;
@@ -23,7 +26,13 @@ import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.PlayerView;
 
-public final class DetailTemplatePlayer extends Presenter {
+public final class DetailTemplatePlayer extends Presenter implements ListTvPresenterImpl {
+
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
     @Override
     public void onViewAttachedToWindow(ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
@@ -41,6 +50,8 @@ public final class DetailTemplatePlayer extends Presenter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
         LogUtil.log("DetailTemplatePlayer => onCreateViewHolder");
+        setPadding(viewGroup.getContext(), viewGroup);
+        setBackgroundColor(viewGroup.getContext(), viewGroup);
         return createViewHolder(viewGroup);
     }
 

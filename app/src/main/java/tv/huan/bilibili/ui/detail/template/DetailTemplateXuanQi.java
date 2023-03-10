@@ -38,23 +38,15 @@ public class DetailTemplateXuanQi extends ListTvGridPresenter<MediaBean> {
         return context.getResources().getString(R.string.detail_xuanqi);
     }
 
-//    @Override
-//    public int initMagrinTop(@NonNull Context context) {
-//        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_30);
-//        return offset;
-//    }
-//
-//    @Override
-//    public int initHeadPadding(@NonNull Context context) {
-//        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
-//        return offset;
-//    }
-//
-//    @Override
-//    public int initHeadTextSize(@NonNull Context context) {
-//        int offset = context.getResources().getDimensionPixelOffset(R.dimen.sp_24);
-//        return offset;
-//    }
+    @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
+    public int initTitlePaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_12);
+    }
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<MediaBean> list, @NonNull int i) {

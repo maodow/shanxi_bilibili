@@ -64,6 +64,13 @@ public class GetSubChannelsByChannelBean implements Serializable {
         private List<TemplateBean> templateData; // 数据
 
         public List<TemplateBean> getTemplateData() {
+            try {
+                for (TemplateBean t : templateData) {
+                    t.setTempTitle(name);
+                    t.setTempShow(show == 1);
+                }
+            } catch (Exception e) {
+            }
             return templateData;
         }
 
@@ -112,7 +119,7 @@ public class GetSubChannelsByChannelBean implements Serializable {
             public TemplateBean() {
             }
 
-            public TemplateBean( String poster, String newPicVt, String newPicHz,boolean tempShow, String tempTitle, String name, String cid, int classId, int toType, List<LookBean> generalTemplate17Recs, boolean generalTemplate17Selected) {
+            public TemplateBean(String poster, String newPicVt, String newPicHz, boolean tempShow, String tempTitle, String name, String cid, int classId, int toType, List<LookBean> generalTemplate17Recs, boolean generalTemplate17Selected) {
                 super(poster, newPicVt, newPicHz);
                 this.tempShow = tempShow;
                 this.tempTitle = tempTitle;
@@ -182,27 +189,20 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
             @Override
             public String getRowTitle() {
-                if(BuildConfig.HUAN_TEST_TEMPLATE_ENABLE){
+                if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
                     return tempTitle;
-                }
-                else if (tempShow){
+                } else if (tempShow) {
                     return tempTitle;
                 } else {
                     return null;
                 }
             }
 
-            @NonNull
-            @Override
-            public String toString() {
-                return "rowTitle = " + getRowTitle();
-            }
-
             @Override
             public TemplateBean clone() {
                 String picture = getPicture(false);
                 String picture1 = getPicture(true);
-                return new TemplateBean(picture, picture,picture1, tempShow, tempTitle, name, cid,classId, toType, generalTemplate17Recs,  generalTemplate17Selected);
+                return new TemplateBean(picture, picture, picture1, tempShow, tempTitle, name, cid, classId, toType, generalTemplate17Recs, generalTemplate17Selected);
             }
         }
     }
