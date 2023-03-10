@@ -53,7 +53,7 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
         classLayout.setOnCheckedChangeListener(new HorizontalClassLayout.OnCheckedChangeListener() {
             @Override
             public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
-                getPresenter().request();
+                getPresenter().request(i);
             }
         });
         classLayout.requestFocus(select, true);
@@ -82,9 +82,8 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
 
     @Override
     public void deletePosition(int position) {
-        Toast.makeText(getContext(), "position = " + position, Toast.LENGTH_SHORT).show();
         putBooleanExtra(INTENT_UPDATE, true);
-        notifyItemRemoved(R.id.center_list, position);
+        notifyItemRangeRemoved(R.id.center_list, position, 1);
     }
 
     @Override

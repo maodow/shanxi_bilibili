@@ -62,8 +62,23 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_24);
-                outRect.set(0, 0, offset, offset);
+                int position = parent.getChildAdapterPosition(view);
+                int bottom = view.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72) / 8;
+                if (position % 4 == 0) {
+                    outRect.set(0, 0, offset * 2, bottom);
+                } else if (position % 4 == 3) {
+                    outRect.set(offset * 2, 0, 0, bottom);
+                } else {
+                    outRect.set(offset, 0, offset, bottom);
+                }
+
+                int transX = offset * 2 / (3 * 2);
+                if (position % 4 == 1) {
+                    view.setTranslationX(-transX);
+                } else if (position % 4 == 2) {
+                    view.setTranslationX(transX);
+                }
             }
         });
         recyclerView.setAdapter(new RecyclerView.Adapter() {
@@ -205,14 +220,12 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
         getView().setText(R.id.center_warning, html);
     }
 
-    protected void request() {
+    protected void request(int position) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        HorizontalClassLayout classLayout = getView().findViewById(R.id.center_tabs);
-                        int checkedIndex = classLayout.getCheckedIndex();
-                        observableEmitter.onNext(checkedIndex == 0);
+                        observableEmitter.onNext(position == 0);
                     }
                 }).flatMap(new Function<Boolean, Observable<BaseBean<FavBean>>>() {
                     @Override
@@ -288,6 +301,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             boolean succ = resp.getData().isSucc();
                             if (!succ)
                                 throw new Exception("操作失败");
+                            mDatas.remove(position);
                             return position;
                         } catch (Exception e) {
                             throw e;
@@ -313,96 +327,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         getView().deletePosition(i);
                     }
                 }).subscribe());
-
-//        ClassLayout classLayout = getView().findViewById(R.id.center_class);
-//        int index = classLayout.getCheckedIndex();
-//        // 观看历史
-//        if (index == 1) {
-//            addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-//                        @Override
-//                        public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-//                            observableEmitter.onNext(true);
-//                        }
-//                    })
-//                    .flatMap(new Function<Boolean, Observable<BaseBean<Object>>>() {
-//                        @Override
-//                        public Observable<BaseBean<Object>> apply(Boolean aBoolean) {
-//
-//                        }
-//                    })
-//                    .delay(40, TimeUnit.MILLISECONDS)
-//                    .compose(ComposeSchedulers.io_main())
-//                    .doOnSubscribe(new Consumer<Disposable>() {
-//                        @Override
-//                        public void accept(Disposable disposable) {
-//                            getView().showLoading();
-//                        }
-//                    })
-//                    .doOnError(new Consumer<Throwable>() {
-//                        @Override
-//                        public void accept(Throwable throwable) {
-//                            getView().hideLoading();
-//                        }
-//                    })
-//                    .doOnNext(new Consumer<BaseBean<Object>>() {
-//                        @Override
-//                        public void accept(BaseBean<Object> objectBaseBean) {
-//                            getView().hideLoading();
-//                            getView().del(position);
-//
-//                        }
-//                    })
-//                    .subscribe());
-//        }
-//        // 我的收藏
-//        else {
-//            addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-//                        @Override
-//                        public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-//                            observableEmitter.onNext(true);
-//                        }
-//                    })
-//                    .flatMap(new Function<Boolean, Observable<BaseBean<Object>>>() {
-//                        @Override
-//                        public Observable<BaseBean<Object>> apply(Boolean aBoolean) {
-//
-//                        }
-//                    })
-//                    .delay(40, TimeUnit.MILLISECONDS)
-//                    .compose(ComposeSchedulers.io_main())
-//                    .doOnSubscribe(new Consumer<Disposable>() {
-//                        @Override
-//                        public void accept(Disposable disposable) {
-//                            getView().showLoading();
-//                        }
-//                    })
-//                    .doOnError(new Consumer<Throwable>() {
-//                        @Override
-//                        public void accept(Throwable throwable) {
-//                            getView().hideLoading();
-//                        }
-//                    })
-//                    .doOnNext(new Consumer<BaseBean<Object>>() {
-//                        @Override
-//                        public void accept(BaseBean<Object> objectBaseBean) {
-//                            getView().hideLoading();
-//                            getView().del(position);
-//                        }
-//                    })
-//                    .subscribe());
-//        }
     }
-
-    //    private void refreshDel(boolean show) {
-//        int size = mDatas.size();
-//        for (int i = 0; i < size; i++) {
-//            FavBean.ItemBean itemBean = mDatas.get(i);
-//            if (null == itemBean)
-//                continue;
-//            itemBean.setDel(show);
-//        }
-//        getView().refreshContent();
-//    }
 
     protected boolean dispatchKey(KeyEvent event) {
         // up
