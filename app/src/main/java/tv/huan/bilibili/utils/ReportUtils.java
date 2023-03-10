@@ -426,11 +426,11 @@ public final class ReportUtils {
         JSONObject object = create("play_vod_stop", prodId);
         try {
             String startTime = TimeUtils.millis2String(start).replace(":", "").replace("-", "").trim();
-            object.put("start_time", startTime);
+            object.put("start_time", startTime); // "20230310 095822"
             String endTime = TimeUtils.millis2String(end).replace(":", "").replace("-", "").trim();
-            object.put("end_time", endTime);
+            object.put("end_time", endTime); // "20230310 095822"
             String playTime = String.valueOf((end - start) / 1000);
-            object.put("play_time", playTime);
+            object.put("play_time", playTime); // 单位s
             object.put("cid", cid);
             object.put("vid", vid);
         } catch (Exception e) {
@@ -477,7 +477,7 @@ public final class ReportUtils {
         JSONObject object = new JSONObject();
         try {
             object.put("action", action);
-            object.put("user_id", BoxUtil.getCa());
+            object.put("user_id", BoxUtil.getUserId());
             object.put("model", Build.MODEL);
             object.put("ver", BuildConfig.VERSION_NAME);
             object.put("business_id", prodId);

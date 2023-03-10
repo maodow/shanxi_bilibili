@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Create by Richard
  * 2019-07-29 16:21
  */
-public class LoadPageIcon extends BaseBean {
+public class GetPopupInfoBean extends BaseBean {
 
     private LoadingPicBean loading_pic;
     private PopupPicBean popup_pic;

@@ -21,13 +21,12 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.format.WelcomeBean;
-import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.bean.BaseBean;
-import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.bean.GetChannelsBean;
-import tv.huan.bilibili.bean.LoadPageIcon;
-import tv.huan.bilibili.utils.BoxUtil;
+import tv.huan.bilibili.bean.GetPopupInfoBean;
+import tv.huan.bilibili.bean.format.WelcomeBean;
+import tv.huan.bilibili.http.HttpClient;
+import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.heilongjiang.HeilongjiangApi;
 
@@ -118,31 +117,75 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         }
                     }
                 })
+//                // 获取HuanId
+//                .flatMap(new Function<WelcomeBean, Observable<BaseBean<HuanInfo>>>() {
+//                    @Override
+//                    public Observable<BaseBean<HuanInfo>> apply(WelcomeBean data) {
+//
+//                        String huanId = CacheUtil.getCache(getView().getContext(), "huanId");
+//                        if (null == huanId || huanId.length() <= 0) {
+//                            String s = new Gson().toJson(data);
+//                            return HttpClient.getHttpClient().getHttpApi().getHuanId(s);
+//                        } else {
+//                            return Observable.create(new ObservableOnSubscribe<BaseBean<HuanInfo>>() {
+//                                @Override
+//                                public void subscribe(ObservableEmitter<BaseBean<HuanInfo>> emitter) {
+//                                    BaseBean<HuanInfo> baseBean = new BaseBean<>();
+//                                    String s = new Gson().toJson(data);
+//                                    baseBean.setExtra(s);
+//                                    emitter.onNext(baseBean);
+//                                }
+//                            });
+//                        }
+//                    }
+//                })
                 // 首次打开app上报
                 .map(new Function<WelcomeBean, WelcomeBean>() {
                     @Override
                     public WelcomeBean apply(WelcomeBean data) {
-                        LogUtil.log("WelcomePresenter => request => 首次打开app上报");
+                        // 上报
                         try {
+                            LogUtil.log("WelcomePresenter => request => 首次打开app上报");
                             reportAppActivation();
                         } catch (Exception e) {
                         }
+
+//                        // huanId
+//                        try {
+//                            LogUtil.log("WelcomePresenter => request => 检查HuanId");
+//                            HuanInfo data = resp.getData();
+//                            if (null != data) {
+//                                String huanId = data.getHuanId();
+//                                if (null != huanId && huanId.length() > 0) {
+//                                    CacheUtil.setCache(getView().getContext(), "huanId", huanId);
+//                                }
+//                            }
+//                        } catch (Exception e) {
+//                        }
+
+//                        WelcomeBean welcomeBean;
+//                        try {
+//                            welcomeBean = new Gson().fromJson(resp.getExtra(), WelcomeBean.class);
+//                        } catch (Exception e) {
+//                            welcomeBean = new WelcomeBean();
+//                        }
+
                         return data;
                     }
                 })
                 // 广告接口
-                .flatMap(new Function<WelcomeBean, Observable<LoadPageIcon>>() {
+                .flatMap(new Function<WelcomeBean, Observable<GetPopupInfoBean>>() {
                     @Override
-                    public Observable<LoadPageIcon> apply(WelcomeBean data) {
+                    public Observable<GetPopupInfoBean> apply(WelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => 广告接口");
                         String s = new Gson().toJson(data);
-                        return HttpClient.getHttpClient().getHttpApi().getLoadPage(BoxUtil.getCa(), s);
+                        return HttpClient.getHttpClient().getHttpApi().getPopupInfo(s);
                     }
                 })
                 // 下载广告
-                .map(new Function<LoadPageIcon, WelcomeBean>() {
+                .map(new Function<GetPopupInfoBean, WelcomeBean>() {
                     @Override
-                    public WelcomeBean apply(LoadPageIcon loadPageIcon) {
+                    public WelcomeBean apply(GetPopupInfoBean loadPageIcon) {
                         LogUtil.log("WelcomePresenter => request => 下载广告");
 
                         WelcomeBean welcomeBean;
@@ -153,7 +196,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         }
 
                         try {
-                            LoadPageIcon.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
+                            GetPopupInfoBean.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
                             String display_time = loading_pic.getDisplay_time();
                             if (null != display_time && display_time.length() > 0) {
                                 int parseInt = Integer.parseInt(display_time);
@@ -165,7 +208,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                             welcomeBean.setAdTime(0);
                         }
                         try {
-                            LoadPageIcon.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
+                            GetPopupInfoBean.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
                             String picture_hd = loading_pic.getPicture_HD();
                             welcomeBean.setAdUrl(picture_hd);
                         } catch (Exception e) {
@@ -235,7 +278,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         String s = throwable.getMessage();
                         LogUtil.log("WelcomePresenter => request => doOnError => s = " + s);
                         getView().showToast(s);
-                        getView().finishActivity();
+                        getView().callFinish();
                     }
                 })
                 .doOnNext(new Consumer<WelcomeBean>() {

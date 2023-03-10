@@ -111,7 +111,7 @@ dependencies {
     // autosize
     api files('libs/lib_autosize_v1.2.1_release.aar')
     // mvp
-    api files('libs/lib_frame_mvp_release_20230309.aar')
+    api files('libs/lib_frame_mvp_release_20230310.aar')
     // leanback
     api files('libs/lib_leanback_r1-2-0-alpha02-release.aar')
     // keyboard

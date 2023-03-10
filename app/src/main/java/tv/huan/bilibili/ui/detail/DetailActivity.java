@@ -32,11 +32,17 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public static final String INTENT_FROM_SPECIAL_TOPNAME = "intent_from_special_topname";
     private static final String INTENT_UPDATE = "intent_update";
     protected static final String INTENT_VID = "intent_vid";
+    protected static final String INTENT_REC_CLASSID = "intent_rec_classid";
     protected static final String INTENT_START_TIME = "intent_start_time";
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         return getPresenter().dispatchEvent(event) || super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        getPresenter().uploadBackupPress();
     }
 
     @Override
@@ -97,7 +103,9 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void updateVid(@NonNull MediaBean data) {
+    public void updateVidAndClassId(@NonNull MediaBean data) {
+        putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
+        putIntExtra(INTENT_POSITION, data.getTempIndex());
         putStringExtra(INTENT_VID, data.getVid());
     }
 

@@ -208,7 +208,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 int itemViewType = holder.getItemViewType();
                 // head
                 if (itemViewType == TYPE_ITEM_HEAD) {
-                    getView().setText(holder.itemView, R.id.mine_head_uuid, BoxUtil.getCa());
+                    getView().setText(holder.itemView, R.id.mine_head_uuid, BoxUtil.getUserId());
                     String s = "<font color='#ff6699'>2021-01-01</font><font color='#ffffff'>&#160;&#160;到期</font>";
                     getView().setText(holder.itemView, R.id.mine_head_date, Html.fromHtml(s));
                     FavBean.ItemBean itemBean = mDatas.get(position);

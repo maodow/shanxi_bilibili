@@ -9,6 +9,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 import lib.kalu.frame.mvp.context.FrameContext;
+import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.heilongjiang.HeilongjiangApi;
 
@@ -22,7 +23,7 @@ public final class BoxUtil {
         }
     }
 
-    public static String getCa() {
+    public static String getUserId() {
         try {
             Context context = FrameContext.getApplicationContext();
             String userId = HeilongjiangApi.getUserId(context);
@@ -31,10 +32,14 @@ public final class BoxUtil {
             return userId;
         } catch (Exception e) {
             LogUtil.log("BoxUtil => getCa => " + e.getMessage());
-            return "00380035890";
-//            return BuildConfig.HUAN_CHECK_USERID ? "null" : "00380035890";
+            return BuildConfig.HUAN_CHECK_USERID ? "null" : "00380035890";
         }
     }
+
+//    public static String getHuanId() {
+//        Context context = FrameContext.getApplicationContext();
+//        return CacheUtil.getCache(context, "huanId");
+//    }
 
     public static String getEtherNetIP() {
         try {

@@ -1,21 +1,14 @@
 package tv.huan.bilibili.bean;
 
+import androidx.annotation.Keep;
+
 import java.io.Serializable;
 
+@Keep
 public class HuanInfo implements Serializable {
-    private static final long serialVersionUID = 9141803756019087135L;
 
     private String vtoken ;
     private String huanId ;
-
-    @Override
-    public String toString() {
-        return "HuanInfo{" +
-                "vtoken='" + vtoken + '\'' +
-                ", huanId='" + huanId + '\'' +
-                '}';
-    }
-
 
     public String getVtoken() {
         return vtoken;

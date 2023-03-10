@@ -17,7 +17,7 @@ public interface DetailView extends BaseViewImpl {
 
     void updateFavor(boolean status);
 
-    void updateVid(@NonNull MediaBean data);
+    void updateVidAndClassId(@NonNull MediaBean data);
 
     void updateData(@NonNull MediaBean data, boolean isFromUser);
 

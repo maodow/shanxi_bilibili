@@ -107,7 +107,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<MediaBean> {
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null != activity && activity instanceof DetailActivity) {
                 ((DetailActivity) activity).stopPlayer();
-                ((DetailActivity) activity).updateVid(item);
+                ((DetailActivity) activity).updateVidAndClassId(item);
                 ((DetailActivity) activity).updateData(item, true);
                 ((DetailActivity) activity).delayPlayer(item, true);
             }

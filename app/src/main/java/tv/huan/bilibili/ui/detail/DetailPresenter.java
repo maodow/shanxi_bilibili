@@ -32,6 +32,7 @@ import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.format.DetailBean;
+import tv.huan.bilibili.bean.format.PlayBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateFavor;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
@@ -44,47 +45,6 @@ import tv.huan.bilibili.widget.player.PlayerView;
 public class DetailPresenter extends BasePresenterImpl<DetailView> {
     public DetailPresenter(@NonNull DetailView detailView) {
         super(detailView);
-    }
-
-    protected boolean checkPlayer() {
-        try {
-            PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
-            LogUtil.log("DetailPresenter => checkPlayer => playerView = " + playerView);
-            if (null == playerView) {
-                VerticalGridView gridView = getView().findViewById(R.id.detail_list);
-                LogUtil.log("DetailPresenter => checkPlayer => gridView = " + gridView);
-                RecyclerView.Adapter adapter = gridView.getAdapter();
-                if (null == adapter) {
-                    return true;
-                } else {
-                    int itemCount = adapter.getItemCount();
-                    if (itemCount <= 0) {
-                        return true;
-                    } else {
-                        gridView.smoothScrollToPosition(0);
-                        return false;
-                    }
-                }
-            } else {
-                boolean full = playerView.isFull();
-                boolean floats = playerView.isFloat();
-                LogUtil.log("DetailPresenter => checkPlayer => full = " + full);
-                LogUtil.log("DetailPresenter => checkPlayer => floats = " + floats);
-                if (full) {
-                    playerView.stopFull();
-                    return false;
-                } else if (floats) {
-                    playerView.stopFloat();
-                    return false;
-                } else {
-                    playerView.release();
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            LogUtil.log("DetailPresenter => checkPlayer => " + e.getMessage());
-            return false;
-        }
     }
 
     protected final void setAdapter() {
@@ -469,7 +429,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(MediaBean data) {
                         getView().hideLoading();
-                        getView().updateVid(data);
+                        getView().updateVidAndClassId(data);
                         getView().refreshContent();
                         getView().updateData(data, false);
                         getView().delayPlayer(data, false);
@@ -570,24 +530,8 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     }
 
     protected boolean dispatchEvent(KeyEvent event) {
-        // back
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            boolean checkPlayer = checkPlayer();
-            LogUtil.log("DetailPresenter => dispatchEvent => checkPlayer = " + checkPlayer);
-            if (checkPlayer) {
-                // 1
-                long start = getView().getLongExtra(DetailActivity.INTENT_START_TIME, 0);
-                long end = System.currentTimeMillis();
-                String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
-                String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
-                reportPlayVodStop(cid, vid, start, end);
-                // 2
-                ((Activity) getView()).onBackPressed();
-            }
-            return true;
-        }
         // left right up down
-        else if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
             PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
             boolean isFull = playerView.isFull();
             // full
@@ -607,6 +551,11 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 }
             }
+        }
+        // back
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            getView().callOnBackPressed();
+            return true;
         }
         return false;
     }
@@ -690,6 +639,63 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         LogUtil.log("DetailPresenter => checkPlayerNext => s = " + s);
                         getView().showToast(s);
                         getView().startPlayerNext1();
+                    }
+                })
+                .subscribe());
+    }
+
+    protected void uploadBackupPress() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<PlayBean>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<PlayBean> emitter) {
+
+                        PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
+                        long duration = playerView.getDuration();
+                        long position = playerView.getPosition();
+
+                        PlayBean playBean = new PlayBean();
+                        playBean.setDuration(duration);
+                        playBean.setPosition(position);
+                        emitter.onNext(playBean);
+                    }
+                })
+                // 播放记录
+                .flatMap(new Function<PlayBean, Observable<BaseBean<Object>>>() {
+                    @Override
+                    public Observable<BaseBean<Object>> apply(PlayBean data) {
+                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
+                        String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
+                        String classId = getView().getStringExtra(DetailActivity.INTENT_REC_CLASSID, "");
+                        int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
+                        int pos = position + 1;
+                        long playTime = data.getPosition();
+                        int endFlag = data.isEnd() ? 0 : 1;
+                        // 1
+                        long start = getView().getLongExtra(DetailActivity.INTENT_START_TIME, 0);
+                        long end = System.currentTimeMillis();
+                        reportPlayVodStop(cid, vid, start, end);
+                        // 2
+                        return HttpClient.getHttpClient().getHttpApi().savePlayHistory(vid, cid, playTime, endFlag, classId, pos);
+                    }
+                })
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                    }
+                })
+                .doOnNext(new Consumer<BaseBean<Object>>() {
+                    @Override
+                    public void accept(BaseBean<Object> resp) {
+                        getView().hideLoading();
+                        getView().callFinish();
                     }
                 })
                 .subscribe());
