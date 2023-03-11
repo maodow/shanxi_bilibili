@@ -342,9 +342,6 @@ public final class DetailTemplatePlayer extends Presenter {
         private boolean updateOnlyFavor = false;
         private boolean updateOnlyVideoPlaying = false;
         private boolean updateOnlyVideoStop = false;
-
-        private String cid;
-        private String recClassId;
         private boolean favor;
         private boolean vip;
 
@@ -394,22 +391,6 @@ public final class DetailTemplatePlayer extends Presenter {
 
         public void setUpdateOnlyVideoStop(boolean updateOnlyVideoStop) {
             this.updateOnlyVideoStop = updateOnlyVideoStop;
-        }
-
-        public String getCid() {
-            return cid;
-        }
-
-        public void setCid(String cid) {
-            this.cid = cid;
-        }
-
-        public String getRecClassId() {
-            return recClassId;
-        }
-
-        public void setRecClassId(String recClassId) {
-            this.recClassId = recClassId;
         }
 
         public boolean isUpdateOnlyFavor() {

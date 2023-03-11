@@ -32,9 +32,6 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
     private String temoInfo;
     private String tempRecClassId;
     private String[] tempPicList;
-
-    @SerializedName("title")
-    private String name;
     private int duration;
 
     public int getTempIndex() {
@@ -126,10 +123,6 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
 
     public void setTempPicList(String[] tempPicList) {
         this.tempPicList = tempPicList;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getDuration() {

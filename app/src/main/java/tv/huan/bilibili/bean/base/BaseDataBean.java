@@ -9,6 +9,7 @@ public class BaseDataBean extends TvEpisodesItemBean implements Serializable {
     private String vid;
     private String cid;
     private int classId;
+    private String recClassId;
     private int toType;
     private int id;
 
@@ -98,5 +99,13 @@ public class BaseDataBean extends TvEpisodesItemBean implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getRecClassId() {
+        return recClassId;
+    }
+
+    public void setRecClassId(String recClassId) {
+        this.recClassId = recClassId;
     }
 }
