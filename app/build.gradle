@@ -117,7 +117,7 @@ dependencies {
     // keyboard
     api files('libs/lib_keyboard_release_20230303.aar')
 //    api project(path: ':module_keyboard')
-    api files('libs/lib_mediaplayer_ui_release_20230309.aar')
+    api files('libs/lib_mediaplayer_ui_release_20230311.aar')
     api files('libs/lib_mediaplayer_exo_r2.18.3_ff4.4_audio_release_20230222.aar')
     // heilongjiang
     api files('libs/lib_huan_heilongjiang_release_20230302.aar')

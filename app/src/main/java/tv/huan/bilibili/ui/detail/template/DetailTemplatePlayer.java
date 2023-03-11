@@ -213,6 +213,7 @@ public final class DetailTemplatePlayer extends Presenter {
             builder.setDelay(4000);
             videoLayout.start(builder.build(), cdnUrl);
         } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => startPlayer => "+e.getMessage());
         }
     }
 
