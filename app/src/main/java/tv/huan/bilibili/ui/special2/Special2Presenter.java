@@ -27,10 +27,9 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.BaseBean;
+import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.SpecialBean;
 import tv.huan.bilibili.http.HttpClient;
-import tv.huan.bilibili.ui.special1.Special1Activity;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
@@ -159,24 +158,24 @@ public class Special2Presenter extends BasePresenterImpl<Special2View> {
                         observableEmitter.onNext(true);
                     }
                 })
-                .flatMap(new Function<Boolean, Observable<BaseBean<SpecialBean>>>() {
+                .flatMap(new Function<Boolean, Observable<ResponsedBean<SpecialBean>>>() {
                     @Override
-                    public Observable<BaseBean<SpecialBean>> apply(Boolean aBoolean) {
+                    public Observable<ResponsedBean<SpecialBean>> apply(Boolean aBoolean) {
                         int specialId = getView().getIntExtra(Special2Activity.INTENT_SPECIALID, 0);
                         return HttpClient.getHttpClient().getHttpApi().getSpecialById(specialId);
                     }
                 })
-                .map(new Function<BaseBean<SpecialBean>, String>() {
+                .map(new Function<ResponsedBean<SpecialBean>, String>() {
                     @Override
-                    public String apply(BaseBean<SpecialBean> specialDataBaseBean) {
+                    public String apply(ResponsedBean<SpecialBean> specialDataResponsedBean) {
                         String str = null;
                         try {
-                            str = specialDataBaseBean.getData().getImgs().getPoster();
+                            str = specialDataResponsedBean.getData().getImgs().getPoster();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         try {
-                            List<SpecialBean.ItemBean> list = specialDataBaseBean.getData().getList();
+                            List<SpecialBean.ItemBean> list = specialDataResponsedBean.getData().getList();
                             mData.clear();
                             mData.addAll(list);
                         } catch (Exception e) {

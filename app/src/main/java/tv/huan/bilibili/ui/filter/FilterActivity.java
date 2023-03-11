@@ -35,7 +35,7 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
         // adapter
         getPresenter().setAdapter();
         // request
-        getPresenter().requestInit();
+        getPresenter().request();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
         classLayout.setOnCheckedChangeListener(new lib.kalu.leanback.clazz.VerticalClassLayout.OnCheckedChangeListener() {
             @Override
             public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
-                setVisibility(R.id.filter_tags, i == 0 ? View.VISIBLE : View.GONE);
+                checkTags(i == 0);
                 if (i == 0) {
                     getPresenter().searchAlbumByTypeNews();
                 } else {
@@ -75,5 +75,15 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
                 getPresenter().searchAlbumByTypeNews();
             }
         });
+    }
+
+    @Override
+    public void checkNodata(boolean show) {
+        setVisibility(R.id.filter_nodata, show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void checkTags(boolean show) {
+        setVisibility(R.id.filter_tags, show ? View.VISIBLE : View.GONE);
     }
 }

@@ -9,16 +9,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import org.json.JSONObject;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
-import lib.kalu.leanback.presenter.ListTvPresenterImpl;
-import lib.kalu.leanback.presenter.bean.TvPresenterRowBeanImpl;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
@@ -338,7 +336,7 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    public static class DetailTemplatePlayerObject {
+    public static class DetailTemplatePlayerObject extends BaseDataBean {
 
         private boolean updateOnlyStopFull = false;
         private boolean updateOnlyFavor = false;
@@ -351,7 +349,6 @@ public final class DetailTemplatePlayer extends Presenter {
         private boolean vip;
 
         private String tag;
-        private String title;
         private String info;
         private String[] picList;
 
@@ -453,14 +450,6 @@ public final class DetailTemplatePlayer extends Presenter {
 
         public void setTag(String tag) {
             this.tag = tag;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
         }
 
         public void setImageUrl(String imageUrl) {

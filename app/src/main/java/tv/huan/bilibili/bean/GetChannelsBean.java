@@ -5,6 +5,8 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 import java.util.List;
 
+import tv.huan.bilibili.bean.base.BaseDataBean;
+
 public final class GetChannelsBean implements Serializable {
 
     private List<ItemBean> list;
@@ -18,13 +20,10 @@ public final class GetChannelsBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean implements Serializable {
+    public static class ItemBean extends BaseDataBean implements Serializable {
 
         private ImgsBean imgs;
-        private int id;
-        private String name;
         private int show;
-        private int classId;
 
         public ImgsBean getImgs() {
             return imgs;
@@ -34,36 +33,12 @@ public final class GetChannelsBean implements Serializable {
             this.imgs = imgs;
         }
 
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
         public int getShow() {
             return show;
         }
 
         public void setShow(int show) {
             this.show = show;
-        }
-
-        public int getClassId() {
-            return classId;
-        }
-
-        public void setClassId(int classId) {
-            this.classId = classId;
         }
 
         @Keep

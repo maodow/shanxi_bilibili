@@ -1,4 +1,4 @@
-package tv.huan.bilibili.bean;
+package tv.huan.bilibili.bean.base;
 
 import androidx.annotation.Keep;
 
@@ -6,10 +6,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-import lib.kalu.leanback.presenter.bean.TvEpisodesItemBean;
-
 @Keep
-public class MediaBaseImageBean extends TvEpisodesItemBean implements Serializable {
+public class BaseImageBean extends BaseDataBean implements Serializable {
 
     private String poster;
     private String newPicVt;
@@ -19,10 +17,10 @@ public class MediaBaseImageBean extends TvEpisodesItemBean implements Serializab
     private String vipUrl;
 
 
-    public MediaBaseImageBean() {
+    public BaseImageBean() {
     }
 
-    public MediaBaseImageBean(String poster, String newPicVt, String newPicHz) {
+    public BaseImageBean(String poster, String newPicVt, String newPicHz) {
         this.poster = poster;
         this.newPicVt = newPicVt;
         this.newPicHz = newPicHz;
@@ -51,7 +49,7 @@ public class MediaBaseImageBean extends TvEpisodesItemBean implements Serializab
 //        return "http://123.59.196.222/hljbili/public/productCodePic/series91030010010000000000001819pic27875.jpg";
     }
 
-    public void copyPic(MediaBaseImageBean data) {
+    public void copyPic(BaseImageBean data) {
         if (null == data)
             return;
         this.poster = data.poster;

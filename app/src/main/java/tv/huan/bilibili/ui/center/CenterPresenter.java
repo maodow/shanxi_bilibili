@@ -1,21 +1,15 @@
 package tv.huan.bilibili.ui.center;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -36,7 +30,7 @@ import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.HorizontalClassLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.BaseBean;
+import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.format.OptBean;
 import tv.huan.bilibili.http.HttpClient;
@@ -145,23 +139,8 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 }
                 try {
                     FavBean.ItemBean itemBean = mDatas.get(position);
-                    String name = itemBean.getName();
-                    int length = name.length();
-                    if (length > 8) {
-                        name = name.substring(0, 9) + "...";
-                    }
-                    SpannableStringBuilder spannableString = new SpannableStringBuilder();
-                    spannableString.append(name);
-                    int length1 = spannableString.length();
-                    spannableString.setSpan(new AbsoluteSizeSpan(30), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#ffffff")), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    String status = itemBean.getStatus();
-                    spannableString.append("  " + status);
-                    int length2 = spannableString.length();
-                    spannableString.setSpan(new AbsoluteSizeSpan(22), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#303030")), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
-                    textView.setText(spannableString);
+                    textView.setText(itemBean.getPositionRec());
                 } catch (Exception e) {
                 }
                 try {
@@ -227,9 +206,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
                         observableEmitter.onNext(position == 0);
                     }
-                }).flatMap(new Function<Boolean, Observable<BaseBean<FavBean>>>() {
+                }).flatMap(new Function<Boolean, Observable<ResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<BaseBean<FavBean>> apply(Boolean v) {
+                    public Observable<ResponsedBean<FavBean>> apply(Boolean v) {
                         // 观看历史
                         if (v) {
                             return HttpClient.getHttpClient().getHttpApi().getBookmark(0, Integer.MAX_VALUE, null);
@@ -239,9 +218,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             return HttpClient.getHttpClient().getHttpApi().getFavList(0, Integer.MAX_VALUE);
                         }
                     }
-                }).map(new Function<BaseBean<FavBean>, Boolean>() {
+                }).map(new Function<ResponsedBean<FavBean>, Boolean>() {
                     @Override
-                    public Boolean apply(BaseBean<FavBean> response) {
+                    public Boolean apply(ResponsedBean<FavBean> response) {
                         try {
                             mDatas.clear();
                         } catch (Exception e) {
@@ -285,18 +264,18 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         int checkedIndex = classLayout.getCheckedIndex();
                         observableEmitter.onNext(checkedIndex == 0);
                     }
-                }).flatMap(new Function<Boolean, Observable<BaseBean<OptBean>>>() {
+                }).flatMap(new Function<Boolean, Observable<ResponsedBean<OptBean>>>() {
                     @Override
-                    public Observable<BaseBean<OptBean>> apply(Boolean v) {
+                    public Observable<ResponsedBean<OptBean>> apply(Boolean v) {
                         if (v) {
                             return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
                         } else {
                             return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
                         }
                     }
-                }).map(new Function<BaseBean<OptBean>, Integer>() {
+                }).map(new Function<ResponsedBean<OptBean>, Integer>() {
                     @Override
-                    public Integer apply(BaseBean<OptBean> resp) throws Exception {
+                    public Integer apply(ResponsedBean<OptBean> resp) throws Exception {
                         try {
                             boolean succ = resp.getData().isSucc();
                             if (!succ)

@@ -27,7 +27,7 @@
         android:weightSum="5"
         app:rl_scale="1.1">
 
-        <TextView
+        <lib.kalu.leanback.marquee.MarqueeTextView
             android:id="@+id/general_template20b_type1_item1_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -77,7 +77,7 @@
         android:weightSum="5"
         app:rl_scale="1.1">
 
-        <TextView
+        <lib.kalu.leanback.marquee.MarqueeTextView
             android:id="@+id/general_template20b_type1_item2_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -114,14 +114,14 @@
         android:id="@+id/general_template20b_type1_item3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingLeft="@dimen/dp_8"
-        android:paddingRight="@dimen/dp_8"
         android:layout_weight="1"
         android:background="@drawable/bg_selector_common_template20_allb"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:focusable="true"
         android:gravity="center"
+        android:paddingLeft="@dimen/dp_8"
+        android:paddingRight="@dimen/dp_8"
         android:visibility="gone"
         app:rl_scale="1.1">
 
@@ -159,7 +159,7 @@
         android:weightSum="5"
         app:rl_scale="1.1">
 
-        <TextView
+        <lib.kalu.leanback.marquee.MarqueeTextView
             android:id="@+id/general_template20b_type2_item1_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -212,7 +212,7 @@
         android:weightSum="3"
         app:rl_scale="1.1">
 
-        <TextView
+        <lib.kalu.leanback.marquee.MarqueeTextView
             android:id="@+id/general_template20b_type2_item2_name"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -230,7 +230,7 @@
             android:textSize="@dimen/sp_14" />
 
         <TextView
-            android:id="@+id/general_template20b_type2_item2_info"
+            android:id="@+id/general_template20b_type2_item2_date"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dp_4"

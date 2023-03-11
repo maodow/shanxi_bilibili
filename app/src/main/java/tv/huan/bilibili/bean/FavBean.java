@@ -1,14 +1,19 @@
 package tv.huan.bilibili.bean;
 
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+
 import androidx.annotation.Keep;
 
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Create by XIECHENG
- * 2019/3/20 4:40 PM
- */
+import tv.huan.bilibili.bean.base.BaseDataBean;
+import tv.huan.bilibili.bean.base.BaseImageBean;
+
 @Keep
 public class FavBean implements Serializable {
 
@@ -51,27 +56,27 @@ public class FavBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean implements Serializable, JumpBean {
+    public static class ItemBean extends BaseDataBean implements Serializable {
 
         private boolean showDel;
         private String favTime;
-        private int classId;
         private String huanId;
         private int productId;
         private InfoBean album;
-        private int id;
-        private String cid;
         private int itemType = 1;
 
         private int icon;
-        private String title;
         private int index;
-        private int jumpType;
         private String bannerUrl;
 
         private String playTime;
         private String playLength;
         private int pos;
+        private String albumName;
+
+        public void setAlbumName(String albumName) {
+            this.albumName = albumName;
+        }
 
         public void setPlayTime(String playTime) {
             this.playTime = playTime;
@@ -101,13 +106,6 @@ public class FavBean implements Serializable {
             this.showDel = showDel;
         }
 
-        public int getJumpType() {
-            return jumpType;
-        }
-
-        public void setJumpType(int jumpType) {
-            this.jumpType = jumpType;
-        }
 
         public int getIndex() {
             return index;
@@ -125,14 +123,6 @@ public class FavBean implements Serializable {
             this.icon = icon;
         }
 
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
         public int getItemType() {
             return itemType;
         }
@@ -147,20 +137,6 @@ public class FavBean implements Serializable {
 
         public void setFavTime(String favTime) {
             this.favTime = favTime;
-        }
-
-        @Override
-        public int getToType() {
-            return 1;
-        }
-
-        @Override
-        public int getClassId() {
-            return classId;
-        }
-
-        public void setClassId(int classId) {
-            this.classId = classId;
         }
 
         public String getHuanId() {
@@ -187,20 +163,6 @@ public class FavBean implements Serializable {
             this.album = album;
         }
 
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        @Override
-        public String getCid() {
-            return cid;
-        }
-
-        @Override
         public String getName() {
             try {
                 return getAlbum().getTitle();
@@ -209,7 +171,19 @@ public class FavBean implements Serializable {
             }
         }
 
-        public String getStatus() {
+        public String getNameRec() {
+            try {
+                if (pos <= 0) {
+                    return getAlbum().getTitle();
+                } else {
+                    return getAlbum().getTitle() + "(第" + pos + "集)";
+                }
+            } catch (Exception e) {
+                return "";
+            }
+        }
+
+        public String getStatusRec() {
             try {
                 long position = Long.parseLong(playTime);
                 long duration = Long.parseLong(playLength);
@@ -221,20 +195,37 @@ public class FavBean implements Serializable {
             }
         }
 
-        public void setCid(String cid) {
-            this.cid = cid;
+        public CharSequence getPositionRec() {
+            try {
+                String name = getName();
+                int length = name.length();
+                if (length > 8) {
+                    name = name.substring(0, 9) + "...";
+                }
+                SpannableStringBuilder spannableString = new SpannableStringBuilder();
+                spannableString.append(name);
+                int length1 = spannableString.length();
+                spannableString.setSpan(new AbsoluteSizeSpan(30), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#ffffff")), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                String status = getStatusRec();
+                spannableString.append("  " + status);
+                int length2 = spannableString.length();
+                spannableString.setSpan(new AbsoluteSizeSpan(22), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#303030")), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                return spannableString;
+            } catch (Exception e) {
+                return "";
+            }
         }
 
         @Keep
-        public static class InfoBean extends MediaBaseImageBean implements Serializable {
+        public static class InfoBean extends BaseImageBean implements Serializable {
 
             private String code;
-            private String title;
             private int type;
             private String productName;
             private int payStatus;
             private int productType;
-            private String cid;
 
             public String getCode() {
                 return code;
@@ -242,14 +233,6 @@ public class FavBean implements Serializable {
 
             public void setCode(String code) {
                 this.code = code;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
             }
 
             public int getType() {
@@ -282,14 +265,6 @@ public class FavBean implements Serializable {
 
             public void setProductType(int productType) {
                 this.productType = productType;
-            }
-
-            public String getCid() {
-                return cid;
-            }
-
-            public void setCid(String cid) {
-                this.cid = cid;
             }
         }
     }

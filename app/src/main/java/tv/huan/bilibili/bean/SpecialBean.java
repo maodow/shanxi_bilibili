@@ -5,29 +5,21 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 import java.util.List;
 
-@Keep
-public class SpecialBean implements Serializable {
+import tv.huan.bilibili.bean.base.BaseDataBean;
+import tv.huan.bilibili.bean.base.BaseImageBean;
 
-    private int id;
-    private String name;
+@Keep
+public class SpecialBean extends BaseDataBean implements Serializable {
 
     private ImgBean imgs;
 
     private List<ItemBean> list;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public List<ItemBean> getList() {
         if (null != this.list) {
             for (ItemBean t : this.list) {
-                t.setTempTopicId(id);
-                t.setTempTopicName(name);
+                t.setTempTopicId(getId());
+                t.setTempTopicName(getName());
             }
         }
         return list;
@@ -68,8 +60,7 @@ public class SpecialBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean extends MediaBaseImageBean implements JumpBean, Serializable {
-        private String cid;
+    public static class ItemBean extends BaseImageBean implements Serializable {
         private String bindName;
         private int tempTopicId;
         private String tempTopicName;
@@ -79,17 +70,8 @@ public class SpecialBean implements Serializable {
         }
 
         @Override
-        public String getCid() {
-            return cid;
-        }
-
-        @Override
         public String getName() {
             return bindName;
-        }
-
-        public void setCid(String cid) {
-            this.cid = cid;
         }
 
         public int getTempTopicId() {
@@ -111,11 +93,6 @@ public class SpecialBean implements Serializable {
         @Override
         public int getToType() {
             return 1;
-        }
-
-        @Override
-        public int getClassId() {
-            return 0;
         }
     }
 }

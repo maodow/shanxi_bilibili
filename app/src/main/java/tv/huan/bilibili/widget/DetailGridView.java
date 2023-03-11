@@ -15,6 +15,7 @@ import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanJi;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.widget.player.PlayerView;
 
 public final class DetailGridView extends LeanBackVerticalGridView {
     public DetailGridView(@NonNull Context context) {
@@ -108,6 +109,24 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         return contains;
     }
 
+    public long getPlayerPosition() {
+        try {
+            PlayerView playerView = findViewById(R.id.detail_player_item_video);
+            return playerView.getPosition();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public long getPlayerDuraion() {
+        try {
+            PlayerView playerView = findViewById(R.id.detail_player_item_video);
+            return playerView.getDuration();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     public void updateFavor(boolean status) {
         try {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
@@ -139,6 +158,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         } catch (Exception e) {
         }
     }
+
     public void stopFull() {
         try {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();

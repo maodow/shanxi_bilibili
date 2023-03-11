@@ -41,6 +41,11 @@ public class GeneralTemplateClass extends ListTvGridPresenter<GetSubChannelsByCh
     }
 
     @Override
+    public int initPaddingBottom(@NonNull Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_40);
+    }
+
+    @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
         try {
             view.setOnClickListener(new View.OnClickListener() {

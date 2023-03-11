@@ -21,7 +21,7 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.BaseBean;
+import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.GetPopupInfoBean;
 import tv.huan.bilibili.bean.format.WelcomeBean;
@@ -217,18 +217,18 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     }
                 })
                 // 频道接口
-                .flatMap(new Function<WelcomeBean, Observable<BaseBean<GetChannelsBean>>>() {
+                .flatMap(new Function<WelcomeBean, Observable<ResponsedBean<GetChannelsBean>>>() {
                     @Override
-                    public Observable<BaseBean<GetChannelsBean>> apply(WelcomeBean data) {
+                    public Observable<ResponsedBean<GetChannelsBean>> apply(WelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => 频道接口");
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getChannels(1, 100, s);
                     }
                 })
                 // 整理数据
-                .map(new Function<BaseBean<GetChannelsBean>, WelcomeBean>() {
+                .map(new Function<ResponsedBean<GetChannelsBean>, WelcomeBean>() {
                     @Override
-                    public WelcomeBean apply(BaseBean<GetChannelsBean> response) {
+                    public WelcomeBean apply(ResponsedBean<GetChannelsBean> response) {
                         LogUtil.log("WelcomePresenter => request => 整理数据");
 
                         WelcomeBean welcomeBean;

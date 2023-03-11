@@ -8,9 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
-import tv.huan.bilibili.bean.JumpBean;
+import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.ui.center.CenterActivity;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.ui.filter.FilterActivity;
@@ -24,7 +22,7 @@ import tv.huan.bilibili.ui.webview.WebviewActivity;
 
 public class JumpUtil {
 
-    public static void next(@NonNull Context context, @NonNull JumpBean templateBean) {
+    public static void next(@NonNull Context context, @NonNull BaseDataBean templateBean) {
 
         if (null == templateBean)
             return;
@@ -48,7 +46,7 @@ public class JumpUtil {
         }
     }
 
-    public static void nextDetail(@NonNull Context context, @NonNull JumpBean data) {
+    public static void nextDetail(@NonNull Context context, @NonNull BaseDataBean data) {
         try {
             String cid = data.getCid();
             nextDetail(context, cid);
@@ -67,9 +65,9 @@ public class JumpUtil {
         }
     }
 
-    public static void nextFilter(@NonNull Context context, @NonNull JumpBean data) {
+    public static void nextFilter(@NonNull Context context, @NonNull BaseDataBean data) {
         try {
-            String name = data.getFilterSecondTag();
+            String name = data.getFilterCheckedName();
             int classId = data.getFilterId();
             nextFilter(context, name, classId);
         } catch (Exception e) {
@@ -87,7 +85,7 @@ public class JumpUtil {
         }
     }
 
-    public static void nextSpecial(@NonNull Context context, @NonNull JumpBean data) {
+    public static void nextSpecial(@NonNull Context context, @NonNull BaseDataBean data) {
         try {
             int specialId = data.getSpecialId();
 //            int type = data.getSpecialType();

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lib.kalu.leanback.presenter.ListTvPresenterImpl;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -30,6 +31,16 @@ import tv.huan.bilibili.widget.player.PlayerView;
 public class GeneralTemplate21 extends Presenter implements ListTvPresenterImpl {
 
     private GeneralTemplate21List mData = new GeneralTemplate21List();
+
+    @Override
+    public String initRowTitle(Context context) {
+        if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
+            return "模板20";
+        }
+        else{
+            return ListTvPresenterImpl.super.initRowTitle(context);
+        }
+    }
 
     @Override
     public int initPaddingBottom(@NonNull Context context) {

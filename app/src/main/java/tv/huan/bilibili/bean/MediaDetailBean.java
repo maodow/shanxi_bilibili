@@ -5,12 +5,11 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 
 import tv.huan.bilibili.BuildConfig;
+import tv.huan.bilibili.bean.base.BaseImageBean;
 
 @Keep
-public final class MediaDetailBean extends MediaBaseImageBean implements Serializable {
+public final class MediaDetailBean extends BaseImageBean implements Serializable {
 
-    private String cid;
-    private String title;
     private String columnId;
     private int type;
     private int isTrailer;
@@ -160,22 +159,6 @@ public final class MediaDetailBean extends MediaBaseImageBean implements Seriali
 
     public void setPlayType(int playType) {
         this.playType = playType;
-    }
-
-    public String getCid() {
-        return cid;
-    }
-
-    public void setCid(String cid) {
-        this.cid = cid;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getColumnId() {

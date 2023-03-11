@@ -34,7 +34,7 @@ import lib.kalu.leanback.tab.model.TabModelImage;
 import lib.kalu.leanback.tab.model.TabModelText;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.BaseBean;
+import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.format.MainBean;
@@ -412,19 +412,19 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
                         observableEmitter.onNext(true);
                     }
-                }).flatMap(new Function<Boolean, Observable<BaseBean<List<ExitBean>>>>() {
+                }).flatMap(new Function<Boolean, Observable<ResponsedBean<List<ExitBean>>>>() {
                     @Override
-                    public Observable<BaseBean<List<ExitBean>>> apply(Boolean aBoolean) {
+                    public Observable<ResponsedBean<List<ExitBean>>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().getExit(2);
                     }
                 })
                 // 上报
-                .map(new Function<BaseBean<List<ExitBean>>, String>() {
+                .map(new Function<ResponsedBean<List<ExitBean>>, String>() {
                     @Override
-                    public String apply(BaseBean<List<ExitBean>> listBaseBean) {
+                    public String apply(ResponsedBean<List<ExitBean>> listResponsedBean) {
                         ArrayList<ExitBean> list = new ArrayList<>();
                         try {
-                            List<ExitBean> data = listBaseBean.getData();
+                            List<ExitBean> data = listResponsedBean.getData();
                             for (int i = 0; i < 2; i++) {
                                 ExitBean bean = data.get(i);
                                 if (null == bean) continue;

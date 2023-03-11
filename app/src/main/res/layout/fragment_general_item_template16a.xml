@@ -19,9 +19,10 @@
         android:orientation="horizontal"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
+        android:visibility="gone"
         app:rl_scale="1.1">
 
-        <TextView
+        <lib.kalu.leanback.marquee.MarqueeTextView
             android:id="@+id/general_item_template16a_rec1_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -60,9 +61,10 @@
         android:orientation="horizontal"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
+        android:visibility="gone"
         app:rl_scale="1.1">
 
-        <TextView
+        <lib.kalu.leanback.marquee.MarqueeTextView
             android:id="@+id/general_item_template16a_rec2_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -101,9 +103,10 @@
         android:orientation="horizontal"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
+        android:visibility="gone"
         app:rl_scale="1.1">
 
-        <TextView
+        <lib.kalu.leanback.marquee.MarqueeTextView
             android:id="@+id/general_item_template16a_rec3_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -142,9 +145,10 @@
         android:orientation="horizontal"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
+        android:visibility="gone"
         app:rl_scale="1.1">
 
-        <TextView
+        <lib.kalu.leanback.marquee.MarqueeTextView
             android:id="@+id/general_item_template16a_rec4_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -183,9 +187,10 @@
         android:orientation="horizontal"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
+        android:visibility="gone"
         app:rl_scale="1.1">
 
-        <TextView
+        <lib.kalu.leanback.marquee.MarqueeTextView
             android:id="@+id/general_item_template16a_rec5_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -210,6 +215,62 @@
             android:text="-"
             android:textColor="#8d8fa8"
             android:textSize="11sp" />
+
+    </lib.kalu.leanback.focus.FocusLinearLayout>
+
+    <lib.kalu.leanback.focus.FocusLinearLayout
+        android:id="@+id/general_item_template16a_all1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_selector_general_template16_rec_bottom"
+        android:focusable="true"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:visibility="gone"
+        app:rl_scale="1.1">
+
+        <TextView
+            android:id="@+id/general_item_template16a_all1_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:gravity="center"
+            android:text="@string/template_rec"
+            android:textColor="@color/color_aaaaaa"
+            android:textSize="@dimen/sp_14" />
+
+    </lib.kalu.leanback.focus.FocusLinearLayout>
+
+    <lib.kalu.leanback.focus.FocusLinearLayout
+        android:id="@+id/general_item_template16a_all2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_selector_general_template16_rec_all"
+        android:focusable="true"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:visibility="gone"
+        app:rl_scale="1.1">
+
+        <lib.kalu.leanback.plus.TextViewPlus
+            android:id="@+id/general_item_template16a_all2_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_selector_common_rec"
+            android:drawablePadding="@dimen/dp_13"
+            android:focusable="false"
+            android:gravity="center"
+            android:text="@string/template_rec"
+            android:textColor="@color/color_aaaaaa"
+            android:textSize="@dimen/sp_14"
+            app:tvp_drawable_top_height="@dimen/dp_44"
+            app:tvp_drawable_top_width="@dimen/dp_44" />
 
     </lib.kalu.leanback.focus.FocusLinearLayout>
 

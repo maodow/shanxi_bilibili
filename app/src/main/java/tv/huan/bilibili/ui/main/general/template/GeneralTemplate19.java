@@ -23,6 +23,7 @@ import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.leanback.list.RecyclerViewHorizontal;
 import lib.kalu.leanback.presenter.ListTvFullPresenter;
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
@@ -32,6 +33,16 @@ import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
 public final class GeneralTemplate19 extends ListTvFullPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public String initRowTitle(Context context) {
+        if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
+            return "模板19";
+        }
+        else{
+            return super.initRowTitle(context);
+        }
+    }
 
     @Override
     public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {

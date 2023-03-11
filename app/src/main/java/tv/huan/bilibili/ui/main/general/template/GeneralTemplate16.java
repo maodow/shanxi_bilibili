@@ -3,15 +3,16 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,15 +27,26 @@ import lib.kalu.frame.mvp.util.CacheUtil;
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.round.RoundLinearLayout;
 import lib.kalu.leanback.round.RoundRelativeLayout;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
-import tv.huan.bilibili.bean.format.LookBean;
 import tv.huan.bilibili.bean.MessageBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
 public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public String initRowTitle(Context context) {
+        if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
+            return "模板16";
+        }
+        else{
+            return super.initRowTitle(context);
+        }
+    }
 
     @Override
     public int initPaddingBottom(@NonNull Context context) {
@@ -113,7 +125,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
             GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
             if (null == bean)
                 continue;
-            bean.setGeneralTemplate17Selected(i == position);
+            bean.setTempChecked(i == position);
         }
     }
 
@@ -126,7 +138,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
             }
             for (int i = 2; i < size; i++) {
                 GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
-                boolean selected = bean.isGeneralTemplate17Selected();
+                boolean selected = bean.isTempChecked();
                 if (selected) {
                     if (i >= 6) {
                         if (size >= 3) {
@@ -153,7 +165,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
             }
             for (int i = 2; i < size; i++) {
                 GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
-                boolean selected = bean.isGeneralTemplate17Selected();
+                boolean selected = bean.isTempChecked();
                 if (selected) {
                     position = i;
                     break;
@@ -307,19 +319,19 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
     }
 
     public final void refreshRecs(@NonNull Context context, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
-        try {
-            String s = CacheUtil.getCache(context, "user_look");
-            Type type = new TypeToken<ArrayList<LookBean>>() {
-            }.getType();
-            ArrayList<LookBean> recs = new Gson().fromJson(s, type);
-            if (null == recs) {
-                recs = new ArrayList<>();
-            }
-            GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(0);
-            bean.setGeneralTemplate17Recs(recs);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String s = CacheUtil.getCache(context, "user_look");
+//            Type type = new TypeToken<ArrayList<LookBean>>() {
+//            }.getType();
+//            ArrayList<LookBean> recs = new Gson().fromJson(s, type);
+//            if (null == recs) {
+//                recs = new ArrayList<>();
+//            }
+//            GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(0);
+//            bean.setGeneralTemplate17Recs(recs);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 //        Toast.makeText(FrameContext.getApplicationContext(), "refreshRecs", Toast.LENGTH_SHORT).show();
     }
 
@@ -330,37 +342,163 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
             // 左侧
             if (i == 1) {
 
-//                    view.findViewById(ids[j]).setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            int id = v.getId();
-//                            // img
-//                            if (id == R.id.general_item_template17a_img) {
-//                                int position = viewHolder.getAbsoluteAdapterPosition();
-//                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-//                                JumpUtil.next(v.getContext(), bean);
-//                            }
-//                            // all
-//                            else if (id == R.id.general_item_template17a_class1_all || id == R.id.general_item_template17a_class2_all || id == R.id.general_item_template17a_class3_all) {
-//                                JumpUtil.nextCenter(v.getContext(), true);
-//                            }
-//                            // rec1
-//                            else if (id == R.id.general_item_template17a_class2_rec1 || id == R.id.general_item_template17a_class3_rec1) {
-//                                int position = viewHolder.getAbsoluteAdapterPosition();
-//                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-//                                List<LookBean> lookBeans = bean.getGeneralTemplate17Recs();
-//                                LookBean lookBean = lookBeans.get(0);
-//                                JumpUtil.next(v.getContext(), lookBean);
-//                            }
-//                            // rec2
-//                            else if (id == R.id.general_item_template17a_class3_rec2) {
-//                                int position = viewHolder.getAbsoluteAdapterPosition();
-//                                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-//                                List<LookBean> lookBeans = bean.getGeneralTemplate17Recs();
-//                                LookBean lookBean = lookBeans.get(1);
-//                                JumpUtil.next(v.getContext(), lookBean);
-//                            }
-//                        }
+                // onClick
+                for (int m = 0; m < 7; m++) {
+                    View v;
+                    if (m == 0) {
+                        v = view.findViewById(R.id.general_item_template16a_rec1);
+                    } else if (m == 1) {
+                        v = view.findViewById(R.id.general_item_template16a_rec2);
+                    } else if (m == 2) {
+                        v = view.findViewById(R.id.general_item_template16a_rec3);
+                    } else if (m == 3) {
+                        v = view.findViewById(R.id.general_item_template16a_rec4);
+                    } else if (m == 4) {
+                        v = view.findViewById(R.id.general_item_template16a_rec5);
+                    } else if (m == 5) {
+                        v = view.findViewById(R.id.general_item_template16a_all1);
+                    } else {
+                        v = view.findViewById(R.id.general_item_template16a_all2);
+                    }
+
+                    v.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int id = view.getId();
+                            if (id == R.id.general_item_template16a_rec1) {
+                                try {
+                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(0);
+                                    itemBean.setToType(1);
+                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    JumpUtil.next(view.getContext(), itemBean);
+                                } catch (Exception e) {
+                                    LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
+                                }
+                            } else if (id == R.id.general_item_template16a_rec2) {
+                                try {
+                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(1);
+                                    itemBean.setToType(1);
+                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    JumpUtil.next(view.getContext(), itemBean);
+                                } catch (Exception e) {
+                                    LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
+                                }
+                            } else if (id == R.id.general_item_template16a_rec3) {
+                                try {
+                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(2);
+                                    itemBean.setToType(1);
+                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    JumpUtil.next(view.getContext(), itemBean);
+                                } catch (Exception e) {
+                                    LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
+                                }
+                            } else if (id == R.id.general_item_template16a_rec4) {
+                                try {
+                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(3);
+                                    itemBean.setToType(1);
+                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    JumpUtil.next(view.getContext(), itemBean);
+                                } catch (Exception e) {
+                                    LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
+                                }
+                            } else if (id == R.id.general_item_template16a_rec5) {
+                                try {
+                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(4);
+                                    itemBean.setToType(1);
+                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    JumpUtil.next(view.getContext(), itemBean);
+                                } catch (Exception e) {
+                                    LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
+                                }
+                            } else {
+                                JumpUtil.nextCenter(view.getContext(), false);
+                            }
+                        }
+                    });
+                }
+
+                // onFocus
+                for (int m = 0; m < 7; m++) {
+                    View v;
+                    if (m == 0) {
+                        v = view.findViewById(R.id.general_item_template16a_rec1);
+                    } else if (m == 1) {
+                        v = view.findViewById(R.id.general_item_template16a_rec2);
+                    } else if (m == 2) {
+                        v = view.findViewById(R.id.general_item_template16a_rec3);
+                    } else if (m == 3) {
+                        v = view.findViewById(R.id.general_item_template16a_rec4);
+                    } else if (m == 4) {
+                        v = view.findViewById(R.id.general_item_template16a_rec5);
+                    } else if (m == 5) {
+                        v = view.findViewById(R.id.general_item_template16a_all1);
+                    } else {
+                        v = view.findViewById(R.id.general_item_template16a_all2);
+                    }
+
+                    v.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View view, boolean b) {
+
+                            @IdRes
+                            int nameId;
+                            @IdRes
+                            int dataId;
+                            @IdRes
+                            int allId;
+
+                            if (view.getId() == R.id.general_item_template16a_rec1) {
+                                nameId = R.id.general_item_template16a_rec1_name;
+                                dataId = R.id.general_item_template16a_rec1_position;
+                                allId = 0;
+                            } else if (view.getId() == R.id.general_item_template16a_rec2) {
+                                nameId = R.id.general_item_template16a_rec2_name;
+                                dataId = R.id.general_item_template16a_rec2_position;
+                                allId = 0;
+                            } else if (view.getId() == R.id.general_item_template16a_rec3) {
+                                nameId = R.id.general_item_template16a_rec3_name;
+                                dataId = R.id.general_item_template16a_rec3_position;
+                                allId = 0;
+                            } else if (view.getId() == R.id.general_item_template16a_rec4) {
+                                nameId = R.id.general_item_template16a_rec4_name;
+                                dataId = R.id.general_item_template16a_rec4_position;
+                                allId = 0;
+                            } else if (view.getId() == R.id.general_item_template16a_rec5) {
+                                nameId = R.id.general_item_template16a_rec5_name;
+                                dataId = R.id.general_item_template16a_rec5_position;
+                                allId = 0;
+                            } else if (view.getId() == R.id.general_item_template16a_all1) {
+                                nameId = 0;
+                                dataId = 0;
+                                allId = R.id.general_item_template16a_all1_name;
+                            } else {
+                                nameId = 0;
+                                dataId = 0;
+                                allId = R.id.general_item_template16a_all2_name;
+                            }
+
+                            try {
+                                TextView textName = v.findViewById(nameId);
+                                textName.setActivated(b);
+                                textName.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                                textName.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                                TextView textData = v.findViewById(dataId);
+                                textData.setActivated(b);
+                                textData.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                                textData.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                            } catch (Exception e) {
+                            }
+
+                            try {
+                                TextView allName = v.findViewById(allId);
+                                allName.setActivated(b);
+                                allName.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                                allName.setTextColor(v.getResources().getColor(b ? R.color.color_black : R.color.color_aaaaaa));
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+                }
             }
             // 中间
             else if (i == 2) {
@@ -437,30 +575,57 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
 
         // left
         if (viewType == 1) {
-//            // a
-//            TextView vTxt = v.findViewById(R.id.general_item_template17a_name);
-//            vTxt.setText(templateBean.getName());
-//            // b
-//            ImageView vImg = v.findViewById(R.id.general_item_template17a_img);
-//            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
-//            // c
-//            int num = 2;
-//            v.findViewById(R.id.general_template17a_type1_item1).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
-//            v.findViewById(R.id.general_template17a_type1_item2).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
-//            v.findViewById(R.id.general_template17a_type1_item3).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
-//            v.findViewById(R.id.general_template17a_type2_item1).setVisibility(num == 1 ? View.VISIBLE : View.GONE);
-//            v.findViewById(R.id.general_template17a_type2_item2).setVisibility(num == 1 ? View.VISIBLE : View.GONE);
-//            v.findViewById(R.id.general_template17a_type3).setVisibility(num <= 0 ? View.VISIBLE : View.GONE);
-//            if (num >= 1) {
-//                ((TextView) v.findViewById(R.id.general_template17a_type1_item1_name)).setText("1");
-//                ((TextView) v.findViewById(R.id.general_template17a_type1_item1_date)).setText("观看至：1");
-//                ((TextView) v.findViewById(R.id.general_template17a_type2_item1_name)).setText("1");
-//                ((TextView) v.findViewById(R.id.general_template17a_type2_item1_date)).setText("观看至：1");
-//            }
-//            if (num >= 2) {
-//                ((TextView) v.findViewById(R.id.general_template17a_type1_item2_name)).setText("2");
-//                ((TextView) v.findViewById(R.id.general_template17a_type1_item2_date)).setText("观看至：2");
-//            }
+
+            // visable
+            try {
+                FavBean fav = templateBean.getTempFav();
+                int num = fav.getRows().size();
+                v.findViewById(R.id.general_item_template16a_rec1).setVisibility(num >= 1 ? View.VISIBLE : View.GONE);
+                v.findViewById(R.id.general_item_template16a_rec2).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+                v.findViewById(R.id.general_item_template16a_rec3).setVisibility(num >= 3 ? View.VISIBLE : View.GONE);
+                v.findViewById(R.id.general_item_template16a_rec4).setVisibility(num >= 4 ? View.VISIBLE : View.GONE);
+                v.findViewById(R.id.general_item_template16a_rec5).setVisibility(num >= 5 ? View.VISIBLE : View.GONE);
+                v.findViewById(R.id.general_item_template16a_all1).setVisibility(num > 1 && num < 5 ? View.VISIBLE : View.GONE);
+                v.findViewById(R.id.general_item_template16a_all2).setVisibility(num <= 0 ? View.VISIBLE : View.GONE);
+            } catch (Exception e) {
+                LogUtil.log("GeneralTemplate16 => onBindHolder => " + e.getMessage());
+                v.findViewById(R.id.general_item_template16a_rec1).setVisibility(View.GONE);
+                v.findViewById(R.id.general_item_template16a_rec2).setVisibility(View.GONE);
+                v.findViewById(R.id.general_item_template16a_rec3).setVisibility(View.GONE);
+                v.findViewById(R.id.general_item_template16a_rec4).setVisibility(View.GONE);
+                v.findViewById(R.id.general_item_template16a_rec5).setVisibility(View.GONE);
+                v.findViewById(R.id.general_item_template16a_all1).setVisibility(View.GONE);
+                v.findViewById(R.id.general_item_template16a_all2).setVisibility(View.VISIBLE);
+            }
+
+            for (int m = 0; m < 5; m++) {
+                TextView textName;
+                TextView textDate;
+                if (m == 0) {
+                    textName = v.findViewById(R.id.general_item_template16a_rec1_name);
+                    textDate = v.findViewById(R.id.general_item_template16a_rec1_position);
+                } else if (m == 1) {
+                    textName = v.findViewById(R.id.general_item_template16a_rec2_name);
+                    textDate = v.findViewById(R.id.general_item_template16a_rec2_position);
+                } else if (m == 2) {
+                    textName = v.findViewById(R.id.general_item_template16a_rec3_name);
+                    textDate = v.findViewById(R.id.general_item_template16a_rec3_position);
+                } else if (m == 3) {
+                    textName = v.findViewById(R.id.general_item_template16a_rec4_name);
+                    textDate = v.findViewById(R.id.general_item_template16a_rec4_position);
+                } else {
+                    textName = v.findViewById(R.id.general_item_template16a_rec5_name);
+                    textDate = v.findViewById(R.id.general_item_template16a_rec5_position);
+                }
+
+                try {
+                    FavBean.ItemBean itemBean = templateBean.getTempFav().getRows().get(m);
+                    textName.setText(itemBean.getNameRec());
+                    textDate.setText(itemBean.getStatusRec());
+                } catch (Exception e) {
+                    LogUtil.log("GeneralTemplate16 => onBindHolder => " + e.getMessage());
+                }
+            }
         }
         // center
         else if (viewType == 2) {
@@ -470,7 +635,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
         // right
         else {
             boolean hasFocus = v.hasFocus();
-            boolean selected = templateBean.isGeneralTemplate17Selected();
+            boolean selected = templateBean.isTempChecked();
             // 2
             TextView vName = v.findViewById(R.id.general_template16_name);
             vName.setText(templateBean.getName());

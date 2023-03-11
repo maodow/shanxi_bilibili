@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -23,6 +24,15 @@ import tv.huan.bilibili.utils.JumpUtil;
 
 public class GeneralTemplate9 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
+    @Override
+    public String initRowTitle(Context context) {
+        if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
+            return "模板9";
+        }
+        else{
+            return super.initRowTitle(context);
+        }
+    }
     @Override
     public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view);

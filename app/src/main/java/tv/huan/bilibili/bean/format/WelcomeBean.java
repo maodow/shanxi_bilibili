@@ -2,14 +2,14 @@ package tv.huan.bilibili.bean.format;
 
 import java.io.Serializable;
 
-public final class WelcomeBean implements Serializable {
+import tv.huan.bilibili.bean.base.BaseDataBean;
+
+public final class WelcomeBean extends BaseDataBean implements Serializable {
 
     private int adTime;
     private String adUrl;
     private int select;
     private int type;
-    private String cid;
-    private int classId;
     private String secondTag;
     private String data;
 
@@ -43,22 +43,6 @@ public final class WelcomeBean implements Serializable {
 
     public void setType(int type) {
         this.type = type;
-    }
-
-    public String getCid() {
-        return cid;
-    }
-
-    public void setCid(String cid) {
-        this.cid = cid;
-    }
-
-    public int getClassId() {
-        return classId;
-    }
-
-    public void setClassId(int classId) {
-        this.classId = classId;
     }
 
     public String getSecondTag() {

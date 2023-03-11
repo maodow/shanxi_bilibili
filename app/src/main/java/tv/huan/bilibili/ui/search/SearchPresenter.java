@@ -28,7 +28,7 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.BaseBean;
+import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
@@ -150,9 +150,9 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                     public void subscribe(ObservableEmitter<Boolean> emitter) {
                         emitter.onNext(null != s && s.length() >= 0);
                     }
-                }).flatMap(new Function<Boolean, Observable<BaseBean<SearchBean>>>() {
+                }).flatMap(new Function<Boolean, Observable<ResponsedBean<SearchBean>>>() {
                     @Override
-                    public Observable<BaseBean<SearchBean>> apply(Boolean aBoolean) {
+                    public Observable<ResponsedBean<SearchBean>> apply(Boolean aBoolean) {
                         // 搜索key
                         if (aBoolean) {
                             return HttpClient.getHttpClient().getHttpApi().searchBySpell(s, 0, Integer.MAX_VALUE, "1");
@@ -162,17 +162,17 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                             return HttpClient.getHttpClient().getHttpApi().getSearchRecommend(BoxUtil.getProdId(), Integer.MAX_VALUE, "2");
                         }
                     }
-                }).map(new Function<BaseBean<SearchBean>, Boolean>() {
+                }).map(new Function<ResponsedBean<SearchBean>, Boolean>() {
                     @Override
-                    public Boolean apply(BaseBean<SearchBean> searchBeanBaseBean) {
+                    public Boolean apply(ResponsedBean<SearchBean> searchBeanResponsedBean) {
 
                         mData.clear();
-                        String extra = searchBeanBaseBean.getExtra();
+                        String extra = searchBeanResponsedBean.getExtra();
                         LogUtil.log("SearchPresenter => request => extra = " + extra);
                         // 搜索key
                         if ("1".equals(extra)) {
                             LogUtil.log("SearchPresenter => request => 搜索key");
-                            List<SearchBean.ItemBean> albums = searchBeanBaseBean.getData().getAlbums();
+                            List<SearchBean.ItemBean> albums = searchBeanResponsedBean.getData().getAlbums();
                             if (null != albums && albums.size() > 0) {
                                 mData.addAll(albums);
                             }
@@ -180,7 +180,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         // 搜索推荐
                         else if ("2".equals(extra)) {
                             LogUtil.log("SearchPresenter => request => 搜索推荐");
-                            List<SearchBean.ItemBean> recommends = searchBeanBaseBean.getData().getRecommends();
+                            List<SearchBean.ItemBean> recommends = searchBeanResponsedBean.getData().getRecommends();
                             if (null != recommends && recommends.size() > 0) {
                                 mData.addAll(recommends);
                             }

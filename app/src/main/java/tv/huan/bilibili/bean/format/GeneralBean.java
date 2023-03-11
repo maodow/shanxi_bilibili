@@ -4,19 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
+import tv.huan.bilibili.bean.base.BaseDataBean;
 
-public final class GeneralBean implements Serializable {
+public final class GeneralBean extends BaseDataBean implements Serializable {
 
-    private int classId;
     private List<GetSubChannelsByChannelBean.ListBean> datas;
-
-    public int getClassId() {
-        return classId;
-    }
-
-    public void setClassId(int classId) {
-        this.classId = classId;
-    }
 
     public List<GetSubChannelsByChannelBean.ListBean> getDatas() {
         return datas;

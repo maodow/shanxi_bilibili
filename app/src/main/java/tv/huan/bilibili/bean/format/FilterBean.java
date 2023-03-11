@@ -1,4 +1,4 @@
-package tv.huan.bilibili.bean;
+package tv.huan.bilibili.bean.format;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -6,12 +6,12 @@ import java.util.List;
 
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.tags.model.TagBean;
+import tv.huan.bilibili.bean.base.BaseDataBean;
 
-public final class FilterBean implements Serializable {
+public final class FilterBean extends BaseDataBean implements Serializable {
 
-    private int filterId;
+    private int filterCheckPosition;
     private String filterTitle;
-//    private List<GetSubChannelsByChannelBean.ClassesBean> filterDatas;
     private List<ClassBean> filterClass;
     private LinkedHashMap<String, List<TagBean>> filterTags;
 
@@ -31,14 +31,6 @@ public final class FilterBean implements Serializable {
         this.filterClass = filterClass;
     }
 
-    public int getFilterId() {
-        return filterId;
-    }
-
-    public void setFilterId(int filterId) {
-        this.filterId = filterId;
-    }
-
     public String getFilterTitle() {
         return filterTitle;
     }
@@ -46,12 +38,12 @@ public final class FilterBean implements Serializable {
     public void setFilterTitle(String filterTitle) {
         this.filterTitle = filterTitle;
     }
-//
-//    public List<GetSubChannelsByChannelBean.ClassesBean> getFilterDatas() {
-//        return filterDatas;
-//    }
-//
-//    public void setFilterDatas(List<GetSubChannelsByChannelBean.ClassesBean> filterDatas) {
-//        this.filterDatas = filterDatas;
-//    }
+
+    public int getFilterCheckPosition() {
+        return filterCheckPosition;
+    }
+
+    public void setFilterCheckPosition(int filterCheckPosition) {
+        this.filterCheckPosition = filterCheckPosition;
+    }
 }

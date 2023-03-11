@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/color_white" />
+                    <corners android:radius="@dimen/dp_8" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/color_303030" />
+                    <corners android:bottomLeftRadius="@dimen/dp_8" android:topLeftRadius="@dimen/dp_8" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

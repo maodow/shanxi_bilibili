@@ -5,6 +5,8 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 import java.util.List;
 
+import tv.huan.bilibili.bean.base.BaseImageBean;
+
 /**
  * Create by XIECHENG
  * 2019/4/1 3:39 PM
@@ -23,9 +25,7 @@ public class GetSecondTagAlbumsBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean extends MediaBaseImageBean implements JumpBean, Serializable {
-        private String cid;
-        private String title;
+    public static class ItemBean extends BaseImageBean implements Serializable {
         private int type;
 
         @Override
@@ -34,30 +34,8 @@ public class GetSecondTagAlbumsBean implements Serializable {
         }
 
         @Override
-        public int getClassId() {
-            return getType();
-        }
-
-        @Override
-        public String getCid() {
-            return cid;
-        }
-
-        @Override
         public String getName() {
             return getTitle();
-        }
-
-        public void setCid(String cid) {
-            this.cid = cid;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
         }
 
         public int getType() {

@@ -105,8 +105,8 @@
         android:layout_marginLeft="@dimen/dp_48"
         android:layout_marginRight="@dimen/dp_48"
         android:layout_toRightOf="@id/filter_title"
-        android:minHeight="0dp"
         android:focusable="true"
+        android:minHeight="0dp"
         android:orientation="vertical"
         android:paddingBottom="@dimen/dp_4"
         android:visibility="gone"
@@ -115,17 +115,35 @@
         app:tag_text_padding_right="@dimen/dp_23"
         app:tag_text_size="@dimen/sp_17" />
 
-    <lib.kalu.leanback.list.RecyclerViewGrid
-        android:id="@+id/filter_content"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/filter_tags"
         android:layout_toRightOf="@id/filter_title"
         android:clipChildren="false"
-        android:clipToPadding="false"
-        android:paddingLeft="@dimen/dp_48"
-        android:paddingTop="@dimen/dp_14"
-        android:paddingRight="@dimen/dp_48"
-        android:paddingBottom="@dimen/dp_14" />
+        android:clipToPadding="false">
+
+        <lib.kalu.leanback.list.RecyclerViewGrid
+            android:id="@+id/filter_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingLeft="@dimen/dp_48"
+            android:paddingTop="@dimen/dp_14"
+            android:paddingRight="@dimen/dp_48"
+            android:paddingBottom="@dimen/dp_14" />
+
+        <!-- noData -->
+        <ImageView
+            android:id="@+id/filter_nodata"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_177"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_nodata"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

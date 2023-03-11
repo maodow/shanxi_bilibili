@@ -5,6 +5,9 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 import java.util.List;
 
+import tv.huan.bilibili.bean.base.BaseDataBean;
+import tv.huan.bilibili.bean.base.BaseImageBean;
+
 /**
  * Create by XIECHENG
  * 2019/3/18 2:06 PM
@@ -42,15 +45,11 @@ public class SearchBean implements Serializable {
     }
 
     @Keep
-    public static class KeyBean implements Serializable {
+    public static class KeyBean extends BaseDataBean implements Serializable {
 
-        private int id;
-        private String name;
         private String poster;
         private int pos;
         private int status;
-        private int classId;
-        private String cid;
         private String jumpUrl;
         private int platformId;
         private String type;
@@ -62,22 +61,6 @@ public class SearchBean implements Serializable {
 
         public void setPayStatus(String payStatus) {
             this.payStatus = payStatus;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
 
         public String getPoster() {
@@ -102,22 +85,6 @@ public class SearchBean implements Serializable {
 
         public void setStatus(int status) {
             this.status = status;
-        }
-
-        public int getClassId() {
-            return classId;
-        }
-
-        public void setClassId(int classId) {
-            this.classId = classId;
-        }
-
-        public String getCid() {
-            return cid;
-        }
-
-        public void setCid(String cid) {
-            this.cid = cid;
         }
 
         public String getJumpUrl() {
@@ -146,46 +113,11 @@ public class SearchBean implements Serializable {
     }
 
     @Keep
-    public static class ItemBean extends MediaBaseImageBean implements JumpBean, Serializable {
-
-        private String cid;
-        private String title;
-        private String name;
-
-        public void setName(String name) {
-            this.name = name;
-        }
+    public static class ItemBean extends BaseImageBean implements Serializable {
 
         @Override
         public int getToType() {
             return 1;
-        }
-
-        @Override
-        public int getClassId() {
-            return 0;
-        }
-
-        public String getCid() {
-            return cid;
-        }
-
-        public void setCid(String cid) {
-            this.cid = cid;
-        }
-
-        public String getName() {
-            if (null != title && title.length() > 0) {
-                return title;
-            } else if (null != name && name.length() > 0) {
-                return name;
-            } else {
-                return null;
-            }
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
         }
 
     }

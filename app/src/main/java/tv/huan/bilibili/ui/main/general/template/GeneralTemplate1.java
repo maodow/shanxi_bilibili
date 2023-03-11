@@ -21,6 +21,7 @@ import java.util.List;
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.round.RoundLinearLayout;
 import lib.kalu.leanback.round.RoundRelativeLayout;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.MessageBean;
@@ -29,6 +30,16 @@ import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
 public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public String initRowTitle(Context context) {
+        if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
+            return "模板1";
+        }
+        else{
+            return super.initRowTitle(context);
+        }
+    }
 
     @Override
     public int initPaddingBottom(@NonNull Context context) {
@@ -147,7 +158,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
         // 文字
         else {
             boolean hasFocus = v.hasFocus();
-            boolean selected = templateBean.isGeneralTemplate17Selected();
+            boolean selected = templateBean.isTempChecked();
             // 2
             TextView vName = v.findViewById(R.id.album_item_template01_name);
             vName.setText(templateBean.getName());
@@ -238,7 +249,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
             GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
             if (null == bean)
                 continue;
-            bean.setGeneralTemplate17Selected(i == position);
+            bean.setTempChecked(i == position);
         }
     }
 
@@ -251,7 +262,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
             }
             for (int i = 1; i < size; i++) {
                 GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
-                boolean selected = bean.isGeneralTemplate17Selected();
+                boolean selected = bean.isTempChecked();
                 if (selected) {
                     if (i >= 6) {
                         if (size >= 3) {
@@ -278,7 +289,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
             }
             for (int i = 1; i < size; i++) {
                 GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
-                boolean selected = bean.isGeneralTemplate17Selected();
+                boolean selected = bean.isChecked();
                 if (selected) {
                     position = i;
                     break;

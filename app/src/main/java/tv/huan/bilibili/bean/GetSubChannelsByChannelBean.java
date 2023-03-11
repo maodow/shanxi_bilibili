@@ -1,14 +1,14 @@
 package tv.huan.bilibili.bean;
 
 import androidx.annotation.Keep;
-import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.List;
 
 import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
 import tv.huan.bilibili.BuildConfig;
-import tv.huan.bilibili.bean.format.LookBean;
+import tv.huan.bilibili.bean.base.BaseDataBean;
+import tv.huan.bilibili.bean.base.BaseImageBean;
 
 @Keep
 public class GetSubChannelsByChannelBean implements Serializable {
@@ -103,56 +103,40 @@ public class GetSubChannelsByChannelBean implements Serializable {
         }
 
         @Keep
-        public static class TemplateBean extends MediaBaseImageBean implements JumpBean, TvPresenterRowBean, Serializable {
+        public static class TemplateBean extends BaseImageBean implements TvPresenterRowBean, Serializable {
 
             private boolean tempShow;
             private String tempTitle;
+            private FavBean tempFav;
+            private boolean tempChecked;
 
-            private String name;
-            private String cid;
-            private int classId;
-            private int toType;
-
-            private List<LookBean> generalTemplate17Recs;
-            private boolean generalTemplate17Selected = false;
 
             public TemplateBean() {
             }
 
-            public TemplateBean(String poster, String newPicVt, String newPicHz, boolean tempShow, String tempTitle, String name, String cid, int classId, int toType, List<LookBean> generalTemplate17Recs, boolean generalTemplate17Selected) {
-                super(poster, newPicVt, newPicHz);
-                this.tempShow = tempShow;
-                this.tempTitle = tempTitle;
-                this.name = name;
-                this.cid = cid;
-                this.classId = classId;
-                this.toType = toType;
-                this.generalTemplate17Recs = generalTemplate17Recs;
-                this.generalTemplate17Selected = generalTemplate17Selected;
+
+            public boolean isTempChecked() {
+                return tempChecked;
             }
 
-            public List<LookBean> getGeneralTemplate17Recs() {
-                return generalTemplate17Recs;
+            public void setTempChecked(boolean tempChecked) {
+                this.tempChecked = tempChecked;
             }
 
-            public void setGeneralTemplate17Recs(List<LookBean> generalTemplate17Recs) {
-                this.generalTemplate17Recs = generalTemplate17Recs;
+            public boolean isTempShow() {
+                return tempShow;
             }
 
-            public boolean isGeneralTemplate17Selected() {
-                return generalTemplate17Selected;
+            public String getTempTitle() {
+                return tempTitle;
             }
 
-            public void setGeneralTemplate17Selected(boolean generalTemplate17Selected) {
-                this.generalTemplate17Selected = generalTemplate17Selected;
+            public FavBean getTempFav() {
+                return tempFav;
             }
 
-            public int getClassId() {
-                return classId;
-            }
-
-            public void setClassId(int classId) {
-                this.classId = classId;
+            public void setTempFav(FavBean tempFav) {
+                this.tempFav = tempFav;
             }
 
             public void setTempShow(boolean tempShow) {
@@ -161,30 +145,6 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
             public void setTempTitle(String tempTitle) {
                 this.tempTitle = tempTitle;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public String getCid() {
-                return cid;
-            }
-
-            public void setCid(String cid) {
-                this.cid = cid;
-            }
-
-            public int getToType() {
-                return toType;
-            }
-
-            public void setToType(int toType) {
-                this.toType = toType;
             }
 
             @Override
@@ -197,42 +157,16 @@ public class GetSubChannelsByChannelBean implements Serializable {
                     return null;
                 }
             }
-
-            @Override
-            public TemplateBean clone() {
-                String picture = getPicture(false);
-                String picture1 = getPicture(true);
-                return new TemplateBean(picture, picture, picture1, tempShow, tempTitle, name, cid, classId, toType, generalTemplate17Recs, generalTemplate17Selected);
-            }
         }
     }
 
-    public static class ClassesBean implements Serializable {
-        /**
-         * id : 119
-         * productId : 1
-         * name : 动作
-         * parentId : 1
-         * hasNext : 0
-         * pos : 1
-         * status : 1
-         */
+    public static class ClassesBean  extends BaseDataBean implements Serializable {
 
-        private int id;
         private int productId;
-        private String name;
         private int parentId;
         private int hasNext;
         private int pos;
         private int status;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
 
         public int getProductId() {
             return productId;
@@ -240,14 +174,6 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
         public void setProductId(int productId) {
             this.productId = productId;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
 
         public int getParentId() {
@@ -284,24 +210,6 @@ public class GetSubChannelsByChannelBean implements Serializable {
     }
 
     @Keep
-    public static class ClassParentBean implements Serializable {
-        private int id;
-        private String name;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
+    public static class ClassParentBean extends BaseDataBean implements Serializable {
     }
 }

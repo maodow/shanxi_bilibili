@@ -7,9 +7,10 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
+import tv.huan.bilibili.bean.base.BaseImageBean;
 
 @Keep
-public class MediaBean extends MediaBaseImageBean implements Serializable, TvPresenterRowBean, JumpBean {
+public class MediaBean extends BaseImageBean implements Serializable, TvPresenterRowBean {
 
     @Override
     public MediaBean clone() {
@@ -34,9 +35,6 @@ public class MediaBean extends MediaBaseImageBean implements Serializable, TvPre
 
     @SerializedName("title")
     private String name;
-    private String vid;
-    private String cid;
-    private int toType;
     private int duration;
 
     public int getTempIndex() {
@@ -130,44 +128,8 @@ public class MediaBean extends MediaBaseImageBean implements Serializable, TvPre
         this.tempPicList = tempPicList;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getVid() {
-        return vid;
-    }
-
-    public void setVid(String vid) {
-        this.vid = vid;
-    }
-
-    @Override
-    public String getCid() {
-        return cid;
-    }
-
-    public void setCid(String cid) {
-        this.cid = cid;
-    }
-
-    @Override
-    public int getToType() {
-        return toType;
-    }
-
-    @Override
-    public int getClassId() {
-        return 0;
-    }
-
-    public void setToType(int toType) {
-        this.toType = toType;
     }
 
     public int getDuration() {

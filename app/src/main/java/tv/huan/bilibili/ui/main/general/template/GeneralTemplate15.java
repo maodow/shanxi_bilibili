@@ -14,12 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 
 public class GeneralTemplate15 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    @Override
+    public String initRowTitle(Context context) {
+        if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
+            return "模板15";
+        }
+        else{
+            return super.initRowTitle(context);
+        }
+    }
 
     @Override
     public int initPaddingBottom(@NonNull Context context) {

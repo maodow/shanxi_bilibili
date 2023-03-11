@@ -4,20 +4,12 @@ package tv.huan.bilibili.ui.main.mine;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Keep;
 import androidx.annotation.LayoutRes;
@@ -44,7 +36,7 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.BaseBean;
+import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.ui.center.CenterActivity;
@@ -52,7 +44,6 @@ import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
-import tv.huan.bilibili.utils.LogUtil;
 
 @Keep
 public class MinePresenter extends BasePresenterImpl<MineView> {
@@ -169,11 +160,10 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         @Override
                         public void onClick(View v) {
                             int position = holder.getAbsoluteAdapterPosition();
+                            int size = mDatas.size();
                             if (position > 0) {
-                                FavBean.ItemBean itemBean = mDatas.get(position);
-                                int jumpType = itemBean.getJumpType();
                                 Intent intent = new Intent(v.getContext(), CenterActivity.class);
-                                intent.putExtra(CenterActivity.INTENT_FAVORY, jumpType != 0);
+                                intent.putExtra(CenterActivity.INTENT_FAVORY, position + 1 == size);
                                 ((Fragment) getView()).getActivity().startActivityForResult(intent, 1001);
                             }
                         }
@@ -230,29 +220,14 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 else if (itemViewType == TYPE_ITEM_IMG) {
                     try {
                         FavBean.ItemBean itemBean = mDatas.get(position);
-                        String name = itemBean.getName();
-                        int length = name.length();
-                        if (length > 8) {
-                            name = name.substring(0, 9) + "...";
-                        }
-                        SpannableStringBuilder spannableString = new SpannableStringBuilder();
-                        spannableString.append(name);
-                        int length1 = spannableString.length();
-                        spannableString.setSpan(new AbsoluteSizeSpan(30), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#ffffff")), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                        String status = itemBean.getStatus();
-                        spannableString.append("  " + status);
-                        int length2 = spannableString.length();
-                        spannableString.setSpan(new AbsoluteSizeSpan(22), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#303030")), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                        getView().setText(holder.itemView, R.id.mine_img_name, spannableString);
-                    }catch (Exception e){
+                        getView().setText(holder.itemView, R.id.mine_img_name, itemBean.getPositionRec());
+                    } catch (Exception e) {
                     }
                     try {
                         FavBean.ItemBean itemBean = mDatas.get(position);
                         ImageView imageView = holder.itemView.findViewById(R.id.mine_img_icon);
                         GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getPicture(true), imageView);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                     }
                 }
                 // item-more
@@ -299,19 +274,19 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     }
                 })
                 // 收藏
-                .flatMap(new Function<Boolean, Observable<BaseBean<FavBean>>>() {
+                .flatMap(new Function<Boolean, Observable<ResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<BaseBean<FavBean>> apply(Boolean aBoolean) {
+                    public Observable<ResponsedBean<FavBean>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3);
                     }
                 })
                 // 观看记录
-                .flatMap(new Function<BaseBean<FavBean>, Observable<BaseBean<FavBean>>>() {
+                .flatMap(new Function<ResponsedBean<FavBean>, Observable<ResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<BaseBean<FavBean>> apply(BaseBean<FavBean> favBeanBaseBean) {
+                    public Observable<ResponsedBean<FavBean>> apply(ResponsedBean<FavBean> favBeanResponsedBean) {
                         String s;
                         try {
-                            List<FavBean.ItemBean> list = favBeanBaseBean.getData().getRows();
+                            List<FavBean.ItemBean> list = favBeanResponsedBean.getData().getRows();
                             s = new Gson().toJson(list);
                         } catch (Exception e) {
                             s = null;
@@ -320,9 +295,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     }
                 })
                 // 数据处理
-                .map(new Function<BaseBean<FavBean>, Boolean>() {
+                .map(new Function<ResponsedBean<FavBean>, Boolean>() {
                     @Override
-                    public Boolean apply(BaseBean<FavBean> response) {
+                    public Boolean apply(ResponsedBean<FavBean> response) {
 
                         // clean
                         mDatas.clear();
@@ -361,7 +336,6 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         FavBean.ItemBean itemT2 = new FavBean.ItemBean();
                         itemT2.setItemType(TYPE_ITEM_MORE);
                         itemT2.setTitle("全部历史");
-                        itemT2.setJumpType(0);
                         itemT2.setIndex(indexLS == -1 ? 0 : indexLS + 1);
                         itemT2.setIcon(R.drawable.ic_selector_common_rec);
                         mDatas.add(itemT2);
@@ -398,7 +372,6 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         FavBean.ItemBean more = new FavBean.ItemBean();
                         more.setIndex(indexSC == -1 ? 0 : indexSC + 1);
                         more.setItemType(TYPE_ITEM_MORE);
-                        more.setJumpType(1);
                         more.setTitle("全部收藏");
                         more.setIcon(R.drawable.ic_selector_common_favor2);
                         mDatas.add(more);
@@ -414,7 +387,6 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             FavBean.ItemBean itemBean = new FavBean.ItemBean();
                             itemBean.setIndex(i);
                             itemBean.setItemType(TYPE_ITEM_WEB);
-                            item.setJumpType(i);
                             if (i == 0) {
                                 itemBean.setTitle("帮助中心");
                                 itemBean.setIcon(R.drawable.ic_selector_common_help);
@@ -429,17 +401,17 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     }
                 })
                 // Banner
-                .flatMap(new Function<Boolean, ObservableSource<BaseBean<String>>>() {
+                .flatMap(new Function<Boolean, ObservableSource<ResponsedBean<String>>>() {
                     @Override
-                    public ObservableSource<BaseBean<String>> apply(Boolean integer) {
+                    public ObservableSource<ResponsedBean<String>> apply(Boolean integer) {
                         return HttpClient.getHttpClient().getHttpApi().getFileUrl(1);
                     }
                 })
-                .map(new Function<BaseBean<String>, Integer>() {
+                .map(new Function<ResponsedBean<String>, Integer>() {
                     @Override
-                    public Integer apply(BaseBean<String> baseBean) {
+                    public Integer apply(ResponsedBean<String> responsedBean) {
                         try {
-                            mDatas.get(0).setBannerUrl(baseBean.getData());
+                            mDatas.get(0).setBannerUrl(responsedBean.getData());
                         } catch (Exception e) {
                         }
                         return mDatas.size();
