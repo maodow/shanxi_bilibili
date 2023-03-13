@@ -153,6 +153,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     FavBean.ItemBean itemBean = mDatas.get(position);
                     TextView textView = holder.itemView.findViewById(R.id.common_poster_status);
                     textView.setText(itemBean.getStatusRec());
+                    textView.setVisibility(itemBean.isVisibility() ? View.GONE : View.VISIBLE);
                 } catch (Exception e) {
                 }
                 try {

@@ -187,12 +187,20 @@ public class FavBean implements Serializable {
             try {
                 long position = Long.parseLong(playTime);
                 long duration = Long.parseLong(playLength);
-                if (position <= 0 && duration <= 0)
-                    throw new Exception();
-                return "观看至 " + (int) position * 100 / duration + "%";
+                if (position > 0 && duration > 0 && position == duration) {
+                    return "已看完";
+                } else if (position <= 0 && duration <= 0) {
+                    return "观看至 1%";
+                } else {
+                    return "观看至 " + (int) position * 100 / duration + "%";
+                }
             } catch (Exception e) {
-                return "已看完";
+                return "";
             }
+        }
+
+        public boolean isVisibility() {
+            return null == playTime && null == playLength;
         }
 
         public CharSequence getPositionRec() {
