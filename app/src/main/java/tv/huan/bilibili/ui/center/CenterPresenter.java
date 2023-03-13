@@ -47,7 +47,6 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
         super(baseView);
     }
 
-
     protected void setAdapter() {
         Context context = getView().getContext();
         RecyclerView recyclerView = getView().findViewById(R.id.center_list);
@@ -126,6 +125,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                                 String cid = itemBean.getCid();
                                 delData(cid, position);
                             } else {
+                                itemBean.setToType(1);
                                 JumpUtil.next(v.getContext(), itemBean);
                             }
                         }

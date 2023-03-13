@@ -577,7 +577,7 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                         }
                     }
                 })
-                .delay(1, TimeUnit.SECONDS)
+                .delay(40, TimeUnit.MILLISECONDS)
                 .compose(ComposeSchedulers.io_main())
                 .doOnNext(new Consumer<FavBean>() {
                     @Override
