@@ -13,20 +13,16 @@ import androidx.leanback.widget.ItemBridgeAdapter;
 
 import com.google.gson.Gson;
 
-import java.util.List;
-
 import lib.kalu.leanback.list.LeanBackVerticalGridView;
 import lib.kalu.leanback.list.RecyclerView;
 import lib.kalu.leanback.util.LeanBackUtil;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
-import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate1;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate16;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate20;
-import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 
 public final class GeneralGridView extends LeanBackVerticalGridView {

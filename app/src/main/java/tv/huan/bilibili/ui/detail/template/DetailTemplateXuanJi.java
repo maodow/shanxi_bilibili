@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
@@ -19,7 +17,6 @@ import lib.kalu.leanback.presenter.ListTvEpisodesPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
-import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 
 public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<MediaBean> {

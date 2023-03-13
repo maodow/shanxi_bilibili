@@ -43,11 +43,11 @@ import okhttp3.RequestBody;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.ResponsedBean;
-import tv.huan.bilibili.bean.format.FilterBean;
 import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
+import tv.huan.bilibili.bean.format.FilterBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -165,17 +165,17 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     }
                 })
                 // 分类
-                .flatMap(new Function<Boolean, Observable<ResponsedBean<GetSubChannelsByChannelBean>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<GetSubChannelsByChannelBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<GetSubChannelsByChannelBean>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<GetSubChannelsByChannelBean>> apply(Boolean aBoolean) {
                         int classId = getView().getIntExtra(FilterActivity.INTENT_CLASSID, 0);
                         return HttpClient.getHttpClient().getHttpApi().getClassByPrentId(classId, null);
                     }
                 })
                 // 分类 - 处理数据
-                .map(new Function<ResponsedBean<GetSubChannelsByChannelBean>, JSONObject>() {
+                .map(new Function<BaseResponsedBean<GetSubChannelsByChannelBean>, JSONObject>() {
                     @Override
-                    public JSONObject apply(ResponsedBean<GetSubChannelsByChannelBean> response) {
+                    public JSONObject apply(BaseResponsedBean<GetSubChannelsByChannelBean> response) {
 
                         JSONObject data = new JSONObject();
                         // classBean
@@ -243,18 +243,18 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     }
                 })
                 // 热搜标签
-                .flatMap(new Function<JSONObject, ObservableSource<ResponsedBean<LinkedHashMap<String, List<String>>>>>() {
+                .flatMap(new Function<JSONObject, ObservableSource<BaseResponsedBean<LinkedHashMap<String, List<String>>>>>() {
                     @Override
-                    public ObservableSource<ResponsedBean<LinkedHashMap<String, List<String>>>> apply(JSONObject data) {
+                    public ObservableSource<BaseResponsedBean<LinkedHashMap<String, List<String>>>> apply(JSONObject data) {
                         String s = data.toString();
                         int classId = getView().getIntExtra(FilterActivity.INTENT_CLASSID, 0);
                         return HttpClient.getHttpClient().getHttpApi().getFilterTypes(classId, s);
                     }
                 })
                 // 热搜标签 - 处理
-                .map(new Function<ResponsedBean<LinkedHashMap<String, List<String>>>, JSONObject>() {
+                .map(new Function<BaseResponsedBean<LinkedHashMap<String, List<String>>>, JSONObject>() {
                     @Override
-                    public JSONObject apply(ResponsedBean<LinkedHashMap<String, List<String>>> response) {
+                    public JSONObject apply(BaseResponsedBean<LinkedHashMap<String, List<String>>> response) {
 
                         JSONObject data;
                         try {
@@ -309,9 +309,9 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     }
                 })
                 // 列表数据
-                .flatMap(new Function<JSONObject, ObservableSource<ResponsedBean<GetSecondTagAlbumsBean>>>() {
+                .flatMap(new Function<JSONObject, ObservableSource<BaseResponsedBean<GetSecondTagAlbumsBean>>>() {
                     @Override
-                    public ObservableSource<ResponsedBean<GetSecondTagAlbumsBean>> apply(JSONObject data) {
+                    public ObservableSource<BaseResponsedBean<GetSecondTagAlbumsBean>> apply(JSONObject data) {
                         int secondId;
                         try {
                             secondId = data.optInt("secondId", 0);
@@ -323,9 +323,9 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     }
                 })
                 // 列表数据 - 处理
-                .map(new Function<ResponsedBean<GetSecondTagAlbumsBean>, JSONObject>() {
+                .map(new Function<BaseResponsedBean<GetSecondTagAlbumsBean>, JSONObject>() {
                     @Override
-                    public JSONObject apply(ResponsedBean<GetSecondTagAlbumsBean> response) {
+                    public JSONObject apply(BaseResponsedBean<GetSecondTagAlbumsBean> response) {
                         try {
                             mData.clear();
                             mData.addAll(response.getData().getAlbums());
@@ -418,9 +418,9 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     public void subscribe(ObservableEmitter<Boolean> emitter) {
                         emitter.onNext(true);
                     }
-                }).flatMap(new Function<Boolean, ObservableSource<ResponsedBean<SearchAlbumByTypeNews>>>() {
+                }).flatMap(new Function<Boolean, ObservableSource<BaseResponsedBean<SearchAlbumByTypeNews>>>() {
                     @Override
-                    public ObservableSource<ResponsedBean<SearchAlbumByTypeNews>> apply(Boolean aBoolean) {
+                    public ObservableSource<BaseResponsedBean<SearchAlbumByTypeNews>> apply(Boolean aBoolean) {
 
                         TagsLayout tagsLinearLayout = getView().findViewById(R.id.filter_tags);
                         Map<String, String> hashMap = tagsLinearLayout.getData();
@@ -451,12 +451,12 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         RequestBody requestBody = RequestBody.create(mediaType, object.toString());
                         return HttpClient.getHttpClient().getHttpApi().searchAlbumByTypeNews(requestBody);
                     }
-                }).map(new Function<ResponsedBean<SearchAlbumByTypeNews>, Boolean>() {
+                }).map(new Function<BaseResponsedBean<SearchAlbumByTypeNews>, Boolean>() {
                     @Override
-                    public Boolean apply(ResponsedBean<SearchAlbumByTypeNews> searchAlbumByTypeNewsResponsedBean) {
+                    public Boolean apply(BaseResponsedBean<SearchAlbumByTypeNews> searchAlbumByTypeNewsBaseResponsedBean) {
                         try {
                             mData.clear();
-                            mData.addAll(searchAlbumByTypeNewsResponsedBean.getData().getAlbums());
+                            mData.addAll(searchAlbumByTypeNewsBaseResponsedBean.getData().getAlbums());
                         } catch (Exception e) {
                         }
                         return true;
@@ -506,15 +506,15 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
                         observableEmitter.onNext(true);
                     }
-                }).flatMap(new Function<Boolean, Observable<ResponsedBean<GetSecondTagAlbumsBean>>>() {
+                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<GetSecondTagAlbumsBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<GetSecondTagAlbumsBean>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<GetSecondTagAlbumsBean>> apply(Boolean aBoolean) {
                         int id = Integer.parseInt(classId);
                         return HttpClient.getHttpClient().getHttpApi().getSecondTagAlbums(id, 0, Integer.MAX_VALUE, null);
                     }
-                }).map(new Function<ResponsedBean<GetSecondTagAlbumsBean>, Boolean>() {
+                }).map(new Function<BaseResponsedBean<GetSecondTagAlbumsBean>, Boolean>() {
                     @Override
-                    public Boolean apply(ResponsedBean<GetSecondTagAlbumsBean> response) {
+                    public Boolean apply(BaseResponsedBean<GetSecondTagAlbumsBean> response) {
 
                         try {
                             mData.clear();

@@ -3,16 +3,12 @@ package tv.huan.bilibili.ui.welcome;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
-
 import lib.kalu.frame.mvp.BaseActivity;
-import tv.huan.bilibili.bean.GetChannelsBean;
-import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.GlideUtils;
 
 public class WelcomeActivity extends BaseActivity<WelcomeView, WelcomePresenter> implements WelcomeView {

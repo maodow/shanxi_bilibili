@@ -6,16 +6,16 @@ public class Recommend implements Serializable {
 
     private static final long serialVersionUID = -3001717101291812095L;
 
-    private int id ;
-    private String name ;
-    private String poster ;
-    private int pos ;
-    private int status ;
-    private int classId ;
-    private String cid ;
-    private String jumpUrl ;
-    private int platformId ;
-    private String type ;
+    private int id;
+    private String name;
+    private String poster;
+    private int pos;
+    private int status;
+    private int classId;
+    private String cid;
+    private String jumpUrl;
+    private int platformId;
+    private String type;
 
     @Override
     public String toString() {

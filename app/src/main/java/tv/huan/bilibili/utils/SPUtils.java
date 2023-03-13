@@ -3,6 +3,7 @@ package tv.huan.bilibili.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.collection.SimpleArrayMap;
 
@@ -15,7 +16,7 @@ import java.util.Set;
 public final class SPUtils {
 
     private static final SimpleArrayMap<String, SPUtils> SP_UTILS_MAP = new SimpleArrayMap<>();
-    private              SharedPreferences               sp;
+    private SharedPreferences sp;
 
     /**
      * Return the single {@link SPUtils} instance

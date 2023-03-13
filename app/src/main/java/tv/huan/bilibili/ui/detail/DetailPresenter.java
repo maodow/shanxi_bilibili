@@ -24,14 +24,12 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.Auth2Bean;
-import tv.huan.bilibili.bean.FavBean;
-import tv.huan.bilibili.bean.ResponsedBean;
+import tv.huan.bilibili.bean.Auth2BeanBase;
 import tv.huan.bilibili.bean.FavorBean;
-import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.RecMediaBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.DetailBean;
 import tv.huan.bilibili.bean.format.OptBean;
 import tv.huan.bilibili.http.HttpClient;
@@ -64,9 +62,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 媒资数据
-                .flatMap(new Function<Boolean, ObservableSource<ResponsedBean<GetMediasByCid2Bean>>>() {
+                .flatMap(new Function<Boolean, ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>>>() {
                     @Override
-                    public ObservableSource<ResponsedBean<GetMediasByCid2Bean>> apply(Boolean o) {
+                    public ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>> apply(Boolean o) {
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                         if (null == cid) {
                             cid = "";
@@ -75,9 +73,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 媒资数据 => 数据处理
-                .map(new Function<ResponsedBean<GetMediasByCid2Bean>, DetailBean>() {
+                .map(new Function<BaseResponsedBean<GetMediasByCid2Bean>, DetailBean>() {
                     @Override
-                    public DetailBean apply(ResponsedBean<GetMediasByCid2Bean> getMediasByCid2BeanResponsedBean) {
+                    public DetailBean apply(BaseResponsedBean<GetMediasByCid2Bean> getMediasByCid2BeanBaseResponsedBean) {
                         // 上报 => 详情页加载完成
                         try {
                             String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
@@ -135,14 +133,14 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
 
                         // recClassId
                         try {
-                            detailBean.setRecClassId(getMediasByCid2BeanResponsedBean.getData().getRecClassId());
+                            detailBean.setRecClassId(getMediasByCid2BeanBaseResponsedBean.getData().getRecClassId());
                         } catch (Exception e) {
                             detailBean.setRecClassId("");
                         }
 
                         // 免费/收费
                         try {
-                            GetMediasByCid2Bean data = getMediasByCid2BeanResponsedBean.getData();
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseResponsedBean.getData();
                             MediaDetailBean album = data.getAlbum();
                             if (0 == album.getProductType()) {
                                 detailBean.setVip(true);
@@ -155,7 +153,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
 
                         // 播放策略
                         try {
-                            GetMediasByCid2Bean data = getMediasByCid2BeanResponsedBean.getData();
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseResponsedBean.getData();
                             MediaDetailBean album = data.getAlbum();
                             detailBean.setPlayType(album.getPlayType());
                         } catch (Exception e) {
@@ -164,7 +162,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
 
                         // 详情
                         try {
-                            GetMediasByCid2Bean data = getMediasByCid2BeanResponsedBean.getData();
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseResponsedBean.getData();
                             detailBean.setAlbum(data.getAlbum());
                         } catch (Exception e) {
                             detailBean.setAlbum(null);
@@ -172,7 +170,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
 
                         // 剧集
                         try {
-                            GetMediasByCid2Bean data = getMediasByCid2BeanResponsedBean.getData();
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseResponsedBean.getData();
                             detailBean.setMedias(data.getMedias());
                         } catch (Exception e) {
                             detailBean.setMedias(null);
@@ -180,7 +178,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
 
                         // 猜你喜欢
                         try {
-                            GetMediasByCid2Bean data = getMediasByCid2BeanResponsedBean.getData();
+                            GetMediasByCid2Bean data = getMediasByCid2BeanBaseResponsedBean.getData();
                             detailBean.setRecAlbums(data.getRecAlbums());
                         } catch (Exception e) {
                             detailBean.setAlbum(null);
@@ -189,18 +187,18 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 白名单
-                .flatMap(new Function<DetailBean, ObservableSource<Auth2Bean>>() {
+                .flatMap(new Function<DetailBean, ObservableSource<Auth2BeanBase>>() {
                     @Override
-                    public ObservableSource<Auth2Bean> apply(DetailBean detailBean) {
+                    public ObservableSource<Auth2BeanBase> apply(DetailBean detailBean) {
                         String s = new Gson().toJson(detailBean);
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
                         return HttpClient.getHttpClient().getHttpApi().auth2(cid, s);
                     }
                 })
                 // 白名单 => 数据处理
-                .map(new Function<Auth2Bean, DetailBean>() {
+                .map(new Function<Auth2BeanBase, DetailBean>() {
                     @Override
-                    public DetailBean apply(Auth2Bean auth2Bean) {
+                    public DetailBean apply(Auth2BeanBase auth2Bean) {
 
                         DetailBean detailBean;
                         try {
@@ -222,18 +220,18 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 收藏
-                .flatMap(new Function<DetailBean, ObservableSource<ResponsedBean<FavorBean>>>() {
+                .flatMap(new Function<DetailBean, ObservableSource<BaseResponsedBean<FavorBean>>>() {
                     @Override
-                    public ObservableSource<ResponsedBean<FavorBean>> apply(DetailBean detailBean) {
+                    public ObservableSource<BaseResponsedBean<FavorBean>> apply(DetailBean detailBean) {
                         String s = new Gson().toJson(detailBean);
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                         return HttpClient.getHttpClient().getHttpApi().checkFavorite(cid, s);
                     }
                 })
                 // 收藏 => 数据处理
-                .map(new Function<ResponsedBean<FavorBean>, DetailBean>() {
+                .map(new Function<BaseResponsedBean<FavorBean>, DetailBean>() {
                     @Override
-                    public DetailBean apply(ResponsedBean<FavorBean> data) {
+                    public DetailBean apply(BaseResponsedBean<FavorBean> data) {
 
                         DetailBean detailBean;
                         try {
@@ -446,17 +444,17 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         observableEmitter.onNext(true);
                     }
                 })
-                .flatMap(new Function<Boolean, Observable<ResponsedBean<FavorBean>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavorBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<FavorBean>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<FavorBean>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().addFavorite(cid, recClassId);
                     }
                 })
-                .map(new Function<ResponsedBean<FavorBean>, Boolean>() {
+                .map(new Function<BaseResponsedBean<FavorBean>, Boolean>() {
                     @Override
-                    public Boolean apply(ResponsedBean<FavorBean> favorBeanResponsedBean) {
+                    public Boolean apply(BaseResponsedBean<FavorBean> favorBeanBaseResponsedBean) {
                         try {
-                            return favorBeanResponsedBean.getData().isFavor();
+                            return favorBeanBaseResponsedBean.getData().isFavor();
                         } catch (Exception e) {
                             return false;
                         }
@@ -494,15 +492,15 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         observableEmitter.onNext(true);
                     }
                 })
-                .flatMap(new Function<Boolean, Observable<ResponsedBean<OptBean>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<OptBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<OptBean>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<OptBean>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
                     }
                 })
-                .map(new Function<ResponsedBean<OptBean>, Boolean>() {
+                .map(new Function<BaseResponsedBean<OptBean>, Boolean>() {
                     @Override
-                    public Boolean apply(ResponsedBean<OptBean> resp) {
+                    public Boolean apply(BaseResponsedBean<OptBean> resp) {
                         return resp.getData().isSucc();
                     }
                 })

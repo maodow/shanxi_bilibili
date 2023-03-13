@@ -35,9 +35,9 @@ import lib.kalu.leanback.tab.model.TabModelImage;
 import lib.kalu.leanback.tab.model.TabModelText;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.format.MainBean;
 import tv.huan.bilibili.dialog.WarningDialog;
@@ -425,19 +425,19 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
                         observableEmitter.onNext(true);
                     }
-                }).flatMap(new Function<Boolean, Observable<ResponsedBean<List<ExitBean>>>>() {
+                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<List<ExitBean>>>>() {
                     @Override
-                    public Observable<ResponsedBean<List<ExitBean>>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<List<ExitBean>>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().getExit(2);
                     }
                 })
                 // 上报
-                .map(new Function<ResponsedBean<List<ExitBean>>, String>() {
+                .map(new Function<BaseResponsedBean<List<ExitBean>>, String>() {
                     @Override
-                    public String apply(ResponsedBean<List<ExitBean>> listResponsedBean) {
+                    public String apply(BaseResponsedBean<List<ExitBean>> listBaseResponsedBean) {
                         ArrayList<ExitBean> list = new ArrayList<>();
                         try {
-                            List<ExitBean> data = listResponsedBean.getData();
+                            List<ExitBean> data = listBaseResponsedBean.getData();
                             for (int i = 0; i < 2; i++) {
                                 ExitBean bean = data.get(i);
                                 if (null == bean) continue;

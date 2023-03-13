@@ -2,20 +2,13 @@ package tv.huan.bilibili.widget.common;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Rect;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 
-import lib.kalu.leanback.plus.TextViewPlus;
-import tv.huan.bilibili.R;
 import tv.huan.heilongjiang.HeilongjiangApi;
 import tv.huan.heilongjiang.OnCheckVipChangeListener;
 

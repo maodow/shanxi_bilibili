@@ -9,7 +9,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
@@ -59,7 +58,7 @@ public final class PopuView extends MarqueeTextView {
         int x3 = getWidth() / 2;
         int x1 = x3 - offset;
         int x2 = x3 + offset;
-        int y1 = (int) (bottom*0.9F);
+        int y1 = (int) (bottom * 0.9F);
         int y2 = bottom;
         Path path = new Path();
         path.moveTo(x1, y1);

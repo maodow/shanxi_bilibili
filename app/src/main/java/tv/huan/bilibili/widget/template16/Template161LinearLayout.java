@@ -9,8 +9,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.RequiresApi;
 import androidx.leanback.widget.VerticalGridView;
 
-import tv.huan.bilibili.R;
-
 public class Template161LinearLayout extends LinearLayout {
     public Template161LinearLayout(Context context) {
         super(context);

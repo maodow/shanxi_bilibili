@@ -2,10 +2,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,8 +32,7 @@ public class GeneralTemplate21 extends Presenter implements ListTvPresenterImpl 
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
             return "模板20";
-        }
-        else{
+        } else {
             return ListTvPresenterImpl.super.initRowTitle(context);
         }
     }

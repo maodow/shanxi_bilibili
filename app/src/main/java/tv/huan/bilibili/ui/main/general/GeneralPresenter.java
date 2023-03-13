@@ -1,4 +1,3 @@
-
 package tv.huan.bilibili.ui.main.general;
 
 import androidx.annotation.Keep;
@@ -27,9 +26,9 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.GeneralBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate1;
@@ -121,17 +120,17 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                     }
                 })
                 // 瀑布流
-                .flatMap(new Function<Boolean, Observable<ResponsedBean<GetSubChannelsByChannelBean>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<GetSubChannelsByChannelBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<GetSubChannelsByChannelBean>> apply(Boolean b) {
+                    public Observable<BaseResponsedBean<GetSubChannelsByChannelBean>> apply(Boolean b) {
                         int channelId = getView().getIntExtra(GeneralFragment.BUNDLE_CHANNELID, 0);
                         return HttpClient.getHttpClient().getHttpApi().getSubChannelsByChannel(channelId, 0, Integer.MAX_VALUE);
                     }
                 })
                 // 瀑布流 => 数据处理
-                .map(new Function<ResponsedBean<GetSubChannelsByChannelBean>, GeneralBean>() {
+                .map(new Function<BaseResponsedBean<GetSubChannelsByChannelBean>, GeneralBean>() {
                     @Override
-                    public GeneralBean apply(ResponsedBean<GetSubChannelsByChannelBean> data) {
+                    public GeneralBean apply(BaseResponsedBean<GetSubChannelsByChannelBean> data) {
 
                         GeneralBean generalBean = new GeneralBean();
 
@@ -164,18 +163,18 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                     }
                 })
                 // 二级菜单
-                .flatMap(new Function<GeneralBean, ObservableSource<ResponsedBean<GetSubChannelsByChannelBean>>>() {
+                .flatMap(new Function<GeneralBean, ObservableSource<BaseResponsedBean<GetSubChannelsByChannelBean>>>() {
                     @Override
-                    public ObservableSource<ResponsedBean<GetSubChannelsByChannelBean>> apply(GeneralBean data) {
+                    public ObservableSource<BaseResponsedBean<GetSubChannelsByChannelBean>> apply(GeneralBean data) {
                         int classId = data.getClassId();
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getClassByPrentId(classId, s);
                     }
                 })
                 // 二级菜单 => 数据处理
-                .map(new Function<ResponsedBean<GetSubChannelsByChannelBean>, GeneralBean>() {
+                .map(new Function<BaseResponsedBean<GetSubChannelsByChannelBean>, GeneralBean>() {
                     @Override
-                    public GeneralBean apply(ResponsedBean<GetSubChannelsByChannelBean> resp) {
+                    public GeneralBean apply(BaseResponsedBean<GetSubChannelsByChannelBean> resp) {
                         GeneralBean generalBean;
                         try {
                             generalBean = new Gson().fromJson(resp.getExtra(), GeneralBean.class);
@@ -217,17 +216,17 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                     }
                 })
                 // 观看记录
-                .flatMap(new Function<GeneralBean, Observable<ResponsedBean<FavBean>>>() {
+                .flatMap(new Function<GeneralBean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<FavBean>> apply(GeneralBean data) {
+                    public Observable<BaseResponsedBean<FavBean>> apply(GeneralBean data) {
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getBookmark(0, Integer.MAX_VALUE, s);
                     }
                 })
                 // 观看记录 => 数据处理
-                .map(new Function<ResponsedBean<FavBean>, GeneralBean>() {
+                .map(new Function<BaseResponsedBean<FavBean>, GeneralBean>() {
                     @Override
-                    public GeneralBean apply(ResponsedBean<FavBean> resp) {
+                    public GeneralBean apply(BaseResponsedBean<FavBean> resp) {
 
                         GeneralBean data;
                         try {
@@ -561,16 +560,16 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                     }
                 })
                 // 观看历史
-                .flatMap(new Function<Boolean, Observable<ResponsedBean<FavBean>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<FavBean>> apply(Boolean v) {
+                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean v) {
                         return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 5, null);
                     }
                 })
                 // 数据处理
-                .map(new Function<ResponsedBean<FavBean>, FavBean>() {
+                .map(new Function<BaseResponsedBean<FavBean>, FavBean>() {
                     @Override
-                    public FavBean apply(ResponsedBean<FavBean> resp) {
+                    public FavBean apply(BaseResponsedBean<FavBean> resp) {
                         try {
                             return resp.getData();
                         } catch (Exception e) {

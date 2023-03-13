@@ -1,6 +1,5 @@
 package tv.huan.bilibili.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,19 +28,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.kalu.frame.mvp.BaseActivity;
+import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
-import tv.huan.bilibili.R;
 
 /**
  * @author zhanghang

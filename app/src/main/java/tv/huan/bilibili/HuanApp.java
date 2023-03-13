@@ -2,14 +2,12 @@ package tv.huan.bilibili;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import lib.kalu.frame.mvp.context.FrameContext;
-import lib.kalu.frame.mvp.interceptor.OkhttpInterceptorStandard;
 import lib.kalu.frame.mvp.util.MvpUtil;
 import lib.kalu.leanback.util.LeanBackUtil;
 import lib.kalu.mediaplayer.config.player.PlayerBuilder;

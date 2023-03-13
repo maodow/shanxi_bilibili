@@ -1,4 +1,3 @@
-
 package tv.huan.bilibili.dialog;
 
 import android.app.Dialog;

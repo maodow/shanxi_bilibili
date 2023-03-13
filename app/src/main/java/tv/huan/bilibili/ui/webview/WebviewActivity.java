@@ -1,7 +1,5 @@
-
 package tv.huan.bilibili.ui.webview;
 
-import android.graphics.Color;
 import android.webkit.WebView;
 
 import androidx.annotation.NonNull;

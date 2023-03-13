@@ -160,7 +160,7 @@ public class GetSubChannelsByChannelBean implements Serializable {
         }
     }
 
-    public static class ClassesBean  extends BaseDataBean implements Serializable {
+    public static class ClassesBean extends BaseDataBean implements Serializable {
 
         private int productId;
         private int parentId;

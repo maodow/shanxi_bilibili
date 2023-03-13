@@ -4,11 +4,10 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import tv.huan.keyboard.KeyboardLinearLayout;
-import tv.huan.keyboard.listener.OnKeyboardInputListener;
-
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
+import tv.huan.keyboard.KeyboardLinearLayout;
+import tv.huan.keyboard.listener.OnKeyboardInputListener;
 
 /**
  * 搜索

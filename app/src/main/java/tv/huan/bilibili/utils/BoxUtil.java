@@ -9,7 +9,6 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 import lib.kalu.frame.mvp.context.FrameContext;
-import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.heilongjiang.HeilongjiangApi;
 

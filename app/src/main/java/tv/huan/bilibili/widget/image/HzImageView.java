@@ -32,7 +32,7 @@ public class HzImageView extends ImageView {
         init();
     }
 
-    private void init(){
+    private void init() {
         setImageResource(R.drawable.bg_shape_placeholder_hz);
     }
 }

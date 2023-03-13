@@ -1,8 +1,8 @@
-package tv.huan.bilibili.bean;
+package tv.huan.bilibili.bean.base;
 
 import lib.kalu.frame.mvp.bean.RequestBean;
 
-public class ResponsedBean<T> extends RequestBean {
+public class BaseResponsedBean<T> extends RequestBean {
 
     private String status;
     private int code;

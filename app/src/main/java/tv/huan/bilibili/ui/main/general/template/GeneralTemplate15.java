@@ -2,7 +2,6 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,8 +25,7 @@ public class GeneralTemplate15 extends ListTvGridPresenter<GetSubChannelsByChann
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
             return "模板15";
-        }
-        else{
+        } else {
             return super.initRowTitle(context);
         }
     }

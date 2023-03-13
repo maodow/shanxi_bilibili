@@ -186,6 +186,6 @@ public final class StringUtils {
 
     public static String getPercent(int num1, int num2) {
 //        return ((num1/60) * 100) / num2 + "%";
-        return ((num1/60) * 100000) / num2 + "%";
+        return ((num1 / 60) * 100000) / num2 + "%";
     }
 }

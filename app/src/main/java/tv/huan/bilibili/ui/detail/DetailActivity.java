@@ -2,20 +2,14 @@ package tv.huan.bilibili.ui.detail;
 
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.KeyEvent;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-
-import com.google.gson.Gson;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
-import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
@@ -31,7 +25,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public static final String INTENT_FROM_SPECIAL_SCENEID = "intent_from_special_sceneid";
     public static final String INTENT_FROM_SPECIAL_TOPID = "intent_from_special_topid";
     public static final String INTENT_FROM_SPECIAL_TOPNAME = "intent_from_special_topname";
-//    private static final String INTENT_UPDATE = "intent_update";
+    //    private static final String INTENT_UPDATE = "intent_update";
     protected static final String INTENT_VID = "intent_vid";
     protected static final String INTENT_INDEX = "intent_index";
     protected static final String INTENT_REC_CLASSID = "intent_rec_classid";

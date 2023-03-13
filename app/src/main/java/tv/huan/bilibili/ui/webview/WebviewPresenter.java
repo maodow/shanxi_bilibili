@@ -16,7 +16,7 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.ResponsedBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.WebviewBean;
 import tv.huan.bilibili.http.HttpClient;
 
@@ -147,9 +147,9 @@ public class WebviewPresenter extends BasePresenterImpl<WebviewView> {
                         observableEmitter.onNext(help);
                     }
                 })
-                .flatMap(new Function<Boolean, Observable<ResponsedBean<String>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<String>>>() {
                     @Override
-                    public Observable<ResponsedBean<String>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<String>> apply(Boolean aBoolean) {
                         // help
                         if (aBoolean) {
                             int i = getView().getIntExtra(WebviewActivity.INTENT_HELP_TYPE, 1);
@@ -157,27 +157,27 @@ public class WebviewPresenter extends BasePresenterImpl<WebviewView> {
                         }
                         // web
                         else {
-                            return Observable.create(new ObservableOnSubscribe<ResponsedBean<String>>() {
+                            return Observable.create(new ObservableOnSubscribe<BaseResponsedBean<String>>() {
                                 @Override
-                                public void subscribe(ObservableEmitter<ResponsedBean<String>> observableEmitter) throws Exception {
-                                    ResponsedBean<String> responsedBean = new ResponsedBean<>();
-                                    responsedBean.setData(null);
+                                public void subscribe(ObservableEmitter<BaseResponsedBean<String>> observableEmitter) throws Exception {
+                                    BaseResponsedBean<String> baseResponsedBean = new BaseResponsedBean<>();
+                                    baseResponsedBean.setData(null);
                                 }
                             });
                         }
                     }
                 })
-                .map(new Function<ResponsedBean<String>, WebviewBean>() {
+                .map(new Function<BaseResponsedBean<String>, WebviewBean>() {
                     @Override
-                    public WebviewBean apply(ResponsedBean<String> responsedBean) {
+                    public WebviewBean apply(BaseResponsedBean<String> baseResponsedBean) {
                         WebviewBean bean = new WebviewBean();
-                        if (null == responsedBean.getData()) {
+                        if (null == baseResponsedBean.getData()) {
                             bean.setData(false);
                             String s = getView().getStringExtra(WebviewActivity.INTENT_URL);
                             bean.setValue(s);
                         } else {
                             bean.setData(true);
-                            bean.setValue(responsedBean.getData());
+                            bean.setValue(baseResponsedBean.getData());
                         }
                         return bean;
                     }

@@ -31,8 +31,8 @@ import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.HorizontalClassLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.FavBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.OptBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -219,9 +219,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
                         observableEmitter.onNext(position == 0);
                     }
-                }).flatMap(new Function<Boolean, Observable<ResponsedBean<FavBean>>>() {
+                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<FavBean>> apply(Boolean v) {
+                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean v) {
                         // 观看历史
                         if (v) {
                             return HttpClient.getHttpClient().getHttpApi().getBookmark(0, Integer.MAX_VALUE, null);
@@ -231,9 +231,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             return HttpClient.getHttpClient().getHttpApi().getFavList(0, Integer.MAX_VALUE);
                         }
                     }
-                }).map(new Function<ResponsedBean<FavBean>, Boolean>() {
+                }).map(new Function<BaseResponsedBean<FavBean>, Boolean>() {
                     @Override
-                    public Boolean apply(ResponsedBean<FavBean> response) {
+                    public Boolean apply(BaseResponsedBean<FavBean> response) {
                         try {
                             mDatas.clear();
                         } catch (Exception e) {
@@ -277,18 +277,18 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         int checkedIndex = classLayout.getCheckedIndex();
                         observableEmitter.onNext(checkedIndex == 0);
                     }
-                }).flatMap(new Function<Boolean, Observable<ResponsedBean<OptBean>>>() {
+                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<OptBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<OptBean>> apply(Boolean v) {
+                    public Observable<BaseResponsedBean<OptBean>> apply(Boolean v) {
                         if (v) {
                             return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
                         } else {
                             return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
                         }
                     }
-                }).map(new Function<ResponsedBean<OptBean>, Integer>() {
+                }).map(new Function<BaseResponsedBean<OptBean>, Integer>() {
                     @Override
-                    public Integer apply(ResponsedBean<OptBean> resp) throws Exception {
+                    public Integer apply(BaseResponsedBean<OptBean> resp) throws Exception {
                         try {
                             boolean succ = resp.getData().isSucc();
                             if (!succ)

@@ -2,8 +2,6 @@ package tv.huan.bilibili.ui.main;
 
 import androidx.annotation.NonNull;
 
-import org.json.JSONObject;
-
 import java.util.List;
 
 import lib.kalu.leanback.tab.model.TabModel;

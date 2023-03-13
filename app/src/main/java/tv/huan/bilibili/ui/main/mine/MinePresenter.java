@@ -1,4 +1,3 @@
-
 package tv.huan.bilibili.ui.main.mine;
 
 import android.content.Context;
@@ -34,17 +33,15 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
-import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
-import tv.huan.bilibili.bean.ResponsedBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.RefreshBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
-import tv.huan.bilibili.utils.LogUtil;
 
 @Keep
 public class MinePresenter extends BasePresenterImpl<MineView> {
@@ -290,19 +287,19 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     }
                 })
                 // 收藏
-                .flatMap(new Function<Boolean, Observable<ResponsedBean<FavBean>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<FavBean>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3);
                     }
                 })
                 // 观看记录
-                .flatMap(new Function<ResponsedBean<FavBean>, Observable<ResponsedBean<FavBean>>>() {
+                .flatMap(new Function<BaseResponsedBean<FavBean>, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<FavBean>> apply(ResponsedBean<FavBean> favBeanResponsedBean) {
+                    public Observable<BaseResponsedBean<FavBean>> apply(BaseResponsedBean<FavBean> favBeanBaseResponsedBean) {
                         String s;
                         try {
-                            List<FavBean.ItemBean> list = favBeanResponsedBean.getData().getRows();
+                            List<FavBean.ItemBean> list = favBeanBaseResponsedBean.getData().getRows();
                             s = new Gson().toJson(list);
                         } catch (Exception e) {
                             s = null;
@@ -311,9 +308,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     }
                 })
                 // 数据处理
-                .map(new Function<ResponsedBean<FavBean>, Boolean>() {
+                .map(new Function<BaseResponsedBean<FavBean>, Boolean>() {
                     @Override
-                    public Boolean apply(ResponsedBean<FavBean> response) {
+                    public Boolean apply(BaseResponsedBean<FavBean> response) {
 
                         // clean
                         mDatas.clear();
@@ -416,17 +413,17 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     }
                 })
                 // Banner
-                .flatMap(new Function<Boolean, ObservableSource<ResponsedBean<String>>>() {
+                .flatMap(new Function<Boolean, ObservableSource<BaseResponsedBean<String>>>() {
                     @Override
-                    public ObservableSource<ResponsedBean<String>> apply(Boolean integer) {
+                    public ObservableSource<BaseResponsedBean<String>> apply(Boolean integer) {
                         return HttpClient.getHttpClient().getHttpApi().getFileUrl(1);
                     }
                 })
-                .map(new Function<ResponsedBean<String>, Boolean>() {
+                .map(new Function<BaseResponsedBean<String>, Boolean>() {
                     @Override
-                    public Boolean apply(ResponsedBean<String> responsedBean) {
+                    public Boolean apply(BaseResponsedBean<String> baseResponsedBean) {
                         try {
-                            mDatas.get(0).setTempBanner(responsedBean.getData());
+                            mDatas.get(0).setTempBanner(baseResponsedBean.getData());
                         } catch (Exception e) {
                         }
                         return true;
@@ -464,16 +461,16 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     }
                 })
                 // 我的收藏
-                .flatMap(new Function<Boolean, Observable<ResponsedBean<FavBean>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<FavBean>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3);
                     }
                 })
                 // 我的收藏 => 数据处理
-                .map(new Function<ResponsedBean<FavBean>, RefreshBean>() {
+                .map(new Function<BaseResponsedBean<FavBean>, RefreshBean>() {
                     @Override
-                    public RefreshBean apply(ResponsedBean<FavBean> resp) throws Exception {
+                    public RefreshBean apply(BaseResponsedBean<FavBean> resp) throws Exception {
                         try {
                             LinkedList<FavBean.ItemBean> beans = new LinkedList<>();
                             int start = -1;

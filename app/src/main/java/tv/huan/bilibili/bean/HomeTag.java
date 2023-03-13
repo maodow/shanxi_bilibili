@@ -6,13 +6,13 @@ public class HomeTag implements Serializable {
 
     private static final long serialVersionUID = -8655538652626397489L;
 
-    private int id ;
-    private int productId ;
-    private String name ;
-    private int parentId ;
-    private int hasNext ;
-    private int pos ;
-    private int status ;
+    private int id;
+    private int productId;
+    private String name;
+    private int parentId;
+    private int hasNext;
+    private int pos;
+    private int status;
 
 
     @Override

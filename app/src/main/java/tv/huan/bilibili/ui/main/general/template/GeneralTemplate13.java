@@ -2,7 +2,6 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,11 +25,11 @@ public class GeneralTemplate13 extends ListTvRowPresenter<GetSubChannelsByChanne
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
             return "模板13";
-        }
-        else{
+        } else {
             return super.initRowTitle(context);
         }
     }
+
     @Override
     public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         Context context = view.getContext();

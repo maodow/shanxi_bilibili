@@ -6,7 +6,6 @@ import lib.kalu.frame.mvp.interceptor.OkhttpInterceptorStandard;
 import okhttp3.Connection;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
-import retrofit2.http.Query;
 import tv.huan.bilibili.utils.BoxUtil;
 
 public final class HttpInterceptor extends OkhttpInterceptorStandard {

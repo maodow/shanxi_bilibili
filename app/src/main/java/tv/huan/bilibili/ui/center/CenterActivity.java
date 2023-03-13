@@ -2,17 +2,14 @@ package tv.huan.bilibili.ui.center;
 
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.HorizontalClassLayout;
-import lib.kalu.leanback.list.RecyclerViewHorizontal;
 import tv.huan.bilibili.R;
 
 public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> implements CenterView {

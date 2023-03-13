@@ -1,4 +1,3 @@
-
 package tv.huan.bilibili.widget.common;
 
 import android.annotation.SuppressLint;

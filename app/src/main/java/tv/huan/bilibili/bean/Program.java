@@ -5,23 +5,23 @@ import java.io.Serializable;
 public class Program implements Serializable {
 
     private static final long serialVersionUID = -4261256634172280464L;
-    private String albumName ;
-    private String HuanId ;
-    private int productId ;
-    private MediaBean album ;
-    private int endFlag ;
-    private String markTime ;
-    private String vid ;
-    private int classId ;
-    private int playHistoryId ;
-    private int pos ;
-    private String clientCode ;
-    private String pageNo ;
-    private String fontSize ;
-    private String playTime ;
-    private int id ;
-    private String mediaName ;
-    private String cid ;
+    private String albumName;
+    private String HuanId;
+    private int productId;
+    private MediaBean album;
+    private int endFlag;
+    private String markTime;
+    private String vid;
+    private int classId;
+    private int playHistoryId;
+    private int pos;
+    private String clientCode;
+    private String pageNo;
+    private String fontSize;
+    private String playTime;
+    private int id;
+    private String mediaName;
+    private String cid;
 
 
     @Override

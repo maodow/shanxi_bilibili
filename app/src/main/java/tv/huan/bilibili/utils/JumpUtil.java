@@ -14,10 +14,6 @@ import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.ui.filter.FilterActivity;
 import tv.huan.bilibili.ui.search.SearchActivity;
 import tv.huan.bilibili.ui.special1.Special1Activity;
-import tv.huan.bilibili.ui.special2.Special2Activity;
-import tv.huan.bilibili.ui.special3.Special3Activity;
-import tv.huan.bilibili.ui.special4.Special4Activity;
-import tv.huan.bilibili.ui.special5.Special5Activity;
 import tv.huan.bilibili.ui.webview.WebviewActivity;
 
 public final class JumpUtil {

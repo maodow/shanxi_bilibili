@@ -3,11 +3,13 @@ package tv.huan.bilibili.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
+
 /**
  * Create by Richard
  * 2019-07-29 16:21
  */
-public class GetPopupInfoBean extends ResponsedBean {
+public class GetPopupInfoBeanBase extends BaseResponsedBean {
 
     private LoadingPicBean loading_pic;
     private PopupPicBean popup_pic;
@@ -210,7 +212,7 @@ public class GetPopupInfoBean extends ResponsedBean {
 
         @Override
         public String toString() {
-            return"{" +
+            return "{" +
                     "picture_SD=\"" + picture_SD + '\"' +
                     ", picture_HD=\"" + picture_HD + '\"' +
                     ", display_time=\"" + display_time + '\"' +

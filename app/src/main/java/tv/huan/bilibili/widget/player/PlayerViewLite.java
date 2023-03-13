@@ -4,11 +4,9 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import lib.kalu.mediaplayer.config.player.PlayerType;
-import lib.kalu.mediaplayer.config.start.StartBuilder;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.component.ComponentSpeed;
 

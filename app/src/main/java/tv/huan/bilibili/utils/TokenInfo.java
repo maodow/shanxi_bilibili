@@ -15,23 +15,23 @@ public class TokenInfo {
      * 用户标识
      */
     private String userId;
-    
-    
+
+
     /**
      * 计费系统认证的序列号
      */
     private String seq;
-    
+
     /**
      * EPG系统产生的序列号
      */
     private String ossSeq;
-    
+
     /**
      * 用户名称
      */
     private String userName;
-    
+
     /**
      * 播放内容名称
      */
@@ -40,62 +40,61 @@ public class TokenInfo {
      * 系统生成文件的地址
      */
     private String relativeUrl;
-    
-    
-    
+
+
     /**
-	 *
-	 */
-	public TokenInfo() {
-		super();
-	}
+     *
+     */
+    public TokenInfo() {
+        super();
+    }
 
-	public String getUserId() {
-		return userId;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public String getSeq() {
-		return seq;
-	}
+    public String getSeq() {
+        return seq;
+    }
 
-	public void setSeq(String seq) {
-		this.seq = seq;
-	}
+    public void setSeq(String seq) {
+        this.seq = seq;
+    }
 
-	public String getOssSeq() {
-		return ossSeq;
-	}
+    public String getOssSeq() {
+        return ossSeq;
+    }
 
-	public void setOssSeq(String ossSeq) {
-		this.ossSeq = ossSeq;
-	}
+    public void setOssSeq(String ossSeq) {
+        this.ossSeq = ossSeq;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public String getContentName() {
-		return contentName;
-	}
+    public String getContentName() {
+        return contentName;
+    }
 
-	public void setContentName(String contentName) {
-		this.contentName = contentName;
-	}
+    public void setContentName(String contentName) {
+        this.contentName = contentName;
+    }
 
-	public String getRelativeUrl() {
-		return relativeUrl;
-	}
+    public String getRelativeUrl() {
+        return relativeUrl;
+    }
 
-	public void setRelativeUrl(String relativeUrl) {
-		this.relativeUrl = relativeUrl;
-	}
+    public void setRelativeUrl(String relativeUrl) {
+        this.relativeUrl = relativeUrl;
+    }
 }
 

@@ -32,8 +32,7 @@ public class GeneralTemplate22 extends Presenter implements ListTvPresenterImpl 
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
             return "模板20";
-        }
-        else{
+        } else {
             return ListTvPresenterImpl.super.initRowTitle(context);
         }
     }

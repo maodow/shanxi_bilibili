@@ -8,7 +8,7 @@ import tv.huan.bilibili.HuanApp;
 
 
 /**
- * @author：tqzhang  on 18/7/23 11:33
+ * @author：tqzhang on 18/7/23 11:33
  */
 public class NetworkUtils {
 

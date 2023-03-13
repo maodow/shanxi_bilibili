@@ -21,9 +21,9 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
-import tv.huan.bilibili.bean.GetPopupInfoBean;
+import tv.huan.bilibili.bean.GetPopupInfoBeanBase;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.WelcomeBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.MainActivity;
@@ -152,18 +152,18 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     }
                 })
                 // 广告接口
-                .flatMap(new Function<WelcomeBean, Observable<GetPopupInfoBean>>() {
+                .flatMap(new Function<WelcomeBean, Observable<GetPopupInfoBeanBase>>() {
                     @Override
-                    public Observable<GetPopupInfoBean> apply(WelcomeBean data) {
+                    public Observable<GetPopupInfoBeanBase> apply(WelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => 广告接口");
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getPopupInfo(s);
                     }
                 })
                 // 下载广告
-                .map(new Function<GetPopupInfoBean, WelcomeBean>() {
+                .map(new Function<GetPopupInfoBeanBase, WelcomeBean>() {
                     @Override
-                    public WelcomeBean apply(GetPopupInfoBean loadPageIcon) {
+                    public WelcomeBean apply(GetPopupInfoBeanBase loadPageIcon) {
                         LogUtil.log("WelcomePresenter => request => 下载广告");
 
                         WelcomeBean welcomeBean;
@@ -174,7 +174,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         }
 
                         try {
-                            GetPopupInfoBean.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
+                            GetPopupInfoBeanBase.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
                             String display_time = loading_pic.getDisplay_time();
                             if (null != display_time && display_time.length() > 0) {
                                 int parseInt = Integer.parseInt(display_time);
@@ -186,7 +186,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                             welcomeBean.setAdTime(0);
                         }
                         try {
-                            GetPopupInfoBean.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
+                            GetPopupInfoBeanBase.LoadingPicBean loading_pic = loadPageIcon.getLoading_pic();
                             String picture_hd = loading_pic.getPicture_HD();
                             welcomeBean.setAdUrl(picture_hd);
                         } catch (Exception e) {
@@ -195,18 +195,18 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     }
                 })
                 // 频道接口
-                .flatMap(new Function<WelcomeBean, Observable<ResponsedBean<GetChannelsBean>>>() {
+                .flatMap(new Function<WelcomeBean, Observable<BaseResponsedBean<GetChannelsBean>>>() {
                     @Override
-                    public Observable<ResponsedBean<GetChannelsBean>> apply(WelcomeBean data) {
+                    public Observable<BaseResponsedBean<GetChannelsBean>> apply(WelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => 频道接口");
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getChannels(1, 100, s);
                     }
                 })
                 // 整理数据
-                .map(new Function<ResponsedBean<GetChannelsBean>, WelcomeBean>() {
+                .map(new Function<BaseResponsedBean<GetChannelsBean>, WelcomeBean>() {
                     @Override
-                    public WelcomeBean apply(ResponsedBean<GetChannelsBean> response) {
+                    public WelcomeBean apply(BaseResponsedBean<GetChannelsBean> response) {
                         LogUtil.log("WelcomePresenter => request => 整理数据");
 
                         WelcomeBean welcomeBean;

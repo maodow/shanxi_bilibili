@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import lib.kalu.frame.mvp.BaseActivity;
-import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.utils.GlideUtils;
+import tv.huan.bilibili.widget.player.PlayerView;
 
 public class Special2Activity extends BaseActivity<Special2View, Special2Presenter> implements Special2View {
 

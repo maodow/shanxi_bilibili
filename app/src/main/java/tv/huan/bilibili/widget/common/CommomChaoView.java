@@ -2,8 +2,6 @@ package tv.huan.bilibili.widget.common;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Toast;

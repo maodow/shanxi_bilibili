@@ -77,14 +77,14 @@ public class TokenGenerator {
     }
 
     /**
-        * 按指定的密钥字符串和token生存期，创建一个TokenGenerator。
-        *
-        * @param chiave   用来加密的密钥字符串，是EPG与Streaming
-        *                 Server之间共享的，必须是英文字符或GBK字符。chiave会与keyMask做异或，得出加密用的key。
-        */
-       public TokenGenerator(String chiave) {
-           this(chiave, -1, Cipher.ENCRYPT_MODE);
-       }
+     * 按指定的密钥字符串和token生存期，创建一个TokenGenerator。
+     *
+     * @param chiave 用来加密的密钥字符串，是EPG与Streaming
+     *               Server之间共享的，必须是英文字符或GBK字符。chiave会与keyMask做异或，得出加密用的key。
+     */
+    public TokenGenerator(String chiave) {
+        this(chiave, -1, Cipher.ENCRYPT_MODE);
+    }
 
     /**
      * 按指定的密钥字符串和token生存期，创建一个TokenGenerator。
@@ -129,17 +129,18 @@ public class TokenGenerator {
 
     /**
      * 解密数据
+     *
      * @param data
      * @return
      * @throws BadPaddingException
      * @throws IllegalBlockSizeException
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
     public TokenInfo decrypt(byte[] data) throws BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
         byte[] result = cipher.doFinal(data);
         byte[] input = new byte[data.length - 25];
         System.arraycopy(result, 25, input, 0, input.length);
-        String str = new String(input,"GBK");
+        String str = new String(input, "GBK");
         String[] arr = str.split("\n");
         TokenInfo token = new TokenInfo();
         token.setUserId(arr[0]);
@@ -147,13 +148,13 @@ public class TokenGenerator {
     }
 
     public long limitTime(byte[] data) throws BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
-		byte[] result = cipher.doFinal(data);
-		byte[] mima = new byte[4];
-		System.arraycopy(result, 5, mima, 0, mima.length);
-		long l = bytesToLong(mima);
-		return l;
-	}
-    
+        byte[] result = cipher.doFinal(data);
+        byte[] mima = new byte[4];
+        System.arraycopy(result, 5, mima, 0, mima.length);
+        long l = bytesToLong(mima);
+        return l;
+    }
+
     /**
      * 生成可以传送给Streaming Server的访问token。
      * <p/>
@@ -183,7 +184,7 @@ public class TokenGenerator {
             Date now = new Date();
             byte[] validateData = longTo4Bytes(now.getTime() / 1000
                     - tokenTTLStartPoint + tokenTTL);
-            Log.e(TAG,"validateData==" + validateData) ;
+            Log.e(TAG, "validateData==" + validateData);
             // ip+url的MD5摘要（16字节长）
             StringBuffer ipurl = new StringBuffer();
             if (userIp != null) {
@@ -254,7 +255,7 @@ public class TokenGenerator {
      *
      * @param data
      * @return @throws
-     *         IllegalStateException
+     * IllegalStateException
      * @throws IllegalBlockSizeException
      * @throws BadPaddingException
      */
@@ -300,12 +301,14 @@ public class TokenGenerator {
         }
         return result;
     }
+
     private long bytesToLong(byte[] bb) {
-        long l=( (((long) bb[3] & 0xff) << 24) 
-                | (((long) bb[2] & 0xff) << 16) 
-                | (((long) bb[1] & 0xff) << 8) | (((long) bb[0] & 0xff) << 0)); 
+        long l = ((((long) bb[3] & 0xff) << 24)
+                | (((long) bb[2] & 0xff) << 16)
+                | (((long) bb[1] & 0xff) << 8) | (((long) bb[0] & 0xff) << 0));
         return l;
     }
+
     /**
      * 生成可以传送给Streaming Server的访问token。
      * <p/>
@@ -385,7 +388,7 @@ public class TokenGenerator {
         }
         return result;
     }
-    
+
 //    public String generateAccessUrl(String prefix, String relativeUrl, String userIp, TokenInfo tokenInfo, AdInfo[] adInfo,boolean booltoken) {
 //        StringBuffer sb = new StringBuffer();
 //        if (StringUtils.isBlank(prefix)||relativeUrl.startsWith("http")||relativeUrl.startsWith("rtsp")) {
@@ -417,7 +420,7 @@ public class TokenGenerator {
 //        }
 //        return sb.toString();
 //    }
-    
+
 //    public static void main(String[] args) throws Exception {
 //    	System.out.println("请输入需要解密的token串");
 //    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

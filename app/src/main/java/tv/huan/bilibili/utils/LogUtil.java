@@ -1,4 +1,3 @@
-
 package tv.huan.bilibili.utils;
 
 import android.util.Log;

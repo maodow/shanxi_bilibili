@@ -1,7 +1,5 @@
 package tv.huan.bilibili.bean.format;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.List;
 

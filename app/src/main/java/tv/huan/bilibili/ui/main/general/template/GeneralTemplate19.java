@@ -3,33 +3,24 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.leanback.widget.Presenter;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
-import lib.kalu.leanback.list.RecyclerViewHorizontal;
 import lib.kalu.leanback.presenter.ListTvFullPresenter;
-import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
-import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.GlideUtils;
-import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
 public final class GeneralTemplate19 extends ListTvFullPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
@@ -38,8 +29,7 @@ public final class GeneralTemplate19 extends ListTvFullPresenter<GetSubChannelsB
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
             return "模板19";
-        }
-        else{
+        } else {
             return super.initRowTitle(context);
         }
     }

@@ -17,7 +17,7 @@ import lib.kalu.frame.mvp.BasePresenter;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import okhttp3.RequestBody;
 import tv.huan.bilibili.BuildConfig;
-import tv.huan.bilibili.bean.ResponsedBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.utils.ReportUtils;
@@ -139,9 +139,9 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
                         emitter.onNext(requestBody);
                     }
                 })
-                .flatMap(new Function<RequestBody, Observable<ResponsedBean<Object>>>() {
+                .flatMap(new Function<RequestBody, Observable<BaseResponsedBean<Object>>>() {
                     @Override
-                    public Observable<ResponsedBean<Object>> apply(RequestBody requestBody) {
+                    public Observable<BaseResponsedBean<Object>> apply(RequestBody requestBody) {
                         return HttpClient.getHttpClient().getHttpApi().logReport(requestBody);
                     }
                 })
@@ -162,9 +162,9 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
                         }
                     }
                 })
-                .doOnNext(new Consumer<ResponsedBean<Object>>() {
+                .doOnNext(new Consumer<BaseResponsedBean<Object>>() {
                     @Override
-                    public void accept(ResponsedBean<Object> response) {
+                    public void accept(BaseResponsedBean<Object> response) {
                         if (BuildConfig.HUAN_LOG) {
                             LogUtil.log("BasePresenterImpl", "logReport => doOnNext => " + new Gson().toJson(response));
                         }
@@ -173,6 +173,7 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
                 .subscribe();
 //    );
     }
+
     protected final void uploadPlayHistory(String cid, String vid, String classId, int pos, int endFlag, long duration, long position) {
 
         Observable.create(new ObservableOnSubscribe<Boolean>() {
@@ -181,9 +182,9 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
                         emitter.onNext(true);
                     }
                 })
-                .flatMap(new Function<Boolean, Observable<ResponsedBean<Object>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<Object>>>() {
                     @Override
-                    public Observable<ResponsedBean<Object>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<Object>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().savePlayHistory(vid, cid, endFlag, classId, pos, position, duration);
                     }
                 })
@@ -204,9 +205,9 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
                         }
                     }
                 })
-                .doOnNext(new Consumer<ResponsedBean<Object>>() {
+                .doOnNext(new Consumer<BaseResponsedBean<Object>>() {
                     @Override
-                    public void accept(ResponsedBean<Object> response) {
+                    public void accept(BaseResponsedBean<Object> response) {
                         if (BuildConfig.HUAN_LOG) {
                             LogUtil.log("BasePresenterImpl", "uploadPlayHistory => doOnNext => " + new Gson().toJson(response));
                         }

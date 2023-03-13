@@ -3,13 +3,9 @@ package tv.huan.bilibili.widget.template20;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.ViewParent;
 import android.widget.LinearLayout;
 
 import androidx.annotation.RequiresApi;
-import androidx.leanback.widget.VerticalGridView;
-
-import tv.huan.bilibili.R;
 
 public class Template20LinearLayout extends LinearLayout {
     public Template20LinearLayout(Context context) {
