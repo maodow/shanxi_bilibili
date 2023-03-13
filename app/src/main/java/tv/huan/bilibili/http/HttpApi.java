@@ -17,6 +17,7 @@ import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.FavorBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
+import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.GetPopupInfoBeanBase;
 import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
