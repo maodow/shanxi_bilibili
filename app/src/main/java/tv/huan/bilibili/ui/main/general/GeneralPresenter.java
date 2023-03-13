@@ -57,6 +57,7 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplate9;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplateBottom;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplateClass;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.widget.GeneralGridView;
 
 @Keep
 public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
@@ -541,7 +542,18 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                     public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
                         boolean extra = getView().getBooleanExtra(GeneralFragment.BUNDLE_RESEAT, false);
                         if (extra) {
-                            emitter.onNext(true);
+                            boolean visible = getView().isFragmentVisible();
+                            if (visible) {
+                                GeneralGridView gridView = getView().findViewById(R.id.general_list);
+                                boolean containsTemplateHistory = gridView.containsTemplateHistory();
+                                if (containsTemplateHistory) {
+                                    emitter.onNext(true);
+                                } else {
+                                    throw new Exception("not contains");
+                                }
+                            } else {
+                                throw new Exception("not visable");
+                            }
                         } else {
                             getView().putBooleanExtra(GeneralFragment.BUNDLE_RESEAT, true);
                             throw new Exception("not init");

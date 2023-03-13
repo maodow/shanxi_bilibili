@@ -176,6 +176,34 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
 
     /***************/
 
+    public boolean containsTemplateHistory() {
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            int size = objectAdapter.size();
+            for (int i = 0; i < size; i++) {
+                Object o = objectAdapter.get(i);
+                if (null == o)
+                    continue;
+                // GeneralTemplate16
+                if (o instanceof GeneralTemplate16.GeneralTemplate16List) {
+                    return true;
+                }
+                // GeneralTemplate17
+                else if (o instanceof GeneralTemplate17.GeneralTemplate17List) {
+                    return true;
+                }
+                // GeneralTemplate20
+                else if (o instanceof GeneralTemplate20.GeneralTemplate20List) {
+                    return true;
+                }
+            }
+            throw new Exception("not find");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public void updateTemplateHistory(@NonNull FavBean data) {
 
         if (BuildConfig.DEBUG) {

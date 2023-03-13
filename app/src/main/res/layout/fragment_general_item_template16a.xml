@@ -26,27 +26,27 @@
             android:id="@+id/general_item_template16a_rec1_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/dp_3"
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="left|center_vertical"
             android:singleLine="true"
-            android:text="-"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/general_item_template16a_rec1_position"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:ellipsize="end"
+            android:layout_marginLeft="@dimen/dp_3"
             android:focusable="false"
             android:gravity="right|center_vertical"
             android:singleLine="true"
             android:text="-"
-            android:textColor="#8d8fa8"
-            android:textSize="11sp" />
+            android:textColor="@color/color_aaaaaa"
+            android:textSize="@dimen/sp_11" />
 
     </lib.kalu.leanback.focus.FocusLinearLayout>
 
@@ -68,27 +68,27 @@
             android:id="@+id/general_item_template16a_rec2_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/dp_3"
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="left|center_vertical"
             android:singleLine="true"
-            android:text="-"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/general_item_template16a_rec2_position"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:ellipsize="end"
+            android:layout_marginLeft="@dimen/dp_3"
             android:focusable="false"
             android:gravity="right|center_vertical"
             android:singleLine="true"
             android:text="-"
-            android:textColor="#8d8fa8"
-            android:textSize="11sp" />
+            android:textColor="@color/color_aaaaaa"
+            android:textSize="@dimen/sp_11" />
 
     </lib.kalu.leanback.focus.FocusLinearLayout>
 
@@ -110,27 +110,27 @@
             android:id="@+id/general_item_template16a_rec3_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/dp_3"
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="left|center_vertical"
             android:singleLine="true"
-            android:text="-"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/general_item_template16a_rec3_position"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:ellipsize="end"
+            android:layout_marginLeft="@dimen/dp_3"
             android:focusable="false"
             android:gravity="right|center_vertical"
             android:singleLine="true"
             android:text="-"
-            android:textColor="#8d8fa8"
-            android:textSize="11sp" />
+            android:textColor="@color/color_aaaaaa"
+            android:textSize="@dimen/sp_11" />
 
     </lib.kalu.leanback.focus.FocusLinearLayout>
 
@@ -152,27 +152,27 @@
             android:id="@+id/general_item_template16a_rec4_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/dp_3"
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="left|center_vertical"
             android:singleLine="true"
-            android:text="-"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/general_item_template16a_rec4_position"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:ellipsize="end"
+            android:layout_marginLeft="@dimen/dp_3"
             android:focusable="false"
             android:gravity="right|center_vertical"
             android:singleLine="true"
             android:text="-"
-            android:textColor="#8d8fa8"
-            android:textSize="11sp" />
+            android:textColor="@color/color_aaaaaa"
+            android:textSize="@dimen/sp_11" />
 
     </lib.kalu.leanback.focus.FocusLinearLayout>
 
@@ -194,27 +194,27 @@
             android:id="@+id/general_item_template16a_rec5_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/dp_3"
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="left|center_vertical"
             android:singleLine="true"
-            android:text="-"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/general_item_template16a_rec5_position"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:ellipsize="end"
+            android:layout_marginLeft="@dimen/dp_3"
             android:focusable="false"
             android:gravity="right|center_vertical"
             android:singleLine="true"
             android:text="-"
-            android:textColor="#8d8fa8"
-            android:textSize="11sp" />
+            android:textColor="@color/color_aaaaaa"
+            android:textSize="@dimen/sp_11" />
 
     </lib.kalu.leanback.focus.FocusLinearLayout>
 

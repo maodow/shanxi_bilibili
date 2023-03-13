@@ -40,7 +40,6 @@
         android:paddingLeft="@dimen/dp_8"
         android:paddingRight="@dimen/dp_8"
         android:visibility="gone"
-        android:weightSum="5"
         app:rl_scale="1.1">
 
         <lib.kalu.leanback.marquee.MarqueeTextView
@@ -48,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/dp_3"
-            android:layout_weight="3.8"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="center_vertical|left"
@@ -59,10 +58,9 @@
 
         <TextView
             android:id="@+id/general_template17a_type1_item1_date"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_3"
-            android:layout_weight="1.2"
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="center_vertical|right"
@@ -88,7 +86,6 @@
         android:paddingLeft="@dimen/dp_8"
         android:paddingRight="@dimen/dp_8"
         android:visibility="gone"
-        android:weightSum="5"
         app:rl_scale="1.1">
 
         <lib.kalu.leanback.marquee.MarqueeTextView
@@ -96,7 +93,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/dp_3"
-            android:layout_weight="3.8"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="center_vertical|left"
@@ -107,10 +104,9 @@
 
         <TextView
             android:id="@+id/general_template17a_type1_item2_date"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_3"
-            android:layout_weight="1.2"
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="center_vertical|right"
@@ -168,7 +164,6 @@
         android:paddingLeft="@dimen/dp_8"
         android:paddingRight="@dimen/dp_8"
         android:visibility="gone"
-        android:weightSum="5"
         app:rl_scale="1.1">
 
         <lib.kalu.leanback.marquee.MarqueeTextView
@@ -176,7 +171,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/dp_3"
-            android:layout_weight="3.8"
+            android:layout_weight="1"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:ellipsize="end"
@@ -189,10 +184,9 @@
 
         <TextView
             android:id="@+id/general_template17a_type2_item1_date"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_3"
-            android:layout_weight="1.2"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:ellipsize="end"
