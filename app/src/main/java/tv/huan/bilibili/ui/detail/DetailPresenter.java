@@ -292,7 +292,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                             bean.setTempFavor(data.isFavor());
                                             bean.setTempPlayType(data.getPlayType());
                                             bean.setTempTag(detail.getSplitTag());
-                                            bean.setTempTitle(detail.getTitle());
+                                            bean.setTempTitle(detail.getName());
                                             bean.setTemoInfo(detail.getInfo());
                                             bean.setTempRecClassId(data.getRecClassId());
                                             bean.setTempImageUrl(detail.getPicture(true));
@@ -339,7 +339,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                             bean.setTempFavor(data.isFavor());
                                             bean.setTempPlayType(data.getPlayType());
                                             bean.setTempTag(detail.getSplitTag());
-                                            bean.setTempTitle(detail.getTitle());
+                                            bean.setTempTitle(detail.getName());
                                             bean.setTemoInfo(detail.getInfo());
                                             bean.setTempRecClassId(data.getRecClassId());
                                             bean.setTempImageUrl(detail.getPicture(true));
@@ -405,7 +405,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             bean.setTempPlayType(data.getPlayType());
                             bean.setTempRecClassId(data.getRecClassId());
                             bean.setTempTag(data.getAlbum().getSplitTag());
-                            bean.setTempTitle(data.getAlbum().getTitle());
+                            bean.setTempTitle(data.getAlbum().getName());
                             bean.setTemoInfo(data.getAlbum().getInfo());
                             bean.setTempImageUrl(data.getAlbum().getPicture(true));
                             bean.setTempVideoUrl(null);

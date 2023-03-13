@@ -126,7 +126,7 @@ public final class DetailTemplatePlayer extends Presenter {
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
             String imageUrl = ((DetailTemplatePlayerObject) o).getImageUrl();
-            String title = ((DetailTemplatePlayerObject) o).getTitle();
+            String title = ((DetailTemplatePlayerObject) o).getName();
             int playingIndex = ((DetailTemplatePlayerObject) o).getPlayingIndex();
             componentInit.setData(imageUrl, title, playingIndex);
         } catch (Exception e) {
@@ -155,7 +155,7 @@ public final class DetailTemplatePlayer extends Presenter {
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_title);
-            textView.setText(((DetailTemplatePlayerObject) o).getTitle());
+            textView.setText(((DetailTemplatePlayerObject) o).getName());
         } catch (Exception e) {
         }
         try {

@@ -145,12 +145,7 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         }).doOnNext(new Consumer<Fragment>() {
             @Override
             public void accept(Fragment fragment) {
-                LogUtil.log("MainPresenter => updateFragment => succ");
-                LogUtil.log("MainPresenter => updateFragment => fragment = " + fragment);
                 getView().showFragment(fragment);
-                if (fragment instanceof MineFragment) {
-                    ((MineFragment) fragment).onUpdate();
-                }
             }
         }).subscribe());
     }

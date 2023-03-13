@@ -30,7 +30,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public static final String INTENT_FROM_SPECIAL_SCENEID = "intent_from_special_sceneid";
     public static final String INTENT_FROM_SPECIAL_TOPID = "intent_from_special_topid";
     public static final String INTENT_FROM_SPECIAL_TOPNAME = "intent_from_special_topname";
-    private static final String INTENT_UPDATE = "intent_update";
+//    private static final String INTENT_UPDATE = "intent_update";
     protected static final String INTENT_VID = "intent_vid";
     protected static final String INTENT_INDEX = "intent_index";
     protected static final String INTENT_REC_CLASSID = "intent_rec_classid";
@@ -50,10 +50,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void finish() {
-        boolean extra = getBooleanExtra(INTENT_UPDATE, false);
-        if (extra) {
-            setResult(2002);
-        }
         stopPlayer();
         super.finish();
     }
@@ -100,7 +96,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void updateFavor(boolean status) {
-        putBooleanExtra(INTENT_UPDATE, true);
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.updateFavor(status);
     }

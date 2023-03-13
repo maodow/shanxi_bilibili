@@ -4,6 +4,7 @@ import androidx.annotation.Keep;
 
 import lib.kalu.frame.mvp.BaseFragment;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.utils.LogUtil;
 
 @Keep
 public class MineFragment extends BaseFragment<MineView, MinePresenter> implements MineView {
@@ -15,23 +16,25 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
 
     @Override
     public void initData() {
-        // adapter
         getPresenter().setAdapter();
-        // http
-        getPresenter().request(false);
+        getPresenter().request();
     }
 
     @Override
-    public void refreshContent(boolean update, int size) {
-//        if (update) {
-//            notifyItemRangeChanged(R.id.mine_list, 0, size);
-//        } else {
-            notifyDataSetChanged(R.id.mine_list);
-//        }
+    public void onResume() {
+        super.onResume();
+        LogUtil.log("MineFragment => onResume => " + this);
+        getPresenter().refresh();
     }
 
     @Override
-    public void onUpdate() {
-        getPresenter().request(true);
+    public void refreshContent() {
+        notifyDataSetChanged(R.id.mine_list);
+    }
+
+    @Override
+    public void refreshContent(int start, int length) {
+        LogUtil.log("MineFragment => onResume => start = " + start + ", length = " + length);
+        notifyItemRangeChanged(R.id.mine_list, start, length);
     }
 }

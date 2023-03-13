@@ -49,15 +49,17 @@ public class BaseDataBean extends TvEpisodesItemBean implements Serializable {
     }
 
     public String getName() {
-        return name;
+        if (null != name && name.length() > 0) {
+            return name;
+        } else if (null != title && title.length() > 0) {
+            return title;
+        } else {
+            return "";
+        }
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public void setTitle(String title) {

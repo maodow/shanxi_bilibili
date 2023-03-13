@@ -90,8 +90,8 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         int position = holder.getAbsoluteAdapterPosition();
                         if (position >= 0) {
                             FavBean.ItemBean itemBean = mDatas.get(position);
-                            if (!itemBean.isShowDel()) {
-                                itemBean.setShowDel(true);
+                            if (!itemBean.isTempDel()) {
+                                itemBean.setTempDel(true);
                                 getView().updatePosition(position);
                             }
                         }
@@ -106,9 +106,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             if (position < 0)
                                 throw new Exception();
                             FavBean.ItemBean itemBean = mDatas.get(position);
-                            if (!itemBean.isShowDel())
+                            if (!itemBean.isTempDel())
                                 throw new Exception();
-                            itemBean.setShowDel(false);
+                            itemBean.setTempDel(false);
                             getView().updatePosition(position);
                         } catch (Exception e) {
                             TextView textView = view.findViewById(R.id.common_poster_name);
@@ -122,7 +122,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         int position = holder.getAbsoluteAdapterPosition();
                         if (position >= 0) {
                             FavBean.ItemBean itemBean = mDatas.get(position);
-                            if (itemBean.isShowDel()) {
+                            if (itemBean.isTempDel()) {
                                 String cid = itemBean.getCid();
                                 delData(cid, position);
                             } else {
@@ -140,7 +140,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 try {
                     FavBean.ItemBean itemBean = mDatas.get(position);
                     View view = holder.itemView.findViewById(R.id.center_item_del);
-                    view.setVisibility(itemBean.isShowDel() ? View.VISIBLE : View.INVISIBLE);
+                    view.setVisibility(itemBean.isTempDel() ? View.VISIBLE : View.INVISIBLE);
                 } catch (Exception e) {
                 }
                 try {

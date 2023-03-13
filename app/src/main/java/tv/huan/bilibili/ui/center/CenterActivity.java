@@ -18,20 +18,10 @@ import tv.huan.bilibili.R;
 public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> implements CenterView {
 
     public static final String INTENT_FAVORY = "intent_favory"; // 我的收藏
-    private static final String INTENT_UPDATE = "intent_update";
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         return getPresenter().dispatchKey(event) || super.dispatchKeyEvent(event);
-    }
-
-    @Override
-    public void finish() {
-        boolean extra = getBooleanExtra(INTENT_UPDATE, false);
-        if (extra) {
-            setResult(1002);
-        }
-        super.finish();
     }
 
     @Override
@@ -82,7 +72,6 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
 
     @Override
     public void deletePosition(int position) {
-        putBooleanExtra(INTENT_UPDATE, true);
         notifyItemRangeRemoved(R.id.center_list, position, 1);
     }
 

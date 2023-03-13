@@ -33,11 +33,6 @@ public class GetSecondTagAlbumsBean implements Serializable {
             return 1;
         }
 
-        @Override
-        public String getName() {
-            return getTitle();
-        }
-
         public int getType() {
             return type;
         }

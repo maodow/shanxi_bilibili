@@ -58,21 +58,74 @@ public class FavBean implements Serializable {
     @Keep
     public static class ItemBean extends BaseDataBean implements Serializable {
 
-        private boolean showDel;
-        private String favTime;
-        private String huanId;
-        private int productId;
         private InfoBean album;
-        private int itemType = 1;
-
-        private int icon;
-        private int index;
-        private String bannerUrl;
 
         private String playTime;
         private String playLength;
         private int pos;
         private String albumName;
+
+        private int tempType;
+        private boolean tempDel;
+        private String tempBanner;
+        private int tempDrawable;
+        private int tempPosition = -1;
+
+        public int getTempPosition() {
+            return tempPosition;
+        }
+
+        public void setTempPosition(int tempPosition) {
+            this.tempPosition = tempPosition;
+        }
+
+        public int getTempDrawable() {
+            return tempDrawable;
+        }
+
+        public void setTempDrawable(int tempDrawable) {
+            this.tempDrawable = tempDrawable;
+        }
+
+        public String getPlayTime() {
+            return playTime;
+        }
+
+        public String getPlayLength() {
+            return playLength;
+        }
+
+        public int getPos() {
+            return pos;
+        }
+
+        public String getAlbumName() {
+            return albumName;
+        }
+
+        public int getTempType() {
+            return tempType;
+        }
+
+        public void setTempType(int tempType) {
+            this.tempType = tempType;
+        }
+
+        public boolean isTempDel() {
+            return tempDel;
+        }
+
+        public void setTempDel(boolean tempDel) {
+            this.tempDel = tempDel;
+        }
+
+        public String getTempBanner() {
+            return tempBanner;
+        }
+
+        public void setTempBanner(String tempBanner) {
+            this.tempBanner = tempBanner;
+        }
 
         public void setAlbumName(String albumName) {
             this.albumName = albumName;
@@ -90,71 +143,6 @@ public class FavBean implements Serializable {
             this.pos = pos;
         }
 
-        public String getBannerUrl() {
-            return bannerUrl;
-        }
-
-        public void setBannerUrl(String bannerUrl) {
-            this.bannerUrl = bannerUrl;
-        }
-
-        public boolean isShowDel() {
-            return showDel;
-        }
-
-        public void setShowDel(boolean showDel) {
-            this.showDel = showDel;
-        }
-
-
-        public int getIndex() {
-            return index;
-        }
-
-        public void setIndex(int index) {
-            this.index = index;
-        }
-
-        public int getIcon() {
-            return icon;
-        }
-
-        public void setIcon(int icon) {
-            this.icon = icon;
-        }
-
-        public int getItemType() {
-            return itemType;
-        }
-
-        public void setItemType(int itemType) {
-            this.itemType = itemType;
-        }
-
-        public String getFavTime() {
-            return favTime;
-        }
-
-        public void setFavTime(String favTime) {
-            this.favTime = favTime;
-        }
-
-        public String getHuanId() {
-            return huanId;
-        }
-
-        public void setHuanId(String huanId) {
-            this.huanId = huanId;
-        }
-
-        public int getProductId() {
-            return productId;
-        }
-
-        public void setProductId(int productId) {
-            this.productId = productId;
-        }
-
         public InfoBean getAlbum() {
             return album;
         }
@@ -163,20 +151,32 @@ public class FavBean implements Serializable {
             this.album = album;
         }
 
+//        public String getName() {
+//            super.getName();
+
+//        }
+
+
+        @Override
         public String getName() {
-            try {
-                return getAlbum().getTitle();
-            } catch (Exception e) {
-                return "";
+            String name = super.getName();
+            if (null != name && name.length() > 0) {
+                return name;
+            } else {
+                try {
+                    return getAlbum().getName();
+                } catch (Exception e) {
+                    return "";
+                }
             }
         }
 
         public String getNameRec() {
             try {
                 if (pos <= 0) {
-                    return getAlbum().getTitle();
+                    return getAlbum().getName();
                 } else {
-                    return getAlbum().getTitle() + "(第" + pos + "集)";
+                    return getAlbum().getName() + "(第" + pos + "集)";
                 }
             } catch (Exception e) {
                 return "";
