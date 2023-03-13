@@ -117,28 +117,6 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         }
                     }
                 })
-//                // 获取HuanId
-//                .flatMap(new Function<WelcomeBean, Observable<BaseBean<HuanInfo>>>() {
-//                    @Override
-//                    public Observable<BaseBean<HuanInfo>> apply(WelcomeBean data) {
-//
-//                        String huanId = CacheUtil.getCache(getView().getContext(), "huanId");
-//                        if (null == huanId || huanId.length() <= 0) {
-//                            String s = new Gson().toJson(data);
-//                            return HttpClient.getHttpClient().getHttpApi().getHuanId(s);
-//                        } else {
-//                            return Observable.create(new ObservableOnSubscribe<BaseBean<HuanInfo>>() {
-//                                @Override
-//                                public void subscribe(ObservableEmitter<BaseBean<HuanInfo>> emitter) {
-//                                    BaseBean<HuanInfo> baseBean = new BaseBean<>();
-//                                    String s = new Gson().toJson(data);
-//                                    baseBean.setExtra(s);
-//                                    emitter.onNext(baseBean);
-//                                }
-//                            });
-//                        }
-//                    }
-//                })
                 // 首次打开app上报
                 .map(new Function<WelcomeBean, WelcomeBean>() {
                     @Override
@@ -275,10 +253,8 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        String s = throwable.getMessage();
-                        LogUtil.log("WelcomePresenter => request => doOnError => s = " + s);
-                        getView().showToast(s);
-                        getView().callFinish();
+                        LogUtil.log("WelcomePresenter => request => doOnError =>");
+                        getView().next();
                     }
                 })
                 .doOnNext(new Consumer<WelcomeBean>() {

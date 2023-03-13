@@ -13,5 +13,7 @@ public interface WelcomeView extends BaseViewImpl {
 
     void refreshTime(@NonNull String text);
 
+    void next();
+
     void next(@NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag);
 }

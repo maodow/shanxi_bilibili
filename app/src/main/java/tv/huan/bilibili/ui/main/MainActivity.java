@@ -1,12 +1,10 @@
 package tv.huan.bilibili.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
 import org.json.JSONObject;
@@ -26,6 +24,7 @@ import tv.huan.bilibili.widget.player.PlayerView;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
 
+    public static final String INTENT_ENABLE = "intent_enable";
     public static final String INTENT_SECOND_TAG = "intent_second_tag";
     public static final String INTENT_CID = "intent_cid";
     public static final String INTENT_CLASSID = "intent_classid";
@@ -56,8 +55,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     @Override
     public void initData() {
-        // auto
-        getPresenter().autoNext();
+        // check
+        getPresenter().checkIntent();
         // request
         getPresenter().showTabs();
         // listener

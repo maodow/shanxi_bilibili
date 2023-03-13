@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -39,6 +40,7 @@ import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.format.MainBean;
+import tv.huan.bilibili.dialog.WarningDialog;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.general.GeneralFragment;
 import tv.huan.bilibili.ui.main.mine.MineFragment;
@@ -50,25 +52,33 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         super(mainView);
     }
 
-    protected void autoNext() {
-        int type = getView().getIntExtra(MainActivity.INTENT_TYPE, -1);
-        // 专辑
-        if (type == MainActivity.INTENT_TYPE_DETAIL) {
-            String cid = getView().getStringExtra(MainActivity.INTENT_CID);
-            BaseDataBean bean = new BaseDataBean();
-            bean.setToType(1);
-            bean.setCid(cid);
-            JumpUtil.next((Context) getView(), bean);
-        }
-        // 筛选
-        else if (type == MainActivity.INTENT_TYPE_FILTER) {
-            String secondTag = getView().getStringExtra(MainActivity.INTENT_SECOND_TAG);
-            int classId = getView().getIntExtra(MainActivity.INTENT_CLASSID, -1);
-            BaseDataBean bean = new BaseDataBean();
-            bean.setToType(2);
-            bean.setClassId(classId);
-            bean.setName(secondTag);
-            JumpUtil.next(getView().getContext(), bean);
+    protected void checkIntent() {
+        // userId
+        boolean enable = getView().getBooleanExtra(MainActivity.INTENT_ENABLE, true);
+        if (enable) {
+            int type = getView().getIntExtra(MainActivity.INTENT_TYPE, -1);
+            // 专辑
+            if (type == MainActivity.INTENT_TYPE_DETAIL) {
+                String cid = getView().getStringExtra(MainActivity.INTENT_CID);
+                BaseDataBean bean = new BaseDataBean();
+                bean.setToType(1);
+                bean.setCid(cid);
+                JumpUtil.next((Context) getView(), bean);
+            }
+            // 筛选
+            else if (type == MainActivity.INTENT_TYPE_FILTER) {
+                String secondTag = getView().getStringExtra(MainActivity.INTENT_SECOND_TAG);
+                int classId = getView().getIntExtra(MainActivity.INTENT_CLASSID, -1);
+                BaseDataBean bean = new BaseDataBean();
+                bean.setToType(2);
+                bean.setClassId(classId);
+                bean.setName(secondTag);
+                JumpUtil.next(getView().getContext(), bean);
+            }
+        } else {
+            FragmentManager fragmentManager = getView().getSupportFragmentManager();
+            WarningDialog dialog = new WarningDialog();
+            dialog.show(fragmentManager, null);
         }
     }
 

@@ -48,6 +48,14 @@ public class WelcomeActivity extends BaseActivity<WelcomeView, WelcomePresenter>
     }
 
     @Override
+    public void next() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra(MainActivity.INTENT_ENABLE, false);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public void next(@NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag) {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(MainActivity.INTENT_SELECT, select);
