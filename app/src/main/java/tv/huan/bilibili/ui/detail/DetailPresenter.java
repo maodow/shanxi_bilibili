@@ -590,6 +590,13 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                 if (!isVip && index > playType) {
                                     emitter.onNext(1);
                                 } else {
+                                    if (isFromUser) {
+                                        long seek = getView().getLongExtra(DetailActivity.INTENT_SEEK, 0);
+                                        if (seek > 0) {
+                                            getView().putLongExtra(DetailActivity.INTENT_SEEK, 0);
+                                            data.setTempSeek(seek);
+                                        }
+                                    }
                                     emitter.onNext(isFromUser ? 21 : 22);
                                 }
                             }
@@ -608,9 +615,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(Integer v) {
                         if (v == 21) {
-                            getView().startPlayer(data, true);
+                            getView().startPlayer(data);
                         } else if (v == 22) {
-                            getView().startPlayer(data, false);
+                            getView().selectPosition(data);
                         } else if (v == 1) {
                             getView().jumpVip();
                         }

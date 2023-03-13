@@ -206,11 +206,15 @@ public final class DetailTemplatePlayer extends Presenter {
         LogUtil.log("DetailTemplatePlayer => startPlayer");
         try {
             DetailTemplatePlayerObject data = (DetailTemplatePlayerObject) o;
+            LogUtil.log("DetailTemplatePlayer => startPlayer => seek = " + data.getSeek());
             String cdnUrl = data.getVideoUrl();
             PlayerView videoLayout = view.findViewById(R.id.detail_player_item_video);
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(false);
             builder.setDelay(4000);
+            long seek = data.getSeek();
+            data.setSeek(0);
+            builder.setSeek(seek);
             videoLayout.start(builder.build(), cdnUrl);
         } catch (Exception e) {
             LogUtil.log("DetailTemplatePlayer => startPlayer => " + e.getMessage());
@@ -353,6 +357,7 @@ public final class DetailTemplatePlayer extends Presenter {
         private String imageUrl;
         private String videoUrl;
         private int playingIndex = 0;
+        private long seek = 0;
 
         public boolean isFavor() {
             return favor;
@@ -448,6 +453,15 @@ public final class DetailTemplatePlayer extends Presenter {
 
         public void setVideoUrl(String videoUrl) {
             this.videoUrl = videoUrl;
+        }
+
+        @Override
+        public long getSeek() {
+            return seek;
+        }
+
+        public void setSeek(long seek) {
+            this.seek = seek;
         }
     }
 }

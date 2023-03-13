@@ -10,6 +10,7 @@ import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
@@ -117,9 +118,15 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void startPlayer(@NonNull MediaBean data, boolean isFromUser) {
+    public void startPlayer(@NonNull MediaBean data) {
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.startPlayer(data, isFromUser);
+        gridView.startPlayer(data);
+    }
+
+    @Override
+    public void selectPosition(@NonNull MediaBean data) {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.selectPlayerPosition(data);
     }
 
     @Override
