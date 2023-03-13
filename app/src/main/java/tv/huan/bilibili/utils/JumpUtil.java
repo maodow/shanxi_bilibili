@@ -20,7 +20,7 @@ import tv.huan.bilibili.ui.special4.Special4Activity;
 import tv.huan.bilibili.ui.special5.Special5Activity;
 import tv.huan.bilibili.ui.webview.WebviewActivity;
 
-public class JumpUtil {
+public final class JumpUtil {
 
     public static void next(@NonNull Context context, @NonNull BaseDataBean templateBean) {
 
@@ -28,7 +28,6 @@ public class JumpUtil {
             return;
         Log.e("JumpUtil", "next => " + new Gson().toJson(templateBean));
         int toType = templateBean.getToType();
-//        int toType = 4;
 
         switch (toType) {
             // 分类
@@ -46,80 +45,49 @@ public class JumpUtil {
         }
     }
 
-    public static void nextDetail(@NonNull Context context, @NonNull BaseDataBean data) {
+    private static void nextDetail(@NonNull Context context, @NonNull BaseDataBean data) {
         try {
             String cid = data.getCid();
-            nextDetail(context, cid);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void nextDetail(@NonNull Context context, @NonNull String cid) {
-//        Log.e("JumpUtil", "nextDetail => cid = " + cid + ", classId = " + classId);
-        if (null != cid && cid.length() > 0) {
+            if (null == cid || cid.length() <= 0)
+                throw new Exception("cid error: " + cid);
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra(DetailActivity.INTENT_CID, cid);
-//            intent.putExtra(DetailActivity.INTENT_CLASSID, classId);
             context.startActivity(intent);
-        }
-    }
-
-    public static void nextFilter(@NonNull Context context, @NonNull BaseDataBean data) {
-        try {
-            String name = data.getFilterCheckedName();
-            int classId = data.getFilterId();
-            nextFilter(context, name, classId);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("JumpUtil", "nextDetail => " + e.getMessage());
         }
     }
 
-    public static void nextFilter(@NonNull Context context, @NonNull String secondTag, @NonNull int classId) {
-        Log.e("JumpUtil", "nextFilter => secondTag = " + secondTag + ", classId = " + classId);
-        if (classId > 0) {
+    private static void nextFilter(@NonNull Context context, @NonNull BaseDataBean data) {
+        try {
+            int classId = data.getClassId();
+            if (classId <= 0)
+                throw new Exception("classId error: " + classId);
             Intent intent = new Intent(context, FilterActivity.class);
-            intent.putExtra(FilterActivity.INTENT_SECOND_TAG, secondTag);
+            intent.putExtra(FilterActivity.INTENT_SECOND_TAG, data.getName());
             intent.putExtra(FilterActivity.INTENT_CLASSID, classId);
             context.startActivity(intent);
-        }
-    }
-
-    public static void nextSpecial(@NonNull Context context, @NonNull BaseDataBean data) {
-        try {
-            int specialId = data.getSpecialId();
-//            int type = data.getSpecialType();
-            nextSpecial(context, specialId, 1);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("JumpUtil", "nextFilter => " + e.getMessage());
         }
     }
 
-    public static void nextSpecial(@NonNull Context context, @NonNull int specialId, @NonNull int type) {
-        if (specialId > 0) {
-
-            Intent intent = new Intent();
-            switch (type) {
-                case 2:
-                    intent.setClass(context, Special2Activity.class);
-                    break;
-                case 3:
-                    intent.setClass(context, Special3Activity.class);
-                    break;
-                case 4:
-                    intent.setClass(context, Special4Activity.class);
-                    break;
-                case 5:
-                    intent.setClass(context, Special5Activity.class);
-                    break;
-                default:
-                    intent.setClass(context, Special1Activity.class);
-                    break;
-            }
+    private static void nextSpecial(@NonNull Context context, @NonNull BaseDataBean data) {
+        try {
+            String cid = data.getCid();
+            if (null == cid || cid.length() <= 0)
+                throw new Exception("cid error: " + cid);
+            int specialId = Integer.parseInt(cid);
+            if (specialId <= 0)
+                throw new Exception("specialId error: " + specialId);
+            Intent intent = new Intent(context, Special1Activity.class);
             intent.putExtra(Special1Activity.INTENT_SPECIALID, specialId);
             context.startActivity(intent);
+        } catch (Exception e) {
+            Log.e("JumpUtil", "nextSpecial => " + e.getMessage());
         }
     }
+
 
     /*****************/
 
@@ -140,6 +108,7 @@ public class JumpUtil {
         intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 2);
         context.startActivity(intent);
     }
+
     public static final void nextWebAbout(@NonNull Context context) {
         Intent intent = new Intent(context, WebviewActivity.class);
         intent.putExtra(WebviewActivity.INTENT_HELP, true);
@@ -169,7 +138,7 @@ public class JumpUtil {
 
     public static void nextDetailFromSpecial(@NonNull Context context, @NonNull String cid, int sceneId, int topicId, String topicName) {
 
-        Log.e("JumpUtil", "nextDetailFromSpecial => cid = " + cid+", sceneId = "+sceneId+", topicId = "+topicId+", topicName = "+topicName);
+        Log.e("JumpUtil", "nextDetailFromSpecial => cid = " + cid + ", sceneId = " + sceneId + ", topicId = " + topicId + ", topicName = " + topicName);
         if (null != cid && cid.length() > 0) {
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra(DetailActivity.INTENT_CID, cid);

@@ -1,11 +1,9 @@
 package tv.huan.bilibili.ui.main.general.template;
 
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 

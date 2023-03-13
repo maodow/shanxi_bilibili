@@ -37,6 +37,7 @@ import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.ResponsedBean;
 import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
+import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.format.MainBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.general.GeneralFragment;
@@ -54,13 +55,20 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         // 专辑
         if (type == MainActivity.INTENT_TYPE_DETAIL) {
             String cid = getView().getStringExtra(MainActivity.INTENT_CID);
-            JumpUtil.nextDetail((Context) getView(), cid);
+            BaseDataBean bean = new BaseDataBean();
+            bean.setToType(1);
+            bean.setCid(cid);
+            JumpUtil.next((Context) getView(), bean);
         }
         // 筛选
         else if (type == MainActivity.INTENT_TYPE_FILTER) {
             String secondTag = getView().getStringExtra(MainActivity.INTENT_SECOND_TAG);
             int classId = getView().getIntExtra(MainActivity.INTENT_CLASSID, -1);
-            JumpUtil.nextFilter(getView().getContext(), secondTag, classId);
+            BaseDataBean bean = new BaseDataBean();
+            bean.setToType(2);
+            bean.setClassId(classId);
+            bean.setName(secondTag);
+            JumpUtil.next(getView().getContext(), bean);
         }
     }
 

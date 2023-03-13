@@ -343,11 +343,11 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     @Override
                     public FilterBean apply(JSONObject data) {
                         FilterBean filterBean = new FilterBean();
-                        try {
-                            int id = data.optInt("filterId", 0);
-                            filterBean.setFilterId(id);
-                        } catch (Exception e) {
-                        }
+//                        try {
+//                            int id = data.optInt("filterId", 0);
+//                            filterBeang.setFilterId(id);
+//                        } catch (Exception e) {
+//                        }
                         try {
                             String title = data.optString("filterTitle", null);
                             filterBean.setFilterTitle(title);

@@ -16,11 +16,6 @@ public class BaseDataBean extends TvEpisodesItemBean implements Serializable {
     private String name;
     private String title;
 
-
-    private int specialId;
-    private int filterId;
-    private String filterCheckedName;
-
     public int getToType() {
         return toType;
     }
@@ -43,30 +38,6 @@ public class BaseDataBean extends TvEpisodesItemBean implements Serializable {
 
     public void setCid(String cid) {
         this.cid = cid;
-    }
-
-    public int getFilterId() {
-        return filterId;
-    }
-
-    public void setFilterId(int filterId) {
-        this.filterId = filterId;
-    }
-
-    public String getFilterCheckedName() {
-        return filterCheckedName;
-    }
-
-    public void setFilterCheckedName(String filterCheckedName) {
-        this.filterCheckedName = filterCheckedName;
-    }
-
-    public int getSpecialId() {
-        return specialId;
-    }
-
-    public void setSpecialId(int specialId) {
-        this.specialId = specialId;
     }
 
     public String getVid() {
