@@ -68,7 +68,6 @@ public class WarningDialog extends DialogFragment implements DialogInterface.OnK
             viewById.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "ss", Toast.LENGTH_SHORT).show();
                     ((BaseActivity) getActivity()).killProcess();
                 }
             });

@@ -2,6 +2,10 @@
     <string name="app_name">云视听小电视11</string>
 
 
+    <string name="dialog_exit_title">您可能喜欢</string>
+    <string name="dialog_exit_cancle">在看一会儿</string>
+    <string name="dialog_exit_sure">残忍离开</string>
+
     <string name="dialog_warning_title">用户信息获取失败，请退出重试！</string>
     <string name="dialog_warning_sure">确定</string>
 
