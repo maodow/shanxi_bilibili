@@ -20,6 +20,7 @@ import tv.huan.bilibili.widget.DetailGridView;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 
+    public static final String INTENT_SEEK = "intent_seek";
     public static final String INTENT_POSITION = "intent_position";
     public static final String INTENT_CID = "intent_cid";
     public static final String INTENT_FROM_SEARCH = "intent_from_search";

@@ -60,9 +60,6 @@ public class FavBean implements Serializable {
 
         private InfoBean album;
 
-        private String playTime;
-        private String playLength;
-        private int pos;
         private String albumName;
 
         private int tempType;
@@ -85,18 +82,6 @@ public class FavBean implements Serializable {
 
         public void setTempDrawable(int tempDrawable) {
             this.tempDrawable = tempDrawable;
-        }
-
-        public String getPlayTime() {
-            return playTime;
-        }
-
-        public String getPlayLength() {
-            return playLength;
-        }
-
-        public int getPos() {
-            return pos;
         }
 
         public String getAlbumName() {
@@ -131,18 +116,6 @@ public class FavBean implements Serializable {
             this.albumName = albumName;
         }
 
-        public void setPlayTime(String playTime) {
-            this.playTime = playTime;
-        }
-
-        public void setPlayLength(String playLength) {
-            this.playLength = playLength;
-        }
-
-        public void setPos(int pos) {
-            this.pos = pos;
-        }
-
         public InfoBean getAlbum() {
             return album;
         }
@@ -173,10 +146,10 @@ public class FavBean implements Serializable {
 
         public String getNameRec() {
             try {
-                if (pos <= 0) {
+                if (getPos() <= 0) {
                     return getAlbum().getName();
                 } else {
-                    return getAlbum().getName() + "(第" + pos + "集)";
+                    return getAlbum().getName() + "(第" + getPos() + "集)";
                 }
             } catch (Exception e) {
                 return "";
@@ -185,8 +158,8 @@ public class FavBean implements Serializable {
 
         public String getStatusRec() {
             try {
-                long position = Long.parseLong(playTime);
-                long duration = Long.parseLong(playLength);
+                long position = Long.parseLong(getPlayTime());
+                long duration = Long.parseLong(getPlayLength());
                 if (position > 0 && duration > 0 && position == duration) {
                     return "已看完";
                 } else if (position <= 0 && duration <= 0) {
@@ -200,7 +173,7 @@ public class FavBean implements Serializable {
         }
 
         public boolean isVisibility() {
-            return null == playTime && null == playLength;
+            return null == getPlayTime() && null == getPlayLength();
         }
 
         public CharSequence getPositionRec() {

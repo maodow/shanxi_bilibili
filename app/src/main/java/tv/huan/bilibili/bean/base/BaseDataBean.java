@@ -16,6 +16,56 @@ public class BaseDataBean extends TvEpisodesItemBean implements Serializable {
     private String name;
     private String title;
 
+    private String playTime;
+    private String playLength;
+    private int pos;
+
+    public long getSeek() {
+        try {
+            long l = Long.parseLong(playTime);
+            if (l <= 0)
+                throw new Exception();
+            return l;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public String getPlayTime() {
+        return playTime;
+    }
+
+    public void setPlayTime(String playTime) {
+        this.playTime = playTime;
+    }
+
+    public String getPlayLength() {
+        return playLength;
+    }
+
+    public void setPlayLength(String playLength) {
+        this.playLength = playLength;
+    }
+
+    public int getPos() {
+        return pos;
+    }
+
+    public int getPosition() {
+        try {
+            int i = getPos() - 1;
+            if (i < 0)
+                throw new Exception();
+            return i;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
+    }
+
     public int getToType() {
         return toType;
     }

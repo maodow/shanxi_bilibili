@@ -48,7 +48,6 @@ public class SearchBean implements Serializable {
     public static class KeyBean extends BaseDataBean implements Serializable {
 
         private String poster;
-        private int pos;
         private int status;
         private String jumpUrl;
         private int platformId;
@@ -69,14 +68,6 @@ public class SearchBean implements Serializable {
 
         public void setPoster(String poster) {
             this.poster = poster;
-        }
-
-        public int getPos() {
-            return pos;
-        }
-
-        public void setPos(int pos) {
-            this.pos = pos;
         }
 
         public int getStatus() {

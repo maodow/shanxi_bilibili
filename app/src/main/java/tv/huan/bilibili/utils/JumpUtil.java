@@ -52,6 +52,10 @@ public final class JumpUtil {
                 throw new Exception("cid error: " + cid);
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra(DetailActivity.INTENT_CID, cid);
+            int position = data.getPosition();
+            intent.putExtra(DetailActivity.INTENT_POSITION, position);
+            long seek = data.getSeek();
+            intent.putExtra(DetailActivity.INTENT_SEEK, seek);
             context.startActivity(intent);
         } catch (Exception e) {
             Log.e("JumpUtil", "nextDetail => " + e.getMessage());

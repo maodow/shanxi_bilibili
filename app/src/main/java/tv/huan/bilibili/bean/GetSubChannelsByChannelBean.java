@@ -165,7 +165,6 @@ public class GetSubChannelsByChannelBean implements Serializable {
         private int productId;
         private int parentId;
         private int hasNext;
-        private int pos;
         private int status;
 
         public int getProductId() {
@@ -190,14 +189,6 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
         public void setHasNext(int hasNext) {
             this.hasNext = hasNext;
-        }
-
-        public int getPos() {
-            return pos;
-        }
-
-        public void setPos(int pos) {
-            this.pos = pos;
         }
 
         public int getStatus() {
