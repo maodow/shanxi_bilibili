@@ -6,34 +6,9 @@
     android:focusable="true"
     app:rl_rate_height="0.56">
 
-    <!-- 图片 -->
-    <ImageView
-        android:id="@+id/mine_img_icon"
+    <include
+        layout="@layout/common_poster_status"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="false"
-        android:scaleType="centerCrop" />
-
-    <!-- 标题 -->
-    <tv.huan.bilibili.widget.common.CommonShandowTextView
-        android:id="@+id/mine_img_name"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:focusable="false"
-        android:gravity="bottom|left"
-        android:textColor="@color/color_white"
-        android:textSize="@dimen/sp_14" />
-    <!--    &lt;!&ndash; 标记 &ndash;&gt;-->
-    <!--    <lib.kalu.leanback.auto.AutoImageView-->
-    <!--        android:layout_width="33dp"-->
-    <!--        android:layout_height="33dp"-->
-    <!--        android:layout_alignParentRight="true"-->
-    <!--        android:layout_alignParentBottom="true"-->
-    <!--        android:layout_marginRight="5dp"-->
-    <!--        android:layout_marginBottom="22dp"-->
-    <!--        android:visibility="invisible"-->
-    <!--        android:src="@drawable/ic_filter_flag" />-->
+        android:layout_height="match_parent" />
 
 </tv.huan.bilibili.widget.common.CommonRoundRelativeLayout>

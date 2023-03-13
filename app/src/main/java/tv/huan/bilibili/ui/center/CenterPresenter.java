@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,13 +101,18 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View view, boolean b) {
-                        int position = holder.getAbsoluteAdapterPosition();
-                        if (position >= 0) {
+                        try {
+                            int position = holder.getAbsoluteAdapterPosition();
+                            if (position < 0)
+                                throw new Exception();
                             FavBean.ItemBean itemBean = mDatas.get(position);
-                            if (itemBean.isShowDel()) {
-                                itemBean.setShowDel(false);
-                                getView().updatePosition(position);
-                            }
+                            if (!itemBean.isShowDel())
+                                throw new Exception();
+                            itemBean.setShowDel(false);
+                            getView().updatePosition(position);
+                        } catch (Exception e) {
+                            TextView textView = view.findViewById(R.id.common_poster_name);
+                            textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
                         }
                     }
                 });
@@ -140,7 +146,13 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 try {
                     FavBean.ItemBean itemBean = mDatas.get(position);
                     TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
-                    textView.setText(itemBean.getPositionRec());
+                    textView.setText(itemBean.getName());
+                } catch (Exception e) {
+                }
+                try {
+                    FavBean.ItemBean itemBean = mDatas.get(position);
+                    TextView textView = holder.itemView.findViewById(R.id.common_poster_status);
+                    textView.setText(itemBean.getStatusRec());
                 } catch (Exception e) {
                 }
                 try {

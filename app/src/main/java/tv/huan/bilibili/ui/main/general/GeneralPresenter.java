@@ -237,7 +237,6 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
 
                         // 模板 => 遍历
                         List<GetSubChannelsByChannelBean.ListBean> generalList = data.getDatas();
-                        LogUtil.log("GeneralTemplate20 => onBindHolder => generalList = " + new Gson().toJson(generalList));
                         int size = generalList.size();
                         for (int i = 0; i < size; i++) {
                             GetSubChannelsByChannelBean.ListBean listBean = generalList.get(i);
@@ -256,6 +255,7 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                     continue;
                                 temp.setClassId(data.getClassId());
                                 int preTemplate = listBean.getPreTemplate();
+                                preTemplate = 17;
                                 // 模板1
                                 if (1 == preTemplate) {
                                     if (n == 0) {
@@ -268,6 +268,7 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                         GetSubChannelsByChannelBean.ListBean.TemplateBean t = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
                                         t.setTempFav(resp.getData());
                                         t.setClassId(data.getClassId());
+                                        LogUtil.log("GeneralPresenter => GeneralTemplate16 => " + new Gson().toJson(t));
                                         tempList.add(t);
                                     } else if (n == 1) {
                                         tempList.add(temp);
@@ -277,17 +278,18 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                 else if (17 == preTemplate) {
                                     if (n == 0) {
                                         temp.setTempFav(resp.getData());
+                                        LogUtil.log("GeneralPresenter => GeneralTemplate17 => " + new Gson().toJson(temp));
                                     } else if (n == 1) {
                                         tempList.add(temp);
                                     }
                                 }
                                 // 模板20
-                                else if (20 == preTemplate) {
+                                else if (19 == preTemplate) {
                                     if (n == 2) {
                                         GetSubChannelsByChannelBean.ListBean.TemplateBean t = new GetSubChannelsByChannelBean.ListBean.TemplateBean();
                                         t.setTempFav(resp.getData());
                                         t.setClassId(data.getClassId());
-                                        LogUtil.log("GeneralTemplate20 => onBindHolder => " + new Gson().toJson(t));
+                                        LogUtil.log("GeneralPresenter => GeneralTemplate20 => " + new Gson().toJson(t));
                                         tempList.add(t);
                                     }
                                 }

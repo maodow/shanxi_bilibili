@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Keep;
 import androidx.annotation.LayoutRes;
@@ -133,6 +135,13 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 }
                 // image
                 else if (viewType == TYPE_ITEM_IMG) {
+                    inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View view, boolean b) {
+                            TextView textView = view.findViewById(R.id.common_poster_name);
+                            textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                        }
+                    });
                     inflate.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -220,13 +229,24 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 else if (itemViewType == TYPE_ITEM_IMG) {
                     try {
                         FavBean.ItemBean itemBean = mDatas.get(position);
-                        getView().setText(holder.itemView, R.id.mine_img_name, itemBean.getPositionRec());
+                        getView().setText(holder.itemView, R.id.common_poster_name, itemBean.getName());
                     } catch (Exception e) {
                     }
                     try {
                         FavBean.ItemBean itemBean = mDatas.get(position);
-                        ImageView imageView = holder.itemView.findViewById(R.id.mine_img_icon);
+                        getView().setText(holder.itemView, R.id.common_poster_status, itemBean.getStatusRec());
+                    } catch (Exception e) {
+                    }
+                    try {
+                        FavBean.ItemBean itemBean = mDatas.get(position);
+                        ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
                         GlideUtils.loadHz(imageView.getContext(), itemBean.getAlbum().getPicture(true), imageView);
+                    } catch (Exception e) {
+                    }
+                    try {
+                        FavBean.ItemBean itemBean = mDatas.get(position);
+                        ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
+                        GlideUtils.loadVt(imageView.getContext(), itemBean.getAlbum().getVipUrl(), imageView);
                     } catch (Exception e) {
                     }
                 }
