@@ -499,8 +499,8 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                                 }
                                 mDatas.addAll(start, rows);
                                 RefreshBean bean = new RefreshBean();
-                                bean.setStart(start);
-                                bean.setLength(size);
+                                bean.setStart1(start);
+                                bean.setLength1(size);
                                 return bean;
                             }
                             throw new Exception("error");
@@ -509,12 +509,84 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         }
                     }
                 })
+                // 观看记录
+                .flatMap(new Function<RefreshBean, Observable<BaseResponsedBean<FavBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<FavBean>> apply(RefreshBean data) {
+                        String s = new Gson().toJson(data);
+                        return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 3, s);
+                    }
+                })
+                // 观看记录 => 数据处理
+                .map(new Function<BaseResponsedBean<FavBean>, RefreshBean>() {
+                    @Override
+                    public RefreshBean apply(BaseResponsedBean<FavBean> resp) throws Exception {
+
+                        RefreshBean data;
+                        try {
+                            data = new Gson().fromJson(resp.getExtra(), RefreshBean.class);
+                        } catch (Exception e) {
+                            data = new RefreshBean();
+                        }
+
+                        try {
+                            LinkedList<FavBean.ItemBean> beans = new LinkedList<>();
+                            int start = -1;
+                            for (FavBean.ItemBean t : mDatas) {
+                                if (null == t)
+                                    continue;
+                                if (t.getTempType() == TYPE_ITEM_IMG_HISTORY) {
+                                    if (start == -1) {
+                                        start = mDatas.indexOf(t);
+                                    }
+                                    beans.add(t);
+                                }
+                            }
+                            for (FavBean.ItemBean t : beans) {
+                                mDatas.remove(t);
+                            }
+                            if (start != -1) {
+                                List<FavBean.ItemBean> rows = resp.getData().getRows();
+                                int size = rows.size();
+                                for (int i = 0; i <= 2; i++) {
+                                    FavBean.ItemBean t = rows.get(i);
+                                    if (null == t)
+                                        continue;
+                                    t.setTempPosition(i);
+                                    t.setTempType(TYPE_ITEM_IMG_HISTORY);
+                                }
+                                mDatas.addAll(start, rows);
+                                data.setStart2(start);
+                                data.setLength2(size);
+                                return data;
+                            }
+                            throw new Exception("error");
+                        } catch (Exception e) {
+                            throw e;
+                        }
+
+                    }
+                })
                 .delay(1, TimeUnit.SECONDS)
                 .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                    }
+                })
                 .doOnNext(new Consumer<RefreshBean>() {
                     @Override
                     public void accept(RefreshBean data) {
-                        getView().refreshContent(data.getStart(), data.getLength());
+                        getView().hideLoading();
+                        getView().refreshContent(data.getStart1(), data.getLength1());
+                        getView().refreshContent(data.getStart2(), data.getLength2());
                     }
                 })
                 .subscribe());
