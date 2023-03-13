@@ -255,7 +255,6 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                     continue;
                                 temp.setClassId(data.getClassId());
                                 int preTemplate = listBean.getPreTemplate();
-                                preTemplate = 17;
                                 // 模板1
                                 if (1 == preTemplate) {
                                     if (n == 0) {
@@ -533,5 +532,48 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
             int size = arrayObjectAdapter.size();
             arrayObjectAdapter.addAll(size, collection, false);
         }
+    }
+
+    protected void requestBookmark() {
+
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
+                        boolean extra = getView().getBooleanExtra(GeneralFragment.BUNDLE_RESEAT, false);
+                        if (extra) {
+                            emitter.onNext(true);
+                        } else {
+                            getView().putBooleanExtra(GeneralFragment.BUNDLE_RESEAT, true);
+                            throw new Exception("not init");
+                        }
+                    }
+                })
+                // 观看历史
+                .flatMap(new Function<Boolean, Observable<ResponsedBean<FavBean>>>() {
+                    @Override
+                    public Observable<ResponsedBean<FavBean>> apply(Boolean v) {
+                        return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 5, null);
+                    }
+                })
+                // 数据处理
+                .map(new Function<ResponsedBean<FavBean>, FavBean>() {
+                    @Override
+                    public FavBean apply(ResponsedBean<FavBean> resp) {
+                        try {
+                            return resp.getData();
+                        } catch (Exception e) {
+                            throw e;
+                        }
+                    }
+                })
+                .delay(1, TimeUnit.SECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnNext(new Consumer<FavBean>() {
+                    @Override
+                    public void accept(FavBean data) {
+                        getView().updateTemplateHistory(data);
+                    }
+                })
+                .subscribe());
     }
 }

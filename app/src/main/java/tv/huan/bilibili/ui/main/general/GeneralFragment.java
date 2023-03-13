@@ -4,6 +4,7 @@ import androidx.annotation.Keep;
 
 import lib.kalu.frame.mvp.BaseFragment;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.GeneralGridView;
@@ -16,6 +17,7 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
     public static final String BUNDLE_CLASSID = "bundle_classId";
     public static final String BUNDLE_NAME = "bundle_name";
     public static final String BUNDLE_INDEX = "bundle_index";
+    protected static final String BUNDLE_RESEAT = "bundle_reseat";
 
     @Override
     public int initLayout() {
@@ -50,7 +52,6 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
 
     @Override
     public void onHide() {
-        LogUtil.log("GeneralFragment => onHide => " + this);
         PlayerView v1 = findViewById(R.id.general_template21_player);
         if (null != v1) {
             v1.pause();
@@ -67,7 +68,6 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
 
     @Override
     public void onShow() {
-        LogUtil.log("GeneralFragment => onShow => " + this);
         PlayerView v1 = findViewById(R.id.general_template21_player);
         if (null != v1) {
             v1.resume();
@@ -80,5 +80,17 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
         if (null != v3) {
             v3.resumeMessage();
         }
+    }
+
+    @Override
+    public void updateTemplateHistory(FavBean data) {
+        GeneralGridView gridView = findViewById(R.id.general_list);
+        gridView.updateTemplateHistory(data);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPresenter().requestBookmark();
     }
 }

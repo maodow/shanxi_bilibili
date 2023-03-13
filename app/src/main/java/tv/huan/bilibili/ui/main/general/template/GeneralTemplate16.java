@@ -42,8 +42,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
             return "模板16";
-        }
-        else{
+        } else {
             return super.initRowTitle(context);
         }
     }
@@ -314,25 +313,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
         super.onBindViewHolder(viewHolder, item);
         cleanLoop();
         Context context = viewHolder.view.getContext();
-        refreshRecs(context, (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) item);
         nextLoop(viewHolder.view, item, 0x10013, true);
-    }
-
-    public final void refreshRecs(@NonNull Context context, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
-//        try {
-//            String s = CacheUtil.getCache(context, "user_look");
-//            Type type = new TypeToken<ArrayList<LookBean>>() {
-//            }.getType();
-//            ArrayList<LookBean> recs = new Gson().fromJson(s, type);
-//            if (null == recs) {
-//                recs = new ArrayList<>();
-//            }
-//            GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(0);
-//            bean.setGeneralTemplate17Recs(recs);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        Toast.makeText(FrameContext.getApplicationContext(), "refreshRecs", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -575,57 +556,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
 
         // left
         if (viewType == 1) {
-
-            // visable
-            try {
-                FavBean fav = templateBean.getTempFav();
-                int num = fav.getRows().size();
-                v.findViewById(R.id.general_item_template16a_rec1).setVisibility(num >= 1 ? View.VISIBLE : View.GONE);
-                v.findViewById(R.id.general_item_template16a_rec2).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
-                v.findViewById(R.id.general_item_template16a_rec3).setVisibility(num >= 3 ? View.VISIBLE : View.GONE);
-                v.findViewById(R.id.general_item_template16a_rec4).setVisibility(num >= 4 ? View.VISIBLE : View.GONE);
-                v.findViewById(R.id.general_item_template16a_rec5).setVisibility(num >= 5 ? View.VISIBLE : View.GONE);
-                v.findViewById(R.id.general_item_template16a_all1).setVisibility(num > 1 && num < 5 ? View.VISIBLE : View.GONE);
-                v.findViewById(R.id.general_item_template16a_all2).setVisibility(num <= 0 ? View.VISIBLE : View.GONE);
-            } catch (Exception e) {
-                LogUtil.log("GeneralTemplate16 => onBindHolder => " + e.getMessage());
-                v.findViewById(R.id.general_item_template16a_rec1).setVisibility(View.GONE);
-                v.findViewById(R.id.general_item_template16a_rec2).setVisibility(View.GONE);
-                v.findViewById(R.id.general_item_template16a_rec3).setVisibility(View.GONE);
-                v.findViewById(R.id.general_item_template16a_rec4).setVisibility(View.GONE);
-                v.findViewById(R.id.general_item_template16a_rec5).setVisibility(View.GONE);
-                v.findViewById(R.id.general_item_template16a_all1).setVisibility(View.GONE);
-                v.findViewById(R.id.general_item_template16a_all2).setVisibility(View.VISIBLE);
-            }
-
-            for (int m = 0; m < 5; m++) {
-                TextView textName;
-                TextView textDate;
-                if (m == 0) {
-                    textName = v.findViewById(R.id.general_item_template16a_rec1_name);
-                    textDate = v.findViewById(R.id.general_item_template16a_rec1_position);
-                } else if (m == 1) {
-                    textName = v.findViewById(R.id.general_item_template16a_rec2_name);
-                    textDate = v.findViewById(R.id.general_item_template16a_rec2_position);
-                } else if (m == 2) {
-                    textName = v.findViewById(R.id.general_item_template16a_rec3_name);
-                    textDate = v.findViewById(R.id.general_item_template16a_rec3_position);
-                } else if (m == 3) {
-                    textName = v.findViewById(R.id.general_item_template16a_rec4_name);
-                    textDate = v.findViewById(R.id.general_item_template16a_rec4_position);
-                } else {
-                    textName = v.findViewById(R.id.general_item_template16a_rec5_name);
-                    textDate = v.findViewById(R.id.general_item_template16a_rec5_position);
-                }
-
-                try {
-                    FavBean.ItemBean itemBean = templateBean.getTempFav().getRows().get(m);
-                    textName.setText(itemBean.getNameRec());
-                    textDate.setText(itemBean.getStatusRec());
-                } catch (Exception e) {
-                    LogUtil.log("GeneralTemplate16 => onBindHolder => " + e.getMessage());
-                }
-            }
+            updateHistory(v, templateBean.getTempFav());
         }
         // center
         else if (viewType == 2) {
@@ -716,6 +647,58 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
             return R.layout.fragment_general_item_template16e;
         } else {
             return R.layout.fragment_general_item_template16d;
+        }
+    }
+
+    public void updateHistory(@NonNull View v, @NonNull FavBean data) {
+        // visable
+        try {
+            int num = data.getRows().size();
+            v.findViewById(R.id.general_item_template16a_rec1).setVisibility(num >= 1 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_item_template16a_rec2).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_item_template16a_rec3).setVisibility(num >= 3 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_item_template16a_rec4).setVisibility(num >= 4 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_item_template16a_rec5).setVisibility(num >= 5 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_item_template16a_all1).setVisibility(num > 1 && num < 5 ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.general_item_template16a_all2).setVisibility(num <= 0 ? View.VISIBLE : View.GONE);
+        } catch (Exception e) {
+            LogUtil.log("GeneralTemplate16 => updateHistory => " + e.getMessage());
+            v.findViewById(R.id.general_item_template16a_rec1).setVisibility(View.GONE);
+            v.findViewById(R.id.general_item_template16a_rec2).setVisibility(View.GONE);
+            v.findViewById(R.id.general_item_template16a_rec3).setVisibility(View.GONE);
+            v.findViewById(R.id.general_item_template16a_rec4).setVisibility(View.GONE);
+            v.findViewById(R.id.general_item_template16a_rec5).setVisibility(View.GONE);
+            v.findViewById(R.id.general_item_template16a_all1).setVisibility(View.GONE);
+            v.findViewById(R.id.general_item_template16a_all2).setVisibility(View.VISIBLE);
+        }
+
+        for (int m = 0; m < 5; m++) {
+            TextView textName;
+            TextView textDate;
+            if (m == 0) {
+                textName = v.findViewById(R.id.general_item_template16a_rec1_name);
+                textDate = v.findViewById(R.id.general_item_template16a_rec1_position);
+            } else if (m == 1) {
+                textName = v.findViewById(R.id.general_item_template16a_rec2_name);
+                textDate = v.findViewById(R.id.general_item_template16a_rec2_position);
+            } else if (m == 2) {
+                textName = v.findViewById(R.id.general_item_template16a_rec3_name);
+                textDate = v.findViewById(R.id.general_item_template16a_rec3_position);
+            } else if (m == 3) {
+                textName = v.findViewById(R.id.general_item_template16a_rec4_name);
+                textDate = v.findViewById(R.id.general_item_template16a_rec4_position);
+            } else {
+                textName = v.findViewById(R.id.general_item_template16a_rec5_name);
+                textDate = v.findViewById(R.id.general_item_template16a_rec5_position);
+            }
+
+            try {
+                FavBean.ItemBean itemBean = data.getRows().get(m);
+                textName.setText(itemBean.getNameRec());
+                textDate.setText(itemBean.getStatusRec());
+            } catch (Exception e) {
+                LogUtil.log("GeneralTemplate16 => updateHistory => " + e.getMessage());
+            }
         }
     }
 
