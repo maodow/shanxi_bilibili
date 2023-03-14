@@ -64,8 +64,10 @@ public class GeneralTemplate2 extends ListTvGridPresenter<GetSubChannelsByChanne
                 @Override
                 public void onClick(View v) {
                     int position = viewHolder.getAbsoluteAdapterPosition();
-                    GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                    JumpUtil.next(v.getContext(), bean);
+                    if (position >= 0) {
+                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+                        JumpUtil.next(v.getContext(), bean);
+                    }
                 }
             });
         } catch (Exception e) {
@@ -74,11 +76,8 @@ public class GeneralTemplate2 extends ListTvGridPresenter<GetSubChannelsByChanne
             view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    int position = viewHolder.getAbsoluteAdapterPosition();
-                    if (position >= 0) {
-                        TextView textView = view.findViewById(R.id.common_poster_name);
-                        textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
-                    }
+                    TextView textView = view.findViewById(R.id.common_poster_name);
+                    textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
                 }
             });
         } catch (Exception e) {

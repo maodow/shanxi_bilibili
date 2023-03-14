@@ -3,37 +3,57 @@ package tv.huan.bilibili.ui.main.general.template;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.view.LayoutInflater;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.leanback.widget.Presenter;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.kalu.leanback.presenter.ListTvPresenterImpl;
+import lib.kalu.leanback.presenter.ListTvGridPresenter;
+import lib.kalu.mediaplayer.config.start.StartBuilder;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.widget.player.PlayerView;
 
-public class GeneralTemplate22 extends Presenter implements ListTvPresenterImpl {
-
-    private List mData = new ArrayList();
+public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
     @Override
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
-            return "模板20";
+            return "模板22";
         } else {
-            return ListTvPresenterImpl.super.initRowTitle(context);
+            return super.initRowTitle(context);
+        }
+    }
+
+    @Override
+    public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+        int position = parent.getChildAdapterPosition(view);
+
+        int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72) / 8;
+        if (position == 0) {
+            int margin = view.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+            outRect.set(0, 0, 0, margin);
+        } else if (position == 1) {
+            outRect.set(0, 0, offset * 2, 0);
+        } else if (position == 4) {
+            outRect.set(offset * 2, 0, 0, 0);
+        } else {
+            outRect.set(offset, 0, offset, 0);
+        }
+
+        int transX = offset * 2 / (3 * 2);
+        if (position == 2) {
+            view.setTranslationX(-transX);
+        } else if (position == 3) {
+            view.setTranslationX(transX);
         }
     }
 
@@ -48,68 +68,80 @@ public class GeneralTemplate22 extends Presenter implements ListTvPresenterImpl 
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
-        try {
-            Context context = viewGroup.getContext();
-            ViewGroup inflate = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.fragment_general_item_template22, viewGroup, false);
-            setPadding(context, inflate);
-            setBackgroundColor(context, inflate);
-            setContentBackgroundColor(context, inflate, R.id.general_template22_list);
-            setTitlePadding(context, inflate, R.id.general_template22_title);
-            setTitleTextColor(context, inflate, R.id.general_template22_title);
-            setTitleTextSize(context, inflate, R.id.general_template22_title);
-            setTitleAssetTTF(context, inflate, R.id.general_template22_title);
-            setTitleBackgroundColor(context, inflate, R.id.general_template22_title);
-            // 1
-            setControl(inflate);
-            // 2
-            setAdapter(inflate);
-            return new ViewHolder(inflate);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private void setControl(View inflate) {
-        try {
-            inflate.findViewById(R.id.general_template22_control).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    if (b) {
-                        resumePlayer(view);
-                    } else {
-                        pasuePlayer(view);
+    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int viewType) {
+        // img
+        if (viewType == 2) {
+            try {
+                view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
+                        TextView textView = view.findViewById(R.id.common_poster_name);
+                        textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
                     }
-                }
-            });
-        } catch (Exception e) {
+                });
+            } catch (Exception e) {
+            }
         }
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, Object o) {
-        try {
-            TextView textView = viewHolder.view.findViewById(R.id.general_template22_title);
-            textView.setText("模板22");
-        } catch (Exception e) {
+    protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
+
+        // player
+        if (viewType == 1) {
+            startPlayer(view);
         }
-        try {
-            // 1
-            startPlayer(viewHolder.view);
-            // 2
-            addAll(viewHolder.view, o);
-        } catch (Exception e) {
+        // img
+        else if (viewType == 2) {
+            try {
+                TextView textView = view.findViewById(R.id.common_poster_name);
+                textView.setText(templateBean.getName());
+            } catch (Exception e) {
+            }
+            try {
+                ImageView imageView = view.findViewById(R.id.common_poster_img);
+                GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
+            } catch (Exception e) {
+            }
+            try {
+                ImageView imageView = view.findViewById(R.id.common_poster_vip);
+                GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
+            } catch (Exception e) {
+            }
         }
     }
 
-    private void addAll(View view, Object o) {
-        try {
-            mData.clear();
-            mData.addAll((List) o);
-            RecyclerView recyclerView = view.findViewById(R.id.general_template22_list);
-            recyclerView.getAdapter().notifyItemRangeChanged(0, mData.size());
-        } catch (Exception e) {
+    @Override
+    protected int initSpanSize(int position) {
+        return position == 0 ? 4 : 1;
+    }
+
+    @Override
+    protected int initItemViewType(int position, GetSubChannelsByChannelBean.ListBean.TemplateBean data) {
+        if (position == 0) {
+            return 1;
+        } else {
+            return 2;
         }
+    }
+
+    @Override
+    protected int initLayout(int viewType) {
+        if (viewType == 1) {
+            return R.layout.fragment_general_item_template22a;
+        } else {
+            return R.layout.fragment_general_item_template22b;
+        }
+    }
+
+    @Override
+    protected int initSpan() {
+        return 4;
+    }
+
+    @Override
+    protected int initMax() {
+        return 5;
     }
 
     private void pasuePlayer(View inflate) {
@@ -134,79 +166,12 @@ public class GeneralTemplate22 extends Presenter implements ListTvPresenterImpl 
 
         if (null == inflate)
             return;
-
         PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
         String url = "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
-        playerView.start(url);
-    }
-
-    private void setAdapter(View view) {
-
-        if (null == view)
-            return;
-
-        RecyclerView recyclerView = view.findViewById(R.id.general_template22_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
-        });
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_25);
-                outRect.set(0, 0, offset, 0);
-            }
-        });
-        recyclerView.setAdapter(new RecyclerView.Adapter() {
-            @NonNull
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_general_item_template22_item, null);
-                return new RecyclerView.ViewHolder(inflate) {
-                };
-            }
-
-            @Override
-            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
-                try {
-                    GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = (GetSubChannelsByChannelBean.ListBean.TemplateBean) mData.get(position);
-                    TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
-                    textView.setText(templateBean.getName());
-                } catch (Exception e) {
-                }
-                try {
-                    GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = (GetSubChannelsByChannelBean.ListBean.TemplateBean) mData.get(position);
-                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
-                    GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
-                } catch (Exception e) {
-                }
-                try {
-                    GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = (GetSubChannelsByChannelBean.ListBean.TemplateBean) mData.get(position);
-                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
-                    GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
-                } catch (Exception e) {
-                }
-            }
-
-            @Override
-            public int getItemCount() {
-                return mData.size();
-            }
-        });
-    }
-
-    @Override
-    public void onUnbindViewHolder(ViewHolder viewHolder) {
-
+        StartBuilder.Builder builder = new StartBuilder.Builder();
+        builder.setLoop(true);
+        builder.setDelay(3000);
+        playerView.start(builder.build(), url);
     }
 
     public static class GeneralTemplate22List extends ArrayList {

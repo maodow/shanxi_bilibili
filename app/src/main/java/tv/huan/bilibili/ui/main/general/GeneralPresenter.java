@@ -325,7 +325,7 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                                 List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = bean.getTemplateData();
                                                 // 测试模板
                                                 if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
-                                                    for (int n = 1; n <= 22; n++) {
+                                                    for (int n = 22; n >= 1; n--) {
                                                         addPresenter((ArrayObjectAdapter) objectAdapter, n, templateData);
                                                     }
                                                     break;

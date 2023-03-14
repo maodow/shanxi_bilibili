@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.main.general.template;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,7 +53,16 @@ public class GeneralTemplate15 extends ListTvGridPresenter<GetSubChannelsByChann
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+        try {
+            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    TextView textView = view.findViewById(R.id.common_poster_name);
+                    textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                }
+            });
+        } catch (Exception e) {
         }
     }
 
