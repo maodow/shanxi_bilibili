@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_300"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="false"
+    android:orientation="horizontal">
+
+    <tv.huan.bilibili.widget.player.PlayerViewLite
+        android:id="@+id/general_template21_player"
+        android:layout_width="@dimen/dp_400"
+        android:layout_height="@dimen/dp_300"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:focusable="false" />
+
+
+    <!-- 图片 -->
+    <ImageView
+        android:id="@+id/general_template21_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@id/general_template21_player"
+        android:background="#cccccc"
+        android:gravity="center"
+        android:text="111" />
+
+</RelativeLayout>

@@ -27,7 +27,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
     @Override
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
-            return "模板22";
+            return "模板21";
         } else {
             return super.initRowTitle(context);
         }

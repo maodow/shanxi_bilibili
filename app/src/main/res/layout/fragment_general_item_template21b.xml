@@ -2,7 +2,7 @@
 <tv.huan.bilibili.widget.common.CommonRoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/dp_120"
     android:focusable="true"
     app:rl_rate_width="1.78">
 
