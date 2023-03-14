@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +26,17 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.widget.player.PlayerView;
 
 public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1001) {
+                View view = (View) msg.obj;
+                switchContentUI(false, view);
+            }
+        }
+    };
 
     @Override
     public String initRowTitle(Context context) {
@@ -63,6 +75,9 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
 
                     // 2
                     if (b) {
+
+                        mHandler.removeCallbacksAndMessages(null);
+                        switchContentUI(true, contentView);
                         try {
                             int position = viewHolder.getAbsoluteAdapterPosition();
                             if (position >= 0) {
@@ -72,8 +87,6 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
                             }
                         } catch (Exception e) {
                         }
-                    } else {
-                        switchContentUI(true, contentView);
                     }
 
                     // 3
@@ -154,12 +167,10 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
         if (null == inflate)
             return;
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                switchContentUI(false, inflate);
-            }
-        }, 3000);
+        Message message = new Message();
+        message.obj = inflate;
+        message.what = 1001;
+        mHandler.sendMessageDelayed(message, 3000);
 
         PlayerView playerView = inflate.findViewById(R.id.general_template21_player);
         String url = "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
@@ -172,12 +183,12 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
     private void switchContentUI(boolean reset, View inflate) {
         try {
             View byId = inflate.findViewById(R.id.general_template21_img);
-            byId.setVisibility(reset ? View.VISIBLE : View.GONE);
+            byId.setVisibility(reset ? View.VISIBLE : View.INVISIBLE);
         } catch (Exception e) {
         }
         try {
             View byId = inflate.findViewById(R.id.general_template21_player);
-            byId.setVisibility(reset ? View.GONE : View.VISIBLE);
+            byId.setVisibility(reset ? View.INVISIBLE : View.VISIBLE);
         } catch (Exception e) {
         }
     }
