@@ -92,7 +92,7 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JumpUtil.next(v.getContext(), t);
+                    JumpUtil.next(getApplicationContext(), t);
                 }
             });
         }
