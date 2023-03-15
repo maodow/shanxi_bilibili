@@ -90,7 +90,7 @@
         android:layout_alignTop="@id/search_input"
         android:layout_marginLeft="@dimen/dp_48"
         android:layout_marginRight="@dimen/dp_48"
-        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_12"
         android:layout_toRightOf="@id/search_input"
         android:focusable="false"
         android:gravity="center_vertical|left"
@@ -98,11 +98,27 @@
         android:textColor="@android:color/white"
         android:textSize="@dimen/sp_18" />
 
+    <!-- 热搜信息 -->
+    <lib.kalu.leanback.flexbox.FlexboxLayout
+        android:id="@+id/keyboard_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_12"
+        android:visibility="gone"
+        android:layout_below="@id/keyboard_title"
+        android:layout_alignLeft="@id/keyboard_title"
+        android:layout_alignRight="@id/keyboard_title"
+        app:dividerDrawableHorizontal="@drawable/bg_shape_divider_hr"
+        app:dividerDrawableVertical="@drawable/bg_shape_divider_vt"
+        app:flexWrap="wrap"
+        app:showDividerHorizontal="middle"
+        app:showDividerVertical="middle" />
+
     <!-- 搜索结果 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/keyboard_title"
+        android:layout_below="@id/keyboard_tags"
         android:layout_toRightOf="@id/search_input"
         android:clipChildren="false"
         android:clipToPadding="false"

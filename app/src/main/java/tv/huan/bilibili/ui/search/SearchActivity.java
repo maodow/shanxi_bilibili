@@ -1,11 +1,18 @@
 package tv.huan.bilibili.ui.search;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
+
 import lib.kalu.frame.mvp.BaseActivity;
+import lib.kalu.leanback.flexbox.FlexboxLayout;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.SearchBean;
+import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.keyboard.KeyboardLinearLayout;
 import tv.huan.keyboard.listener.OnKeyboardInputListener;
 
@@ -67,5 +74,32 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
     @Override
     public void checkNodata(boolean show) {
         setVisibility(R.id.search_nodata, show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void updateKeys(@NonNull List<SearchBean.KeyBean> data) {
+        FlexboxLayout flexboxLayout = findViewById(R.id.keyboard_tags);
+        int childCount = flexboxLayout.getChildCount();
+        if (childCount > 0)
+            return;
+        for (SearchBean.KeyBean t : data) {
+            if (null == t)
+                continue;
+            TextView textView = (TextView) LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_search_tag, flexboxLayout, false);
+            flexboxLayout.addView(textView);
+            String name = t.getName();
+            textView.setText(name);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    JumpUtil.next(v.getContext(), t);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void showKeys(boolean show) {
+        setVisibility(R.id.keyboard_tags, show ? View.VISIBLE : View.GONE);
     }
 }

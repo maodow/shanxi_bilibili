@@ -28,8 +28,9 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.SearchBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
+import tv.huan.bilibili.bean.format.CallSearchBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -148,7 +149,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> emitter) {
-                        emitter.onNext(null != s && s.length() >= 0);
+                        emitter.onNext(null != s && s.length() > 0);
                     }
                 }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<SearchBean>>>() {
                     @Override
@@ -162,17 +163,19 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                             return HttpClient.getHttpClient().getHttpApi().getSearchRecommend(BoxUtil.getProdId(), Integer.MAX_VALUE, "2");
                         }
                     }
-                }).map(new Function<BaseResponsedBean<SearchBean>, Boolean>() {
+                }).map(new Function<BaseResponsedBean<SearchBean>, List<SearchBean.KeyBean>>() {
                     @Override
-                    public Boolean apply(BaseResponsedBean<SearchBean> searchBeanBaseResponsedBean) {
+                    public List<SearchBean.KeyBean> apply(BaseResponsedBean<SearchBean> resp) {
+
+                        ArrayList<SearchBean.KeyBean> beans = new ArrayList<>();
 
                         mData.clear();
-                        String extra = searchBeanBaseResponsedBean.getExtra();
+                        String extra = resp.getExtra();
                         LogUtil.log("SearchPresenter => request => extra = " + extra);
                         // 搜索key
                         if ("1".equals(extra)) {
                             LogUtil.log("SearchPresenter => request => 搜索key");
-                            List<SearchBean.ItemBean> albums = searchBeanBaseResponsedBean.getData().getAlbums();
+                            List<SearchBean.ItemBean> albums = resp.getData().getAlbums();
                             if (null != albums && albums.size() > 0) {
                                 mData.addAll(albums);
                             }
@@ -180,21 +183,24 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         // 搜索推荐
                         else if ("2".equals(extra)) {
                             LogUtil.log("SearchPresenter => request => 搜索推荐");
-                            List<SearchBean.ItemBean> recommends = searchBeanBaseResponsedBean.getData().getRecommends();
+                            List<SearchBean.ItemBean> recommends = resp.getData().getRecommends();
                             if (null != recommends && recommends.size() > 0) {
                                 mData.addAll(recommends);
+                            }
+                            List<SearchBean.KeyBean> keys = resp.getData().getKeys();
+                            if (null != keys) {
+                                beans.addAll(keys);
                             }
                         }
 
                         LogUtil.log("SearchPresenter => request => " + new Gson().toJson(mData));
-
-                        return true;
+                        return beans;
                     }
                 })
                 // 上报
-                .map(new Function<Boolean, String>() {
+                .map(new Function<List<SearchBean.KeyBean>, CallSearchBean>() {
                     @Override
-                    public String apply(Boolean aBoolean) {
+                    public CallSearchBean apply(List<SearchBean.KeyBean> data) {
                         if (null != s && s.length() > 0) {
                             try {
                                 reportSearchResultItemNum(s);
@@ -202,13 +208,20 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                             }
                         }
 
+                        CallSearchBean callSearchBean = new CallSearchBean();
+                        callSearchBean.setTags(data);
                         if (null == s || s.length() <= 0) {
-                            return getView().getString(R.string.search_hot);
+                            String s1 = getView().getString(R.string.search_hot);
+                            callSearchBean.setTitle(s1);
                         } else {
-                            return getView().getString(R.string.search_title, s);
+                            String string = getView().getString(R.string.search_title, s);
+                            callSearchBean.setTitle(string);
                         }
+                        return callSearchBean;
                     }
-                }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
+                }).delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
                         getView().checkNodata(false);
@@ -219,12 +232,14 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                     }
-                }).doOnNext(new Consumer<String>() {
+                }).doOnNext(new Consumer<CallSearchBean>() {
                     @Override
-                    public void accept(String s) {
+                    public void accept(CallSearchBean data) {
                         getView().hideLoading();
                         getView().checkNodata(mData.size() <= 0);
-                        getView().showTitle(s);
+                        getView().showTitle(data.getTitle());
+                        getView().showKeys(data.getTags().size() > 0);
+                        getView().updateKeys(data.getTags());
                         getView().refreshContent();
                     }
                 }).subscribe());

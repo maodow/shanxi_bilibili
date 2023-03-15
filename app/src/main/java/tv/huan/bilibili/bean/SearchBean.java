@@ -47,59 +47,9 @@ public class SearchBean implements Serializable {
     @Keep
     public static class KeyBean extends BaseDataBean implements Serializable {
 
-        private String poster;
-        private int status;
-        private String jumpUrl;
-        private int platformId;
-        private String type;
-        private String payStatus;
-
-        public String getPayStatus() {
-            return payStatus;
-        }
-
-        public void setPayStatus(String payStatus) {
-            this.payStatus = payStatus;
-        }
-
-        public String getPoster() {
-            return poster;
-        }
-
-        public void setPoster(String poster) {
-            this.poster = poster;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public String getJumpUrl() {
-            return jumpUrl;
-        }
-
-        public void setJumpUrl(String jumpUrl) {
-            this.jumpUrl = jumpUrl;
-        }
-
-        public int getPlatformId() {
-            return platformId;
-        }
-
-        public void setPlatformId(int platformId) {
-            this.platformId = platformId;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
+        @Override
+        public int getToType() {
+            return 1;
         }
     }
 
