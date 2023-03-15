@@ -19,6 +19,59 @@ B站黑龙江移动安卓前端
 ```
 
 #
+#### 统一搜索
+```
+{
+    "action":"tv.huan.bilibili.heilongjiang.open",
+    "package":"tv.huan.bilibili.heilongjiang",
+    "component":{
+        "pkg":"tv.huan.bilibili.heilongjiang",
+        "cls":"tv.huan.bilibili.ui.welcome.WelcomeActivity"
+    },
+    "extras":{
+        "intent_type":2,
+        "intent_cid":""
+    }
+}
+```
+
+#
+#### 组件 => lib_autosize_v1.2.1_release.aar
+```
+/repo/AndroidAutoSize-1.2.1.zip
+```
+
+#
+#### 组件 => lib_keyboard_release_20230303.aar
+```
+/repo/module_keyboard_20230303.zip
+```
+
+#
+#### 组件 => lib_huan_heilongjiang_release_20230302.aar
+```
+/repo/huan_heilongjiang_20230302.zip
+```
+
+#
+#### 组件 => lib_leanback_r1-2-0-alpha02-release.aar
+```
+https://github.com/kalu-github/androidx_aar_leanback
+```
+
+#
+#### 组件 => lib_frame_mvp_release_20230313.aar
+```
+https://github.com/kalu-github/android-develop-frame
+```
+
+#
+#### 组件 => lib_mediaplayer_ui_release_20230311.aar/lib_mediaplayer_exo_r2.18.3_ff4.4_audio_release_20230222.aar
+```
+https://github.com/kalu-github/module_mediaplayer
+```
+
+#
 #### 机顶盒开adb方法
 ```
 遥控器操作上下上下左右左右菜单
@@ -50,29 +103,4 @@ APP_ID：8774148295636500482、APP_KEY：87b91bd2993b4150a69f522139f5e5f8、prod
 3、测试完成后发送邮件到黄老师（huangshijie@hl.chinamobile.com）和王嘉楠（wangjianan@migu.cn）
 
 4、《[落地省份]《[APK名称]》[厂商]-初测验收版V1.2》此报告测试通过后用来换取正式的局数据参数信息
-```
-
-#
-#### 说明
-```
-huan_common.aar
-huan_heilongjiang.aar
-module_keyboard.aar
-3个组件, 在repo根目录
-```
-#
-#### 统一搜索
-```
-{
-    "action":"tv.huan.bilibili.heilongjiang.open",
-    "package":"tv.huan.bilibili.heilongjiang",
-    "component":{
-        "pkg":"tv.huan.bilibili.heilongjiang",
-        "cls":"tv.huan.bilibili.ui.welcome.WelcomeActivity"
-    },
-    "extras":{
-        "intent_type":2,
-        "intent_cid":""
-    }
-}
 ```
