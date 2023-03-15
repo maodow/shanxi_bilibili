@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_40"
     android:background="@drawable/bg_selector_common_noboard"
@@ -8,7 +9,7 @@
     android:focusable="true">
 
     <!-- popu -->
-    <lib.kalu.leanback.marquee.MarqueeTextView
+    <lib.kalu.leanback.popu.PopuMarqueeTextView
         android:id="@+id/detail_xuanji1_item_popu"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_30"
@@ -17,16 +18,19 @@
         android:layout_marginTop="@dimen/dp_f40"
         android:layout_marginRight="-20dp"
         android:layout_marginBottom="@dimen/dp_10"
-        android:background="@color/color_white"
         android:ellipsize="end"
         android:focusable="false"
         android:gravity="center"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_4"
         android:singleLine="true"
         android:textColor="@color/color_black"
         android:textSize="@dimen/sp_16"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        app:ptv_background_color="@color/color_white"
+        app:ptv_corners="@dimen/dp_4"
+        app:ptv_margin_bottom="@dimen/dp_4" />
 
     <!-- 标题 -->
     <TextView
