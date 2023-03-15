@@ -25,7 +25,7 @@
             android:layout_height="@dimen/dp_50"
             android:layout_centerInParent="true"
             android:focusable="false"
-            android:src="@drawable/ic_clean" />
+            android:src="@drawable/ic_clean_white" />
 
     </RelativeLayout>
 

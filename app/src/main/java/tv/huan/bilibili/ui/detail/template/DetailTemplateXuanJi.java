@@ -126,13 +126,13 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<MediaBean> {
 
     @Override
     protected int initEpisodePadding(@NonNull Context context) {
-        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_5);
+        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_4);
         return offset;
     }
 
     @Override
     protected int initRangePadding(@NonNull Context context) {
-        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_10);
+        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_8);
         return offset;
     }
 

@@ -33,6 +33,7 @@
     <string name="menu_chao_no">开通大会员</string>
     <string name="menu_chao_yes">续费会员</string>
     <string name="menu_search">搜索</string>
+    <string name="menu_center">个人中心</string>
 
     <string name="template_rec">全部历史</string>
     <string name="template_warning">快去观看精彩影片吧！</string>

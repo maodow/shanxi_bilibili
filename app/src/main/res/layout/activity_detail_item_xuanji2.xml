@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<lib.kalu.leanback.round.RoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<tv.huan.bilibili.widget.xuanji.XuanJiRangeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_28"
-    android:background="@drawable/bg_selector_common_noboard"
-    android:clickable="true"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:longClickable="false"
-    app:rl_corner_bottom_left="8dp"
-    app:rl_corner_bottom_right="8dp"
-    app:rl_corner_top_left="8dp"
-    app:rl_corner_top_right="8dp"
-    app:rl_rate_width="6"
-    app:rl_scale="1.04">
+    android:focusable="true">
 
     <!-- 标题 -->
     <TextView
@@ -25,4 +14,4 @@
         android:textColor="@color/color_aaaaaa"
         android:textSize="@dimen/sp_16" />
 
-</lib.kalu.leanback.round.RoundRelativeLayout>
+</tv.huan.bilibili.widget.xuanji.XuanJiRangeLayout>
