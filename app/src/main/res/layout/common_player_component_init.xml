@@ -13,8 +13,8 @@
         android:id="@+id/detail_player_item_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg_shape_placeholder" />
+        android:background="@drawable/bg_shape_placeholder"
+        android:scaleType="centerCrop" />
 
     <ImageView
         android:id="@+id/detail_player_item_playing"
