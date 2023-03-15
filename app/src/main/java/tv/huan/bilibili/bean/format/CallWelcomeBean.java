@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import tv.huan.bilibili.bean.base.BaseDataBean;
 
-public final class WelcomeBean extends BaseDataBean implements Serializable {
+public final class CallWelcomeBean extends BaseDataBean implements Serializable {
 
     private int adTime;
     private String adUrl;

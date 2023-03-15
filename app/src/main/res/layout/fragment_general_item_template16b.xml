@@ -2,7 +2,7 @@
 <tv.huan.bilibili.widget.template16.Template162RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/item_common_bg_r8"
+    android:background="@drawable/bg_selector_corner8_66000000_33000000"
     android:focusable="false">
 
     <!-- 图片 -->

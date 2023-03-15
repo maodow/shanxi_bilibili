@@ -24,7 +24,7 @@ import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.GetPopupInfoBeanBase;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
-import tv.huan.bilibili.bean.format.WelcomeBean;
+import tv.huan.bilibili.bean.format.CallWelcomeBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.LogUtil;
@@ -38,10 +38,10 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
 
     protected void request() {
 
-        addDisposable(Observable.create(new ObservableOnSubscribe<WelcomeBean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<CallWelcomeBean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<WelcomeBean> emitter) {
-                        WelcomeBean welcomeBean = new WelcomeBean();
+                    public void subscribe(ObservableEmitter<CallWelcomeBean> emitter) {
+                        CallWelcomeBean welcomeBean = new CallWelcomeBean();
                         try {
                             // 3
                             int select = getView().getIntExtra(WelcomeActivity.INTENT_SELECT, 1);
@@ -84,9 +84,9 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     }
                 })
                 // 初始化支付sdk
-                .map(new Function<WelcomeBean, WelcomeBean>() {
+                .map(new Function<CallWelcomeBean, CallWelcomeBean>() {
                     @Override
-                    public WelcomeBean apply(WelcomeBean data) {
+                    public CallWelcomeBean apply(CallWelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => 初始化支付sdk");
                         try {
                             Context context = getView().getContext();
@@ -97,9 +97,9 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     }
                 })
                 // 获取userId
-                .map(new Function<WelcomeBean, WelcomeBean>() {
+                .map(new Function<CallWelcomeBean, CallWelcomeBean>() {
                     @Override
-                    public WelcomeBean apply(WelcomeBean data) throws Exception {
+                    public CallWelcomeBean apply(CallWelcomeBean data) throws Exception {
                         LogUtil.log("WelcomePresenter => request => 获取userId");
                         try {
                             if (BuildConfig.HUAN_CHECK_USERID) {
@@ -118,9 +118,9 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     }
                 })
                 // 首次打开app上报
-                .map(new Function<WelcomeBean, WelcomeBean>() {
+                .map(new Function<CallWelcomeBean, CallWelcomeBean>() {
                     @Override
-                    public WelcomeBean apply(WelcomeBean data) {
+                    public CallWelcomeBean apply(CallWelcomeBean data) {
                         // 上报
                         try {
                             LogUtil.log("WelcomePresenter => request => 首次打开app上报");
@@ -152,25 +152,25 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     }
                 })
                 // 广告接口
-                .flatMap(new Function<WelcomeBean, Observable<GetPopupInfoBeanBase>>() {
+                .flatMap(new Function<CallWelcomeBean, Observable<GetPopupInfoBeanBase>>() {
                     @Override
-                    public Observable<GetPopupInfoBeanBase> apply(WelcomeBean data) {
+                    public Observable<GetPopupInfoBeanBase> apply(CallWelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => 广告接口");
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getPopupInfo(s);
                     }
                 })
                 // 下载广告
-                .map(new Function<GetPopupInfoBeanBase, WelcomeBean>() {
+                .map(new Function<GetPopupInfoBeanBase, CallWelcomeBean>() {
                     @Override
-                    public WelcomeBean apply(GetPopupInfoBeanBase loadPageIcon) {
+                    public CallWelcomeBean apply(GetPopupInfoBeanBase loadPageIcon) {
                         LogUtil.log("WelcomePresenter => request => 下载广告");
 
-                        WelcomeBean welcomeBean;
+                        CallWelcomeBean welcomeBean;
                         try {
-                            welcomeBean = new Gson().fromJson(loadPageIcon.getExtra(), WelcomeBean.class);
+                            welcomeBean = new Gson().fromJson(loadPageIcon.getExtra(), CallWelcomeBean.class);
                         } catch (Exception e) {
-                            welcomeBean = new WelcomeBean();
+                            welcomeBean = new CallWelcomeBean();
                         }
 
                         try {
@@ -195,25 +195,25 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     }
                 })
                 // 频道接口
-                .flatMap(new Function<WelcomeBean, Observable<BaseResponsedBean<GetChannelsBean>>>() {
+                .flatMap(new Function<CallWelcomeBean, Observable<BaseResponsedBean<GetChannelsBean>>>() {
                     @Override
-                    public Observable<BaseResponsedBean<GetChannelsBean>> apply(WelcomeBean data) {
+                    public Observable<BaseResponsedBean<GetChannelsBean>> apply(CallWelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => 频道接口");
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getChannels(1, 100, s);
                     }
                 })
                 // 整理数据
-                .map(new Function<BaseResponsedBean<GetChannelsBean>, WelcomeBean>() {
+                .map(new Function<BaseResponsedBean<GetChannelsBean>, CallWelcomeBean>() {
                     @Override
-                    public WelcomeBean apply(BaseResponsedBean<GetChannelsBean> response) {
+                    public CallWelcomeBean apply(BaseResponsedBean<GetChannelsBean> response) {
                         LogUtil.log("WelcomePresenter => request => 整理数据");
 
-                        WelcomeBean welcomeBean;
+                        CallWelcomeBean welcomeBean;
                         try {
-                            welcomeBean = new Gson().fromJson(response.getExtra(), WelcomeBean.class);
+                            welcomeBean = new Gson().fromJson(response.getExtra(), CallWelcomeBean.class);
                         } catch (Exception e) {
-                            welcomeBean = new WelcomeBean();
+                            welcomeBean = new CallWelcomeBean();
                         }
 
                         ArrayList<GetChannelsBean.ItemBean> list = new ArrayList<>();
@@ -257,9 +257,9 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         getView().next();
                     }
                 })
-                .doOnNext(new Consumer<WelcomeBean>() {
+                .doOnNext(new Consumer<CallWelcomeBean>() {
                     @Override
-                    public void accept(WelcomeBean data) {
+                    public void accept(CallWelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => doOnNext => " + new Gson().toJson(data));
                         if (data.containsAd()) {
                             getView().refreshAD(data.getAdUrl());

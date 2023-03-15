@@ -39,7 +39,7 @@ import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.base.BaseDataBean;
-import tv.huan.bilibili.bean.format.MainBean;
+import tv.huan.bilibili.bean.format.CallMainBean;
 import tv.huan.bilibili.dialog.WarningDialog;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.general.GeneralFragment;
@@ -246,9 +246,9 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
 
     protected void showTabs() {
 
-        addDisposable(Observable.create(new ObservableOnSubscribe<MainBean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<CallMainBean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<MainBean> observableEmitter) {
+                    public void subscribe(ObservableEmitter<CallMainBean> observableEmitter) {
 
                         // 0
                         int select = getView().getIntExtra(MainActivity.INTENT_SELECT, 0);
@@ -288,16 +288,16 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                             list.add(tabModel);
                         }
 
-                        MainBean mainBean = new MainBean();
+                        CallMainBean mainBean = new CallMainBean();
                         mainBean.setPosition(select);
                         mainBean.setTabModels(list);
                         observableEmitter.onNext(mainBean);
                     }
                 })
                 // 上报-进入APP首页
-                .map(new Function<MainBean, MainBean>() {
+                .map(new Function<CallMainBean, CallMainBean>() {
                     @Override
-                    public MainBean apply(MainBean mainBean) {
+                    public CallMainBean apply(CallMainBean mainBean) {
                         try {
                             int select = getView().getIntExtra(MainActivity.INTENT_SELECT, 0);
                             String extra = getView().getStringExtra(MainActivity.INTENT_TABS);
@@ -321,9 +321,9 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                     }
-                }).doOnNext(new Consumer<MainBean>() {
+                }).doOnNext(new Consumer<CallMainBean>() {
                     @Override
-                    public void accept(MainBean data) {
+                    public void accept(CallMainBean data) {
                         getView().hideLoading();
                         getView().refreshTabs(data.getTabModels(), data.getPosition());
                     }

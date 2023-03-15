@@ -5,7 +5,7 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 
 @Keep
-public final class OptBean implements Serializable {
+public final class CallOptBean implements Serializable {
 
     private int optCode;
 

@@ -47,7 +47,7 @@ import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
-import tv.huan.bilibili.bean.format.FilterBean;
+import tv.huan.bilibili.bean.format.CallFilterBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -339,10 +339,10 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         }
                         return object;
                     }
-                }).map(new Function<JSONObject, FilterBean>() {
+                }).map(new Function<JSONObject, CallFilterBean>() {
                     @Override
-                    public FilterBean apply(JSONObject data) {
-                        FilterBean filterBean = new FilterBean();
+                    public CallFilterBean apply(JSONObject data) {
+                        CallFilterBean filterBean = new CallFilterBean();
 //                        try {
 //                            int id = data.optInt("filterId", 0);
 //                            filterBeang.setFilterId(id);
@@ -395,9 +395,9 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                     }
-                }).doOnNext(new Consumer<FilterBean>() {
+                }).doOnNext(new Consumer<CallFilterBean>() {
                     @Override
-                    public void accept(FilterBean data) {
+                    public void accept(CallFilterBean data) {
                         if (BuildConfig.HUAN_LOG) {
                             LogUtil.log("FilterPresenter => " + new Gson().toJson(data));
                         }

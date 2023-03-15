@@ -25,7 +25,7 @@ import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
 import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.bean.SpecialBean;
-import tv.huan.bilibili.bean.format.OptBean;
+import tv.huan.bilibili.bean.format.CallOptBean;
 
 public interface HttpApi {
 
@@ -48,7 +48,7 @@ public interface HttpApi {
 
     // 删除历史
     @GET("data/delBookmarkById")
-    Observable<BaseResponsedBean<OptBean>> deleteBookmark(@Query("cid") String cid);
+    Observable<BaseResponsedBean<CallOptBean>> deleteBookmark(@Query("cid") String cid);
 
     // 添加收藏
     @GET("data/addFavorite")
@@ -57,7 +57,7 @@ public interface HttpApi {
 
     // 取消收藏
     @GET("data/cancelFavorite")
-    Observable<BaseResponsedBean<OptBean>> cancelFavorite(@Query("cid") String cid);
+    Observable<BaseResponsedBean<CallOptBean>> cancelFavorite(@Query("cid") String cid);
 
     // 查询收藏
     @GET("data/checkFavorite")

@@ -44,7 +44,7 @@
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
         android:text="@string/search_clean"
-        android:textColor="@color/color_selector_text_common"
+        android:textColor="@color/color_selector_aaaaaa_000000"
         android:textSize="@dimen/sp_14"
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />
@@ -64,7 +64,7 @@
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
         android:text="@string/search_delete"
-        android:textColor="@color/color_selector_text_common"
+        android:textColor="@color/color_selector_aaaaaa_000000"
         android:textSize="@dimen/sp_14"
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />

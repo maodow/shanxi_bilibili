@@ -5,7 +5,7 @@ import java.util.List;
 
 import lib.kalu.leanback.tab.model.TabModel;
 
-public final class MainBean implements Serializable {
+public final class CallMainBean implements Serializable {
 
     private int position;
     private List<TabModel> tabModels;

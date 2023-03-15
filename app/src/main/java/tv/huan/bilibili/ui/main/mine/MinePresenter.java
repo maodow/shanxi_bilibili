@@ -37,7 +37,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
-import tv.huan.bilibili.bean.format.RefreshBean;
+import tv.huan.bilibili.bean.format.CallRefreshBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -468,9 +468,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     }
                 })
                 // 我的收藏 => 数据处理
-                .map(new Function<BaseResponsedBean<FavBean>, RefreshBean>() {
+                .map(new Function<BaseResponsedBean<FavBean>, CallRefreshBean>() {
                     @Override
-                    public RefreshBean apply(BaseResponsedBean<FavBean> resp) throws Exception {
+                    public CallRefreshBean apply(BaseResponsedBean<FavBean> resp) throws Exception {
                         try {
                             LinkedList<FavBean.ItemBean> beans = new LinkedList<>();
                             int start = -1;
@@ -498,7 +498,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                                     t.setTempType(TYPE_ITEM_IMG_FAVOR);
                                 }
                                 mDatas.addAll(start, rows);
-                                RefreshBean bean = new RefreshBean();
+                                CallRefreshBean bean = new CallRefreshBean();
                                 bean.setStart1(start);
                                 bean.setLength1(size);
                                 return bean;
@@ -510,23 +510,23 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     }
                 })
                 // 观看记录
-                .flatMap(new Function<RefreshBean, Observable<BaseResponsedBean<FavBean>>>() {
+                .flatMap(new Function<CallRefreshBean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
-                    public Observable<BaseResponsedBean<FavBean>> apply(RefreshBean data) {
+                    public Observable<BaseResponsedBean<FavBean>> apply(CallRefreshBean data) {
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 3, s);
                     }
                 })
                 // 观看记录 => 数据处理
-                .map(new Function<BaseResponsedBean<FavBean>, RefreshBean>() {
+                .map(new Function<BaseResponsedBean<FavBean>, CallRefreshBean>() {
                     @Override
-                    public RefreshBean apply(BaseResponsedBean<FavBean> resp) throws Exception {
+                    public CallRefreshBean apply(BaseResponsedBean<FavBean> resp) throws Exception {
 
-                        RefreshBean data;
+                        CallRefreshBean data;
                         try {
-                            data = new Gson().fromJson(resp.getExtra(), RefreshBean.class);
+                            data = new Gson().fromJson(resp.getExtra(), CallRefreshBean.class);
                         } catch (Exception e) {
-                            data = new RefreshBean();
+                            data = new CallRefreshBean();
                         }
 
                         try {
@@ -581,9 +581,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         getView().hideLoading();
                     }
                 })
-                .doOnNext(new Consumer<RefreshBean>() {
+                .doOnNext(new Consumer<CallRefreshBean>() {
                     @Override
-                    public void accept(RefreshBean data) {
+                    public void accept(CallRefreshBean data) {
                         getView().hideLoading();
                         getView().refreshContent(data.getStart1(), data.getLength1());
                         getView().refreshContent(data.getStart2(), data.getLength2());

@@ -30,7 +30,7 @@
             android:focusable="true"
             android:gravity="center"
             android:text="@string/dialog_warning_sure"
-            android:textColor="@color/color_selector_text_bdbdbd_3d3d3d"
+            android:textColor="@color/color_selector_bdbdbd_3d3d3d"
             android:textSize="@dimen/sp_18" />
 
     </LinearLayout>

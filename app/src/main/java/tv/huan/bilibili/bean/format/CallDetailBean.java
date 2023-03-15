@@ -7,7 +7,7 @@ import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.RecMediaBean;
 
-public class DetailBean implements Serializable {
+public class CallDetailBean implements Serializable {
 
     private boolean favor; //收藏状态
     private boolean vip; // vip状态

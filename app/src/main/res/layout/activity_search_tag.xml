@@ -7,5 +7,5 @@
     android:gravity="center"
     android:paddingLeft="@dimen/dp_14"
     android:paddingRight="@dimen/dp_14"
-    android:textColor="@color/color_selector_text_ffffff_00000"
+    android:textColor="@color/color_selector_ffffff_00000"
     android:textSize="@dimen/sp_15" />

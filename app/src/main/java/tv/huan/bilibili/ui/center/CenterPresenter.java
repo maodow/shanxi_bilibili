@@ -33,7 +33,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
-import tv.huan.bilibili.bean.format.OptBean;
+import tv.huan.bilibili.bean.format.CallOptBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
@@ -277,18 +277,18 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         int checkedIndex = classLayout.getCheckedIndex();
                         observableEmitter.onNext(checkedIndex == 0);
                     }
-                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<OptBean>>>() {
+                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
                     @Override
-                    public Observable<BaseResponsedBean<OptBean>> apply(Boolean v) {
+                    public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean v) {
                         if (v) {
                             return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
                         } else {
                             return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
                         }
                     }
-                }).map(new Function<BaseResponsedBean<OptBean>, Integer>() {
+                }).map(new Function<BaseResponsedBean<CallOptBean>, Integer>() {
                     @Override
-                    public Integer apply(BaseResponsedBean<OptBean> resp) throws Exception {
+                    public Integer apply(BaseResponsedBean<CallOptBean> resp) throws Exception {
                         try {
                             boolean succ = resp.getData().isSucc();
                             if (!succ)

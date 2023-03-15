@@ -31,8 +31,8 @@ import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.RecMediaBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
-import tv.huan.bilibili.bean.format.DetailBean;
-import tv.huan.bilibili.bean.format.OptBean;
+import tv.huan.bilibili.bean.format.CallDetailBean;
+import tv.huan.bilibili.bean.format.CallOptBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateFavor;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
@@ -74,9 +74,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 媒资数据 => 数据处理
-                .map(new Function<BaseResponsedBean<GetMediasByCid2Bean>, DetailBean>() {
+                .map(new Function<BaseResponsedBean<GetMediasByCid2Bean>, CallDetailBean>() {
                     @Override
-                    public DetailBean apply(BaseResponsedBean<GetMediasByCid2Bean> getMediasByCid2BeanBaseResponsedBean) {
+                    public CallDetailBean apply(BaseResponsedBean<GetMediasByCid2Bean> getMediasByCid2BeanBaseResponsedBean) {
                         // 上报 => 详情页加载完成
                         try {
                             String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
@@ -130,7 +130,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                         }
 
-                        DetailBean detailBean = new DetailBean();
+                        CallDetailBean detailBean = new CallDetailBean();
 
                         // recClassId
                         try {
@@ -188,24 +188,24 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 白名单
-                .flatMap(new Function<DetailBean, ObservableSource<Auth2BeanBase>>() {
+                .flatMap(new Function<CallDetailBean, ObservableSource<Auth2BeanBase>>() {
                     @Override
-                    public ObservableSource<Auth2BeanBase> apply(DetailBean detailBean) {
+                    public ObservableSource<Auth2BeanBase> apply(CallDetailBean detailBean) {
                         String s = new Gson().toJson(detailBean);
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID, null);
                         return HttpClient.getHttpClient().getHttpApi().auth2(cid, s);
                     }
                 })
                 // 白名单 => 数据处理
-                .map(new Function<Auth2BeanBase, DetailBean>() {
+                .map(new Function<Auth2BeanBase, CallDetailBean>() {
                     @Override
-                    public DetailBean apply(Auth2BeanBase auth2Bean) {
+                    public CallDetailBean apply(Auth2BeanBase auth2Bean) {
 
-                        DetailBean detailBean;
+                        CallDetailBean detailBean;
                         try {
-                            detailBean = new Gson().fromJson(auth2Bean.getExtra(), DetailBean.class);
+                            detailBean = new Gson().fromJson(auth2Bean.getExtra(), CallDetailBean.class);
                         } catch (Exception e) {
-                            detailBean = new DetailBean();
+                            detailBean = new CallDetailBean();
                         }
 
                         // 白名单
@@ -221,24 +221,24 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 收藏
-                .flatMap(new Function<DetailBean, ObservableSource<BaseResponsedBean<FavorBean>>>() {
+                .flatMap(new Function<CallDetailBean, ObservableSource<BaseResponsedBean<FavorBean>>>() {
                     @Override
-                    public ObservableSource<BaseResponsedBean<FavorBean>> apply(DetailBean detailBean) {
+                    public ObservableSource<BaseResponsedBean<FavorBean>> apply(CallDetailBean detailBean) {
                         String s = new Gson().toJson(detailBean);
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                         return HttpClient.getHttpClient().getHttpApi().checkFavorite(cid, s);
                     }
                 })
                 // 收藏 => 数据处理
-                .map(new Function<BaseResponsedBean<FavorBean>, DetailBean>() {
+                .map(new Function<BaseResponsedBean<FavorBean>, CallDetailBean>() {
                     @Override
-                    public DetailBean apply(BaseResponsedBean<FavorBean> data) {
+                    public CallDetailBean apply(BaseResponsedBean<FavorBean> data) {
 
-                        DetailBean detailBean;
+                        CallDetailBean detailBean;
                         try {
-                            detailBean = new Gson().fromJson(data.getExtra(), DetailBean.class);
+                            detailBean = new Gson().fromJson(data.getExtra(), CallDetailBean.class);
                         } catch (Exception e) {
-                            detailBean = new DetailBean();
+                            detailBean = new CallDetailBean();
                         }
 
                         // 收藏状态
@@ -250,9 +250,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 播放器 => 数据处理
-                .map(new Function<DetailBean, DetailBean>() {
+                .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
-                    public DetailBean apply(DetailBean data) {
+                    public CallDetailBean apply(CallDetailBean data) {
                         try {
                             DetailTemplatePlayer.DetailTemplatePlayerObject playerData = new DetailTemplatePlayer.DetailTemplatePlayerObject();
                             VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
@@ -265,9 +265,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 选期列表 => 数据处理
-                .map(new Function<DetailBean, DetailBean>() {
+                .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
-                    public DetailBean apply(DetailBean data) {
+                    public CallDetailBean apply(CallDetailBean data) {
                         try {
                             MediaDetailBean detail = data.getAlbum();
                             boolean xuanQi = detail.isXuanQi();
@@ -310,9 +310,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 选集列表 => 数据处理
-                .map(new Function<DetailBean, DetailBean>() {
+                .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
-                    public DetailBean apply(DetailBean data) {
+                    public CallDetailBean apply(CallDetailBean data) {
 
                         try {
                             MediaDetailBean detail = data.getAlbum();
@@ -357,9 +357,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 猜你喜欢 => 数据处理
-                .map(new Function<DetailBean, DetailBean>() {
+                .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
-                    public DetailBean apply(DetailBean data) {
+                    public CallDetailBean apply(CallDetailBean data) {
                         try {
                             List<RecMediaBean> albums = data.getRecAlbums();
                             if (null != albums) {
@@ -389,9 +389,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 默认position => 数据处理
-                .map(new Function<DetailBean, MediaBean>() {
+                .map(new Function<CallDetailBean, MediaBean>() {
                     @Override
-                    public MediaBean apply(DetailBean data) {
+                    public MediaBean apply(CallDetailBean data) {
                         try {
                             int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
                             List<MediaBean> medias = data.getMedias();
@@ -493,15 +493,15 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         observableEmitter.onNext(true);
                     }
                 })
-                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<OptBean>>>() {
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
                     @Override
-                    public Observable<BaseResponsedBean<OptBean>> apply(Boolean aBoolean) {
+                    public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean aBoolean) {
                         return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
                     }
                 })
-                .map(new Function<BaseResponsedBean<OptBean>, Boolean>() {
+                .map(new Function<BaseResponsedBean<CallOptBean>, Boolean>() {
                     @Override
-                    public Boolean apply(BaseResponsedBean<OptBean> resp) {
+                    public Boolean apply(BaseResponsedBean<CallOptBean> resp) {
                         return resp.getData().isSucc();
                     }
                 })

@@ -6,7 +6,7 @@ import java.util.List;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 
-public final class GeneralBean extends BaseDataBean implements Serializable {
+public final class CallGeneralBean extends BaseDataBean implements Serializable {
 
     private List<GetSubChannelsByChannelBean.ListBean> datas;
 

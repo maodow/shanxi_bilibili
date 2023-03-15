@@ -59,7 +59,7 @@
             android:focusable="true"
             android:maxLines="5"
             android:padding="@dimen/dp_10"
-            android:textColor="@color/color_selector_text_aaaaa_00000"
+            android:textColor="@color/color_selector_aaaaaa_000000"
             android:textSize="@dimen/sp_12" />
 
         <Space
@@ -89,7 +89,7 @@
                 android:paddingTop="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_4"
                 android:text="@string/detail_vip"
-                android:textColor="@color/color_selector_text_ffffff_00000"
+                android:textColor="@color/color_selector_ffffff_00000"
                 android:textSize="@dimen/sp_12"
                 android:visibility="gone"
                 app:tvp_drawable_top_height="@dimen/dp_21"
@@ -108,7 +108,7 @@
                 android:paddingTop="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_4"
                 android:text="@string/detail_full"
-                android:textColor="@color/color_selector_text_ffffff_00000"
+                android:textColor="@color/color_selector_ffffff_00000"
                 android:textSize="@dimen/sp_12"
                 app:tvp_drawable_top_height="@dimen/dp_21"
                 app:tvp_drawable_top_width="@dimen/dp_21" />
@@ -124,7 +124,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_4"
-                android:textColor="@color/color_selector_text_ffffff_00000"
+                android:textColor="@color/color_selector_ffffff_00000"
                 android:textSize="@dimen/sp_12"
                 app:tvp_drawable_top_height="@dimen/dp_21"
                 app:tvp_drawable_top_width="@dimen/dp_21" />

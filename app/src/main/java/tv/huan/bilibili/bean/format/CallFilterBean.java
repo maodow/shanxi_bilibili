@@ -8,7 +8,7 @@ import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.tags.model.TagBean;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 
-public final class FilterBean extends BaseDataBean implements Serializable {
+public final class CallFilterBean extends BaseDataBean implements Serializable {
 
     private int filterCheckPosition;
     private String filterTitle;

@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">云视听小电视11</string>
 
-
     <string name="dialog_exit_title">您可能喜欢</string>
     <string name="dialog_exit_cancle">在看一会儿</string>
     <string name="dialog_exit_sure">残忍离开</string>
@@ -40,8 +39,4 @@
     <string name="template_bottom_top">回到顶部</string>
     <string name="template_bottom_search">搜索</string>
     <string name="template_bottom_hint">按【返回键】回到顶部，按菜单键回到首页</string>
-
-    <!-- 我的 -->
-    <!--    <string name="format_error">请使用%1$s:%2$s:%3$s的格式</string>-->
-    <!--    <string name="mine_vip_date"><font color='#ffffff'>2021-01-01</font><font color='#00ff00'>到期</font></string>-->
 </resources>

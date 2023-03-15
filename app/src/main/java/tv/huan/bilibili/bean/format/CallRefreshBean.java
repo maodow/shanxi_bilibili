@@ -2,7 +2,7 @@ package tv.huan.bilibili.bean.format;
 
 import java.io.Serializable;
 
-public class RefreshBean implements Serializable {
+public class CallRefreshBean implements Serializable {
 
     private int start1;
     private int length1;

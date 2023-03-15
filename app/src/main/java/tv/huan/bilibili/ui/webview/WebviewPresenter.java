@@ -17,7 +17,7 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
-import tv.huan.bilibili.bean.format.WebviewBean;
+import tv.huan.bilibili.bean.format.CallWebviewBean;
 import tv.huan.bilibili.http.HttpClient;
 
 public class WebviewPresenter extends BasePresenterImpl<WebviewView> {
@@ -167,10 +167,10 @@ public class WebviewPresenter extends BasePresenterImpl<WebviewView> {
                         }
                     }
                 })
-                .map(new Function<BaseResponsedBean<String>, WebviewBean>() {
+                .map(new Function<BaseResponsedBean<String>, CallWebviewBean>() {
                     @Override
-                    public WebviewBean apply(BaseResponsedBean<String> baseResponsedBean) {
-                        WebviewBean bean = new WebviewBean();
+                    public CallWebviewBean apply(BaseResponsedBean<String> baseResponsedBean) {
+                        CallWebviewBean bean = new CallWebviewBean();
                         if (null == baseResponsedBean.getData()) {
                             bean.setData(false);
                             String s = getView().getStringExtra(WebviewActivity.INTENT_URL);
@@ -196,9 +196,9 @@ public class WebviewPresenter extends BasePresenterImpl<WebviewView> {
                         getView().hideLoading();
                     }
                 })
-                .doOnNext(new Consumer<WebviewBean>() {
+                .doOnNext(new Consumer<CallWebviewBean>() {
                     @Override
-                    public void accept(WebviewBean webviewBean) {
+                    public void accept(CallWebviewBean webviewBean) {
                         getView().hideLoading();
                         getView().showUrl(webviewBean.getValue());
                     }

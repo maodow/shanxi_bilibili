@@ -2,7 +2,7 @@ package tv.huan.bilibili.bean.format;
 
 import java.io.Serializable;
 
-public class WebviewBean implements Serializable {
+public class CallWebviewBean implements Serializable {
 
     private boolean data;
     private String value;
