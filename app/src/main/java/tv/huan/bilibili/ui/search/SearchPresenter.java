@@ -224,6 +224,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
+                        getView().showInput(s);
                         getView().checkNodata(false);
                         getView().showLoading();
                     }

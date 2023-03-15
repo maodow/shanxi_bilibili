@@ -50,7 +50,6 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
         keyboardView.setOnKeyboardInputListener(new OnKeyboardInputListener() {
             @Override
             public void onInput(String s) {
-                showInput(s);
                 getPresenter().request(s);
             }
         });
@@ -92,7 +91,7 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JumpUtil.next(getApplicationContext(), t);
+                    JumpUtil.next(SearchActivity.this, t);
                 }
             });
         }

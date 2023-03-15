@@ -32,9 +32,8 @@ import java.util.List;
 
 import lib.kalu.leanback.tab.ninepatch.NinePatchChunk;
 import tv.huan.bilibili.HuanApp;
-import tv.huan.bilibili.R;
 
-public class GlideUtils {
+public final class GlideUtils {
 
     /**************************** 网络图片 ************************************/
     /**************************** ↓↓↓↓ ************************************/
@@ -58,7 +57,15 @@ public class GlideUtils {
     @SuppressLint("CheckResult")
     private static void into(Context context, String url, final ImageView imageView, @DrawableRes int res) {
 
-        if (null == imageView || null == url || url.length() == 0)
+        if (null == imageView)
+            return;
+
+        try {
+            imageView.setImageDrawable(null);
+        } catch (Exception e) {
+        }
+
+        if (null == url || url.length() == 0)
             return;
 
         RequestOptions options = new RequestOptions()
@@ -85,47 +92,53 @@ public class GlideUtils {
 
     private static void into(Context context, String url, final ImageView imageView, RequestOptions options) {
 
+        try {
+            imageView.setImageDrawable(null);
+        } catch (Exception e) {
+        }
+
         if (null == url || url.length() == 0)
             return;
 
-        try {
 
-            // 圆角
+        // 圆角
 //            float v = context.getResources().getDimension(R.dimen.dp_4);
 //            GlideRoundTransform transform = new GlideRoundTransform(context, v);
 //            options.transform(transform);
 
-            // 图片
+
+        // 图片
+        try {
             Glide.with(context).load(url.trim()).apply(options).into(imageView);
 //            Glide.with(context).load(url).apply(options).into(new CustomTarget<Drawable>() {
 //                @Override
 //                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-//                    int visibility = imageView.getVisibility();
+//                    int visibility = imavoid onLoadCleared(@Nullable Drawable placeholder) {
+////                }
+////            });
+////            Glide.with(context).asBitmap().load(url).apply(options).into(new CustomTarget<Bitmap>() {
+////                @Override
+////                public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
+////                    try {
+////                        Bitmap copy = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+////                        imageView.setImageDrawable(null);
+////                        imageView.setImageBitmap(null);
+////                        imageView.setImageBitmap(copy);
+////                    } catch (Exception e) {
+////                    }
+////                }
+////
+////                @Override
+////                public void onLoadCleared(@Nullable Drawable drawable) {
+////                }
+////            });geView.getVisibility();
 //                    if (visibility == View.VISIBLE) {
 //                        imageView.setImageDrawable(resource);
 //                    }
 //                }
 //
 //                @Override
-//                public void onLoadCleared(@Nullable Drawable placeholder) {
-//                }
-//            });
-//            Glide.with(context).asBitmap().load(url).apply(options).into(new CustomTarget<Bitmap>() {
-//                @Override
-//                public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-//                    try {
-//                        Bitmap copy = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-//                        imageView.setImageDrawable(null);
-//                        imageView.setImageBitmap(null);
-//                        imageView.setImageBitmap(copy);
-//                    } catch (Exception e) {
-//                    }
-//                }
-//
-//                @Override
-//                public void onLoadCleared(@Nullable Drawable drawable) {
-//                }
-//            });
+//                public
         } catch (Exception e) {
         }
     }
