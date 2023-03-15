@@ -144,7 +144,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
             }
             try {
                 ImageView vImg = v.findViewById(R.id.common_poster_img);
-                GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+                GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg);
             } catch (Exception e) {
             }
             try {

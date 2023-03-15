@@ -115,6 +115,6 @@
         android:background="#000000"
         android:focusable="false"
         android:scaleType="fitEnd"
-        android:src="@drawable/bg_shape_placeholder_hz" />
+        android:src="@drawable/bg_shape_placeholder" />
 
 </LinearLayout>

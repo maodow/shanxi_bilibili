@@ -40,11 +40,11 @@ public class GlideUtils {
     /**************************** ↓↓↓↓ ************************************/
 
     public static void loadHz(Context context, String url, ImageView imageView) {
-        into(context, url, imageView, R.drawable.bg_shape_placeholder_hz);
+        into(context, url, imageView, 0);
     }
 
     public static void loadVt(Context context, String url, ImageView imageView) {
-        into(context, url, imageView, R.drawable.bg_shape_placeholder_vt);
+        into(context, url, imageView, 0);
     }
 
     public static void load(Context context, String url, ImageView imageView, @DrawableRes int placeholder) {

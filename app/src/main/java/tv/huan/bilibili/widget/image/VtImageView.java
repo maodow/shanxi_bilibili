@@ -33,6 +33,6 @@ public class VtImageView extends ImageView {
     }
 
     private void init() {
-        setImageResource(R.drawable.bg_shape_placeholder_vt);
+//        setImageResource(R.drawable.bg_shape_placeholder_vt);
     }
 }

@@ -556,7 +556,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
         // center
         else if (viewType == 2) {
             ImageView vImg = v.findViewById(R.id.general_item_template16_img);
-            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg);
         }
         // right
         else {

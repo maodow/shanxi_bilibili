@@ -8,6 +8,7 @@
         android:id="@+id/common_poster_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/bg_shape_placeholder"
         android:focusable="false"
         android:scaleType="centerCrop" />
 

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:width="420dp"
-        android:height="246dp">
-        <shape android:shape="rectangle">
+    <item>
+        <shape>
             <solid android:color="@color/color_303030" />
+            <corners android:radius="@dimen/dp_4" />
         </shape>
     </item>
     <item
-        android:width="40dp"
-        android:height="40dp"
+        android:width="@dimen/dp_40"
+        android:height="@dimen/dp_40"
         android:gravity="center">
         <bitmap
             android:gravity="center"

@@ -645,7 +645,7 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
             // b
             try {
                 ImageView vImg = v.findViewById(R.id.common_poster_img);
-                GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+                GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg);
             } catch (Exception e) {
             }
             try {
@@ -659,7 +659,7 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
         // center
         else if (viewType == 2) {
             ImageView vImg = v.findViewById(R.id.general_item_template17b_img);
-            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg, R.drawable.bg_shape_placeholder_template17b);
+            GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg);
         }
         // right
         else {

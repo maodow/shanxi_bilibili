@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_shape_placeholder_hz" />
+        android:src="@drawable/bg_shape_placeholder" />
 
     <ImageView
         android:id="@+id/detail_player_item_playing"
