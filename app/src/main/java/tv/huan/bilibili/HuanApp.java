@@ -34,7 +34,7 @@ public final class HuanApp extends Application {
 
         LogUtil.setLogger(true);
         MvpUtil.setLogger(true);
-        LeanBackUtil.setLogger(true);
+        LeanBackUtil.setLogger(false);
         HuanCrash.getInstance().init();
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override

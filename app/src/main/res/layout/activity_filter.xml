@@ -22,8 +22,8 @@
         android:background="@drawable/bg_selector_common_search"
         android:drawableLeft="@drawable/ic_selector_common_search"
         android:drawablePadding="@dimen/dp_8"
-        android:focusable="false"
         android:gravity="center"
+        android:focusable="false"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
         android:text="@string/menu_search"
@@ -78,7 +78,7 @@
 
     <!-- 二级菜单 -->
     <lib.kalu.leanback.clazz.VerticalClassLayout
-        android:id="@+id/filter_second"
+        android:id="@+id/filter_class"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/filter_title"

@@ -13,11 +13,14 @@ public interface FilterView extends BaseViewImpl {
 
     void refreshClass(@NonNull List<ClassBean> classApis, @NonNull String className);
 
-    void refreshContent(boolean hasFocus);
-
     void refreshTags(LinkedHashMap<String, List<TagBean>> filterTags);
 
     void checkNodata(boolean show);
 
     void checkTags(boolean show);
+
+    void refreshContent();
+
+    void requestFocusList();
+    void requestFocusClass();
 }

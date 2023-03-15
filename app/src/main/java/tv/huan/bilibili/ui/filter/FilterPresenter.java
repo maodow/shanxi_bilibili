@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.filter;
 import android.content.Context;
 import android.graphics.Rect;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.leanback.clazz.ClassBean;
+import lib.kalu.leanback.clazz.VerticalClassLayout;
 import lib.kalu.leanback.tags.TagsLayout;
 import lib.kalu.leanback.tags.model.TagBean;
 import okhttp3.MediaType;
@@ -45,8 +47,8 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
-import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallFilterBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
@@ -404,7 +406,12 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         getView().hideLoading();
                         getView().refreshTags(data.getFilterTags());
                         getView().refreshClass(data.getFilterClass(), data.getFilterTitle());
-                        getView().refreshContent(true);
+                        if (mData.size() > 0) {
+                            getView().refreshContent();
+                            getView().requestFocusList();
+                        } else {
+                            getView().requestFocusClass();
+                        }
                         getView().checkNodata(mData.size() <= 0);
                         getView().checkTags(data.getFilterCheckPosition() == 0);
                     }
@@ -479,7 +486,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         }
                         // loading
                         getView().hideLoading();
-                        getView().refreshContent(false);
+                        getView().refreshContent();
                         getView().checkNodata(mData.size() <= 0);
                     }
                 }).doOnComplete(new Action() {
@@ -493,7 +500,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     public void accept(Boolean aBoolean) {
                         // loading
                         getView().hideLoading();
-                        getView().refreshContent(false);
+                        getView().refreshContent();
                         getView().checkNodata(mData.size() <= 0);
                     }
                 }).subscribe());
@@ -542,7 +549,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         }
                         // loading
                         getView().hideLoading();
-                        getView().refreshContent(false);
+                        getView().refreshContent();
                         getView().checkNodata(mData.size() <= 0);
                     }
                 }).doOnComplete(new Action() {
@@ -556,9 +563,63 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     public void accept(Boolean aBoolean) {
                         // loading
                         getView().hideLoading();
-                        getView().refreshContent(false);
+                        getView().refreshContent();
                         getView().checkNodata(mData.size() <= 0);
                     }
                 }).subscribe());
+    }
+
+    protected boolean dispatchEvent(KeyEvent event) {
+        // up
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+            int focusId = getView().getCurrentFocusId();
+            LogUtil.log("FilterPresenter => dispatchEvent => up");
+            if (focusId == R.id.filter_class) {
+                lib.kalu.leanback.clazz.VerticalClassLayout classLayout = (VerticalClassLayout) getView().getCurrentFocus();
+                int index = classLayout.getCheckedIndex();
+                LogUtil.log("FilterPresenter => dispatchEvent => index = " + index);
+                if (index <= 0) {
+                    getView().setFocusable(R.id.filter_search, true);
+                    getView().setFocusable(R.id.filter_vip, true);
+                    classLayout.focusLeave();
+                    getView().requestFocus(R.id.filter_search);
+                    return true;
+                }
+            }
+        }
+        // down
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            int focusId = getView().getCurrentFocusId();
+            if (focusId == R.id.filter_search || focusId == R.id.filter_vip) {
+                getView().setFocusable(R.id.filter_search, false);
+                getView().setFocusable(R.id.filter_vip, false);
+                lib.kalu.leanback.clazz.VerticalClassLayout classLayout = getView().findViewById(R.id.filter_class);
+                classLayout.requestFocus(0, false);
+                return true;
+            }
+        }
+        // right
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            int focusId = getView().getCurrentFocusId();
+            if (focusId == R.id.filter_vip) {
+                return true;
+            } else if (focusId == R.id.filter_class) {
+                lib.kalu.leanback.clazz.VerticalClassLayout classLayout = getView().findViewById(R.id.filter_class);
+                int index = classLayout.getCheckedIndex();
+                if (index <= 0) {
+                    classLayout.focusLeave();
+                    getView().requestFocus(R.id.filter_tags);
+                    return true;
+                }
+            }
+        }
+        // left
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+            int focusId = getView().getCurrentFocusId();
+            if (focusId == R.id.filter_search) {
+                return true;
+            }
+        }
+        return false;
     }
 }
