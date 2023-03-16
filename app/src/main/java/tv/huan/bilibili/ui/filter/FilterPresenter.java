@@ -208,6 +208,14 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                                 classApi.setChecked(secondTag.equals(bean.getName()));
                                 classApis.add(classApi);
                             }
+                            for (int i = 0; i < classes.size(); i++) {
+                                GetSubChannelsByChannelBean.ClassesBean bean = classes.get(i);
+                                ClassBean classApi = new ClassBean();
+                                classApi.setText(bean.getName());
+                                classApi.setCode(String.valueOf(bean.getId()));
+                                classApi.setChecked(secondTag.equals(bean.getName()));
+                                classApis.add(classApi);
+                            }
                             String s = new Gson().toJson(classApis);
                             data.put("filterClass", s);
                         } catch (Exception e) {
