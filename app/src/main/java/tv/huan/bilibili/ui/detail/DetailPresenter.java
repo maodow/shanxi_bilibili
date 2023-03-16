@@ -544,9 +544,19 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 int focusId = getView().getCurrentFocusId();
                 if (focusId == R.id.detail_player_item_vip || focusId == R.id.detail_player_item_full || focusId == R.id.detail_player_item_favor) {
                     DetailGridView gridView = getView().findViewById(R.id.detail_list);
-                    boolean containsXuanJi = gridView.containsXuanJi();
-                    if (containsXuanJi) {
-                        gridView.requestFocusEpisodePlayingItem();
+                    boolean actionDown = gridView.dispatchKeyEventDown();
+                    if (actionDown) {
+                        return true;
+                    }
+                }
+            }
+            // up
+            else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+                int focusId = getView().getCurrentFocusId();
+                if (focusId == R.id.detail_item_favor) {
+                    DetailGridView gridView = getView().findViewById(R.id.detail_list);
+                    boolean actionDown = gridView.dispatchKeyEventUp();
+                    if (actionDown) {
                         return true;
                     }
                 }
@@ -617,7 +627,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         if (v == 21) {
                             getView().startPlayer(data);
                         } else if (v == 22) {
-                            getView().selectPosition(data);
+                            getView().checkedPlayerPosition(data);
                         } else if (v == 1) {
                             getView().jumpVip();
                         }
@@ -655,7 +665,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         String s = getView().getString(R.string.detail_warning_next, integer);
                         LogUtil.log("DetailPresenter => checkPlayerNext => s = " + s);
                         getView().showToast(s);
-                        getView().startPlayerNext1();
+                        getView().startPlayerNext();
                     }
                 })
                 .subscribe());

@@ -2,9 +2,9 @@ package tv.huan.bilibili.bean.base;
 
 import java.io.Serializable;
 
-import lib.kalu.leanback.presenter.bean.TvEpisodesItemBean;
+import lib.kalu.leanback.presenter.bean.TvEpisodesPlusItemBean;
 
-public class BaseDataBean extends TvEpisodesItemBean implements Serializable {
+public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable {
 
     private String vid;
     private String cid;

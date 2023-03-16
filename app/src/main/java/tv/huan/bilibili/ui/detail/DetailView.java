@@ -25,9 +25,9 @@ public interface DetailView extends BaseViewImpl {
 
     void startPlayer(@NonNull MediaBean data);
 
-    void selectPosition(@NonNull MediaBean data);
+    void checkedPlayerPosition(@NonNull MediaBean data);
 
-    void startPlayerNext1();
+    void startPlayerNext();
 
     void stopPlayer();
 

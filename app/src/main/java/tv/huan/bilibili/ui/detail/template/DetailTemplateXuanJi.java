@@ -1,6 +1,5 @@
 package tv.huan.bilibili.ui.detail.template;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
@@ -13,13 +12,13 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
-import lib.kalu.leanback.presenter.ListTvEpisodesPresenter;
+import lib.kalu.leanback.presenter.ListTvEpisodesPlusPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class DetailTemplateXuanJi extends ListTvEpisodesPresenter<MediaBean> {
+public class DetailTemplateXuanJi extends ListTvEpisodesPlusPresenter<MediaBean> {
 
     @Override
     public int initPaddingTop(@NonNull Context context) {

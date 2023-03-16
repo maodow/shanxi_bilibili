@@ -36,14 +36,6 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     private void init() {
     }
 
-    public void requestFocusEpisodePlayingItem() {
-        DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-        LogUtil.log("DetailGridView", "requestCheckedEpisode => presenter = " + presenter);
-        if (null == presenter)
-            return;
-        presenter.requestFocusChildOfEpisodeChecked(this);
-    }
-
     /*********/
 
     public void stopPlayer() {
@@ -185,7 +177,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public void startNext1() {
+    public void startNext() {
         DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
         LogUtil.log("DetailGridView", "startNext => presenter = " + presenter);
         if (null == presenter)
@@ -193,17 +185,39 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         presenter.startEpisodeNext(this);
     }
 
-    public void selectPlayerPosition(@NonNull MediaBean data) {
-        DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-        LogUtil.log("DetailGridView", "startPlayerPosition => presenter = " + presenter);
-        if (null == presenter)
-            return;
-        int index = data.getTempIndex();
-        LogUtil.log("DetailGridView", "startPlayerPosition => index = " + index);
-        if (index <= 0)
-            return;
-        int position = --index;
-        presenter.startEpisodePosition(this, position);
+    public void checkedPlayerPosition(@NonNull MediaBean data) {
+
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            Object o = objectAdapter.get(1);
+            if (null == o)
+                throw new Exception("objectAdapter null");
+            // 选集列表
+            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
+                int index = data.getTempIndex();
+                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+                if (index > 0 && null != presenter) {
+                    int position = --index;
+                    presenter.startEpisodePosition(this, position);
+                }
+            }
+            // 选期列表
+            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
+                int index = data.getTempIndex();
+                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
+                if (index > 0 && null != presenter) {
+                    int position = --index;
+                    presenter.checkedPosition(this, 1, position, false);
+                }
+            }
+            // 电影
+            else {
+
+            }
+        } catch (Exception e) {
+            LogUtil.log("DetailGridView", "checkedPlayerPosition => " + e.getMessage());
+        }
     }
 
     public void updatePlayerPosition(@NonNull MediaBean data) {
@@ -231,5 +245,60 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         if (null == presenter)
             return -1;
         return presenter.getEpisodeNextPosition();
+    }
+
+    public boolean dispatchKeyEventDown() {
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            Object o = objectAdapter.get(1);
+            if (null == o)
+                throw new Exception("objectAdapter null");
+            // 选集列表
+            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
+                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+                if (null != presenter) {
+                    return presenter.dispatchEventActionDown(this, 1);
+                }
+            }
+            // 选期列表
+            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
+                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
+                if (null != presenter) {
+                    return presenter.dispatchKeyEventCheckedPosition(this, 1);
+                }
+            }
+            throw new Exception("not find");
+        } catch (Exception e) {
+            LogUtil.log("DetailGridView", "dispatchKeyEventDown => " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean dispatchKeyEventUp() {
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            Object o = objectAdapter.get(1);
+            if (null == o)
+                throw new Exception("objectAdapter null");
+            // 选集列表
+            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
+                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+                if (null != presenter) {
+                }
+            }
+            // 选期列表
+            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
+                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
+                if (null != presenter) {
+                    return presenter.dispatchKeyEventCheckedPosition(this, 1);
+                }
+            }
+            throw new Exception("not find");
+        } catch (Exception e) {
+            LogUtil.log("DetailGridView", "dispatchKeyEventUp => " + e.getMessage());
+            return false;
+        }
     }
 }
