@@ -95,6 +95,7 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
 
     @Override
     public void requestFocusClass() {
-        requestFocus(R.id.filter_class);
+        VerticalClassLayout classLayout = findViewById(R.id.filter_class);
+        classLayout.focusInto();
     }
 }
