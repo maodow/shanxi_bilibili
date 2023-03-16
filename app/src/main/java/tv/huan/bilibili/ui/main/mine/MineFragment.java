@@ -9,6 +9,8 @@ import tv.huan.bilibili.utils.LogUtil;
 @Keep
 public class MineFragment extends BaseFragment<MineView, MinePresenter> implements MineView {
 
+    protected final static String BUNDLE_REFRESH = "bundle_refresh";
+
     @Override
     public int initLayout() {
         return R.layout.fragment_mine;

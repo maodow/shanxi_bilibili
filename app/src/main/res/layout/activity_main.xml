@@ -71,6 +71,8 @@
         android:layout_marginTop="@dimen/dp_17"
         android:layout_marginBottom="@dimen/dp_17"
         android:focusable="true"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:paddingLeft="@dimen/dp_33"
         android:paddingRight="@dimen/dp_33"
         app:tab_image_height="@dimen/dp_30"

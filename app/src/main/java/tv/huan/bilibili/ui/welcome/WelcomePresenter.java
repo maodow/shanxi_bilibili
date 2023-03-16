@@ -128,26 +128,6 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         } catch (Exception e) {
                         }
 
-//                        // huanId
-//                        try {
-//                            LogUtil.log("WelcomePresenter => request => 检查HuanId");
-//                            HuanInfo data = resp.getData();
-//                            if (null != data) {
-//                                String huanId = data.getHuanId();
-//                                if (null != huanId && huanId.length() > 0) {
-//                                    CacheUtil.setCache(getView().getContext(), "huanId", huanId);
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                        }
-
-//                        WelcomeBean welcomeBean;
-//                        try {
-//                            welcomeBean = new Gson().fromJson(resp.getExtra(), WelcomeBean.class);
-//                        } catch (Exception e) {
-//                            welcomeBean = new WelcomeBean();
-//                        }
-
                         return data;
                     }
                 })

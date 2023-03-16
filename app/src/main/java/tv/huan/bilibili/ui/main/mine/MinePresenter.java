@@ -150,6 +150,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             if (position > 0) {
                                 FavBean.ItemBean itemBean = mDatas.get(position);
                                 itemBean.setToType(1);
+                                getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, true);
                                 JumpUtil.next(v.getContext(), itemBean);
                             }
                         }
@@ -173,8 +174,10 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                                 FavBean.ItemBean itemBean = mDatas.get(position);
                                 int toType = itemBean.getToType();
                                 if (toType == 8001) {
+                                    getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, true);
                                     JumpUtil.nextCenter(v.getContext(), false);
                                 } else if (toType == 8002) {
+                                    getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, true);
                                     JumpUtil.nextCenter(v.getContext(), true);
                                 }
                             }
@@ -571,8 +574,14 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 .compose(ComposeSchedulers.io_main())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
-                    public void accept(Disposable disposable) {
-                        getView().showLoading();
+                    public void accept(Disposable disposable) throws Exception {
+                        boolean refresh = getView().getBooleanExtra(MineFragment.BUNDLE_REFRESH, false);
+                        if (refresh) {
+                            getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, false);
+                            getView().showLoading();
+                        } else {
+                            throw new Exception();
+                        }
                     }
                 })
                 .doOnError(new Consumer<Throwable>() {
