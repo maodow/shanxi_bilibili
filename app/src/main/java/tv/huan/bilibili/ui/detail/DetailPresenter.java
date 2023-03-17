@@ -1,6 +1,7 @@
 package tv.huan.bilibili.ui.detail;
 
 import android.view.KeyEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -530,50 +531,49 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     }
 
     protected boolean dispatchEvent(KeyEvent event) {
-        // left right up down
-        if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
-            PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
-            boolean isFull = playerView.isFull();
-            // full
-            if (isFull) {
-                playerView.dispatchKeyEvent(event);
-                return true;
-            }
-            // down
-            else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
-                int focusId = getView().getCurrentFocusId();
-                if (focusId == R.id.detail_player_item_vip || focusId == R.id.detail_player_item_full || focusId == R.id.detail_player_item_favor) {
-                    DetailGridView gridView = getView().findViewById(R.id.detail_list);
-                    boolean actionDown = gridView.dispatchKeyEventDown();
-                    if (actionDown) {
-                        return true;
-                    }
+        // down
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            int focusId = getView().getCurrentFocusId();
+            if (focusId == R.id.detail_player_item_vip || focusId == R.id.detail_player_item_full || focusId == R.id.detail_player_item_favor) {
+                DetailGridView gridView = getView().findViewById(R.id.detail_list);
+                boolean dispatchKeyEvent = gridView.dispatchKeyEvent(View.FOCUS_DOWN);
+                if (dispatchKeyEvent) {
+                    return true;
                 }
             }
-            // up
-            else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
-                int focusId = getView().getCurrentFocusId();
-                if (focusId == R.id.detail_item_favor) {
-                    DetailGridView gridView = getView().findViewById(R.id.detail_list);
-                    boolean actionDown = gridView.dispatchKeyEventUp();
-                    if (actionDown) {
-                        return true;
-                    }
+        }
+        // up
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+            int focusId = getView().getCurrentFocusId();
+            if (focusId == R.id.detail_item_favor) {
+                DetailGridView gridView = getView().findViewById(R.id.detail_list);
+                boolean dispatchKeyEvent = gridView.dispatchKeyEvent(View.FOCUS_UP);
+                if (dispatchKeyEvent) {
+                    return true;
                 }
             }
         }
         // back
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+
             try {
-                DetailGridView gridView = getView().findViewById(R.id.detail_list);
-                long position = gridView.getPlayerPosition();
-                long duration = gridView.getPlayerDuraion();
-                LogUtil.log("DetailPresenter => onBack => duration = " + duration);
-                LogUtil.log("DetailPresenter => onBack => position = " + position);
-                getView().putLongExtra(DetailActivity.INTENT_CUR_POSITION, position);
-                getView().putLongExtra(DetailActivity.INTENT_CUR_DURATION, duration);
-                getView().callOnBackPressed();
-                return true;
+                PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
+                boolean isFull = playerView.isFull();
+                // full
+                if (isFull) {
+                    playerView.dispatchKeyEvent(event);
+                    return true;
+                }
+                // report
+                else {
+                    DetailGridView gridView = getView().findViewById(R.id.detail_list);
+                    long position = gridView.getPlayerPosition();
+                    long duration = gridView.getPlayerDuraion();
+                    getView().putLongExtra(DetailActivity.INTENT_CUR_POSITION, position);
+                    getView().putLongExtra(DetailActivity.INTENT_CUR_DURATION, duration);
+                    getView().callOnBackPressed();
+                    return true;
+                }
             } catch (Exception e) {
             }
         }

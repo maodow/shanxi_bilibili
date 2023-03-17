@@ -2,6 +2,7 @@ package tv.huan.bilibili.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -247,35 +248,8 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         return presenter.getEpisodeNextPosition();
     }
 
-    public boolean dispatchKeyEventDown() {
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            Object o = objectAdapter.get(1);
-            if (null == o)
-                throw new Exception("objectAdapter null");
-            // 选集列表
-            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                if (null != presenter) {
-                    return presenter.dispatchEventActionDown(this, 1);
-                }
-            }
-            // 选期列表
-            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
-                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
-                if (null != presenter) {
-                    return presenter.dispatchKeyEventCheckedPosition(this, 1);
-                }
-            }
-            throw new Exception("not find");
-        } catch (Exception e) {
-            LogUtil.log("DetailGridView", "dispatchKeyEventDown => " + e.getMessage());
-            return false;
-        }
-    }
+    public boolean dispatchKeyEvent(int direction) {
 
-    public boolean dispatchKeyEventUp() {
         try {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
@@ -285,7 +259,10 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             // 选集列表
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                if (null != presenter) {
+                if (null != presenter && direction == View.FOCUS_DOWN) {
+                    return presenter.dispatchKeyEventCheckedPositionEpisode(this, 1);
+                } else if (null != presenter && direction == View.FOCUS_UP) {
+                    return presenter.dispatchKeyEventCheckedPositionRange(this, 1);
                 }
             }
             // 选期列表
@@ -297,7 +274,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             }
             throw new Exception("not find");
         } catch (Exception e) {
-            LogUtil.log("DetailGridView", "dispatchKeyEventUp => " + e.getMessage());
+            LogUtil.log("DetailGridView", "dispatchKeyEvent => " + e.getMessage());
             return false;
         }
     }
