@@ -186,41 +186,6 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         presenter.startEpisodeNext(this);
     }
 
-    public void checkedPlayerPosition(@NonNull MediaBean data) {
-
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            Object o = objectAdapter.get(1);
-            if (null == o)
-                throw new Exception("objectAdapter null");
-            // 选集列表
-            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-                int index = data.getTempIndex();
-                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                if (index > 0 && null != presenter) {
-                    int position = --index;
-                    presenter.startEpisodePosition(this, position);
-                }
-            }
-            // 选期列表
-            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
-                int index = data.getTempIndex();
-                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
-                if (index > 0 && null != presenter) {
-                    int position = --index;
-                    presenter.checkedPosition(this, 1, position, false);
-                }
-            }
-            // 电影
-            else {
-
-            }
-        } catch (Exception e) {
-            LogUtil.log("DetailGridView", "checkedPlayerPosition => " + e.getMessage());
-        }
-    }
-
     public void updatePlayerPosition(@NonNull MediaBean data) {
         DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
         LogUtil.log("DetailGridView", "updatePlayerPosition => presenter = " + presenter);
@@ -276,6 +241,41 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         } catch (Exception e) {
             LogUtil.log("DetailGridView", "dispatchKeyEvent => " + e.getMessage());
             return false;
+        }
+    }
+
+    public void checkedPlayerPosition(@NonNull MediaBean data) {
+
+        try {
+            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+            Object o = objectAdapter.get(1);
+            if (null == o)
+                throw new Exception("objectAdapter null");
+            // 选集列表
+            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
+                int index = data.getTempIndex();
+                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+                if (index > 0 && null != presenter) {
+                    int position = --index;
+                    presenter.startEpisodePosition(this, position);
+                }
+            }
+            // 选期列表
+            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
+                int index = data.getTempIndex();
+                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
+                if (index > 0 && null != presenter) {
+                    int position = --index;
+                    presenter.checkedPosition(this, 1, position, false);
+                }
+            }
+            // 电影
+            else {
+                startPlayer(data);
+            }
+        } catch (Exception e) {
+            LogUtil.log("DetailGridView", "checkedPlayerPosition => " + e.getMessage());
         }
     }
 }
