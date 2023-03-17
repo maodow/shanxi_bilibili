@@ -115,13 +115,14 @@ dependencies {
     // leanback
     api files('libs/lib_leanback_r1-2-0-alpha02-release.aar')
     // keyboard
+    // api project(path: ':module_keyboard')
     api files('libs/lib_keyboard_release_20230303.aar')
-//    api project(path: ':module_keyboard')
-    api files('libs/lib_mediaplayer_ui_release_20230311.aar')
+    // player
+    api files('libs/lib_mediaplayer_ui_release_20230317.aar')
     api files('libs/lib_mediaplayer_exo_r2.18.3_ff4.4_audio_release_20230222.aar')
     // heilongjiang
+    // api project(path: ':huan_heilongjiang')
     api files('libs/lib_huan_heilongjiang_release_20230302.aar')
-//    api project(path: ':huan_heilongjiang')
 
     // core
     implementation 'androidx.multidex:multidex:2.0.1'
