@@ -12,6 +12,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import tv.huan.bilibili.bean.Auth2BeanBase;
 import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.FavBean;
@@ -21,10 +22,11 @@ import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.GetPopupInfoBeanBase;
 import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
-import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
 import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.bean.SpecialBean;
+import tv.huan.bilibili.bean.base.BaseAuthorizationBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
 
 public interface HttpApi {
@@ -144,6 +146,13 @@ public interface HttpApi {
                                                           @Query("pos") int pos, //集数从0开始
                                                           @Query("playTime") long playTime, //当前播放时长
                                                           @Query("playLength") long playLength); //当前视频时长
+
+    // 华为播放鉴权
+    @Headers("xAuth:1")
+    @POST()
+    Observable<BaseAuthorizationBean> huaweiAuth(@Url String url,
+                                                 @Body RequestBody requestBody,
+                                                 @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     //    // 获取HuanId
 //    @GET("apk/getHuanId")

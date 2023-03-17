@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,6 +25,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.Auth2BeanBase;
@@ -31,6 +35,7 @@ import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.RecMediaBean;
+import tv.huan.bilibili.bean.base.BaseAuthorizationBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallDetailBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
@@ -42,6 +47,7 @@ import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.bilibili.widget.player.PlayerView;
+import tv.huan.heilongjiang.HuaweiApi;
 
 public class DetailPresenter extends BasePresenterImpl<DetailView> {
     public DetailPresenter(@NonNull DetailView detailView) {
@@ -432,8 +438,8 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         getView().hideLoading();
                         getView().updateVidAndClassId(data);
                         getView().refreshContent();
-                        getView().updateData(data, false);
-                        getView().delayPlayer(data, false);
+                        getView().updatePlayerInfo(data, false);
+                        getView().delayStartPlayer(data, false);
                     }
                 }).subscribe());
     }
@@ -580,15 +586,12 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         return false;
     }
 
-    protected final void delayPlayer(@NonNull MediaBean data, boolean isFromUser) {
-        addDisposable(Observable.create(new ObservableOnSubscribe<Integer>() {
+    protected final void delayStartPlayer(@NonNull MediaBean data, boolean isFromUser) {
+        addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-
-                        String videoUrl = data.getTempVideoUrl();
-                        if (null == videoUrl || videoUrl.length() <= 0) {
-                            throw new Exception("视频url错误");
-                        } else {
+                    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                        // 用户点击
+                        if (isFromUser) {
                             boolean isVip = data.isTempVip();
                             int playType = data.getTempPlayType();
                             int index = data.getTempIndex();
@@ -598,19 +601,75 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                 throw new Exception("第" + index + "集, 需要开通vip");
                             } else {
                                 if (!isVip && index > playType) {
-                                    emitter.onNext(1);
+                                    emitter.onNext("23");
                                 } else {
-                                    if (isFromUser) {
-                                        long seek = getView().getLongExtra(DetailActivity.INTENT_SEEK, 0);
-                                        if (seek > 0) {
-                                            getView().putLongExtra(DetailActivity.INTENT_SEEK, 0);
-                                            data.setTempSeek(seek);
-                                        }
+                                    long seek = getView().getLongExtra(DetailActivity.INTENT_SEEK, 0);
+                                    if (seek > 0) {
+                                        getView().putLongExtra(DetailActivity.INTENT_SEEK, 0);
+                                        data.setTempSeek(seek);
                                     }
-                                    emitter.onNext(isFromUser ? 21 : 22);
+                                    emitter.onNext("21");
                                 }
                             }
                         }
+                        // 初始选中
+                        else {
+                            emitter.onNext("22");
+                        }
+                    }
+                })
+                // 华为播放鉴权
+                .flatMap(new Function<String, Observable<BaseAuthorizationBean>>() {
+                    @Override
+                    public Observable<BaseAuthorizationBean> apply(String s) {
+                        try {
+                            if ("21".equals(s))
+                                throw new Exception("error: " + s);
+                            JSONObject object = new JSONObject();
+                            object.put("cid", "10005848228");
+                            object.put("tid", "-1");
+                            object.put("supercid", "-1");
+                            object.put("playType", "1");
+                            object.put("contentType", "0");
+                            object.put("businessType", "1");
+                            object.put("idflag", "1");
+                            String json = String.valueOf(object);
+                            LogUtil.log("DetailPresenter => requestAuthHuawei => json = " + json);
+                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), json);
+                            String url = HuaweiApi.getEpgServer(getView().getContext());
+                            LogUtil.log("DetailPresenter => requestAuthHuawei => url = " + url);
+                            return HttpClient.getHttpClient().getHttpApi().huaweiAuth(url, requestBody, s);
+                        } catch (Exception e) {
+                            return Observable.create(new ObservableOnSubscribe<BaseAuthorizationBean>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<BaseAuthorizationBean> emitter) {
+                                    BaseAuthorizationBean bean = new BaseAuthorizationBean();
+                                    bean.setExtra(s);
+                                    emitter.onNext(bean);
+                                }
+                            });
+                        }
+                    }
+                })
+                // 华为播放鉴权 => 数据处理
+                .map(new Function<BaseAuthorizationBean, String>() {
+                    @Override
+                    public String apply(BaseAuthorizationBean resp) throws Exception {
+                        LogUtil.log("DetailPresenter => requestAuthHuawei => resp = " + new Gson().toJson(resp));
+
+                        try {
+                            String url = resp.getData().get(0).getPlayurl();
+                            data.setTempVideoUrl(url);
+                        } catch (Exception e) {
+                            data.setTempVideoUrl(null);
+                        }
+
+                        if ("21".equals(resp.getExtra())) {
+                            String tempVideoUrl = data.getTempVideoUrl();
+                            if (null == tempVideoUrl || tempVideoUrl.length() <= 0)
+                                throw new Exception("华为鉴权失败:" + resp.getReturncode());
+                        }
+                        return resp.getExtra();
                     }
                 })
 //                .delay(isFromUser ? 4000 : 1, TimeUnit.MILLISECONDS)
@@ -621,19 +680,21 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         getView().showToast(throwable);
                     }
                 })
-                .doOnNext(new Consumer<Integer>() {
+                .doOnNext(new Consumer<String>() {
                     @Override
-                    public void accept(Integer v) {
-                        if (v == 21) {
+                    public void accept(String s) {
+                        if ("21".equals(s)) {
                             getView().startPlayer(data);
-                        } else if (v == 22) {
+                        } else if ("22".equals(s)) {
                             getView().checkedPlayerPosition(data);
-                        } else if (v == 1) {
+                        } else if ("23".equals(s)) {
                             getView().jumpVip();
                         }
                     }
                 })
-                .subscribe());
+                        .
+
+                subscribe());
     }
 
     protected void checkPlayerNext() {
@@ -647,7 +708,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             throw new Exception("播放结束");
                         int nextPosition = gridView.getPlayerNextPosition();
                         if (nextPosition < 0)
-                            throw new Exception("播放结束1");
+                            throw new Exception("播放完成");
                         emitter.onNext(nextPosition + 1);
                     }
                 })
@@ -665,7 +726,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         String s = getView().getString(R.string.detail_warning_next, integer);
                         LogUtil.log("DetailPresenter => checkPlayerNext => s = " + s);
                         getView().showToast(s);
-                        getView().startPlayerNext();
+                        getView().checkedPlayerPositionNext();
                     }
                 })
                 .subscribe());

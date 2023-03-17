@@ -96,8 +96,8 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPlusPresenter<MediaBean>
             if (null != activity && activity instanceof DetailActivity) {
                 ((DetailActivity) activity).stopPlayer();
                 ((DetailActivity) activity).updateVidAndClassId(item);
-                ((DetailActivity) activity).updateData(item, true);
-                ((DetailActivity) activity).delayPlayer(item, true);
+                ((DetailActivity) activity).updatePlayerInfo(item, true);
+                ((DetailActivity) activity).delayStartPlayer(item, true);
             }
         } catch (Exception e) {
         }
@@ -105,12 +105,12 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPlusPresenter<MediaBean>
 
     @Override
     protected int initRangeLayout() {
-        return R.layout.activity_detail_item_xuanji2;
+        return R.layout.activity_detail_item_xuanji_range;
     }
 
     @Override
     protected int initEpisodeLayout() {
-        return R.layout.activity_detail_item_xuanji1;
+        return R.layout.activity_detail_item_xuanji_episodes;
     }
 
     @Override

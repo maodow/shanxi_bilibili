@@ -146,7 +146,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 try {
                     FavBean.ItemBean itemBean = mDatas.get(position);
                     TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
-                    textView.setText(itemBean.getName());
+                    textView.setText(itemBean.getNameRec());
                 } catch (Exception e) {
                 }
                 try {
@@ -250,6 +250,8 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
+                        mDatas.clear();
+                        getView().refreshContent();
                         getView().checkNodata(false);
                         getView().showLoading();
                     }

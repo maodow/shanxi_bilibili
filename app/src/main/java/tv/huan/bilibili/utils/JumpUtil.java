@@ -111,7 +111,7 @@ public final class JumpUtil {
         context.startActivity(intent);
     }
 
-    public static final void nextWebAbout(@NonNull Context context) {
+    public static void nextWebAbout(@NonNull Context context) {
         Intent intent = new Intent(context, WebviewActivity.class);
         intent.putExtra(WebviewActivity.INTENT_HELP, true);
         intent.putExtra(WebviewActivity.INTENT_HELP_TYPE, 3);

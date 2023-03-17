@@ -19,15 +19,15 @@ public interface DetailView extends BaseViewImpl {
 
     void updateVidAndClassId(@NonNull MediaBean data);
 
-    void updateData(@NonNull MediaBean data, boolean isFromUser);
-
-    void delayPlayer(@NonNull MediaBean data, boolean isFromUser);
+    void delayStartPlayer(@NonNull MediaBean data, boolean isFromUser);
 
     void startPlayer(@NonNull MediaBean data);
 
+    void updatePlayerInfo(@NonNull MediaBean data, boolean isFromUser);
+
     void checkedPlayerPosition(@NonNull MediaBean data);
 
-    void startPlayerNext();
+    void checkedPlayerPositionNext();
 
     void stopPlayer();
 

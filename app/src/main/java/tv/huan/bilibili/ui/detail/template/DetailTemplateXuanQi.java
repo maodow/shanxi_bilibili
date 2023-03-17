@@ -87,8 +87,8 @@ public class DetailTemplateXuanQi extends ListTvEpisodesGridPresenter<MediaBean>
             if (null != activity && activity instanceof DetailActivity) {
                 ((DetailActivity) activity).stopPlayer();
                 ((DetailActivity) activity).updateVidAndClassId(t);
-                ((DetailActivity) activity).updateData(t, true);
-                ((DetailActivity) activity).delayPlayer(t, true);
+                ((DetailActivity) activity).updatePlayerInfo(t, true);
+                ((DetailActivity) activity).delayStartPlayer(t, true);
             }
         } catch (Exception e) {
         }

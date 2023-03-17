@@ -45,10 +45,11 @@
         android:drawablePadding="@dimen/dp_8"
         android:focusable="false"
         android:gravity="center"
-        android:paddingLeft="@dimen/dp_14"
+        android:minEms="5"
+        android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_14"
         android:textColor="@color/color_selector_aaaaaa_ffffff"
-        android:textSize="14sp"
+        android:textSize="@dimen/sp_14"
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
