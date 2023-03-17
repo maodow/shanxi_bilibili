@@ -11,6 +11,7 @@ import lib.kalu.frame.mvp.BaseActivity;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.HorizontalClassLayout;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.utils.LogUtil;
 
 public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> implements CenterView {
 
@@ -40,6 +41,7 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
         classLayout.setOnCheckedChangeListener(new HorizontalClassLayout.OnCheckedChangeListener() {
             @Override
             public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
+                LogUtil.log("CenterActivity => onChecked => index = " + i + ", name = " + s);
                 getPresenter().request(i);
             }
         });
