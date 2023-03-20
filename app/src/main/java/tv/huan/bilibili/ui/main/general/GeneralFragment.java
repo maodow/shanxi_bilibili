@@ -1,13 +1,13 @@
 package tv.huan.bilibili.ui.main.general;
 
 import androidx.annotation.Keep;
+import androidx.leanback.widget.Presenter;
 
 import lib.kalu.frame.mvp.BaseFragment;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.widget.GeneralGridView;
-import tv.huan.bilibili.widget.player.PlayerView;
 
 @Keep
 public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter> implements GeneralView {
@@ -65,6 +65,12 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
     public void updateTemplateHistory(FavBean data) {
         GeneralGridView gridView = findViewById(R.id.general_list);
         gridView.updateTemplateHistory(data);
+    }
+
+    @Override
+    public <T extends Presenter> void startPlayerFromHuawei(Class<T> cls, Class<?> obj, String s) {
+        GeneralGridView gridView = findViewById(R.id.general_list);
+        gridView.startPlayerFromHuawei(cls, obj, s);
     }
 
     @Override

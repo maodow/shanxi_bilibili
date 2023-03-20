@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ItemBridgeAdapter;
+import androidx.leanback.widget.Presenter;
 
 import com.google.gson.Gson;
 
@@ -298,6 +299,21 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
             ViewHolder viewHolder22 = findViewHolderForAdapterObject(GeneralTemplate22.GeneralTemplate22List.class);
             if (null != viewHolder22) {
                 template22.resumePlayer((ViewGroup) viewHolder22.itemView);
+            }
+        }
+    }
+
+    public <T extends Presenter> void startPlayerFromHuawei(Class<T> cls, Class<?> obj, String s) {
+        T t = getPresenter(cls);
+        if (null != t && t instanceof GeneralTemplate21) {
+            ViewHolder viewHolder = findViewHolderForAdapterObject(obj);
+            if (null != viewHolder) {
+                ((GeneralTemplate21) t).startPlayer(viewHolder.itemView, s);
+            }
+        } else if (null != t && t instanceof GeneralTemplate22) {
+            ViewHolder viewHolder = findViewHolderForAdapterObject(obj);
+            if (null != viewHolder) {
+                ((GeneralTemplate22) t).startPlayer(viewHolder.itemView, s);
             }
         }
     }

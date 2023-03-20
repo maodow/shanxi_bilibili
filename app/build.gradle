@@ -122,7 +122,7 @@ dependencies {
     api files('libs/lib_mediaplayer_exo_r2.18.3_ff4.4_audio_release_20230222.aar')
     // heilongjiang
     // api project(path: ':huan_heilongjiang')
-    api files('libs/lib_huan_heilongjiang_release_20230317.aar')
+    api files('libs/lib_huan_heilongjiang_release_20230320.aar')
 
     // core
     implementation 'androidx.multidex:multidex:2.0.1'

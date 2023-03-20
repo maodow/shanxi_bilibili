@@ -148,7 +148,6 @@ public interface HttpApi {
                                                           @Query("playLength") long playLength); //当前视频时长
 
     // 华为播放鉴权
-    @Headers("xAuth:1")
     @POST()
     Observable<BaseAuthorizationBean> huaweiAuth(@Url String url,
                                                  @Body RequestBody requestBody,

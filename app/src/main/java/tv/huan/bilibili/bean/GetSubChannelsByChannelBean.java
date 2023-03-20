@@ -2,6 +2,8 @@ package tv.huan.bilibili.bean;
 
 import androidx.annotation.Keep;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -116,6 +118,16 @@ public class GetSubChannelsByChannelBean implements Serializable {
             private String tag;
             private String cname;
             private String extPoster;
+            @SerializedName("jumpParam")
+            private String huaweiId;
+
+            public String getHuaweiId() {
+                return huaweiId;
+            }
+
+            public void setHuaweiId(String huaweiId) {
+                this.huaweiId = huaweiId;
+            }
 
             public String getExtPoster() {
                 return extPoster;

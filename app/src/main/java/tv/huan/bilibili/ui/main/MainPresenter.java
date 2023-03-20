@@ -17,6 +17,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +35,15 @@ import lib.kalu.leanback.tab.TabLayout;
 import lib.kalu.leanback.tab.model.TabModel;
 import lib.kalu.leanback.tab.model.TabModelImage;
 import lib.kalu.leanback.tab.model.TabModelText;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
-import tv.huan.bilibili.bean.base.BaseResponsedBean;
+import tv.huan.bilibili.bean.base.BaseAuthorizationBean;
 import tv.huan.bilibili.bean.base.BaseDataBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallMainBean;
 import tv.huan.bilibili.dialog.WarningDialog;
 import tv.huan.bilibili.http.HttpClient;
@@ -46,6 +51,7 @@ import tv.huan.bilibili.ui.main.general.GeneralFragment;
 import tv.huan.bilibili.ui.main.mine.MineFragment;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.heilongjiang.HeilongjiangApi;
 
 public class MainPresenter extends BasePresenterImpl<MainView> {
     public MainPresenter(@NonNull MainView mainView) {
@@ -505,5 +511,101 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                 getView().setWindowBackgroundDrawable(drawable);
             }
         }).subscribe());
+    }
+
+    protected <T extends androidx.leanback.widget.Presenter> void requestHuaweiAuth(Class<T> cls, Class<?> obj, String cid) {
+        addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                        emitter.onNext(cid);
+                    }
+                })
+                .flatMap(new Function<String, Observable<BaseAuthorizationBean>>() {
+                    @Override
+                    public Observable<BaseAuthorizationBean> apply(String s) throws Exception {
+                        JSONObject object = new JSONObject();
+                        object.put("cid", s);
+                        object.put("tid", "-1");
+                        object.put("supercid", "-1");
+                        object.put("playType", "1");
+                        object.put("contentType", "0");
+                        object.put("businessType", "1");
+                        object.put("idflag", "1");
+                        String json = String.valueOf(object);
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), json);
+                        String url = HeilongjiangApi.getEpgServer(getView().getContext());
+                        return HttpClient.getHttpClient().getHttpApi().huaweiAuth(url, requestBody, s);
+                    }
+                })
+                // 华为播放鉴权 => 数据处理
+                .map(new Function<BaseAuthorizationBean, String>() {
+                    @Override
+                    public String apply(BaseAuthorizationBean resp) throws Exception {
+                        try {
+                            String url = resp.getData().get(0).getPlayurl();
+                            if (null == url || url.length() <= 0)
+                                throw new Exception("华为鉴权失败:" + resp.getReturncode());
+                            return url;
+                        } catch (Exception e) {
+                            throw e;
+                        }
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().showToast(throwable);
+
+                    }
+                })
+                .doOnNext(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) {
+                        getView().huaweiSucc(cls, obj, s);
+                    }
+                })
+                .subscribe());
+    }
+
+    protected <T extends androidx.leanback.widget.Presenter> void startPlayerFromFragment(Class<T> cls, Class<?> obj, String s) {
+
+        addDisposable(Observable.create(new ObservableOnSubscribe<Integer>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Integer> emitter) {
+                        TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+                        int checkedIndex = tabLayout.getCheckedIndex();
+                        emitter.onNext(checkedIndex);
+                    }
+                }).map(new Function<Integer, Fragment>() {
+                    @Override
+                    public Fragment apply(Integer i) throws Exception {
+                        try {
+                            String tag = "fragment" + i;
+                            Fragment fragment = getView().findFragmentByTag(tag);
+                            if (null == fragment)
+                                throw new Exception("not find");
+                            return fragment;
+                        } catch (Exception e) {
+                            throw e;
+                        }
+                    }
+                }).compose(ComposeSchedulers.io_main())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        LogUtil.log("MainPresenter => startPlayerFromFragment => fail");
+                    }
+                })
+                .doOnNext(new Consumer<Fragment>() {
+                    @Override
+                    public void accept(Fragment fragment) {
+                        LogUtil.log("MainPresenter => startPlayerFromFragment => succ");
+                        if (fragment instanceof GeneralFragment) {
+                            ((GeneralFragment) fragment).startPlayerFromHuawei(cls, obj, s);
+                        }
+                    }
+                }).subscribe());
     }
 }

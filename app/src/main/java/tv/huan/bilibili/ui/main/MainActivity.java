@@ -154,6 +154,16 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     @Override
+    public <T extends androidx.leanback.widget.Presenter>  void huaweiAuth(Class<T> cls, Class<?> obj,  String cid) {
+        getPresenter().requestHuaweiAuth(cls, obj, cid);
+    }
+
+    @Override
+    public <T extends androidx.leanback.widget.Presenter>  void huaweiSucc(Class<T> cls, Class<?> obj,  String s) {
+        getPresenter().startPlayerFromFragment(cls, obj,  s);
+    }
+
+    @Override
     public void onCall(@NonNull int code, @NonNull JSONObject object) {
         super.onCall(code, object);
         if (code == 1100) {

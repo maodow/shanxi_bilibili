@@ -1,6 +1,7 @@
 package tv.huan.bilibili.ui.main.general.template;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.text.TextUtils;
@@ -15,13 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
+import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.GlideUtils;
+import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate21;
 import tv.huan.bilibili.widget.player.PlayerView;
+import tv.huan.bilibili.widget.player.PlayerViewTemplate21;
 
 public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
@@ -90,7 +95,21 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
 
         // player
         if (viewType == 1) {
-            startPlayer(view);
+            try {
+                PlayerViewTemplate21 playerView = view.findViewById(R.id.general_template22_player);
+                PlayerComponentInitTemplate21 component = playerView.findComponent(PlayerComponentInitTemplate21.class);
+                if (null != component) {
+                    component.showImage(templateBean.getPicture(true));
+                }
+            } catch (Exception e) {
+            }
+            try {
+                Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
+                if (null != activity && activity instanceof MainActivity) {
+                    ((MainActivity) activity).huaweiAuth(GeneralTemplate22.class, GeneralTemplate22.GeneralTemplate22List.class, templateBean.getHuaweiId());
+                }
+            } catch (Exception e) {
+            }
         }
         // img
         else if (viewType == 2) {
@@ -163,18 +182,6 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         playerView.resume();
     }
 
-    private void startPlayer(View inflate) {
-
-        if (null == inflate)
-            return;
-        PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
-        String url = "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
-        StartBuilder.Builder builder = new StartBuilder.Builder();
-        builder.setLoop(true);
-        builder.setDelay(3000);
-        playerView.start(builder.build(), url);
-    }
-
     public void pausePlayer(ViewGroup viewGroup) {
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);
@@ -182,10 +189,23 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         } catch (Exception e) {
         }
     }
+
     public void resumePlayer(ViewGroup viewGroup) {
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);
             playerView.resume();
+        } catch (Exception e) {
+        }
+    }
+
+    public void startPlayer(View inflate, String s) {
+        try {
+            if (null == s || s.length() <= 0)
+                throw new Exception("url error: null");
+            PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
+            StartBuilder.Builder builder = new StartBuilder.Builder();
+            builder.setLoop(true);
+            playerView.start(builder.build(), s);
         } catch (Exception e) {
         }
     }
