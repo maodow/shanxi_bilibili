@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,20 +24,11 @@ import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.utils.GlideUtils;
+import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate21;
 import tv.huan.bilibili.widget.player.PlayerView;
+import tv.huan.bilibili.widget.player.PlayerViewTemplate21;
 
 public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
-
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 1001) {
-                View view = (View) msg.obj;
-                switchContentUI(false, view);
-            }
-        }
-    };
 
     @Override
     public String initRowTitle(Context context) {
@@ -75,15 +67,11 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
 
                     // 2
                     if (b) {
-
-                        mHandler.removeCallbacksAndMessages(null);
-                        switchContentUI(true, contentView);
                         try {
                             int position = viewHolder.getAbsoluteAdapterPosition();
                             if (position >= 0) {
                                 GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
-                                ImageView imageView = contentView.findViewById(R.id.general_template21_img);
-                                GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
+                                updateContent(contentView, templateBean);
                             }
                         } catch (Exception e) {
                         }
@@ -101,7 +89,12 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
     }
 
     @Override
-    protected void onBindHolder(@NonNull View view, @NonNull View view1, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i, @NonNull int i1) {
+    protected void onBindHolder(@NonNull View view, @NonNull View view1, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
+
+        if (position == 0) {
+            updateContent(view, templateBean);
+        }
+
         try {
             TextView textView = view1.findViewById(R.id.common_poster_name);
             textView.setText(templateBean.getName());
@@ -120,6 +113,11 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
     }
 
     @Override
+    protected boolean canScrollHorizontally(int count) {
+        return false;
+    }
+
+    @Override
     protected int initLayout(int i) {
         return R.layout.fragment_general_item_template21b;
     }
@@ -132,6 +130,49 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
     @Override
     protected int initContentMarginBottom(Context context) {
         return context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+    }
+
+    private void updateContent(View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean) {
+        try {
+            ImageView imageView = view.findViewById(R.id.general_template21_poster);
+            imageView.setVisibility(templateBean.hasExtPoster() ? View.VISIBLE : View.GONE);
+            GlideUtils.loadHz(imageView.getContext(), templateBean.getExtPoster(), imageView);
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = view.findViewById(R.id.general_template21_title);
+            textView.setText(templateBean.getName());
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = view.findViewById(R.id.general_template21_cname);
+            textView.setText(templateBean.getCname());
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = view.findViewById(R.id.general_template21_tag);
+            textView.setText(templateBean.getTag());
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = view.findViewById(R.id.general_template21_score);
+            textView.setText(templateBean.getScore());
+        } catch (Exception e) {
+        }
+        try {
+            TextView textView = view.findViewById(R.id.general_template21_info);
+            textView.setText(templateBean.getDescription());
+        } catch (Exception e) {
+        }
+        try {
+            PlayerViewTemplate21 playerView = view.findViewById(R.id.general_template21_player);
+            PlayerComponentInitTemplate21 component = playerView.findComponent(PlayerComponentInitTemplate21.class);
+            if (null != component) {
+                component.showImage("https://picnew8.photophoto.cn/20131108/daxiongmaotupian-13762577_1.jpg");
+//                component.showImage(templateBean.getPicture(true));
+            }
+        } catch (Exception e) {
+        }
     }
 
     private void pasuePlayer(View inflate) {
@@ -167,11 +208,6 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
         if (null == inflate)
             return;
 
-        Message message = new Message();
-        message.obj = inflate;
-        message.what = 1001;
-        mHandler.sendMessageDelayed(message, 3000);
-
         PlayerView playerView = inflate.findViewById(R.id.general_template21_player);
         String url = "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
         StartBuilder.Builder builder = new StartBuilder.Builder();
@@ -180,18 +216,21 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
         playerView.start(builder.build(), url);
     }
 
-    private void switchContentUI(boolean reset, View inflate) {
+    public void pausePlayer(ViewGroup viewGroup) {
         try {
-            View byId = inflate.findViewById(R.id.general_template21_img);
-            byId.setVisibility(reset ? View.VISIBLE : View.INVISIBLE);
-        } catch (Exception e) {
-        }
-        try {
-            View byId = inflate.findViewById(R.id.general_template21_player);
-            byId.setVisibility(reset ? View.INVISIBLE : View.VISIBLE);
+            PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
+            playerView.pause();
         } catch (Exception e) {
         }
     }
+    public void resumePlayer(ViewGroup viewGroup) {
+        try {
+            PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
+            playerView.resume();
+        } catch (Exception e) {
+        }
+    }
+
 
     public static class GeneralTemplate21List extends ArrayList {
     }

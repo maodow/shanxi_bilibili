@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -172,6 +173,21 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         builder.setLoop(true);
         builder.setDelay(3000);
         playerView.start(builder.build(), url);
+    }
+
+    public void pausePlayer(ViewGroup viewGroup) {
+        try {
+            PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);
+            playerView.pause();
+        } catch (Exception e) {
+        }
+    }
+    public void resumePlayer(ViewGroup viewGroup) {
+        try {
+            PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);
+            playerView.resume();
+        } catch (Exception e) {
+        }
     }
 
     public static class GeneralTemplate22List extends ArrayList {

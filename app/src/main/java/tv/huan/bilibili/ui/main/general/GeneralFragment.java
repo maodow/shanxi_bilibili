@@ -51,34 +51,14 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
 
     @Override
     public void onHide() {
-        PlayerView v1 = findViewById(R.id.general_template21_player);
-        if (null != v1) {
-            v1.pause();
-        }
-        PlayerView v2 = findViewById(R.id.general_template22_player);
-        if (null != v2) {
-            v2.pause();
-        }
-        GeneralGridView v3 = findViewById(R.id.general_list);
-        if (null != v3) {
-            v3.pauseMessage();
-        }
+        tv.huan.bilibili.widget.GeneralGridView gridView = findViewById(R.id.general_list);
+        gridView.pausePlayer();
     }
 
     @Override
     public void onShow() {
-        PlayerView v1 = findViewById(R.id.general_template21_player);
-        if (null != v1) {
-            v1.resume();
-        }
-        PlayerView v2 = findViewById(R.id.general_template22_player);
-        if (null != v2) {
-            v2.resume();
-        }
-        GeneralGridView v3 = findViewById(R.id.general_list);
-        if (null != v3) {
-            v3.resumeMessage();
-        }
+        tv.huan.bilibili.widget.GeneralGridView gridView = findViewById(R.id.general_list);
+        gridView.resumePlayer();
     }
 
     @Override

@@ -35,7 +35,7 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
     }
 
     private void init(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.common_player_component_init, this, true);
+        LayoutInflater.from(context).inflate(R.layout.common_player_component_init_detail, this, true);
     }
 
     @Override

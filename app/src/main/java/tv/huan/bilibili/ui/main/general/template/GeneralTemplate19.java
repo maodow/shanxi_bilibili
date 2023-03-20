@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -100,6 +101,17 @@ public final class GeneralTemplate19 extends ListTvFullPresenter<GetSubChannelsB
     @Override
     protected int initItemHeight(Context context) {
         return context.getResources().getDimensionPixelOffset(R.dimen.dp_110);
+    }
+
+    public void pausePlayer(ViewGroup viewGroup) {
+        try {
+        } catch (Exception e) {
+        }
+    }
+    public void resumePlayer(ViewGroup viewGroup) {
+        try {
+        } catch (Exception e) {
+        }
     }
 
     public static class GeneralTemplate19List extends ArrayList {

@@ -111,6 +111,56 @@ public class GetSubChannelsByChannelBean implements Serializable {
             private boolean tempChecked;
 
 
+            private String description;
+            private String score;
+            private String tag;
+            private String cname;
+            private String extPoster;
+
+            public String getExtPoster() {
+                return extPoster;
+            }
+
+            public boolean hasExtPoster() {
+                return null != extPoster && extPoster.length() > 0;
+            }
+
+            public void setExtPoster(String extPoster) {
+                this.extPoster = extPoster;
+            }
+
+            public String getDescription() {
+                return description;
+            }
+
+            public void setDescription(String description) {
+                this.description = description;
+            }
+
+            public String getScore() {
+                return score;
+            }
+
+            public void setScore(String score) {
+                this.score = score;
+            }
+
+            public String getTag() {
+                return tag;
+            }
+
+            public void setTag(String tag) {
+                this.tag = tag;
+            }
+
+            public String getCname() {
+                return cname;
+            }
+
+            public void setCname(String cname) {
+                this.cname = cname;
+            }
+
             public TemplateBean() {
             }
 
