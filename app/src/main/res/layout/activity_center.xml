@@ -70,11 +70,11 @@
         android:focusable="true"
         app:cl_item_background_resource="@drawable/bg_shape_center_tab_normal"
         app:cl_item_background_resource_checked="@drawable/bg_shape_center_tab_normal"
-        app:cl_item_background_resource_highlight="@drawable/bg_shape_center_tab_focus"
+        app:cl_item_background_resource_focus="@drawable/bg_shape_center_tab_focus"
         app:cl_item_margin="@dimen/dp_24"
         app:cl_item_text_color="@color/color_aaaaaa"
         app:cl_item_text_color_checked="@color/color_ff6699"
-        app:cl_item_text_color_highlight="@color/color_black"
+        app:cl_item_text_color_focus="@color/color_black"
         app:cl_item_text_size="@dimen/sp_16"
         app:cl_item_width="@dimen/dp_124" />
 

@@ -37,7 +37,8 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     @Override
     public void updateTab(ArrayList<ClassBean> data, int select) {
         HorizontalClassLayout classLayout = findViewById(R.id.center_tabs);
-        classLayout.update(data);
+        classLayout.update(data, select);
+        classLayout.requestFocus();
         classLayout.setOnCheckedChangeListener(new HorizontalClassLayout.OnCheckedChangeListener() {
             @Override
             public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
@@ -45,7 +46,6 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
                 getPresenter().request(i);
             }
         });
-        classLayout.requestFocus(select, true);
     }
 
     @Override
@@ -77,6 +77,6 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     @Override
     public void requestTab() {
         HorizontalClassLayout classLayout = findViewById(R.id.center_tabs);
-        classLayout.requestFocus(false);
+        classLayout.requestFocus();
     }
 }

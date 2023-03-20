@@ -47,7 +47,7 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
     public void refreshClass(@NonNull List<ClassBean> classApis, @NonNull String className) {
         setText(R.id.filter_title, className);
         VerticalClassLayout classLayout = findViewById(R.id.filter_class);
-        classLayout.update(classApis, false);
+        classLayout.update(classApis);
         classLayout.setOnCheckedChangeListener(new lib.kalu.leanback.clazz.VerticalClassLayout.OnCheckedChangeListener() {
             @Override
             public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
@@ -96,6 +96,6 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
     @Override
     public void requestFocusClass() {
         VerticalClassLayout classLayout = findViewById(R.id.filter_class);
-        classLayout.focusInto();
+        classLayout.requestFocus();
     }
 }

@@ -86,16 +86,14 @@
         android:layout_alignRight="@id/filter_title"
         android:fillViewport="true"
         android:scrollbarStyle="@null"
-        app:cl_dispatch_bottom="true"
-        app:cl_dispatch_top="true"
         app:cl_item_background_resource="@drawable/bg_filter_class_item"
         app:cl_item_background_resource_checked="@drawable/bg_filter_class_item_checked"
-        app:cl_item_background_resource_highlight="@drawable/bg_filter_class_item_highlight"
+        app:cl_item_background_resource_focus="@drawable/bg_filter_class_item_highlight"
         app:cl_item_height="@dimen/dp_50"
         app:cl_item_text_color="@color/color_white"
         app:cl_item_text_color_checked="@color/color_ff6699"
-        app:cl_item_text_color_highlight="@color/color_black"
-        app:cl_item_text_size="18sp" />
+        app:cl_item_text_color_focus="@color/color_black"
+        app:cl_item_text_size="@dimen/sp_18" />
 
     <!-- 热搜-->
     <lib.kalu.leanback.tags.TagsLayout

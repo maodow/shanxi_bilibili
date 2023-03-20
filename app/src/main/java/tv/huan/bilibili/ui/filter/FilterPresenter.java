@@ -187,9 +187,9 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                             // 筛选
                             String name = getView().getString(R.string.filter_name);
                             ClassBean shaixuanApi = new ClassBean();
-                            shaixuanApi.setDrawableChecked(R.drawable.ic_filter_focus);
-                            shaixuanApi.setDrawableHighlight(R.drawable.ic_filter_focus);
-                            shaixuanApi.setDrawableNormal(R.drawable.ic_filter);
+                            shaixuanApi.setLeftDrawableFocus(R.drawable.ic_filter_focus);
+                            shaixuanApi.setLeftDrawableChecked(R.drawable.ic_filter_focus);
+                            shaixuanApi.setLeftDrawable(R.drawable.ic_filter);
                             shaixuanApi.setText(name);
                             int classId = getView().getIntExtra(FilterActivity.INTENT_CLASSID, 0);
                             shaixuanApi.setCode(String.valueOf(classId));
@@ -581,7 +581,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 if (index <= 0) {
                     getView().setFocusable(R.id.filter_search, true);
                     getView().setFocusable(R.id.filter_vip, true);
-                    classLayout.focusLeave();
+                    classLayout.clearFocus();
                     getView().requestFocus(R.id.filter_search);
                     return true;
                 }
@@ -594,7 +594,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 getView().setFocusable(R.id.filter_search, false);
                 getView().setFocusable(R.id.filter_vip, false);
                 lib.kalu.leanback.clazz.VerticalClassLayout classLayout = getView().findViewById(R.id.filter_class);
-                classLayout.requestFocus(0, false);
+                classLayout.requestFocus();
                 return true;
             }
         }
@@ -607,7 +607,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 lib.kalu.leanback.clazz.VerticalClassLayout classLayout = getView().findViewById(R.id.filter_class);
                 int index = classLayout.getCheckedIndex();
                 if (index <= 0) {
-                    classLayout.focusLeave();
+                    classLayout.clearFocus();
                     getView().requestFocus(R.id.filter_tags);
                     return true;
                 }

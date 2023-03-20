@@ -330,9 +330,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
             LogUtil.log("CenterPresenter => dispatchKeyEvent => up_action_down => ");
             if (focusId == R.id.center_tabs) {
                 HorizontalClassLayout classLayout = (HorizontalClassLayout) getView().getCurrentFocus();
+                classLayout.clearFocus();
                 LogUtil.log("CenterPresenter => dispatchKeyEvent => up_action_down => classLayout = " + classLayout);
                 int index = classLayout.getCheckedIndex();
-                classLayout.checked(index);
                 getView().setFocusable(R.id.center_vip, index > 0);
                 getView().setFocusable(R.id.center_search, index <= 0);
             } else if (focusId == R.id.center_search || focusId == R.id.center_vip) {
