@@ -28,7 +28,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.leanback.clazz.ClassBean;
-import lib.kalu.leanback.clazz.HorizontalClassLayout;
+import lib.kalu.leanback.clazz.ClassScrollView;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
@@ -275,7 +275,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        HorizontalClassLayout classLayout = getView().findViewById(R.id.center_tabs);
+                        ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
                         int checkedIndex = classLayout.getCheckedIndex();
                         observableEmitter.onNext(checkedIndex == 0);
                     }
@@ -329,7 +329,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
             int focusId = getView().getCurrentFocusId();
             LogUtil.log("CenterPresenter => dispatchKeyEvent => up_action_down => ");
             if (focusId == R.id.center_tabs) {
-                HorizontalClassLayout classLayout = (HorizontalClassLayout) getView().getCurrentFocus();
+                ClassScrollView classLayout = (ClassScrollView) getView().getCurrentFocus();
                 classLayout.clearFocus();
                 LogUtil.log("CenterPresenter => dispatchKeyEvent => up_action_down => classLayout = " + classLayout);
                 int index = classLayout.getCheckedIndex();
@@ -365,7 +365,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
             } else if (focusId == R.id.center_vip) {
                 return true;
             } else if (focusId == R.id.center_tabs) {
-                HorizontalClassLayout classLayout = (HorizontalClassLayout) getView().getCurrentFocus();
+                ClassScrollView classLayout = (ClassScrollView) getView().getCurrentFocus();
                 int index = classLayout.getCheckedIndex();
                 if (index >= 1) {
                     return true;
@@ -383,7 +383,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
             } else if (focusId == R.id.center_search) {
                 return true;
             } else if (focusId == R.id.center_tabs) {
-                HorizontalClassLayout classLayout = (HorizontalClassLayout) getView().getCurrentFocus();
+                ClassScrollView classLayout = (ClassScrollView) getView().getCurrentFocus();
                 int index = classLayout.getCheckedIndex();
                 if (index <= 0) {
                     return true;

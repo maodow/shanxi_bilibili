@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import lib.kalu.leanback.clazz.ClassBean;
-import lib.kalu.leanback.clazz.HorizontalClassLayout;
+import lib.kalu.leanback.clazz.ClassScrollView;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.utils.LogUtil;
 
@@ -36,10 +36,10 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
 
     @Override
     public void updateTab(ArrayList<ClassBean> data, int select) {
-        HorizontalClassLayout classLayout = findViewById(R.id.center_tabs);
+        ClassScrollView classLayout = findViewById(R.id.center_tabs);
         classLayout.update(data, select);
         classLayout.requestFocus();
-        classLayout.setOnCheckedChangeListener(new HorizontalClassLayout.OnCheckedChangeListener() {
+        classLayout.setOnCheckedChangeListener(new ClassScrollView.OnCheckedChangeListener() {
             @Override
             public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
                 LogUtil.log("CenterActivity => onChecked => index = " + i + ", name = " + s);
@@ -76,7 +76,7 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
 
     @Override
     public void requestTab() {
-        HorizontalClassLayout classLayout = findViewById(R.id.center_tabs);
+        ClassScrollView classLayout = findViewById(R.id.center_tabs);
         classLayout.requestFocus();
     }
 }

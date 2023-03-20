@@ -78,7 +78,7 @@
         android:textSize="@dimen/sp_18" />
 
     <!-- 二级菜单 -->
-    <lib.kalu.leanback.clazz.VerticalClassLayout
+    <lib.kalu.leanback.clazz.ClassScrollView
         android:id="@+id/filter_class"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -93,7 +93,8 @@
         app:cl_item_text_color="@color/color_white"
         app:cl_item_text_color_checked="@color/color_ff6699"
         app:cl_item_text_color_focus="@color/color_black"
-        app:cl_item_text_size="@dimen/sp_18" />
+        app:cl_item_text_size="@dimen/sp_18"
+        app:cl_orientation="vertical" />
 
     <!-- 热搜-->
     <lib.kalu.leanback.tags.TagsLayout
@@ -120,6 +121,7 @@
         android:layout_below="@id/filter_tags"
         android:layout_toRightOf="@id/filter_title"
         android:clipChildren="false"
+        android:focusable="false"
         android:clipToPadding="false">
 
         <lib.kalu.leanback.list.RecyclerViewGrid
@@ -130,6 +132,7 @@
             android:clipToPadding="false"
             android:paddingLeft="@dimen/dp_48"
             android:paddingTop="@dimen/dp_14"
+            android:focusable="false"
             android:paddingRight="@dimen/dp_48"
             android:paddingBottom="@dimen/dp_14" />
 
@@ -140,6 +143,7 @@
             android:layout_height="@dimen/dp_177"
             android:layout_centerInParent="true"
             android:scaleType="fitCenter"
+            android:focusable="false"
             android:src="@drawable/ic_nodata"
             android:visibility="gone" />
 

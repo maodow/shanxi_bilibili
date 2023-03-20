@@ -37,7 +37,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.leanback.clazz.ClassBean;
-import lib.kalu.leanback.clazz.VerticalClassLayout;
+import lib.kalu.leanback.clazz.ClassScrollView;
 import lib.kalu.leanback.tags.TagsLayout;
 import lib.kalu.leanback.tags.model.TagBean;
 import okhttp3.MediaType;
@@ -575,7 +575,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
             int focusId = getView().getCurrentFocusId();
             LogUtil.log("FilterPresenter => dispatchEvent => up");
             if (focusId == R.id.filter_class) {
-                lib.kalu.leanback.clazz.VerticalClassLayout classLayout = (VerticalClassLayout) getView().getCurrentFocus();
+                ClassScrollView classLayout = (ClassScrollView) getView().getCurrentFocus();
                 int index = classLayout.getCheckedIndex();
                 LogUtil.log("FilterPresenter => dispatchEvent => index = " + index);
                 if (index <= 0) {
@@ -593,7 +593,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
             if (focusId == R.id.filter_search || focusId == R.id.filter_vip) {
                 getView().setFocusable(R.id.filter_search, false);
                 getView().setFocusable(R.id.filter_vip, false);
-                lib.kalu.leanback.clazz.VerticalClassLayout classLayout = getView().findViewById(R.id.filter_class);
+                ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
                 classLayout.requestFocus();
                 return true;
             }
@@ -604,7 +604,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
             if (focusId == R.id.filter_vip) {
                 return true;
             } else if (focusId == R.id.filter_class) {
-                lib.kalu.leanback.clazz.VerticalClassLayout classLayout = getView().findViewById(R.id.filter_class);
+                ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
                 int index = classLayout.getCheckedIndex();
                 if (index <= 0) {
                     classLayout.clearFocus();
