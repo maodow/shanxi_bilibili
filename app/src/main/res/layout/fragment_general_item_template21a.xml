@@ -54,7 +54,7 @@
 
             <ImageView
                 android:id="@+id/general_template21_poster"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_shape_placeholder"
                 android:scaleType="fitStart"

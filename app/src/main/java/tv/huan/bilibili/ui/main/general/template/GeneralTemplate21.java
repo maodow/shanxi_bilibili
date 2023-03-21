@@ -158,11 +158,13 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
         }
         try {
             TextView textView = view.findViewById(R.id.general_template21_title);
+            textView.setVisibility(templateBean.hasExtPoster() ? View.GONE : View.VISIBLE);
             textView.setText(templateBean.getName());
         } catch (Exception e) {
         }
         try {
             TextView textView = view.findViewById(R.id.general_template21_cname);
+            textView.setVisibility(templateBean.hasExtPoster() ? View.GONE : View.VISIBLE);
             textView.setText(templateBean.getCname());
         } catch (Exception e) {
         }
