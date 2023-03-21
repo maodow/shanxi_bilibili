@@ -544,10 +544,10 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                         try {
                             String url = resp.getData().get(0).getPlayurl();
                             if (null == url || url.length() <= 0)
-                                throw new Exception("华为鉴权失败:" + resp.getReturncode());
+                                throw new Exception();
                             return url;
                         } catch (Exception e) {
-                            throw e;
+                            throw new Exception("华为鉴权失败:" + resp.getReturncode());
                         }
                     }
                 })

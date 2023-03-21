@@ -10,7 +10,6 @@ import tv.huan.bilibili.bean.RecMediaBean;
 public class CallDetailBean implements Serializable {
 
     private boolean favor; //收藏状态
-    private boolean vip; // vip状态
     private int playType; // 播放策略, vip前几集免费看
     private String recClassId;
 
@@ -56,14 +55,6 @@ public class CallDetailBean implements Serializable {
 
     public void setRecClassId(String recClassId) {
         this.recClassId = recClassId;
-    }
-
-    public boolean isVip() {
-        return vip;
-    }
-
-    public void setVip(boolean vip) {
-        this.vip = vip;
     }
 
     public boolean isFavor() {

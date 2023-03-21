@@ -12,13 +12,11 @@ import androidx.leanback.widget.ItemBridgeAdapter;
 import com.google.gson.Gson;
 
 import lib.kalu.leanback.list.LeanBackVerticalGridView;
-import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanJi;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.bilibili.widget.player.PlayerView;
 
 public final class DetailGridView extends LeanBackVerticalGridView {
     public DetailGridView(@NonNull Context context) {
@@ -39,75 +37,15 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     private void init() {
     }
 
-    /*********/
-
-    public void stopPlayer() {
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setUpdateOnlyVideoStop(true);
-            itemBridgeAdapter.notifyItemChanged(0);
-        } catch (Exception e) {
-        }
-    }
-
-    public void nextPlayer(@NonNull int position) {
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setPlayingIndex(position);
-            playerObject.setUpdateOnlyVideoStop(true);
-            itemBridgeAdapter.notifyItemChanged(0);
-        } catch (Exception e) {
-        }
-    }
-
-    public boolean containsXuanJi() {
-        boolean contains = false;
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            int size = objectAdapter.size();
-            for (int i = 0; i < size; i++) {
-                Object o = objectAdapter.get(i);
-                if (null == o)
-                    continue;
-                if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-                    contains = true;
-                    break;
-                }
-            }
-        } catch (Exception e) {
-        }
-        return contains;
-    }
-
-    public boolean containsXuanQi() {
-        boolean contains = false;
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            int size = objectAdapter.size();
-            for (int i = 0; i < size; i++) {
-                Object o = objectAdapter.get(i);
-                if (null == o)
-                    continue;
-                if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
-                    contains = true;
-                    break;
-                }
-            }
-        } catch (Exception e) {
-        }
-        return contains;
-    }
-
     public long getPlayerPosition() {
         try {
-            PlayerView playerView = findViewById(R.id.detail_player_item_video);
-            return playerView.getPosition();
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder)
+                throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null == presenterPlayer)
+                throw new Exception("presenterPlayer error: null");
+            return presenterPlayer.getPosition(viewHolder.itemView);
         } catch (Exception e) {
             return 0;
         }
@@ -115,47 +53,126 @@ public final class DetailGridView extends LeanBackVerticalGridView {
 
     public long getPlayerDuraion() {
         try {
-            PlayerView playerView = findViewById(R.id.detail_player_item_video);
-            return playerView.getDuration();
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder)
+                throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null == presenterPlayer)
+                throw new Exception("presenterPlayer error: null");
+            return presenterPlayer.getDuration(viewHolder.itemView);
         } catch (Exception e) {
             return 0;
         }
     }
 
-    public void updateFavor(boolean status) {
+    public void stopPlayer() {
         try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setUpdateOnlyFavor(true);
-            playerObject.setFavor(status);
-            itemBridgeAdapter.notifyItemChanged(0);
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder)
+                throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null != presenterPlayer) {
+                presenterPlayer.stopPlayer(viewHolder.itemView);
+            }
         } catch (Exception e) {
         }
     }
 
     public void stopFull() {
         try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setUpdateOnlyStopFull(true);
-            itemBridgeAdapter.notifyItemChanged(0);
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder)
+                throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null != presenterPlayer) {
+                presenterPlayer.stopFull(viewHolder.itemView);
+            }
         } catch (Exception e) {
         }
     }
 
-    public void startPlayer(@NonNull MediaBean data) {
-        LogUtil.log("DetailGridView", "startPlayer => ");
+    public void startPlayer(@NonNull String s, long seek) {
         try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerData = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerData.setUpdateOnlyVideoPlaying(true);
-            playerData.setPlayingIndex(data.getTempIndex());
-            playerData.setVideoUrl(data.getTempVideoUrl());
-            playerData.setSeek(data.getTempSeek());
-            itemBridgeAdapter.notifyItemChanged(0);
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder)
+                throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null != presenterPlayer) {
+                presenterPlayer.startPlayer(viewHolder.itemView, s, seek);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateFavor(boolean status) {
+        try {
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder)
+                throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null != presenterPlayer) {
+                presenterPlayer.updateFavor(viewHolder.itemView, status);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public void checkPlayer(@NonNull MediaBean data) {
+        LogUtil.log("DetailGridView", "checkPlayer => ");
+        try {
+            // 1
+            showData(data);
+            // 2
+            int playType = data.getTempPlayType();
+            int index = data.getTempIndex();
+            // 免费
+            if (playType > 0 && index <= playType) {
+                startHuawei(data);
+            }
+            // 收费
+            else {
+                checkAccount(data);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public void showData(@NonNull MediaBean data) {
+        stopPlayer();
+        try {
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder)
+                throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null != presenterPlayer) {
+                presenterPlayer.showData(viewHolder.itemView, data);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void startHuawei(@NonNull MediaBean data) {
+        try {
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder)
+                throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null != presenterPlayer) {
+                presenterPlayer.startHuawei(viewHolder.itemView, data);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void checkAccount(@NonNull MediaBean data) {
+        try {
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder)
+                throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null != presenterPlayer) {
+                presenterPlayer.checkAccount(viewHolder.itemView, data);
+            }
         } catch (Exception e) {
         }
     }
@@ -219,7 +236,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             }
             // 电影
             else {
-                startPlayer(data);
+                checkPlayer(data);
             }
         } catch (Exception e) {
             LogUtil.log("DetailGridView", "checkedPlayerPosition => " + e.getMessage());
@@ -264,27 +281,6 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             return;
         int position = --index;
         presenter.refreshPositionRange(this, position);
-    }
-
-    public void updatePlayerInfo(@NonNull MediaBean data) {
-        LogUtil.log("DetailGridView => updatePlayerInfo => " + new Gson().toJson(data));
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = (DetailTemplatePlayer.DetailTemplatePlayerObject) objectAdapter.get(0);
-            playerObject.setFavor(data.isTempFavor());
-            playerObject.setVip(data.isTempVip());
-            playerObject.setPlayingIndex(data.getTempIndex());
-            playerObject.setImageUrl(data.getTempImageUrl());
-            playerObject.setTag(data.getTempTag());
-            playerObject.setTitle(data.getTempTitle());
-            playerObject.setCid(data.getCid());
-            playerObject.setInfo(data.getTemoInfo());
-            playerObject.setRecClassId(data.getTempRecClassId());
-            playerObject.setPicList(data.getTempPicList());
-            itemBridgeAdapter.notifyItemChanged(0);
-        } catch (Exception e) {
-        }
     }
 
     public int getPlayerNextPosition() {

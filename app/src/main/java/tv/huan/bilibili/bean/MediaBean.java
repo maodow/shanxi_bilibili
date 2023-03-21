@@ -23,7 +23,6 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
     private String tempVideoUrl;
     private String tempImageUrl;
     private int tempPlayType;
-    private boolean tempVip;
     private boolean tempFavor; //收藏状态
     private String tempTag;
     private String tempTitle;
@@ -65,14 +64,6 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
 
     public void setTempPlayType(int tempPlayType) {
         this.tempPlayType = tempPlayType;
-    }
-
-    public boolean isTempVip() {
-        return tempVip;
-    }
-
-    public void setTempVip(boolean tempVip) {
-        this.tempVip = tempVip;
     }
 
     public boolean isTempFavor() {

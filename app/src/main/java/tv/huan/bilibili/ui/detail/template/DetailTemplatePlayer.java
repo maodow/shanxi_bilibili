@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -23,6 +24,8 @@ import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.PlayerView;
+import tv.huan.heilongjiang.HeilongjiangApi;
+import tv.huan.heilongjiang.OnStatusChangeListener;
 
 public final class DetailTemplatePlayer extends Presenter {
 
@@ -54,113 +57,48 @@ public final class DetailTemplatePlayer extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
         LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
-        showData(viewHolder.view, o);
     }
 
-    private void showData(View view, Object o) {
+    public void updateFavor(View view, boolean status) {
+        try {
+            TextView textView = view.findViewById(R.id.detail_player_item_favor);
+            textView.setText(view.getResources().getString(status ? R.string.detail_favor_yes : R.string.detail_favor_no));
+        } catch (Exception e) {
+        }
+    }
+
+    public void showData(View view, MediaBean data) {
         LogUtil.log("DetailTemplatePlayer => showData");
-
-        boolean updateOnlyStopFull;  // 收藏状态
-        boolean updateOnlyFavor;  // 收藏状态
-        boolean updateOnlyVideoStop;  // 暂停视频
-        boolean updateOnlyVideoPlaying;  // 播放视频
-        try {
-            updateOnlyStopFull = ((DetailTemplatePlayerObject) o).isUpdateOnlyStopFull();
-            ((DetailTemplatePlayerObject) o).setUpdateOnlyStopFull(false);
-        } catch (Exception e) {
-            updateOnlyStopFull = false;
-        }
-        try {
-            updateOnlyFavor = ((DetailTemplatePlayerObject) o).isUpdateOnlyFavor();
-            ((DetailTemplatePlayerObject) o).setUpdateOnlyFavor(false);
-        } catch (Exception e) {
-            updateOnlyFavor = false;
-        }
-        try {
-            updateOnlyVideoPlaying = ((DetailTemplatePlayerObject) o).isUpdateOnlyVideoPlaying();
-            ((DetailTemplatePlayerObject) o).setUpdateOnlyVideoPlaying(false);
-        } catch (Exception e) {
-            updateOnlyVideoPlaying = false;
-        }
-        try {
-            updateOnlyVideoStop = ((DetailTemplatePlayerObject) o).isUpdateOnlyVideoStop();
-            ((DetailTemplatePlayerObject) o).setUpdateOnlyVideoStop(false);
-        } catch (Exception e) {
-            updateOnlyVideoStop = false;
-        }
-        LogUtil.log("DetailTemplatePlayer => showData => updateOnlyFavor = " + updateOnlyFavor);
-        LogUtil.log("DetailTemplatePlayer => showData => updateOnlyVideoStop = " + updateOnlyVideoStop);
-        LogUtil.log("DetailTemplatePlayer => showData => updateOnlyVideoPlaying = " + updateOnlyVideoPlaying);
-
-        if (updateOnlyStopFull) {
-            stopFull(view);
-        } else if (updateOnlyFavor) {
-            try {
-                TextView textView = view.findViewById(R.id.detail_player_item_favor);
-                textView.setSelected(((DetailTemplatePlayerObject) o).isFavor());
-                textView.setText(view.getResources().getString(((DetailTemplatePlayerObject) o).isFavor() ? R.string.detail_favor_yes : R.string.detail_favor_no));
-            } catch (Exception e) {
-            }
-        } else if (updateOnlyVideoPlaying) {
-            hideWarning(view);
-            startPlayer(view, o);
-        } else if (updateOnlyVideoStop) {
-            showWarning(view, o);
-            stopFloat(view);
-            stopPlayer(view);
-        } else {
-            showWarning(view, o);
-        }
-    }
-
-    private void showWarning(View view, Object o) {
-        LogUtil.log("DetailTemplatePlayer => showWarning");
         try {
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
+            componentInit.setData(data.getTempImageUrl(), data.getTempTitle(), data.getTempIndex());
             componentInit.show();
-        } catch (Exception e) {
-            LogUtil.log("DetailTemplatePlayer => showWarning => " + e.getMessage());
-        }
-        try {
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
-            PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
-            String imageUrl = ((DetailTemplatePlayerObject) o).getImageUrl();
-            String title = ((DetailTemplatePlayerObject) o).getName();
-            int playingIndex = ((DetailTemplatePlayerObject) o).getPlayingIndex();
-            componentInit.setData(imageUrl, title, playingIndex);
-        } catch (Exception e) {
-            LogUtil.log("DetailTemplatePlayer => showWarning => " + e.getMessage());
-        }
-        try {
-            TextView textView = view.findViewById(R.id.detail_player_item_vip);
-            textView.setVisibility(((DetailTemplatePlayerObject) o).isVip() ? View.GONE : View.VISIBLE);
         } catch (Exception e) {
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_favor);
-            textView.setSelected(((DetailTemplatePlayerObject) o).isFavor());
-            textView.setText(view.getResources().getString(((DetailTemplatePlayerObject) o).isFavor() ? R.string.detail_favor_yes : R.string.detail_favor_no));
+            textView.setText(view.getResources().getString(data.isTempFavor() ? R.string.detail_favor_yes : R.string.detail_favor_no));
             JSONObject object = new JSONObject();
-            object.put("cid", ((DetailTemplatePlayerObject) o).getCid());
-            object.put("recClassId", ((DetailTemplatePlayerObject) o).getRecClassId());
+            object.put("cid", data.getCid());
+            object.put("recClassId", data.getRecClassId());
             textView.setTag(R.id.detail_player_item_favor, object);
 
         } catch (Exception e) {
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_tag);
-            textView.setText(((DetailTemplatePlayerObject) o).getTag());
+            textView.setText(data.getTempTag());
         } catch (Exception e) {
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_title);
-            textView.setText(((DetailTemplatePlayerObject) o).getName());
+            textView.setText(data.getTempTitle());
         } catch (Exception e) {
         }
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_info);
-            textView.setText(((DetailTemplatePlayerObject) o).getInfo());
+            textView.setText(data.getTemoInfo());
         } catch (Exception e) {
         }
         try {
@@ -169,10 +107,9 @@ public final class DetailTemplatePlayer extends Presenter {
             for (int i = 0; i < childCount - 1; i++) {
                 linearLayout.removeViewAt(i);
             }
-            String[] picList = ((DetailTemplatePlayerObject) o).getPicList();
             int length;
             try {
-                length = picList.length;
+                length = data.getTempPicList().length;
             } catch (Exception e) {
                 length = 0;
             }
@@ -184,10 +121,28 @@ public final class DetailTemplatePlayer extends Presenter {
                 int margin = linearLayout.getContext().getResources().getDimensionPixelOffset(i == length - 1 ? R.dimen.dp_8 : R.dimen.dp_4);
                 params.setMargins(0, 0, margin, 0);
                 picView.setLayoutParams(params);
-                GlideUtils.loadHz(picView.getContext(), picList[i], picView);
+                GlideUtils.loadHz(picView.getContext(), data.getTempPicList()[i], picView);
                 linearLayout.addView(picView, i);
             }
         } catch (Exception e) {
+        }
+        try {
+            HeilongjiangApi.checkVip(view.getContext(), new OnStatusChangeListener() {
+                @Override
+                public void onPass() {
+                    TextView textView = view.findViewById(R.id.detail_player_item_vip);
+                    textView.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onFail() {
+                    TextView textView = view.findViewById(R.id.detail_player_item_vip);
+                    textView.setVisibility(View.VISIBLE);
+                }
+            });
+        } catch (Exception e) {
+            TextView textView = view.findViewById(R.id.detail_player_item_vip);
+            textView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -202,45 +157,95 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private void startPlayer(View view, Object o) {
-        LogUtil.log("DetailTemplatePlayer => startPlayer");
+    public void checkAccount(View view, MediaBean data) {
+        LogUtil.log("DetailTemplatePlayer => checkAccount");
         try {
-            DetailTemplatePlayerObject data = (DetailTemplatePlayerObject) o;
-            LogUtil.log("DetailTemplatePlayer => startPlayer => seek = " + data.getSeek());
-            String cdnUrl = data.getVideoUrl();
-            PlayerView videoLayout = view.findViewById(R.id.detail_player_item_video);
-            StartBuilder.Builder builder = new StartBuilder.Builder();
-            builder.setLoop(false);
-            builder.setDelay(4000);
-            long seek = data.getSeek();
-            data.setSeek(0);
-            builder.setSeek(seek);
-            videoLayout.start(builder.build(), cdnUrl);
+            HeilongjiangApi.checkVip(view.getContext(), new OnStatusChangeListener() {
+                @Override
+                public void onPass() {
+                    startHuawei(view, data);
+                }
+
+                @Override
+                public void onFail() {
+                    startShopping(view);
+                }
+            });
+        } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => checkAccount => " + e.getMessage());
+        }
+    }
+
+    private void startShopping(View view) {
+        try {
+            Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
+            if (null == activity)
+                throw new Exception("activity error: null");
+            if (!(activity instanceof DetailActivity))
+                throw new Exception("activity error: " + activity);
+            ((DetailActivity) activity).jumpVip();
+        } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => startShopping => " + e.getMessage());
+        }
+    }
+
+    public void startHuawei(View view, MediaBean data) {
+        try {
+            Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
+            if (null == activity)
+                throw new Exception("activity error: null");
+            if (!(activity instanceof DetailActivity))
+                throw new Exception("activity error: " + activity);
+            ((DetailActivity) activity).huaweiAuth(data.getCid(), data.getTempSeek());
+        } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => startHuawei => " + e.getMessage());
+        }
+    }
+
+    public long getPosition(View view) {
+        try {
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            return playerView.getPosition();
+        } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => getPosition => " + e.getMessage());
+            return 0;
+        }
+    }
+    public long getDuration(View view) {
+        try {
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            return playerView.getDuration();
+        } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => getDuration => " + e.getMessage());
+            return 0;
+        }
+    }
+    public void stopPlayer(View view) {
+        try {
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            playerView.stop();
+            playerView.release();
         } catch (Exception e) {
             LogUtil.log("DetailTemplatePlayer => startPlayer => " + e.getMessage());
         }
     }
 
-    private void stopPlayer(View view) {
-        LogUtil.log("DetailTemplatePlayer => stopPlayer");
+    public void startPlayer(View view, String s, long seek) {
+        LogUtil.log("DetailTemplatePlayer => startPlayer");
         try {
-            PlayerView videoLayout = view.findViewById(R.id.detail_player_item_video);
-            videoLayout.stop();
-            videoLayout.release();
+            stopPlayer(view);
+            StartBuilder.Builder builder = new StartBuilder.Builder();
+            builder.setLoop(false);
+            builder.setDelay(4000);
+            builder.setSeek(seek);
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            playerView.start(builder.build(), s);
         } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => startPlayer => " + e.getMessage());
         }
     }
 
-    private void stopPlayer(ViewHolder viewHolder, Object o) {
-        try {
-            ViewGroup viewGroup = (ViewGroup) viewHolder.view.getParent().getParent().getParent();
-            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
-            playerView.stopFloat();
-        } catch (Exception e) {
-        }
-    }
-
-    private void stopFull(View view) {
+    public void stopFull(View view) {
         try {
             ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
             PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
@@ -342,126 +347,5 @@ public final class DetailTemplatePlayer extends Presenter {
     }
 
     public static class DetailTemplatePlayerObject extends BaseDataBean {
-
-        private boolean updateOnlyStopFull = false;
-        private boolean updateOnlyFavor = false;
-        private boolean updateOnlyVideoPlaying = false;
-        private boolean updateOnlyVideoStop = false;
-        private boolean favor;
-        private boolean vip;
-
-        private String tag;
-        private String info;
-        private String[] picList;
-
-        private String imageUrl;
-        private String videoUrl;
-        private int playingIndex = 0;
-        private long seek = 0;
-
-        public boolean isFavor() {
-            return favor;
-        }
-
-        public void setFavor(boolean favor) {
-            this.favor = favor;
-        }
-
-        public boolean isVip() {
-            return vip;
-        }
-
-        public void setVip(boolean vip) {
-            this.vip = vip;
-        }
-
-        public boolean isUpdateOnlyStopFull() {
-            return updateOnlyStopFull;
-        }
-
-        public void setUpdateOnlyStopFull(boolean updateOnlyStopFull) {
-            this.updateOnlyStopFull = updateOnlyStopFull;
-        }
-
-        public boolean isUpdateOnlyVideoPlaying() {
-            return updateOnlyVideoPlaying;
-        }
-
-        public void setUpdateOnlyVideoPlaying(boolean updateOnlyVideoPlaying) {
-            this.updateOnlyVideoPlaying = updateOnlyVideoPlaying;
-        }
-
-        public boolean isUpdateOnlyVideoStop() {
-            return updateOnlyVideoStop;
-        }
-
-        public void setUpdateOnlyVideoStop(boolean updateOnlyVideoStop) {
-            this.updateOnlyVideoStop = updateOnlyVideoStop;
-        }
-
-        public boolean isUpdateOnlyFavor() {
-            return updateOnlyFavor;
-        }
-
-        public void setUpdateOnlyFavor(boolean updateOnlyFavor) {
-            this.updateOnlyFavor = updateOnlyFavor;
-        }
-
-        public int getPlayingIndex() {
-            return playingIndex;
-        }
-
-        public void setPlayingIndex(int playingIndex) {
-            this.playingIndex = playingIndex;
-        }
-
-        public String[] getPicList() {
-            return picList;
-        }
-
-        public void setPicList(String[] picList) {
-            this.picList = picList;
-        }
-
-        public String getInfo() {
-            return info;
-        }
-
-        public void setInfo(String info) {
-            this.info = info;
-        }
-
-        public String getTag() {
-            return tag;
-        }
-
-        public void setTag(String tag) {
-            this.tag = tag;
-        }
-
-        public void setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
-        }
-
-        public String getImageUrl() {
-            return imageUrl;
-        }
-
-        public String getVideoUrl() {
-            return videoUrl;
-        }
-
-        public void setVideoUrl(String videoUrl) {
-            this.videoUrl = videoUrl;
-        }
-
-        @Override
-        public long getSeek() {
-            return seek;
-        }
-
-        public void setSeek(long seek) {
-            this.seek = seek;
-        }
     }
 }

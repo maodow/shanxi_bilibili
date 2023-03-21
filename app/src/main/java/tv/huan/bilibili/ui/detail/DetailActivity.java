@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.detail;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -10,8 +11,8 @@ import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
-import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
+import tv.huan.heilongjiang.HeilongjiangApi;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 
@@ -106,7 +107,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public void updatePlayerInfo(@NonNull MediaBean data, boolean isFromUser) {
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.updatePlayerInfo(data);
+        gridView.showData(data);
         if (!isFromUser) {
             gridView.refreshPositionRange(data);
         }
@@ -118,9 +119,9 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void startPlayer(@NonNull MediaBean data) {
+    public void checkPlayer(@NonNull MediaBean data) {
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.startPlayer(data);
+        gridView.checkPlayer(data);
     }
 
     @Override
@@ -148,12 +149,24 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void jumpVip() {
-//        HeilongjiangApi.jumpVip(getApplicationContext());
+        Toast.makeText(getApplicationContext(), "需要开通会员", Toast.LENGTH_SHORT).show();
+        HeilongjiangApi.jumpVip(getApplicationContext(), null);
     }
 
     @Override
     public void stopFull() {
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.stopFull();
+    }
+
+    @Override
+    public void huaweiAuth(String cid, long seek) {
+        getPresenter().requestHuaweiAuth(cid, seek);
+    }
+
+    @Override
+    public void huaweiSucc(String s, long seek) {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.startPlayer(s, seek);
     }
 }

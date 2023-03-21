@@ -54,22 +54,17 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPlusPresenter<MediaBean>
         }
         try {
             ImageView imageView = v.findViewById(R.id.detail_xuanji1_item_vip);
-            boolean isVip = item.isTempVip();
-            // 免费
-            if (isVip) {
-                imageView.setVisibility(View.GONE);
-            }
             // 播放策略
-            else {
-                int playType = item.getTempPlayType();
-                int index = item.getTempIndex();
-                if (playType > 0 && index <= playType) {
-                    imageView.setVisibility(View.GONE);
-                } else {
-                    imageView.setVisibility(View.VISIBLE);
-                }
+            int playType = item.getTempPlayType();
+            int index = item.getTempIndex();
+            if (playType > 0 && index <= playType) {
+                imageView.setVisibility(View.GONE);
+            } else {
+                imageView.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
+            ImageView imageView = v.findViewById(R.id.detail_xuanji1_item_vip);
+            imageView.setVisibility(View.VISIBLE);
         }
     }
 

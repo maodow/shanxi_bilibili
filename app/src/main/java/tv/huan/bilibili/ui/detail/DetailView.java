@@ -21,7 +21,7 @@ public interface DetailView extends BaseViewImpl {
 
     void delayStartPlayer(@NonNull MediaBean data, boolean isFromUser);
 
-    void startPlayer(@NonNull MediaBean data);
+    void checkPlayer(@NonNull MediaBean data);
 
     void updatePlayerInfo(@NonNull MediaBean data, boolean isFromUser);
 
@@ -36,4 +36,8 @@ public interface DetailView extends BaseViewImpl {
     void jumpVip();
 
     void stopFull();
+
+    void huaweiAuth(String cid, long  seek);
+
+    void huaweiSucc(String s, long  seek);
 }

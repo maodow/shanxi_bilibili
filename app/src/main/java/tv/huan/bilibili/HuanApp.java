@@ -33,6 +33,7 @@ public final class HuanApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        HeilongjiangApi.setLogger(true);
         LogUtil.setLogger(true);
         MvpUtil.setLogger(true);
         LeanBackUtil.setLogger(true);
