@@ -405,15 +405,15 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         }
                         getView().hideLoading();
                         getView().refreshTags(data.getFilterTags());
-                        getView().refreshClass(data.getFilterClass(), data.getFilterTitle());
+                        getView().refreshClass(data.getFilterClass(), data.getFilterTitle(), data.getFilterCheckPosition());
                         if (mData.size() > 0) {
                             getView().refreshContent();
                             getView().requestFocusList();
                         } else {
-                            getView().requestFocusClass();
+                            getView().cleanFocusClass();
                         }
                         getView().checkNodata(mData.size() <= 0);
-                        getView().checkTags(data.getFilterCheckPosition() == 0);
+                        getView().checkTags();
                     }
                 }).subscribe());
     }
@@ -474,6 +474,13 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
+                        try {
+                            mData.clear();
+                        } catch (Exception e) {
+                        }
+                        getView().refreshContent();
+                        getView().checkNodata(false);
+                        getView().checkTags();
                         // loading
                         getView().showLoading();
                     }
@@ -537,19 +544,21 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
+                        try {
+                            mData.clear();
+                        } catch (Exception e) {
+                        }
+                        getView().refreshContent();
+                        getView().checkNodata(false);
+                        getView().checkTags();
                         // loading
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        try {
-                            mData.clear();
-                        } catch (Exception e) {
-                        }
                         // loading
                         getView().hideLoading();
-                        getView().refreshContent();
                         getView().checkNodata(mData.size() <= 0);
                     }
                 }).doOnComplete(new Action() {
@@ -581,7 +590,6 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 if (index <= 0) {
                     getView().setFocusable(R.id.filter_search, true);
                     getView().setFocusable(R.id.filter_vip, true);
-                    classLayout.clearFocus();
                     getView().requestFocus(R.id.filter_search);
                     return true;
                 }
@@ -593,8 +601,6 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
             if (focusId == R.id.filter_search || focusId == R.id.filter_vip) {
                 getView().setFocusable(R.id.filter_search, false);
                 getView().setFocusable(R.id.filter_vip, false);
-                ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
-                classLayout.requestFocus();
                 return true;
             }
         }
@@ -607,7 +613,6 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
                 int index = classLayout.getCheckedIndex();
                 if (index <= 0) {
-                    classLayout.clearFocus();
                     getView().requestFocus(R.id.filter_tags);
                     return true;
                 }

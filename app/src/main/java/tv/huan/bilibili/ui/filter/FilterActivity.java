@@ -12,10 +12,12 @@ import java.util.Map;
 import lib.kalu.frame.mvp.BaseActivity;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
+import lib.kalu.leanback.clazz.OnCheckedChangeListener;
 import lib.kalu.leanback.tags.TagsLayout;
 import lib.kalu.leanback.tags.listener.OnTagsChangeListener;
 import lib.kalu.leanback.tags.model.TagBean;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.utils.LogUtil;
 
 /**
  * 筛选
@@ -44,14 +46,13 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
     }
 
     @Override
-    public void refreshClass(@NonNull List<ClassBean> classApis, @NonNull String className) {
+    public void refreshClass(@NonNull List<ClassBean> classApis, @NonNull String className, @NonNull int checkedIndex) {
         setText(R.id.filter_title, className);
         ClassScrollView classLayout = findViewById(R.id.filter_class);
-        classLayout.update(classApis);
-        classLayout.setOnCheckedChangeListener(new ClassScrollView.OnCheckedChangeListener() {
+        classLayout.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
-            public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
-                checkTags(i == 0);
+            public void onChecked(@NonNull boolean b, @NonNull int i, @NonNull String s, @NonNull String s1) {
+                LogUtil.log("FilterActivity => onChecked => index = " + i + ", name = " + s);
                 if (i == 0) {
                     getPresenter().searchAlbumByTypeNews();
                 } else {
@@ -59,6 +60,7 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
                 }
             }
         });
+        classLayout.update(classApis, checkedIndex);
     }
 
     @Override
@@ -79,8 +81,10 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
     }
 
     @Override
-    public void checkTags(boolean show) {
-        setVisibility(R.id.filter_tags, show ? View.VISIBLE : View.GONE);
+    public void checkTags() {
+        ClassScrollView classLayout = findViewById(R.id.filter_class);
+        int checkedIndex = classLayout.getCheckedIndex();
+        setVisibility(R.id.filter_tags, checkedIndex == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -94,8 +98,12 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
     }
 
     @Override
-    public void requestFocusClass() {
+    public void cleanFocusClass() {
         ClassScrollView classLayout = findViewById(R.id.filter_class);
-        classLayout.requestFocus();
+        classLayout.clearFocus();
     }
+
+//    @Override
+//    public void requestFocusClass() {
+//    }
 }

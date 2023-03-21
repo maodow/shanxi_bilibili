@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import lib.kalu.frame.mvp.BaseActivity;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
+import lib.kalu.leanback.clazz.OnCheckedChangeListener;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.utils.LogUtil;
 
@@ -37,15 +38,15 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     @Override
     public void updateTab(ArrayList<ClassBean> data, int select) {
         ClassScrollView classLayout = findViewById(R.id.center_tabs);
-        classLayout.update(data, select);
-        classLayout.requestFocus();
-        classLayout.setOnCheckedChangeListener(new ClassScrollView.OnCheckedChangeListener() {
+        classLayout.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
             @Override
-            public void onChecked(@NonNull int i, @NonNull String s, @NonNull String s1) {
-                LogUtil.log("CenterActivity => onChecked => index = " + i + ", name = " + s);
-                getPresenter().request(i);
+            public void onChecked(@NonNull boolean b, @NonNull int i, @NonNull String s, @NonNull String s1) {
+                LogUtil.log("CenterActivity => onChecked => isFromUser = " + b + ", index = " + i + ", name = " + s);
+                getPresenter().request(i, b);
             }
         });
+        classLayout.update(data, select);
     }
 
     @Override
@@ -75,8 +76,8 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     }
 
     @Override
-    public void requestTab() {
-        ClassScrollView classLayout = findViewById(R.id.center_tabs);
-        classLayout.requestFocus();
+    public void reqFocus(boolean noData) {
+        LogUtil.log("CenterActivity => reqFocus => noData = " + noData);
+        requestFocus(noData ? R.id.center_tabs : R.id.center_list);
     }
 }

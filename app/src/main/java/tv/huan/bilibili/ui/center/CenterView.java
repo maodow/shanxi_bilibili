@@ -19,5 +19,5 @@ public interface CenterView extends BaseViewImpl {
 
     void deletePosition(int position);
 
-    void requestTab();
+    void reqFocus(boolean noData);
 }

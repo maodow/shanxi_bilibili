@@ -11,16 +11,16 @@ import tv.huan.bilibili.base.BaseViewImpl;
 
 public interface FilterView extends BaseViewImpl {
 
-    void refreshClass(@NonNull List<ClassBean> classApis, @NonNull String className);
+    void refreshClass(@NonNull List<ClassBean> classApis, @NonNull String className, @NonNull int checkedIndex);
 
     void refreshTags(LinkedHashMap<String, List<TagBean>> filterTags);
 
     void checkNodata(boolean show);
 
-    void checkTags(boolean show);
+    void checkTags();
 
     void refreshContent();
 
     void requestFocusList();
-    void requestFocusClass();
+    void cleanFocusClass();
 }

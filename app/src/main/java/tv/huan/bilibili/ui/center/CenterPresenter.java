@@ -212,7 +212,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
         getView().setText(R.id.center_warning, html);
     }
 
-    protected void request(int position) {
+    protected void request(int position, boolean isFromUser) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
@@ -266,6 +266,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         getView().hideLoading();
                         getView().refreshContent();
                         getView().checkNodata(aBoolean);
+                        if (!isFromUser) {
+                            getView().reqFocus(aBoolean);
+                        }
                     }
                 }).subscribe());
     }
@@ -346,7 +349,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 LogUtil.log("CenterPresenter => dispatchKeyEvent => down_action_down => ");
                 getView().setFocusable(R.id.center_vip, false);
                 getView().setFocusable(R.id.center_search, false);
-                getView().requestTab();
+//                getView().requestTab();
                 return true;
             } else if (focusId == R.id.center_tabs) {
                 if (mDatas.size() <= 0) {

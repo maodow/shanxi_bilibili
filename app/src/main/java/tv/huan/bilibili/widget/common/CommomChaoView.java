@@ -56,6 +56,7 @@ public final class CommomChaoView extends TextViewPlus {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "click", Toast.LENGTH_SHORT).show();
+                HeilongjiangApi.setLogger(true);
                 HeilongjiangApi.jumpVip(getContext());
             }
         });

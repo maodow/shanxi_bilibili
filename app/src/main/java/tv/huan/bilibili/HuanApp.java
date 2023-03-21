@@ -15,6 +15,7 @@ import lib.kalu.mediaplayer.config.player.PlayerManager;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import tv.huan.bilibili.crash.HuanCrash;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.heilongjiang.HeilongjiangApi;
 
 public final class HuanApp extends Application {
 
