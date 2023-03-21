@@ -130,13 +130,12 @@ public class GetSubChannelsByChannelBean implements Serializable {
             }
 
             public String getExtPoster() {
-//                return extPoster;
-                return "https://img0.baidu.com/it/u=1273517628,1100314156&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281";
+                return extPoster;
+//                return "https://img0.baidu.com/it/u=1273517628,1100314156&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281";
             }
 
             public boolean hasExtPoster() {
-//                return null != extPoster && extPoster.length() > 0;
-                return true;
+                return null != extPoster && extPoster.length() > 0;
             }
 
             public void setExtPoster(String extPoster) {
