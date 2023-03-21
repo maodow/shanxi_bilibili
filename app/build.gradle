@@ -115,15 +115,15 @@ android {
         exclude 'androidsupportmultidexversion.txt'
     }
 
-    configurations {
-        all*.exclude group: 'org.jetbrains', module: 'annotations'
-        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
-        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-common'
-        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
-        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
-        all*.exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-android'
-        all*.exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-core-jvm'
-    }
+//    configurations {
+//        all*.exclude group: 'org.jetbrains', module: 'annotations'
+//        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
+//        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-common'
+//        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+//        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+//        all*.exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-android'
+//        all*.exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-core-jvm'
+//    }
 }
 
 
