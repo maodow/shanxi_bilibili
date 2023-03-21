@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import tv.huan.heilongjiang.HeilongjiangApi;
-import tv.huan.heilongjiang.OnCheckVipChangeListener;
+import tv.huan.heilongjiang.OnStatusChangeListener;
 
 @SuppressLint("AppCompatCustomView")
 public final class CommomDataView extends TextView {
@@ -49,7 +49,7 @@ public final class CommomDataView extends TextView {
     }
 
     private void checkVip() {
-        HeilongjiangApi.checkVip(getContext(), new OnCheckVipChangeListener() {
+        HeilongjiangApi.checkVip(getContext(), new OnStatusChangeListener() {
             @Override
             public void onPass() {
                 updateVisibility(true);

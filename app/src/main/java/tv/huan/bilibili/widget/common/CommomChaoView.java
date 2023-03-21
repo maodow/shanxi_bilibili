@@ -13,7 +13,7 @@ import androidx.core.view.ViewCompat;
 import lib.kalu.leanback.plus.TextViewPlus;
 import tv.huan.bilibili.R;
 import tv.huan.heilongjiang.HeilongjiangApi;
-import tv.huan.heilongjiang.OnCheckVipChangeListener;
+import tv.huan.heilongjiang.OnStatusChangeListener;
 
 public final class CommomChaoView extends TextViewPlus {
     public CommomChaoView(@NonNull Context context) {
@@ -57,13 +57,13 @@ public final class CommomChaoView extends TextViewPlus {
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "click", Toast.LENGTH_SHORT).show();
                 HeilongjiangApi.setLogger(true);
-                HeilongjiangApi.jumpVip(getContext());
+                HeilongjiangApi.jumpVip(getContext(), null);
             }
         });
     }
 
     private void checkVip() {
-        HeilongjiangApi.checkVip(getContext(), new OnCheckVipChangeListener() {
+        HeilongjiangApi.checkVip(getContext(), new OnStatusChangeListener() {
             @Override
             public void onPass() {
                 updateText(true);

@@ -277,13 +277,6 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                                 LinkedList<TagBean> list = new LinkedList<>();
                                 TagBean firstBean = new TagBean();
                                 firstBean.setText(getView().getString(R.string.filter_all));
-                                firstBean.setId(0);
-                                firstBean.setTextColorResourceDetault(R.color.color_white);
-                                firstBean.setTextColorResourceSelect(R.color.color_ff6699);
-                                firstBean.setTextColorResourceFocus(R.color.color_black);
-                                firstBean.setBackgroundResourceDefault(R.drawable.bg_filter_tag_unfocus);
-                                firstBean.setBackgroundResourceFocus(R.drawable.bg_filter_tag_focus);
-                                firstBean.setBackgroundResourceSelect(R.drawable.bg_filter_tag_unfocus);
                                 list.addFirst(firstBean);
                                 for (int n = 0; n < values.size(); n++) {
 
@@ -292,13 +285,6 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
 
                                     TagBean tagsModel = new TagBean();
                                     tagsModel.setText(value);
-                                    tagsModel.setId(0);
-                                    tagsModel.setTextColorResourceDetault(R.color.color_white);
-                                    tagsModel.setTextColorResourceSelect(R.color.color_ff6699);
-                                    tagsModel.setTextColorResourceFocus(R.color.color_black);
-                                    tagsModel.setBackgroundResourceDefault(R.drawable.bg_filter_tag_unfocus);
-                                    tagsModel.setBackgroundResourceFocus(R.drawable.bg_filter_tag_focus);
-                                    tagsModel.setBackgroundResourceSelect(R.drawable.bg_filter_tag_unfocus);
                                     list.addLast(tagsModel);
                                 }
                                 tagsApi.put(key, list);
@@ -593,6 +579,11 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     getView().requestFocus(R.id.filter_search);
                     return true;
                 }
+            } else if (focusId == R.id.filter_item) {
+                View focus = getView().getCurrentFocus();
+                RecyclerView recyclerView = getView().findViewById(R.id.filter_content);
+                int adapterPosition = recyclerView.getChildAdapterPosition(focus);
+                getView().setVisibility(R.id.filter_tags, adapterPosition <= 9 ? View.VISIBLE : View.GONE);
             }
         }
         // down
@@ -602,6 +593,12 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 getView().setFocusable(R.id.filter_search, false);
                 getView().setFocusable(R.id.filter_vip, false);
                 return true;
+            } else if (focusId == R.id.filter_item) {
+                RecyclerView recyclerView = getView().findViewById(R.id.filter_content);
+                int itemCount = recyclerView.getAdapter().getItemCount();
+                if (itemCount > 5) {
+                    getView().setVisibility(R.id.filter_tags, View.GONE);
+                }
             }
         }
         // right

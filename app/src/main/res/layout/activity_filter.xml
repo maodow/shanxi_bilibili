@@ -22,8 +22,8 @@
         android:background="@drawable/bg_selector_common_search"
         android:drawableLeft="@drawable/ic_selector_common_search"
         android:drawablePadding="@dimen/dp_8"
-        android:gravity="center"
         android:focusable="false"
+        android:gravity="center"
         android:paddingLeft="@dimen/dp_14"
         android:paddingRight="@dimen/dp_14"
         android:text="@string/menu_search"
@@ -109,9 +109,15 @@
         android:orientation="vertical"
         android:paddingBottom="@dimen/dp_4"
         android:visibility="gone"
-        app:tag_item_height="@dimen/dp_38"
-        app:tag_text_padding_left="@dimen/dp_23"
-        app:tag_text_padding_right="@dimen/dp_23"
+        app:tag_background_resource="@drawable/bg_filter_tag_unfocus"
+        app:tag_background_resource_checked="@drawable/bg_filter_tag_unfocus"
+        app:tag_background_resource_focus="@drawable/bg_filter_tag_focus"
+        app:tag_item_height="@dimen/dp_34"
+        app:tag_item_padding_left="@dimen/dp_14"
+        app:tag_item_padding_right="@dimen/dp_14"
+        app:tag_text_color="@color/color_white"
+        app:tag_text_color_checked="@color/color_ff6699"
+        app:tag_text_color_focus="@color/color_black"
         app:tag_text_size="@dimen/sp_17" />
 
     <RelativeLayout
@@ -120,8 +126,8 @@
         android:layout_below="@id/filter_tags"
         android:layout_toRightOf="@id/filter_title"
         android:clipChildren="false"
-        android:focusable="false"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:focusable="false">
 
         <lib.kalu.leanback.list.RecyclerViewGrid
             android:id="@+id/filter_content"
@@ -129,9 +135,9 @@
             android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:focusable="false"
             android:paddingLeft="@dimen/dp_48"
             android:paddingTop="@dimen/dp_14"
-            android:focusable="false"
             android:paddingRight="@dimen/dp_48"
             android:paddingBottom="@dimen/dp_14" />
 
@@ -141,8 +147,8 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_177"
             android:layout_centerInParent="true"
-            android:scaleType="fitCenter"
             android:focusable="false"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_nodata"
             android:visibility="gone" />
 
