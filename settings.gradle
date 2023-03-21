@@ -1,4 +1,4 @@
 include ':app'
 //include ':huan_common'
-include ':huan_heilongjiang'
+//include ':huan_heilongjiang'
 //include ':module_keyboard'
