@@ -24,6 +24,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.GlideUtils;
+import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate21;
 import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.widget.player.PlayerViewTemplate21;
@@ -83,6 +84,22 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                     public void onFocusChange(View view, boolean b) {
                         TextView textView = view.findViewById(R.id.common_poster_name);
                         textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                    }
+                });
+            } catch (Exception e) {
+            }
+            try {
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            int position = viewHolder.getAbsoluteAdapterPosition();
+                            if (position >= 0) {
+                                GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
+                                JumpUtil.next(v.getContext(), templateBean);
+                            }
+                        } catch (Exception e) {
+                        }
                     }
                 });
             } catch (Exception e) {
