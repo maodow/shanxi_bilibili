@@ -293,7 +293,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
                     public Observable<BaseResponsedBean<FavBean>> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3);
+                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3, null);
                     }
                 })
                 // 观看记录
@@ -467,7 +467,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
                     public Observable<BaseResponsedBean<FavBean>> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3);
+                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3, null);
                     }
                 })
                 // 我的收藏 => 数据处理

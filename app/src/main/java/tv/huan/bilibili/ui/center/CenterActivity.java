@@ -43,15 +43,15 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
             @Override
             public void onChecked(@NonNull boolean b, @NonNull int i, @NonNull String s, @NonNull String s1) {
                 LogUtil.log("CenterActivity => onChecked => isFromUser = " + b + ", index = " + i + ", name = " + s);
-                getPresenter().request(i, b);
+                getPresenter().request(i, b, true);
             }
         });
         classLayout.update(data, select);
     }
 
     @Override
-    public void refreshContent() {
-        notifyDataSetChanged(R.id.center_list);
+    public void refreshContent(int start, int num) {
+        notifyItemRangeInserted(R.id.center_list, start, num);
     }
 
     @Override
@@ -61,8 +61,8 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     }
 
     @Override
-    public void checkNodata(boolean show) {
-        setVisibility(R.id.center_nodata, show ? View.VISIBLE : View.GONE);
+    public void checkNodata(boolean hasData) {
+        setVisibility(R.id.center_nodata, hasData ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -76,8 +76,7 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     }
 
     @Override
-    public void reqFocus(boolean noData) {
-        LogUtil.log("CenterActivity => reqFocus => noData = " + noData);
-        requestFocus(noData ? R.id.center_tabs : R.id.center_list);
+    public void reqFocus(boolean hasData) {
+        requestFocus(hasData ? R.id.center_list : R.id.center_tabs);
     }
 }

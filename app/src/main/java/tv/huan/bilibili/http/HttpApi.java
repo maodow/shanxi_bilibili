@@ -118,7 +118,8 @@ public interface HttpApi {
     // 查询收藏列表
     @GET("data/getFavList")
     Observable<BaseResponsedBean<FavBean>> getFavList(@Query("offset") int offset,
-                                                      @Query("size") int size);
+                                                      @Query("size") int size,
+                                                      @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     // 查询数据库中某个分类的所有绑定专辑信息
     @GET("album/getAlbumByClassId2/{classId}")

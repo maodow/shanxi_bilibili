@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -29,10 +31,13 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
+import lib.kalu.leanback.list.RecyclerViewGrid;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
+import tv.huan.bilibili.bean.format.CallCenterBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -212,7 +217,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
         getView().setText(R.id.center_warning, html);
     }
 
-    protected void request(int position, boolean isFromUser) {
+    protected void request(int position, boolean isFromUser, boolean switchTab) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
@@ -222,37 +227,58 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
                     public Observable<BaseResponsedBean<FavBean>> apply(Boolean v) {
+                        int offset;
+                        if (mDatas.size() <= 0) {
+                            offset = 0;
+                        } else {
+                            offset = mDatas.size();
+                        }
+                        CallCenterBean centerBean = new CallCenterBean();
+                        centerBean.setStart(offset);
+                        String s = new Gson().toJson(centerBean);
                         // 观看历史
                         if (v) {
-                            return HttpClient.getHttpClient().getHttpApi().getBookmark(0, Integer.MAX_VALUE, null);
+                            return HttpClient.getHttpClient().getHttpApi().getBookmark(offset, BuildConfig.HUAN_PAGE_NUM, s);
                         }
                         // 我的收藏
                         else {
-                            return HttpClient.getHttpClient().getHttpApi().getFavList(0, Integer.MAX_VALUE);
+                            return HttpClient.getHttpClient().getHttpApi().getFavList(offset, BuildConfig.HUAN_PAGE_NUM, s);
                         }
                     }
-                }).map(new Function<BaseResponsedBean<FavBean>, Boolean>() {
+                })
+                // 数据处理
+                .map(new Function<BaseResponsedBean<FavBean>, CallCenterBean>() {
                     @Override
-                    public Boolean apply(BaseResponsedBean<FavBean> response) {
+                    public CallCenterBean apply(BaseResponsedBean<FavBean> response) {
+
+                        CallCenterBean centerBean;
                         try {
-                            mDatas.clear();
+                            centerBean = new Gson().fromJson(response.getExtra(), CallCenterBean.class);
                         } catch (Exception e) {
+                            centerBean = new CallCenterBean();
                         }
+
                         try {
                             List<FavBean.ItemBean> rows = response.getData().getRows();
+                            int size = rows.size();
+                            centerBean.setNum(size);
                             mDatas.addAll(rows);
                         } catch (Exception e) {
                         }
-                        return mDatas.size() <= 0;
+
+                        centerBean.setHasData(mDatas.size() > 0);
+                        return centerBean;
                     }
                 }).delay(40, TimeUnit.MILLISECONDS)
                 .compose(ComposeSchedulers.io_main())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
-                        mDatas.clear();
-                        getView().refreshContent();
-                        getView().checkNodata(false);
+                        if (switchTab) {
+                            mDatas.clear();
+                            getView().notifyDataSetChanged(R.id.center_list);
+                            getView().checkNodata(false);
+                        }
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
@@ -260,14 +286,18 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                     }
-                }).doOnNext(new Consumer<Boolean>() {
+                }).doOnNext(new Consumer<CallCenterBean>() {
                     @Override
-                    public void accept(Boolean aBoolean) {
+                    public void accept(CallCenterBean data) {
                         getView().hideLoading();
-                        getView().refreshContent();
-                        getView().checkNodata(aBoolean);
+                        getView().checkNodata(data.isHasData());
+                        if (data.getNum() > 0) {
+                            getView().refreshContent(data.getStart(), data.getNum());
+                        } else {
+                            getView().showToast(R.string.common_loadmore_empty);
+                        }
                         if (!isFromUser) {
-                            getView().reqFocus(aBoolean);
+                            getView().reqFocus(data.isHasData());
                         }
                     }
                 }).subscribe());
@@ -349,11 +379,19 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 LogUtil.log("CenterPresenter => dispatchKeyEvent => down_action_down => ");
                 getView().setFocusable(R.id.center_vip, false);
                 getView().setFocusable(R.id.center_search, false);
-//                getView().requestTab();
                 return true;
             } else if (focusId == R.id.center_tabs) {
                 if (mDatas.size() <= 0) {
                     return true;
+                }
+            } else if (focusId == R.id.center_item) {
+                RecyclerViewGrid recyclerView = getView().findViewById(R.id.center_list);
+                int focusPosition = recyclerView.findFocusPosition();
+                int itemCount = recyclerView.getItemCount();
+                if (itemCount > 0 && itemCount - focusPosition <= 4) {
+                    ClassScrollView scrollView = getView().findViewById(R.id.center_tabs);
+                    int checkedIndex = scrollView.getCheckedIndex();
+                    request(checkedIndex, true, false);
                 }
             }
         }
