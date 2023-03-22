@@ -293,7 +293,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         getView().checkNodata(data.isHasData());
                         if (data.getNum() > 0) {
                             getView().refreshContent(data.getStart(), data.getNum());
-                        } else {
+                        } else if (!switchTab) {
                             getView().showToast(R.string.common_loadmore_empty);
                         }
                         if (!isFromUser) {
