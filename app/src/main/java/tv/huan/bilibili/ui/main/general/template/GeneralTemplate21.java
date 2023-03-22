@@ -131,7 +131,7 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
 
     @Override
     protected boolean canScrollHorizontally(int count) {
-        return false;
+        return count > 4;
     }
 
     @Override

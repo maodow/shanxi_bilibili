@@ -148,9 +148,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     @Override
     public void stopFullPlayer() {
-        PlayerView playerView = findViewById(R.id.main_player);
-        playerView.stop();
-        playerView.release();
+//        PlayerView playerView = findViewById(R.id.main_player);
+//        playerView.stop();
+//        playerView.release();
     }
 
     @Override

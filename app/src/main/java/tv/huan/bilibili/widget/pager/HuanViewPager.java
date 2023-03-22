@@ -26,68 +26,68 @@ public class HuanViewPager extends ViewPager {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        // left
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
-            View focus = findFocus();
-            View nextFocus = FocusFinder.getInstance().findNextFocus(this, focus, View.FOCUS_LEFT);
-            if (null == nextFocus) {
-                int count = event.getRepeatCount();
-                if (count <= 0) {
-
-                    long time;
-                    long downTime = event.getDownTime();
-                    int id = getId();
-
-                    try {
-                        time = (long) getTag(id);
-                    } catch (Exception e) {
-                        time = 0;
-                    }
-
-                    if (time <= 0 || (downTime - Math.abs(time) > 4000)) {
-                        shakeAnim();
-                        setTag(id, downTime);
-                    } else {
-                        onPageLft();
-                        setTag(id, 0);
-                        super.executeKeyEvent(event);
-                    }
-                }
-                return true;
-            }
-        }
-        // right
-        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            View focus = findFocus();
-            View nextFocus = FocusFinder.getInstance().findNextFocus(this, focus, View.FOCUS_RIGHT);
-            if (null == nextFocus) {
-                int count = event.getRepeatCount();
-                if (count <= 0) {
-
-                    long time;
-                    long downTime = event.getDownTime();
-                    int id = getId();
-
-                    try {
-                        time = (long) getTag(id);
-                    } catch (Exception e) {
-                        time = 0;
-                    }
-
-                    if (time >= 0 || (downTime - Math.abs(time) > 4000)) {
-                        shakeAnim();
-                        setTag(id, -downTime);
-                    } else {
-                        onPageRight();
-                        setTag(id, 0);
-                        super.executeKeyEvent(event);
-                    }
-                }
-                return true;
-            }
-        } else if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            setTag(getId(), 0);
-        }
+//        // left
+//        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+//            View focus = findFocus();
+//            View nextFocus = FocusFinder.getInstance().findNextFocus(this, focus, View.FOCUS_LEFT);
+//            if (null == nextFocus) {
+//                int count = event.getRepeatCount();
+//                if (count <= 0) {
+//
+//                    long time;
+//                    long downTime = event.getDownTime();
+//                    int id = getId();
+//
+//                    try {
+//                        time = (long) getTag(id);
+//                    } catch (Exception e) {
+//                        time = 0;
+//                    }
+//
+//                    if (time <= 0 || (downTime - Math.abs(time) > 4000)) {
+//                        shakeAnim();
+//                        setTag(id, downTime);
+//                    } else {
+//                        onPageLft();
+//                        setTag(id, 0);
+//                        super.executeKeyEvent(event);
+//                    }
+//                }
+//                return true;
+//            }
+//        }
+//        // right
+//        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+//            View focus = findFocus();
+//            View nextFocus = FocusFinder.getInstance().findNextFocus(this, focus, View.FOCUS_RIGHT);
+//            if (null == nextFocus) {
+//                int count = event.getRepeatCount();
+//                if (count <= 0) {
+//
+//                    long time;
+//                    long downTime = event.getDownTime();
+//                    int id = getId();
+//
+//                    try {
+//                        time = (long) getTag(id);
+//                    } catch (Exception e) {
+//                        time = 0;
+//                    }
+//
+//                    if (time >= 0 || (downTime - Math.abs(time) > 4000)) {
+//                        shakeAnim();
+//                        setTag(id, -downTime);
+//                    } else {
+//                        onPageRight();
+//                        setTag(id, 0);
+//                        super.executeKeyEvent(event);
+//                    }
+//                }
+//                return true;
+//            }
+//        } else if (event.getAction() == KeyEvent.ACTION_DOWN) {
+//            setTag(getId(), 0);
+//        }
         return super.dispatchKeyEvent(event);
     }
 

@@ -12,11 +12,11 @@ import androidx.annotation.Nullable;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ItemBridgeAdapter;
 import androidx.leanback.widget.Presenter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
 import lib.kalu.leanback.list.LeanBackVerticalGridView;
-import lib.kalu.leanback.list.RecyclerView;
 import lib.kalu.leanback.util.LeanBackUtil;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.bean.FavBean;
