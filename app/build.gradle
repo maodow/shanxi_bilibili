@@ -106,24 +106,21 @@ android {
     }
 
     packagingOptions {
-        exclude 'META-INF/*.version'
-        exclude 'META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler'
-        exclude 'META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory'
-        exclude 'META-INF/com/android/build/gradle/app-metadata.properties'
-        exclude 'kotlin/**'
         exclude 'DebugProbesKt.bin'
         exclude 'androidsupportmultidexversion.txt'
+        exclude 'META-INF/**'
+        exclude 'okhttp3/**'
+        exclude 'kotlin/**'
     }
-
-//    configurations {
-//        all*.exclude group: 'org.jetbrains', module: 'annotations'
-//        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
-//        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-common'
-//        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
-//        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
-//        all*.exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-android'
-//        all*.exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-core-jvm'
-//    }
+    configurations {
+//        all*.exclude group: 'androidx.emoji2', module: 'emoji2'
+//        all*.exclude group: 'androidx.exifinterface', module: 'exifinterface'
+//        all*.exclude group: 'androidx.vectordrawable', module: 'vectordrawable'
+//        all*.exclude group: 'androidx.vectordrawable', module: 'vectordrawable-animated'
+//        all*.exclude group: 'androidx.customview', module: 'customview'
+//        all*.exclude group: 'androidx.cursoradapter', module: 'cursoradapter'
+//        all*.exclude group: 'androidx.tracing', module: 'tracing'
+    }
 }
 
 
@@ -146,7 +143,7 @@ dependencies {
 
     // core
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0' // 1.2.1
     implementation 'androidx.appcompat:appcompat:1.6.1'
 
     // glide
