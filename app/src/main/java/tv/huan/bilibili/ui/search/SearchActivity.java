@@ -1,5 +1,6 @@
 package tv.huan.bilibili.ui.search;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import lib.kalu.leanback.flexbox.FlexboxLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.keyboard.KeyboardLinearLayout;
 import tv.huan.keyboard.listener.OnKeyboardInputListener;
 
@@ -20,6 +22,12 @@ import tv.huan.keyboard.listener.OnKeyboardInputListener;
  * 搜索
  */
 public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> implements SearchView {
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        return getPresenter().dispatchEvent(event) || super.dispatchKeyEvent(event);
+    }
+
     @Override
     public int initLayout() {
         return R.layout.activity_search;
@@ -30,7 +38,7 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
         // adapter
         getPresenter().setAdapter();
         // request
-        getPresenter().request(null);
+        getPresenter().request(true);
         // listener
         findViewById(R.id.search_clean).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,14 +58,9 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
         keyboardView.setOnKeyboardInputListener(new OnKeyboardInputListener() {
             @Override
             public void onInput(String s) {
-                getPresenter().request(s);
+                getPresenter().request(true);
             }
         });
-    }
-
-    @Override
-    public void refreshContent() {
-        notifyDataSetChanged(R.id.search_list);
     }
 
     @Override
@@ -66,13 +69,10 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
     }
 
     @Override
-    public void showInput(@NonNull String s) {
-        setText(R.id.search_input, s);
-    }
-
-    @Override
-    public void checkNodata(boolean show) {
-        setVisibility(R.id.search_nodata, show ? View.VISIBLE : View.GONE);
+    public void showInput() {
+        KeyboardLinearLayout keyboardView = findViewById(R.id.search_keyboard);
+        String input = keyboardView.getInput();
+        setText(R.id.search_input, input);
     }
 
     @Override
@@ -95,10 +95,5 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
                 }
             });
         }
-    }
-
-    @Override
-    public void showKeys(boolean show) {
-        setVisibility(R.id.keyboard_tags, show ? View.VISIBLE : View.GONE);
     }
 }

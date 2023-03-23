@@ -3,6 +3,7 @@ package tv.huan.bilibili.ui.search;
 import android.content.Context;
 import android.graphics.Rect;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.leanback.list.RecyclerViewGrid;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.SearchBean;
@@ -35,7 +38,6 @@ import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
-import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.keyboard.KeyboardLinearLayout;
 
 public class SearchPresenter extends BasePresenterImpl<SearchView> {
@@ -144,88 +146,114 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
         });
     }
 
-    protected void request(String s) {
-
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+    protected void request(boolean isUpdate) {
+        addDisposable(Observable.create(new ObservableOnSubscribe<CallSearchBean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> emitter) {
-                        emitter.onNext(null != s && s.length() > 0);
-                    }
-                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<SearchBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<SearchBean>> apply(Boolean aBoolean) {
-                        // 搜索key
-                        if (aBoolean) {
-                            return HttpClient.getHttpClient().getHttpApi().searchBySpell(s, 0, Integer.MAX_VALUE, "1");
-                        }
-                        // 搜索推荐
-                        else {
-                            return HttpClient.getHttpClient().getHttpApi().getSearchRecommend(BoxUtil.getProdId(), Integer.MAX_VALUE, "2");
-                        }
-                    }
-                }).map(new Function<BaseResponsedBean<SearchBean>, List<SearchBean.KeyBean>>() {
-                    @Override
-                    public List<SearchBean.KeyBean> apply(BaseResponsedBean<SearchBean> resp) {
+                    public void subscribe(ObservableEmitter<CallSearchBean> emitter) {
 
-                        ArrayList<SearchBean.KeyBean> beans = new ArrayList<>();
-
-                        mData.clear();
-                        String extra = resp.getExtra();
-                        LogUtil.log("SearchPresenter => request => extra = " + extra);
-                        // 搜索key
-                        if ("1".equals(extra)) {
-                            LogUtil.log("SearchPresenter => request => 搜索key");
-                            List<SearchBean.ItemBean> albums = resp.getData().getAlbums();
-                            if (null != albums && albums.size() > 0) {
-                                mData.addAll(albums);
+                        try {
+                            // 1
+                            KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
+                            String input = keyboardView.getInput();
+                            // 2
+                            CallSearchBean searchBean = new CallSearchBean();
+                            searchBean.setInput(input);
+                            if (null == input || input.length() <= 0) {
+                                String s1 = getView().getString(R.string.search_hot);
+                                searchBean.setTitle(s1);
+                            } else {
+                                String string = getView().getString(R.string.search_title, input);
+                                searchBean.setTitle(string);
                             }
+                            // 3
+                            emitter.onNext(searchBean);
+                        } catch (Exception e) {
+                            throw e;
                         }
-                        // 搜索推荐
-                        else if ("2".equals(extra)) {
-                            LogUtil.log("SearchPresenter => request => 搜索推荐");
-                            List<SearchBean.ItemBean> recommends = resp.getData().getRecommends();
-                            if (null != recommends && recommends.size() > 0) {
-                                mData.addAll(recommends);
-                            }
-                            List<SearchBean.KeyBean> keys = resp.getData().getKeys();
-                            if (null != keys) {
-                                beans.addAll(keys);
-                            }
-                        }
-
-                        LogUtil.log("SearchPresenter => request => " + new Gson().toJson(mData));
-                        return beans;
                     }
                 })
-                // 上报
-                .map(new Function<List<SearchBean.KeyBean>, CallSearchBean>() {
+                // 上报 => 搜索关键字
+                .map(new Function<CallSearchBean, CallSearchBean>() {
                     @Override
-                    public CallSearchBean apply(List<SearchBean.KeyBean> data) {
-                        if (null != s && s.length() > 0) {
-                            try {
-                                reportSearchResultItemNum(s);
-                            } catch (Exception e) {
-                            }
+                    public CallSearchBean apply(CallSearchBean data) {
+                        String input = data.getInput();
+                        if (null != input && input.length() > 0) {
+                            reportSearchResultItemNum(input);
+                        }
+                        return data;
+                    }
+                })
+                // 接口 => 请求
+                .flatMap(new Function<CallSearchBean, Observable<BaseResponsedBean<SearchBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<SearchBean>> apply(CallSearchBean data) {
+                        String input = data.getInput();
+                        if (null != input && input.length() > 0) {
+                            int offset = mData.size();
+                            data.setStart(offset);
+                            String s = new Gson().toJson(data);
+                            return HttpClient.getHttpClient().getHttpApi().searchBySpell(input, offset, BuildConfig.HUAN_PAGE_NUM, s);
+                        } else {
+                            data.setStart(0);
+                            String s = new Gson().toJson(data);
+                            return HttpClient.getHttpClient().getHttpApi().getSearchRecommend(BoxUtil.getProdId(), BuildConfig.HUAN_PAGE_NUM, s);
+                        }
+                    }
+                })
+                // 接口 => 数据处理
+                .map(new Function<BaseResponsedBean<SearchBean>, CallSearchBean>() {
+                    @Override
+                    public CallSearchBean apply(BaseResponsedBean<SearchBean> resp) {
+
+                        CallSearchBean searchBean;
+                        try {
+                            searchBean = new Gson().fromJson(resp.getExtra(), CallSearchBean.class);
+                        } catch (Exception e) {
+                            searchBean = new CallSearchBean();
                         }
 
-                        CallSearchBean callSearchBean = new CallSearchBean();
-                        callSearchBean.setTags(data);
-                        if (null == s || s.length() <= 0) {
-                            String s1 = getView().getString(R.string.search_hot);
-                            callSearchBean.setTitle(s1);
+                        String input = searchBean.getInput();
+                        if (null != input && input.length() > 0) {
+                            try {
+                                List<SearchBean.ItemBean> list = resp.getData().getAlbums();
+                                mData.addAll(list);
+                                int size = list.size();
+                                searchBean.setNum(size);
+                            } catch (Exception e) {
+                            }
                         } else {
-                            String string = getView().getString(R.string.search_title, s);
-                            callSearchBean.setTitle(string);
+                            try {
+                                List<SearchBean.KeyBean> keys = resp.getData().getKeys();
+                                searchBean.setTags(keys);
+                            } catch (Exception e1) {
+                            }
+                            try {
+                                List<SearchBean.ItemBean> list = resp.getData().getRecommends();
+                                mData.addAll(list);
+                                int size = list.size();
+                                searchBean.setNum(size);
+                            } catch (Exception e1) {
+                            }
                         }
-                        return callSearchBean;
+                        try {
+                            searchBean.setHasData(mData.size() > 0);
+                        } catch (Exception e) {
+                        }
+                        return searchBean;
                     }
-                }).delay(40, TimeUnit.MILLISECONDS)
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
                 .compose(ComposeSchedulers.io_main())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
-                        getView().showInput(s);
-                        getView().checkNodata(false);
+                        if (isUpdate) {
+                            mData.clear();
+                            getView().notifyDataSetChanged(R.id.search_list);
+                            getView().setVisibility(R.id.search_nodata, View.GONE);
+                        }
+                        getView().setVisibility(R.id.keyboard_tags, View.GONE);
+                        getView().showInput();
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
@@ -237,12 +265,41 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                     @Override
                     public void accept(CallSearchBean data) {
                         getView().hideLoading();
-                        getView().checkNodata(mData.size() <= 0);
                         getView().showTitle(data.getTitle());
-                        getView().showKeys(data.getTags().size() > 0);
-                        getView().updateKeys(data.getTags());
-                        getView().refreshContent();
+                        if (null == data.getTags()) {
+                            getView().setVisibility(R.id.keyboard_tags, View.GONE);
+                        } else {
+                            getView().setVisibility(R.id.keyboard_tags, View.VISIBLE);
+                            if (data.getTags().size() > 0) {
+                                getView().updateKeys(data.getTags());
+                            }
+                        }
+                        getView().notifyItemRangeInserted(R.id.search_list, data.getStart(), data.getNum());
+                        getView().setVisibility(R.id.search_nodata, data.isHasData() ? View.GONE : View.VISIBLE);
+                        if (!isUpdate && data.getNum() <= 0) {
+                            getView().showToast(R.string.common_loadmore_empty);
+                        }
                     }
                 }).subscribe());
+    }
+
+    protected boolean dispatchEvent(KeyEvent event) {
+        // down
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            int focusId = getView().getCurrentFocusId();
+            if (focusId == R.id.search_item) {
+                KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
+                String input = keyboardView.getInput();
+                if (null != input && input.length() > 0) {
+                    RecyclerViewGrid recyclerView = getView().findViewById(R.id.search_list);
+                    int itemCount = recyclerView.getAdapter().getItemCount();
+                    int focusPosition = recyclerView.findFocusPosition();
+                    if (itemCount > 0 && itemCount - focusPosition <= 4) {
+                        request(false);
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

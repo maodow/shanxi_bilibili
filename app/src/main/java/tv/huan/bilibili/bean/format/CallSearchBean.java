@@ -5,8 +5,9 @@ import java.util.List;
 
 import tv.huan.bilibili.bean.SearchBean;
 
-public class CallSearchBean implements Serializable {
+public class CallSearchBean extends CallPageBean implements Serializable {
 
+    private String input;
     private String title;
     private List<tv.huan.bilibili.bean.SearchBean.KeyBean> tags;
 
@@ -24,5 +25,13 @@ public class CallSearchBean implements Serializable {
 
     public void setTags(List<SearchBean.KeyBean> tags) {
         this.tags = tags;
+    }
+
+    public String getInput() {
+        return input;
+    }
+
+    public void setInput(String input) {
+        this.input = input;
     }
 }

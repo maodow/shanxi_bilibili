@@ -9,15 +9,9 @@ import tv.huan.bilibili.bean.SearchBean;
 
 public interface SearchView extends BaseViewImpl {
 
-    void refreshContent();
-
     void showTitle(@NonNull String s);
 
-    void showInput(@NonNull String s);
-
-    void checkNodata(boolean show);
+    void showInput();
 
     void updateKeys(@NonNull List<SearchBean.KeyBean> data);
-
-    void showKeys(boolean show);
 }

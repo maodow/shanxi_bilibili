@@ -1,6 +1,9 @@
 package tv.huan.bilibili.bean.format;
 
 import java.io.Serializable;
+import java.util.List;
+
+import tv.huan.bilibili.bean.SearchBean;
 
 public class CallPageBean implements Serializable {
 
