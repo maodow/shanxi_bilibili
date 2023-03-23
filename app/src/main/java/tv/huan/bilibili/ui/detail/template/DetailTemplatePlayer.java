@@ -15,10 +15,12 @@ import org.json.JSONObject;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
+import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.common.CommonPicView;
@@ -190,15 +192,24 @@ public final class DetailTemplatePlayer extends Presenter {
     }
 
     public void startHuawei(View view, MediaBean data) {
-        try {
-            Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
-            if (null == activity)
-                throw new Exception("activity error: null");
-            if (!(activity instanceof DetailActivity))
-                throw new Exception("activity error: " + activity);
-            ((DetailActivity) activity).huaweiAuth(data.getCid(), data.getTempSeek());
-        } catch (Exception e) {
-            LogUtil.log("DetailTemplatePlayer => startHuawei => " + e.getMessage());
+        if (BuildConfig.HUAN_HUAWEI_AUTH) {
+            try {
+                Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
+                if (null == activity)
+                    throw new Exception("activity error: null");
+                if (!(activity instanceof DetailActivity))
+                    throw new Exception("activity error: " + activity);
+                ((DetailActivity) activity).huaweiAuth(data.getCid(), data.getTempSeek());
+            } catch (Exception e) {
+                LogUtil.log("DetailTemplatePlayer => startHuawei => " + e.getMessage());
+            }
+        } else {
+            try {
+                String url = BoxUtil.getTestVideoUrl();
+                startPlayer(view, url, 0);
+            } catch (Exception e) {
+                LogUtil.log("DetailTemplatePlayer => startHuawei => " + e.getMessage());
+            }
         }
     }
 
@@ -211,6 +222,7 @@ public final class DetailTemplatePlayer extends Presenter {
             return 0;
         }
     }
+
     public long getDuration(View view) {
         try {
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
@@ -220,6 +232,7 @@ public final class DetailTemplatePlayer extends Presenter {
             return 0;
         }
     }
+
     public void stopPlayer(View view) {
         try {
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);

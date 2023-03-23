@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.core.component.ComponentApi;
-import lib.kalu.mediaplayer.util.MPLogUtil;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;

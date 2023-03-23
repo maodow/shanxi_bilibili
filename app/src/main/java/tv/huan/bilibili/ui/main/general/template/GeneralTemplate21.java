@@ -23,6 +23,7 @@ import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.ui.main.MainActivity;
+import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate21;
@@ -68,13 +69,13 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
                         try {
                             int position = viewHolder.getAbsoluteAdapterPosition();
                             if (position >= 0) {
+                                stopPlayer(contentView);
                                 GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
                                 updateContent(contentView, templateBean);
                             }
                         } catch (Exception e) {
                         }
                     } else {
-                        stopPlayer(contentView);
                     }
 
                     // name
@@ -106,9 +107,14 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
     protected void onBindHolder(@NonNull View contentView, @NonNull View view1, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
 
         if (position == 0) {
-            boolean playerUrlNull = isPlayerUrlNull(contentView);
-            if (playerUrlNull) {
+            try {
+                int id = contentView.getId();
+                Object tag = contentView.getTag(id);
+                if (null != tag)
+                    throw new Exception("tag warning: " + tag);
+                contentView.setTag(id, 1);
                 updateContent(contentView, templateBean);
+            } catch (Exception e) {
             }
         }
 
@@ -187,16 +193,26 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
             PlayerViewTemplate21 playerView = view.findViewById(R.id.general_template21_player);
             PlayerComponentInitTemplate21 component = playerView.findComponent(PlayerComponentInitTemplate21.class);
             if (null != component) {
-                component.showImage(templateBean.getPicture(true));
+                String picture = templateBean.getPicture(true);
+                component.showImage(picture);
             }
         } catch (Exception e) {
         }
-        try {
-            Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
-            if (null != activity && activity instanceof MainActivity) {
-                ((MainActivity) activity).huaweiAuth(GeneralTemplate21.class, GeneralTemplate21.GeneralTemplate21List.class, templateBean.getHuaweiId());
+
+        if (BuildConfig.HUAN_HUAWEI_AUTH) {
+            try {
+                Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
+                if (null != activity && activity instanceof MainActivity) {
+                    ((MainActivity) activity).huaweiAuth(GeneralTemplate21.class, GeneralTemplate21.GeneralTemplate21List.class, templateBean.getHuaweiId());
+                }
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
+        } else {
+            try {
+                String url = BoxUtil.getTestVideoUrl();
+                startPlayer(view, url);
+            } catch (Exception e) {
+            }
         }
     }
 
@@ -260,6 +276,7 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
             PlayerView playerView = inflate.findViewById(R.id.general_template21_player);
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(true);
+            builder.setDelay(3000);
             playerView.start(builder.build(), s);
         } catch (Exception e) {
         }

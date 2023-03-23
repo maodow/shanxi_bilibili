@@ -23,6 +23,7 @@ import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.ui.main.MainActivity;
+import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate21;
@@ -120,12 +121,21 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                 }
             } catch (Exception e) {
             }
-            try {
-                Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
-                if (null != activity && activity instanceof MainActivity) {
-                    ((MainActivity) activity).huaweiAuth(GeneralTemplate22.class, GeneralTemplate22.GeneralTemplate22List.class, templateBean.getHuaweiId());
+
+            if (BuildConfig.HUAN_HUAWEI_AUTH) {
+                try {
+                    Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
+                    if (null != activity && activity instanceof MainActivity) {
+                        ((MainActivity) activity).huaweiAuth(GeneralTemplate22.class, GeneralTemplate22.GeneralTemplate22List.class, templateBean.getHuaweiId());
+                    }
+                } catch (Exception e) {
                 }
-            } catch (Exception e) {
+            } else {
+                try {
+                    String url = BoxUtil.getTestVideoUrl();
+                    startPlayer(view, url);
+                } catch (Exception e) {
+                }
             }
         }
         // img
@@ -222,6 +232,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(true);
+            builder.setDelay(3000);
             playerView.start(builder.build(), s);
         } catch (Exception e) {
         }

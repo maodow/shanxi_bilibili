@@ -40,9 +40,6 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
     }
 
     public String getTempVideoUrl() {
-        //        return "http://39.134.19.248:6610/yinhe/2/ch00000090990000001335/index.m3u8?virtualDomain=yinhe.live_hls.zte.com";
-//        return "http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&amp;bizid=1023&amp;hy=SH&amp;fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400";
-//        return "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
         return tempVideoUrl;
     }
 
