@@ -68,7 +68,7 @@ android {
             applicationIdSuffix ".heilongjiang"
             versionNameSuffix ".heilongjiang"
             manifestPlaceholders = [design_width_in_dp_value: "960", design_height_in_dp_value: "540"]
-            buildConfigField("int", "HUAN_PAGE_NUM", "6")//分页大小
+            buildConfigField("int", "HUAN_PAGE_NUM", "100")//分页大小
             buildConfigField("boolean", "HUAN_AUTH", "true")  // 鉴权开关
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false")// 换肤skin
