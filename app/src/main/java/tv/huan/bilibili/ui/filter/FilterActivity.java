@@ -52,11 +52,10 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
         classLayout.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onChecked(@NonNull boolean b, @NonNull int i, @NonNull String s, @NonNull String s1) {
-                LogUtil.log("FilterActivity => onChecked => index = " + i + ", name = " + s);
                 if (i == 0) {
-                    getPresenter().searchAlbumByTypeNews();
+                    getPresenter().searchAlbumByTypeNews(true);
                 } else {
-                    getPresenter().requestContent(s1);
+                    getPresenter().requestContent(true);
                 }
             }
         });
@@ -70,14 +69,14 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
         tagsLayout.setOnTagsChangeListener(new OnTagsChangeListener() {
             @Override
             public void onChange(@NonNull int row, @NonNull int col, @NonNull Map<String, String> m) {
-                getPresenter().searchAlbumByTypeNews();
+                getPresenter().searchAlbumByTypeNews(true);
             }
         });
     }
 
     @Override
-    public void checkNodata(boolean show) {
-        setVisibility(R.id.filter_nodata, show ? View.VISIBLE : View.GONE);
+    public void checkNodata(boolean hasData) {
+        setVisibility(R.id.filter_nodata, hasData ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -88,8 +87,8 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
     }
 
     @Override
-    public void refreshContent() {
-        notifyDataSetChanged(R.id.filter_content);
+    public void refreshContent(int start, int num) {
+        notifyItemRangeInserted(R.id.filter_content, start, num);
     }
 
     @Override
@@ -102,8 +101,4 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
         ClassScrollView classLayout = findViewById(R.id.filter_class);
         classLayout.clearFocus();
     }
-
-//    @Override
-//    public void requestFocusClass() {
-//    }
 }

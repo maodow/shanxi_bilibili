@@ -1,9 +1,5 @@
 apply plugin: 'com.android.application'
 
-def static releaseTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
-}
-
 android {
 
     namespace 'tv.huan.bilibili'
@@ -50,7 +46,6 @@ android {
             buildConfigField("boolean", "HUAN_SKIN", "false")// 换肤skin
             buildConfigField("boolean", "HUAN_CHECK_USERID", "true")  // 检测userId获取是否正常
             buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false") // 测试模板1-22
-//            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8188/mediaApi/\"")
             buildConfigField("int", "HUAN_TYPE_GETFISH", "310")//垂钓
             buildConfigField("int", "HUAN_TYPE_LIFE", "309")//茶文化
@@ -73,13 +68,12 @@ android {
             applicationIdSuffix ".heilongjiang"
             versionNameSuffix ".heilongjiang"
             manifestPlaceholders = [design_width_in_dp_value: "960", design_height_in_dp_value: "540"]
-            buildConfigField("int", "HUAN_PAGE_NUM", "100")//分页大小
+            buildConfigField("int", "HUAN_PAGE_NUM", "6")//分页大小
             buildConfigField("boolean", "HUAN_AUTH", "true")  // 鉴权开关
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false")// 换肤skin
             buildConfigField("boolean", "HUAN_CHECK_USERID", "false")  // 检测userId获取是否正常
             buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false") // 测试模板1-22
-//            buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8096/mediaApi/\"")
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.222:8188/mediaApi/\"")
             buildConfigField("int", "HUAN_TYPE_GETFISH", "310")//垂钓
             buildConfigField("int", "HUAN_TYPE_LIFE", "309")//茶文化
@@ -103,8 +97,13 @@ android {
     //打包APK默认名称格式
     android.applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = "Huan_Bilibili_Heilongjiang_" + "${variant.mergedFlavor.versionName}_${releaseTime()}.apk"
+            def time = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08"))
+            outputFileName = "Huan_Bilibili_Heilongjiang_" + "${variant.mergedFlavor.versionName}_${time}.apk"
         }
+    }
+
+    aaptOptions {
+        cruncherEnabled = true // aapt优化图片png
     }
 
     packagingOptions {

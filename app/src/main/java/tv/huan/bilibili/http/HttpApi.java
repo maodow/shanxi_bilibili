@@ -107,7 +107,8 @@ public interface HttpApi {
 
     // 获取筛选结果
     @POST("album/searchAlbumByTypeNews")
-    Observable<BaseResponsedBean<SearchAlbumByTypeNews>> searchAlbumByTypeNews(@Body RequestBody requestBody);
+    Observable<BaseResponsedBean<SearchAlbumByTypeNews>> searchAlbumByTypeNews(@Body RequestBody requestBody,
+                                                                               @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     // 获取播放记录
     @GET("data/getBookmark2")

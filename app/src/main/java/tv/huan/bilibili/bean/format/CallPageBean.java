@@ -2,7 +2,7 @@ package tv.huan.bilibili.bean.format;
 
 import java.io.Serializable;
 
-public class CallCenterBean implements Serializable {
+public class CallPageBean implements Serializable {
 
     private int start;
     private int num;

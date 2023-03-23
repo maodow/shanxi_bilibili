@@ -38,6 +38,7 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
+import lib.kalu.leanback.list.RecyclerViewGrid;
 import lib.kalu.leanback.tags.TagsLayout;
 import lib.kalu.leanback.tags.model.TagBean;
 import okhttp3.MediaType;
@@ -50,6 +51,7 @@ import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallFilterBean;
+import tv.huan.bilibili.bean.format.CallPageBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -392,67 +394,83 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         getView().hideLoading();
                         getView().refreshTags(data.getFilterTags());
                         getView().refreshClass(data.getFilterClass(), data.getFilterTitle(), data.getFilterCheckPosition());
-                        if (mData.size() > 0) {
-                            getView().refreshContent();
+                        int size = mData.size();
+                        if (size > 0) {
+                            getView().refreshContent(0, size);
                             getView().requestFocusList();
                         } else {
                             getView().cleanFocusClass();
                         }
-                        getView().checkNodata(mData.size() <= 0);
+                        getView().checkNodata(size > 0);
                         getView().checkTags();
                     }
                 }).subscribe());
     }
 
-    protected void searchAlbumByTypeNews() {
+    protected void searchAlbumByTypeNews(boolean switchTab) {
 
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<JSONObject>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> emitter) {
-                        emitter.onNext(true);
-                    }
-                }).flatMap(new Function<Boolean, ObservableSource<BaseResponsedBean<SearchAlbumByTypeNews>>>() {
-                    @Override
-                    public ObservableSource<BaseResponsedBean<SearchAlbumByTypeNews>> apply(Boolean aBoolean) {
-
-                        TagsLayout tagsLinearLayout = getView().findViewById(R.id.filter_tags);
-                        Map<String, String> hashMap = tagsLinearLayout.getData();
-                        for (String key : hashMap.keySet()) {
-                            String s = hashMap.get(key);
-                            if ("全部".equals(s)) {
-                                hashMap.put(key, "");
-                            }
-                        }
-
-                        int classId = getView().getIntExtra(FilterActivity.INTENT_CLASSID, 0);
-                        JSONObject object = new JSONObject();
+                    public void subscribe(ObservableEmitter<JSONObject> emitter) throws Exception {
                         try {
+                            // 1
+                            JSONObject object = new JSONObject();
+                            // 2
+                            int offset = mData.size();
                             object.putOpt("prodId", BoxUtil.getProdId());
-                            object.putOpt("offset", 0);
-                            object.putOpt("size", Integer.MAX_VALUE);
+                            object.putOpt("offset", offset);
+                            object.putOpt("size", BuildConfig.HUAN_PAGE_NUM);
+                            int classId = getView().getIntExtra(FilterActivity.INTENT_CLASSID, 0);
                             object.putOpt("classId", classId);
-                        } catch (Exception e) {
-                        }
-                        try {
-                            for (String key : hashMap.keySet()) {
-                                if (null == key || key.length() == 0) continue;
-                                object.putOpt(key, hashMap.get(key));
+                            // 2
+                            TagsLayout tagsLayout = getView().findViewById(R.id.filter_tags);
+                            Map<String, String> map = tagsLayout.getData();
+                            for (String key : map.keySet()) {
+                                if (null == key || key.length() <= 0)
+                                    continue;
+                                String value = map.get(key);
+                                if ("全部".equals(value))
+                                    continue;
+                                object.putOpt(key, value);
                             }
+                            // 3
+                            emitter.onNext(object);
                         } catch (Exception e) {
+                            throw new Exception();
                         }
-                        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-                        RequestBody requestBody = RequestBody.create(mediaType, object.toString());
-                        return HttpClient.getHttpClient().getHttpApi().searchAlbumByTypeNews(requestBody);
                     }
-                }).map(new Function<BaseResponsedBean<SearchAlbumByTypeNews>, Boolean>() {
+                })
+                // 接口 => 筛选结果
+                .flatMap(new Function<JSONObject, ObservableSource<BaseResponsedBean<SearchAlbumByTypeNews>>>() {
                     @Override
-                    public Boolean apply(BaseResponsedBean<SearchAlbumByTypeNews> searchAlbumByTypeNewsBaseResponsedBean) {
+                    public ObservableSource<BaseResponsedBean<SearchAlbumByTypeNews>> apply(JSONObject data) {
+                        int offset = data.optInt("offset", 0);
+                        CallPageBean pageBean = new CallPageBean();
+                        pageBean.setStart(offset);
+                        String s = new Gson().toJson(pageBean);
+                        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+                        RequestBody requestBody = RequestBody.create(mediaType, data.toString());
+                        return HttpClient.getHttpClient().getHttpApi().searchAlbumByTypeNews(requestBody, s);
+                    }
+                })
+                // 数据处理 => 筛选结果
+                .map(new Function<BaseResponsedBean<SearchAlbumByTypeNews>, CallPageBean>() {
+                    @Override
+                    public CallPageBean apply(BaseResponsedBean<SearchAlbumByTypeNews> resp) {
+                        CallPageBean pageBean;
                         try {
-                            mData.clear();
-                            mData.addAll(searchAlbumByTypeNewsBaseResponsedBean.getData().getAlbums());
+                            pageBean = new Gson().fromJson(resp.getExtra(), CallPageBean.class);
+                        } catch (Exception e) {
+                            pageBean = new CallPageBean();
+                        }
+                        try {
+                            List<GetSecondTagAlbumsBean.ItemBean> list = resp.getData().getAlbums();
+                            mData.addAll(list);
+                            pageBean.setNum(list.size());
+                            pageBean.setHasData(mData.size() > 0);
                         } catch (Exception e) {
                         }
-                        return true;
+                        return pageBean;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -460,69 +478,83 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
-                        try {
+                        if (switchTab) {
                             mData.clear();
-                        } catch (Exception e) {
+                            getView().notifyDataSetChanged(R.id.filter_content);
+                            getView().checkNodata(false);
                         }
-                        getView().refreshContent();
-                        getView().checkNodata(false);
-                        getView().checkTags();
-                        // loading
+                        if (switchTab) {
+                            getView().checkTags();
+                        }
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        try {
-                            mData.clear();
-                        } catch (Exception e) {
-                        }
-                        // loading
                         getView().hideLoading();
-                        getView().refreshContent();
-                        getView().checkNodata(mData.size() <= 0);
                     }
                 }).doOnComplete(new Action() {
                     @Override
                     public void run() {
-                        // loading
                         getView().hideLoading();
                     }
-                }).doOnNext(new Consumer<Boolean>() {
+                }).doOnNext(new Consumer<CallPageBean>() {
                     @Override
-                    public void accept(Boolean aBoolean) {
-                        // loading
+                    public void accept(CallPageBean data) {
                         getView().hideLoading();
-                        getView().refreshContent();
-                        getView().checkNodata(mData.size() <= 0);
+                        getView().refreshContent(data.getStart(), data.getNum());
+                        getView().checkNodata(data.isHasData());
+                        if (!switchTab && data.getNum() <= 0) {
+                            getView().showToast(R.string.common_loadmore_empty);
+                        }
                     }
                 }).subscribe());
     }
 
-    protected void requestContent(@NonNull String classId) {
+    protected void requestContent(boolean switchTab) {
 
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Integer>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        observableEmitter.onNext(true);
-                    }
-                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<GetSecondTagAlbumsBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<GetSecondTagAlbumsBean>> apply(Boolean aBoolean) {
-                        int id = Integer.parseInt(classId);
-                        return HttpClient.getHttpClient().getHttpApi().getSecondTagAlbums(id, 0, Integer.MAX_VALUE, null);
-                    }
-                }).map(new Function<BaseResponsedBean<GetSecondTagAlbumsBean>, Boolean>() {
-                    @Override
-                    public Boolean apply(BaseResponsedBean<GetSecondTagAlbumsBean> response) {
-
+                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
                         try {
-                            mData.clear();
-                            mData.addAll(response.getData().getAlbums());
+                            ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
+                            CharSequence code = classLayout.getCheckedCode();
+                            int parseInt = Integer.parseInt(code.toString());
+                            emitter.onNext(parseInt);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            throw new Exception();
                         }
-                        return true;
+                    }
+                })
+                // 接口 => 查询数据库中某个分类的所有绑定专辑信息
+                .flatMap(new Function<Integer, Observable<BaseResponsedBean<GetSecondTagAlbumsBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<GetSecondTagAlbumsBean>> apply(Integer id) {
+                        int offset = mData.size();
+                        CallPageBean pageBean = new CallPageBean();
+                        pageBean.setStart(offset);
+                        String s = new Gson().toJson(pageBean);
+                        return HttpClient.getHttpClient().getHttpApi().getSecondTagAlbums(id, offset, BuildConfig.HUAN_PAGE_NUM, s);
+                    }
+                })
+                // 数据处理 => 查询数据库中某个分类的所有绑定专辑信息
+                .map(new Function<BaseResponsedBean<GetSecondTagAlbumsBean>, CallPageBean>() {
+                    @Override
+                    public CallPageBean apply(BaseResponsedBean<GetSecondTagAlbumsBean> resp) {
+                        CallPageBean pageBean;
+                        try {
+                            pageBean = new Gson().fromJson(resp.getExtra(), CallPageBean.class);
+                        } catch (Exception e) {
+                            pageBean = new CallPageBean();
+                        }
+                        try {
+                            List<GetSecondTagAlbumsBean.ItemBean> list = resp.getData().getAlbums();
+                            pageBean.setNum(list.size());
+                            mData.addAll(list);
+                            pageBean.setHasData(mData.size() > 0);
+                        } catch (Exception e) {
+                        }
+                        return pageBean;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -530,36 +562,35 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
-                        try {
+                        if (switchTab) {
                             mData.clear();
-                        } catch (Exception e) {
+                            getView().notifyDataSetChanged(R.id.filter_content);
+                            getView().checkNodata(false);
                         }
-                        getView().refreshContent();
-                        getView().checkNodata(false);
-                        getView().checkTags();
-                        // loading
+                        if (switchTab) {
+                            getView().checkTags();
+                        }
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        // loading
                         getView().hideLoading();
-                        getView().checkNodata(mData.size() <= 0);
                     }
                 }).doOnComplete(new Action() {
                     @Override
                     public void run() {
-                        // loading
                         getView().hideLoading();
                     }
-                }).doOnNext(new Consumer<Boolean>() {
+                }).doOnNext(new Consumer<CallPageBean>() {
                     @Override
-                    public void accept(Boolean aBoolean) {
-                        // loading
+                    public void accept(CallPageBean data) {
                         getView().hideLoading();
-                        getView().refreshContent();
-                        getView().checkNodata(mData.size() <= 0);
+                        getView().refreshContent(data.getStart(), data.getNum());
+                        getView().checkNodata(data.isHasData());
+                        if (!switchTab && data.getNum() <= 0) {
+                            getView().showToast(R.string.common_loadmore_empty);
+                        }
                     }
                 }).subscribe());
     }
@@ -594,10 +625,20 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 getView().setFocusable(R.id.filter_vip, false);
                 return true;
             } else if (focusId == R.id.filter_item) {
-                RecyclerView recyclerView = getView().findViewById(R.id.filter_content);
+                RecyclerViewGrid recyclerView = getView().findViewById(R.id.filter_content);
                 int itemCount = recyclerView.getAdapter().getItemCount();
                 if (itemCount > 5) {
                     getView().setVisibility(R.id.filter_tags, View.GONE);
+                }
+                int focusPosition = recyclerView.findFocusPosition();
+                if (itemCount > 0 && itemCount - focusPosition <= 5) {
+                    ClassScrollView scrollView = getView().findViewById(R.id.filter_class);
+                    int checkedIndex = scrollView.getCheckedIndex();
+                    if (checkedIndex == 0) {
+                        searchAlbumByTypeNews(false);
+                    } else {
+                        requestContent(false);
+                    }
                 }
             }
         }

@@ -37,7 +37,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
-import tv.huan.bilibili.bean.format.CallCenterBean;
+import tv.huan.bilibili.bean.format.CallPageBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -233,7 +233,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         } else {
                             offset = mDatas.size();
                         }
-                        CallCenterBean centerBean = new CallCenterBean();
+                        CallPageBean centerBean = new CallPageBean();
                         centerBean.setStart(offset);
                         String s = new Gson().toJson(centerBean);
                         // 观看历史
@@ -247,15 +247,15 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     }
                 })
                 // 数据处理
-                .map(new Function<BaseResponsedBean<FavBean>, CallCenterBean>() {
+                .map(new Function<BaseResponsedBean<FavBean>, CallPageBean>() {
                     @Override
-                    public CallCenterBean apply(BaseResponsedBean<FavBean> response) {
+                    public CallPageBean apply(BaseResponsedBean<FavBean> response) {
 
-                        CallCenterBean centerBean;
+                        CallPageBean centerBean;
                         try {
-                            centerBean = new Gson().fromJson(response.getExtra(), CallCenterBean.class);
+                            centerBean = new Gson().fromJson(response.getExtra(), CallPageBean.class);
                         } catch (Exception e) {
-                            centerBean = new CallCenterBean();
+                            centerBean = new CallPageBean();
                         }
 
                         try {
@@ -286,9 +286,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
                     }
-                }).doOnNext(new Consumer<CallCenterBean>() {
+                }).doOnNext(new Consumer<CallPageBean>() {
                     @Override
-                    public void accept(CallCenterBean data) {
+                    public void accept(CallPageBean data) {
                         getView().hideLoading();
                         getView().checkNodata(data.isHasData());
                         if (data.getNum() > 0) {

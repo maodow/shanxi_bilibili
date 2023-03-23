@@ -42,7 +42,6 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
 
             @Override
             public void onChecked(@NonNull boolean b, @NonNull int i, @NonNull String s, @NonNull String s1) {
-                LogUtil.log("CenterActivity => onChecked => isFromUser = " + b + ", index = " + i + ", name = " + s);
                 getPresenter().request(i, b, true);
             }
         });
