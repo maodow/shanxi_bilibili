@@ -75,7 +75,6 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
                             }
                         } catch (Exception e) {
                         }
-                    } else {
                     }
 
                     // name
