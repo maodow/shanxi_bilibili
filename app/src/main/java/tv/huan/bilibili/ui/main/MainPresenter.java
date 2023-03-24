@@ -117,6 +117,11 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                         bundle.putString(GeneralFragment.BUNDLE_NAME, bean.getName());
                         bundle.putInt(GeneralFragment.BUNDLE_CHANNELID, bean.getId());
                         bundle.putInt(GeneralFragment.BUNDLE_CLASSID, bean.getClassId());
+                        if (null != bean.getImgs() && null != bean.getImgs().getPoster() && bean.getImgs().getPoster().length() > 0) {
+                            bundle.putString(GeneralFragment.BUNDLE_POSTER, bean.getImgs().getPoster());
+                        } else {
+                            bundle.putString(GeneralFragment.BUNDLE_POSTER, "");
+                        }
                         if (position == 0) {
                             fragment = new MineFragment();
                         } else {
@@ -398,41 +403,6 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                         getView().showDialog(s);
                     }
                 }).subscribe());
-    }
-
-    protected void showBackground(int position) {
-        addDisposable(Observable.create(new ObservableOnSubscribe<Drawable>() {
-            @Override
-            public void subscribe(ObservableEmitter<Drawable> emitter) throws Exception {
-                try {
-                    String extra = getView().getStringExtra(MainActivity.INTENT_TABS);
-                    Type type = new TypeToken<List<GetChannelsBean.ItemBean>>() {
-                    }.getType();
-                    List<GetChannelsBean.ItemBean> datas = new Gson().fromJson(extra, type);
-                    GetChannelsBean.ItemBean bean = datas.get(position);
-                    String poster = bean.getImgs().getPoster();
-                    if (null == poster || poster.length() <= 0) throw new Exception("url is null");
-                    RequestOptions options = new RequestOptions().dontAnimate().dontTransform().dontAnimate().dontTransform().encodeQuality(40).format(DecodeFormat.PREFER_RGB_565).priority(Priority.LOW).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false);
-                    Drawable drawable = Glide.with(getView().getContext()).load(poster).apply(options).submit().get();
-                    if (null == drawable) throw new Exception("drawable is null");
-                    emitter.onNext(drawable);
-                } catch (Exception e) {
-                    throw new Exception();
-                }
-            }
-        }).compose(ComposeSchedulers.io_main()).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) {
-//                        LogUtil.log("MainPresenter => refreshBackground => fail");
-                getView().setWindowBackgroundColorRes(R.color.color_171819);
-            }
-        }).doOnNext(new Consumer<Drawable>() {
-            @Override
-            public void accept(Drawable drawable) {
-//                        LogUtil.log("MainPresenter => refreshBackground => succ");
-                getView().setWindowBackgroundDrawable(drawable);
-            }
-        }).subscribe());
     }
 
     protected <T extends androidx.leanback.widget.Presenter> void requestHuaweiAuth(Class<T> cls, Class<?> obj, String cid) {

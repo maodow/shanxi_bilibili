@@ -82,7 +82,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             @Override
             public void onChecked(int i, int i1) {
                 stopFullPlayer();
-                getPresenter().showBackground(i);
                 getPresenter().showFragment(i);
             }
         });

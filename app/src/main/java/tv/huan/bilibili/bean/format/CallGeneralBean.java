@@ -8,13 +8,13 @@ import tv.huan.bilibili.bean.base.BaseDataBean;
 
 public final class CallGeneralBean extends BaseDataBean implements Serializable {
 
-    private List<GetSubChannelsByChannelBean.ListBean> datas;
+    private List<GetSubChannelsByChannelBean.ListBean> templateDatas;
 
-    public List<GetSubChannelsByChannelBean.ListBean> getDatas() {
-        return datas;
+    public List<GetSubChannelsByChannelBean.ListBean> getTemplateDatas() {
+        return templateDatas;
     }
 
-    public void setDatas(List<GetSubChannelsByChannelBean.ListBean> datas) {
-        this.datas = datas;
+    public void setTemplateDatas(List<GetSubChannelsByChannelBean.ListBean> templateDatas) {
+        this.templateDatas = templateDatas;
     }
 }

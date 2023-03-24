@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?><!-- 属性focusOutFront : https://www.cnblogs.com/DayaoBin/p/15687183.html -->
-<tv.huan.bilibili.widget.GeneralGridView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/general_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
-    android:clipToPadding="false"
-    android:paddingTop="@dimen/dp_12"
-    android:paddingBottom="@dimen/dp_12"
-    app:focusOutEnd="true"
-    app:focusOutFront="true" />
+    android:clipToPadding="false">
+
+    <tv.huan.bilibili.widget.GeneralGridView
+        android:id="@+id/general_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/dp_12"
+        android:paddingBottom="@dimen/dp_12"
+        app:focusOutEnd="true"
+        app:focusOutFront="true" />
+
+    <!-- noData -->
+    <ImageView
+        android:id="@+id/general_nodata"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_177"
+        android:layout_centerInParent="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_nodata"
+        android:visibility="gone" />
+
+</RelativeLayout>
