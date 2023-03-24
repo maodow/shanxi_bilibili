@@ -39,9 +39,7 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
 
     @Override
     public void initData() {
-        // adapter
         getPresenter().setAdapter();
-        // request
         getPresenter().request();
     }
 

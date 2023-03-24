@@ -220,7 +220,6 @@ public class ExitDialog extends DialogFragment implements DialogInterface.OnKeyL
                     continue;
                 list.add(exitBean);
             }
-            LogUtil.log("ExitDialog => setAdapter => data = " + new Gson().toJson(list));
             if (null == list || list.size() <= 0)
                 throw new Exception("list error: " + list);
             RecyclerView recyclerView = dialog.findViewById(R.id.dialog_exit_list);

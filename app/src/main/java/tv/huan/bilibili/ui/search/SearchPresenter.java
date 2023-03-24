@@ -29,6 +29,7 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.frame.mvp.util.OffsetUtil;
 import lib.kalu.leanback.list.RecyclerViewGrid;
+import lib.kalu.leanback.list.layoutmanager.AutoMeasureNoGridLayoutManager;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
@@ -52,8 +53,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
     protected void setAdapter() {
         Context context = getView().getContext();
         RecyclerView recyclerView = getView().findViewById(R.id.search_list);
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 4);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new AutoMeasureNoGridLayoutManager(context, 4));
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -190,7 +190,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                     public Observable<BaseResponsedBean<SearchBean>> apply(CallSearchBean data) {
                         String input = data.getInput();
                         if (null != input && input.length() > 0) {
-                            int offset = OffsetUtil.getOffset(mData, BuildConfig.HUAN_PAGE_NUM);
+                            int offset = OffsetUtil.getOffset(mData);
                             data.setStart(offset);
                             String s = new Gson().toJson(data);
                             return HttpClient.getHttpClient().getHttpApi().searchBySpell(input, offset, BuildConfig.HUAN_PAGE_NUM, s);

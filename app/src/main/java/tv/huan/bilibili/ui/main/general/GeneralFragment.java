@@ -24,6 +24,12 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getPresenter().requestBookmark();
+    }
+
+    @Override
     public void initData() {
         // adapter
         getPresenter().setAdapter();
@@ -42,11 +48,6 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
                 ((MainActivity) getActivity()).hideTitle();
             }
         });
-    }
-
-    @Override
-    public void refreshContent() {
-        notifyDataSetChanged(R.id.general_list);
     }
 
     @Override
@@ -71,11 +72,5 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
     public <T extends Presenter> void startPlayerFromHuawei(Class<T> cls, Class<?> obj, String s) {
         GeneralGridView gridView = findViewById(R.id.general_list);
         gridView.startPlayerFromHuawei(cls, obj, s);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getPresenter().requestBookmark();
     }
 }

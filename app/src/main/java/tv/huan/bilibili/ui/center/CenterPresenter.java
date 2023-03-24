@@ -33,6 +33,7 @@ import lib.kalu.frame.mvp.util.OffsetUtil;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
 import lib.kalu.leanback.list.RecyclerViewGrid;
+import lib.kalu.leanback.list.layoutmanager.AutoMeasureNoGridLayoutManager;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
@@ -56,8 +57,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
     protected void setAdapter() {
         Context context = getView().getContext();
         RecyclerView recyclerView = getView().findViewById(R.id.center_list);
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 4);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new AutoMeasureNoGridLayoutManager(context, 4));
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -228,7 +228,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
                     public Observable<BaseResponsedBean<FavBean>> apply(Boolean v) {
-                        int offset = OffsetUtil.getOffset(mDatas, BuildConfig.HUAN_PAGE_NUM);
+                        int offset = OffsetUtil.getOffset(mDatas);
                         CallPageBean centerBean = new CallPageBean();
                         centerBean.setStart(offset);
                         String s = new Gson().toJson(centerBean);
@@ -288,7 +288,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         getView().hideLoading();
                         getView().setVisibility(R.id.center_nodata, data.isHasData() ? View.GONE : View.VISIBLE);
                         if (data.getNum() > 0) {
-                            getView().refreshContent(data.getStart(), data.getNum());
+                            getView().notifyItemRangeInserted(R.id.center_list, data.getStart(), data.getNum());
                         } else if (!switchTab) {
                             getView().showToast(R.string.common_loadmore_empty);
                         }

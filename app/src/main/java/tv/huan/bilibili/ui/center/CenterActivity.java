@@ -49,11 +49,6 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     }
 
     @Override
-    public void refreshContent(int start, int num) {
-        notifyItemRangeInserted(R.id.center_list, start, num);
-    }
-
-    @Override
     public void updateFocus() {
         setFocusable(R.id.center_search, true);
         setFocusable(R.id.center_vip, true);

@@ -78,7 +78,7 @@ android {
             buildConfigField("int", "HUAN_TYPE_TELEPLAY", "301")//电视剧
             buildConfigField("int", "HUAN_TYPE_FILM", "300")//电影
             buildConfigField("int", "HUAN_PAGE_NUM", "100") // 接口分页num
-            buildConfigField("boolean", "HUAN_TOAST", "false")  // 提示Toast
+            buildConfigField("boolean", "HUAN_TOAST_THROWABLE", "false") // 提示Throwable_Toast
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false") // 换肤skin => 暂无
             buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "false") // 华为鉴权播放开关
@@ -104,7 +104,7 @@ android {
             buildConfigField("int", "HUAN_TYPE_TELEPLAY", "301")//电视剧
             buildConfigField("int", "HUAN_TYPE_FILM", "300")//电影
             buildConfigField("int", "HUAN_PAGE_NUM", "100") // 接口分页num
-            buildConfigField("boolean", "HUAN_TOAST", "true")  // 提示Toast
+            buildConfigField("boolean", "HUAN_TOAST_THROWABLE", "true") // 提示Throwable_Toast
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false") // 换肤skin => 暂无
             buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "true") // 华为鉴权播放开关

@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -74,45 +75,6 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
 
     protected final void request() {
 
-        VerticalGridView verticalGridView = getView().findViewById(R.id.general_list);
-        RecyclerView.Adapter objectAdapter = verticalGridView.getAdapter();
-        int itemCount = objectAdapter.getItemCount();
-        if (itemCount <= 0) {
-            getSubChannelsByChannel();
-        } else {
-            refreshTemplate17Rec();
-        }
-    }
-
-    private void refreshTemplate17Rec() {
-        try {
-            // 1
-            VerticalGridView verticalGridView = getView().findViewById(R.id.general_list);
-            ItemBridgeAdapter objectAdapter = (ItemBridgeAdapter) verticalGridView.getAdapter();
-            ArrayObjectAdapter arrayObjectAdapter = (ArrayObjectAdapter) objectAdapter.getAdapter();
-
-            int position = -1;
-            int size = arrayObjectAdapter.size();
-            for (int i = 0; i < size; i++) {
-                Object o = arrayObjectAdapter.get(i);
-                if (null == o)
-                    continue;
-                if (o instanceof GeneralTemplate17.GeneralTemplate17List) {
-                    position = i;
-                    break;
-                }
-            }
-            // update
-            if (position != -1) {
-                arrayObjectAdapter.notifyArrayItemRangeChanged(position, 1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void getSubChannelsByChannel() {
-
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
@@ -136,9 +98,21 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
 
                         // 瀑布流
                         try {
-                            generalBean.setDatas(data.getData().getList());
+                            List<GetSubChannelsByChannelBean.ListBean> list = data.getData().getList();
+                            if (null == list || list.size() <= 0)
+                                throw new Exception();
+                            LinkedList<GetSubChannelsByChannelBean.ListBean> listBeans = new LinkedList<>();
+                            for (GetSubChannelsByChannelBean.ListBean t : list) {
+                                if (null == t)
+                                    continue;
+                                List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = t.getTemplateData();
+                                if (null == templateData || templateData.size() <= 0)
+                                    continue;
+                                listBeans.add(t);
+                            }
+                            generalBean.setDatas(listBeans);
                         } catch (Exception e) {
-                            generalBean.setDatas(new ArrayList<>());
+                            generalBean.setDatas(new LinkedList<>());
                         }
 
                         // classId
@@ -289,6 +263,8 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                 if (null == templateData)
                                     continue;
                                 int num = templateData.size();
+                                int preTemplate = listBean.getPreTemplate();
+                                LogUtil.log("GeneralPresenter => preTemplate = " + preTemplate + ", num = " + num);
                                 if (num <= 0)
                                     continue;
                                 List<GetSubChannelsByChannelBean.ListBean.TemplateBean> tempList = new ArrayList<>();
@@ -297,7 +273,6 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                     if (null == temp)
                                         continue;
                                     temp.setClassId(data.getClassId());
-                                    int preTemplate = listBean.getPreTemplate();
                                     // 模板1
                                     if (1 == preTemplate) {
                                         if (n == 0) {
@@ -414,7 +389,7 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                     @Override
                     public void accept(Boolean data) {
                         getView().hideLoading();
-                        getView().refreshContent();
+                        getView().notifyDataSetChanged(R.id.general_list);
                     }
                 })
                 .subscribe());

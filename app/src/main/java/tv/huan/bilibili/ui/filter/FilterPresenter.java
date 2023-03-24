@@ -40,6 +40,7 @@ import lib.kalu.frame.mvp.util.OffsetUtil;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
 import lib.kalu.leanback.list.RecyclerViewGrid;
+import lib.kalu.leanback.list.layoutmanager.AutoMeasureNoGridLayoutManager;
 import lib.kalu.leanback.tags.TagsLayout;
 import lib.kalu.leanback.tags.model.TagBean;
 import okhttp3.MediaType;
@@ -69,8 +70,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
 
     protected void setAdapter() {
         RecyclerView recyclerView = getView().findViewById(R.id.filter_content);
-        GridLayoutManager layoutManager = new GridLayoutManager(getView().getContext(), 5);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new AutoMeasureNoGridLayoutManager(getView().getContext(), 5));
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -418,7 +418,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                             // 1
                             JSONObject object = new JSONObject();
                             // 2
-                            int offset = OffsetUtil.getOffset(mData, BuildConfig.HUAN_PAGE_NUM);
+                            int offset = OffsetUtil.getOffset(mData);
                             object.putOpt("prodId", BoxUtil.getProdId());
                             object.putOpt("offset", offset);
                             object.putOpt("size", BuildConfig.HUAN_PAGE_NUM);
@@ -532,7 +532,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 .flatMap(new Function<Integer, Observable<BaseResponsedBean<GetSecondTagAlbumsBean>>>() {
                     @Override
                     public Observable<BaseResponsedBean<GetSecondTagAlbumsBean>> apply(Integer id) {
-                        int offset = OffsetUtil.getOffset(mData, BuildConfig.HUAN_PAGE_NUM);
+                        int offset = OffsetUtil.getOffset(mData);
                         CallPageBean pageBean = new CallPageBean();
                         pageBean.setStart(offset);
                         String s = new Gson().toJson(pageBean);

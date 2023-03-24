@@ -22,22 +22,8 @@ public interface BaseViewImpl extends BaseView {
     String KEY_INSTALL_TIME = "install_time";
 
     @Override
-    default void showToast(@NonNull String s) {
-        if (!BuildConfig.HUAN_TOAST)
-            return;
-        BaseView.super.showToast(s);
-    }
-
-    @Override
-    default void showToast(int resId) {
-        if (!BuildConfig.HUAN_TOAST)
-            return;
-        BaseView.super.showToast(resId);
-    }
-
-    @Override
     default void showToast(@NonNull Throwable throwable) {
-        if (!BuildConfig.HUAN_TOAST)
+        if (!BuildConfig.HUAN_TOAST_THROWABLE)
             return;
         BaseView.super.showToast(throwable);
     }

@@ -86,7 +86,7 @@ public interface HttpApi {
     @GET("album/getAlbumBySpell2")
     Observable<BaseResponsedBean<SearchBean>> searchBySpell(@Query("spell") String spell,
                                                             @Query("offset") int offset,
-                                                            @Query("size") int size,
+                                                            @Query("pages") int size,
                                                             @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     // 热搜推荐

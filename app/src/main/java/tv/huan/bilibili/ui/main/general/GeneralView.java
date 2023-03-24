@@ -8,8 +8,6 @@ import tv.huan.bilibili.bean.FavBean;
 @Keep
 public interface GeneralView extends BaseViewImpl {
 
-    void refreshContent();
-
     void onHide();
 
     void onShow();

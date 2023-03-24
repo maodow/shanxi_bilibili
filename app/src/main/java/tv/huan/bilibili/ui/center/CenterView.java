@@ -9,8 +9,6 @@ public interface CenterView extends BaseViewImpl {
 
     void updateTab(ArrayList<ClassBean> data, int select);
 
-    void refreshContent(int start,int num);
-
     void updateFocus();
 
     void updatePosition(int position);
