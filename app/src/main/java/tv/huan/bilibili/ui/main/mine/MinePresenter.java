@@ -2,7 +2,6 @@ package tv.huan.bilibili.ui.main.mine;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +16,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +33,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
-import tv.huan.bilibili.bean.format.CallRefreshBean;
+import tv.huan.bilibili.bean.format.CallMineBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -282,120 +278,173 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
     }
 
     protected void request() {
-
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<CallMineBean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        observableEmitter.onNext(true);
+                    public void subscribe(ObservableEmitter<CallMineBean> observableEmitter) {
+                        CallMineBean mineBean = new CallMineBean();
+                        mineBean.setContainsData(mDatas.size() > 0);
+                        observableEmitter.onNext(mineBean);
                     }
                 })
-                // 收藏
-                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
+                // 接口 => 图片
+                .flatMap(new Function<CallMineBean, ObservableSource<BaseResponsedBean<String>>>() {
                     @Override
-                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3, null);
-                    }
-                })
-                // 观看记录
-                .flatMap(new Function<BaseResponsedBean<FavBean>, Observable<BaseResponsedBean<FavBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<FavBean>> apply(BaseResponsedBean<FavBean> favBeanBaseResponsedBean) {
-                        String s;
-                        try {
-                            List<FavBean.ItemBean> list = favBeanBaseResponsedBean.getData().getRows();
-                            s = new Gson().toJson(list);
-                        } catch (Exception e) {
-                            s = null;
+                    public ObservableSource<BaseResponsedBean<String>> apply(CallMineBean data) {
+                        boolean containsData = data.isContainsData();
+                        if (containsData) {
+                            return Observable.create(new ObservableOnSubscribe<BaseResponsedBean<String>>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<BaseResponsedBean<String>> emitter) {
+                                    BaseResponsedBean<String> responsedBean = new BaseResponsedBean<>();
+                                    responsedBean.setExtra(new Gson().toJson(data));
+                                    emitter.onNext(responsedBean);
+                                }
+                            });
+                        } else {
+                            String s = new Gson().toJson(data);
+                            return HttpClient.getHttpClient().getHttpApi().getFileUrl(1, s);
                         }
+                    }
+                })
+                // 数据处理 => 图片
+                .map(new Function<BaseResponsedBean<String>, CallMineBean>() {
+                    @Override
+                    public CallMineBean apply(BaseResponsedBean<String> resp) {
+
+                        try {
+                            String data = resp.getData();
+                            if (null == data)
+                                throw new Exception();
+                            FavBean.ItemBean item = new FavBean.ItemBean();
+                            item.setTempBanner(data);
+                            item.setTempType(TYPE_ITEM_HEAD);
+                            mDatas.add(item);
+                        } catch (Exception e) {
+                            FavBean.ItemBean itemBean = mDatas.remove(0);
+                            mDatas.clear();
+                            mDatas.add(itemBean);
+                        }
+
+                        try {
+                            CallMineBean mineBean = new Gson().fromJson(resp.getExtra(), CallMineBean.class);
+                            return mineBean;
+                        } catch (Exception e) {
+                            throw e;
+                        }
+                    }
+                })
+                // 接口 => 观看历史
+                .flatMap(new Function<CallMineBean, Observable<BaseResponsedBean<FavBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<FavBean>> apply(CallMineBean data) {
+                        String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 3, s);
                     }
                 })
-                // 数据处理
-                .map(new Function<BaseResponsedBean<FavBean>, Boolean>() {
+                // 数据处理 => 观看历史
+                .map(new Function<BaseResponsedBean<FavBean>, CallMineBean>() {
                     @Override
-                    public Boolean apply(BaseResponsedBean<FavBean> response) {
+                    public CallMineBean apply(BaseResponsedBean<FavBean> resp) {
 
-                        // clean
-                        mDatas.clear();
+                        FavBean.ItemBean itemTitle = new FavBean.ItemBean();
+                        itemTitle.setTempType(TYPE_ITEM_TITLE);
+                        itemTitle.setName("观看历史");
+                        mDatas.add(itemTitle);
 
-                        // 1 => head
-                        FavBean.ItemBean item = new FavBean.ItemBean();
-                        item.setTempType(TYPE_ITEM_HEAD);
-                        mDatas.add(item);
-
-                        // 2 => title => 观看历史
-                        FavBean.ItemBean itemHistoryTitle = new FavBean.ItemBean();
-                        itemHistoryTitle.setTempType(TYPE_ITEM_TITLE);
-                        itemHistoryTitle.setName("观看历史");
-                        mDatas.add(itemHistoryTitle);
-
-                        // 3 => 观看历史 and more
                         try {
-                            // 1
-                            List<FavBean.ItemBean> list = response.getData().getRows();
-                            if (null != list && list.size() > 0) {
-                                for (int i = 0; i <= 2; i++) {
-                                    FavBean.ItemBean t = list.get(i);
-                                    if (null == t)
-                                        continue;
-                                    t.setTempPosition(i);
-                                    t.setTempType(TYPE_ITEM_IMG_HISTORY);
-                                    mDatas.add(t);
-                                }
+                            List<FavBean.ItemBean> list = resp.getData().getRows();
+                            for (int i = 0; i <= 2; i++) {
+                                FavBean.ItemBean t = list.get(i);
+                                if (null == t)
+                                    continue;
+                                t.setTempPosition(i);
+                                t.setTempType(TYPE_ITEM_IMG_HISTORY);
+                                mDatas.add(t);
                             }
                         } catch (Exception e) {
                         }
-                        // 2
+
                         FavBean.ItemBean itemHistory = new FavBean.ItemBean();
                         itemHistory.setTempType(TYPE_ITEM_MORE);
                         itemHistory.setName("全部历史");
                         itemHistory.setToType(8001);
                         itemHistory.setTempDrawable(R.drawable.ic_selector_common_rec);
-                        itemHistory.setTempPosition(mDatas.get(mDatas.size() - 1).getTempPosition() + 1);
+                        if (mDatas.get(mDatas.size() - 1).getTempType() == TYPE_ITEM_IMG_HISTORY) {
+                            itemHistory.setTempPosition(mDatas.get(mDatas.size() - 1).getTempPosition() + 1);
+                        } else {
+                            itemHistory.setTempPosition(0);
+                        }
                         mDatas.add(itemHistory);
 
-                        // 4 => title => 我的收藏
+                        try {
+                            CallMineBean mineBean = new Gson().fromJson(resp.getExtra(), CallMineBean.class);
+                            return mineBean;
+                        } catch (Exception e) {
+                            throw e;
+                        }
+                    }
+                })
+                // 接口 => 我的收藏
+                .flatMap(new Function<CallMineBean, Observable<BaseResponsedBean<FavBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<FavBean>> apply(CallMineBean data) {
+                        String s = new Gson().toJson(data);
+                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3, s);
+                    }
+                })
+                // 数据处理 => 我的收藏
+                .map(new Function<BaseResponsedBean<FavBean>, CallMineBean>() {
+                    @Override
+                    public CallMineBean apply(BaseResponsedBean<FavBean> resp) {
+
                         FavBean.ItemBean itemFavorTitle = new FavBean.ItemBean();
                         itemFavorTitle.setTempType(TYPE_ITEM_TITLE);
                         itemFavorTitle.setName("我的收藏");
                         mDatas.add(itemFavorTitle);
 
-                        // 5 => 我的收藏
                         try {
-                            // 1
-                            String extra = response.getExtra();
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<List<FavBean.ItemBean>>() {
-                            }.getType();
-                            List<FavBean.ItemBean> list = gson.fromJson(extra, type);
-                            if (null != list && list.size() > 0) {
-                                for (int i = 0; i <= 2; i++) {
-                                    FavBean.ItemBean t = list.get(i);
-                                    if (null == t)
-                                        continue;
-                                    t.setTempPosition(i);
-                                    t.setTempType(TYPE_ITEM_IMG_FAVOR);
-                                    mDatas.add(t);
-                                }
+                            List<FavBean.ItemBean> list = resp.getData().getRows();
+                            for (int i = 0; i <= 2; i++) {
+                                FavBean.ItemBean t = list.get(i);
+                                if (null == t)
+                                    continue;
+                                t.setTempPosition(i);
+                                t.setTempType(TYPE_ITEM_IMG_FAVOR);
+                                mDatas.add(t);
                             }
                         } catch (Exception e) {
                         }
-                        // 2
+
                         FavBean.ItemBean itemFavor = new FavBean.ItemBean();
                         itemFavor.setTempType(TYPE_ITEM_MORE);
                         itemFavor.setName("全部收藏");
-                        itemFavor.setTempPosition(mDatas.get(mDatas.size() - 1).getTempPosition() + 1);
+                        if (mDatas.get(mDatas.size() - 1).getTempType() == TYPE_ITEM_IMG_FAVOR) {
+                            itemFavor.setTempPosition(mDatas.get(mDatas.size() - 1).getTempPosition() + 1);
+                        } else {
+                            itemFavor.setTempPosition(0);
+                        }
                         itemFavor.setTempDrawable(R.drawable.ic_selector_common_favor2);
                         itemFavor.setToType(8002);
                         mDatas.add(itemFavor);
 
-                        // 7 => title => 更多功能
+                        try {
+                            CallMineBean mineBean = new Gson().fromJson(resp.getExtra(), CallMineBean.class);
+                            return mineBean;
+                        } catch (Exception e) {
+                            throw e;
+                        }
+                    }
+                })
+                // 数据处理 => 更多功能
+                .map(new Function<CallMineBean, CallMineBean>() {
+                    @Override
+                    public CallMineBean apply(CallMineBean data) {
+
                         FavBean.ItemBean itemMoreTitle = new FavBean.ItemBean();
                         itemMoreTitle.setTempType(TYPE_ITEM_TITLE);
                         itemMoreTitle.setName("更多功能");
                         mDatas.add(itemMoreTitle);
 
-                        // 8 => 更多功能
                         for (int i = 0; i < 2; i++) {
                             FavBean.ItemBean t = new FavBean.ItemBean();
                             t.setTempType(TYPE_ITEM_WEB);
@@ -412,24 +461,11 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             mDatas.add(t);
                         }
 
-                        return true;
-                    }
-                })
-                // Banner
-                .flatMap(new Function<Boolean, ObservableSource<BaseResponsedBean<String>>>() {
-                    @Override
-                    public ObservableSource<BaseResponsedBean<String>> apply(Boolean integer) {
-                        return HttpClient.getHttpClient().getHttpApi().getFileUrl(1);
-                    }
-                })
-                .map(new Function<BaseResponsedBean<String>, Boolean>() {
-                    @Override
-                    public Boolean apply(BaseResponsedBean<String> baseResponsedBean) {
                         try {
-                            mDatas.get(0).setTempBanner(baseResponsedBean.getData());
+                            data.setLength(mDatas.size());
                         } catch (Exception e) {
                         }
-                        return true;
+                        return data;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -446,156 +482,15 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         getView().hideLoading();
                     }
                 })
-                .doOnNext(new Consumer<Boolean>() {
+                .doOnNext(new Consumer<CallMineBean>() {
                     @Override
-                    public void accept(Boolean i) {
+                    public void accept(CallMineBean data) {
                         getView().hideLoading();
-                        getView().refreshContent();
-                    }
-                })
-                .subscribe());
-    }
-
-    protected void refresh() {
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        observableEmitter.onNext(true);
-                    }
-                })
-                // 我的收藏
-                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3, null);
-                    }
-                })
-                // 我的收藏 => 数据处理
-                .map(new Function<BaseResponsedBean<FavBean>, CallRefreshBean>() {
-                    @Override
-                    public CallRefreshBean apply(BaseResponsedBean<FavBean> resp) throws Exception {
-                        try {
-                            LinkedList<FavBean.ItemBean> beans = new LinkedList<>();
-                            int start = -1;
-                            for (FavBean.ItemBean t : mDatas) {
-                                if (null == t)
-                                    continue;
-                                if (t.getTempType() == TYPE_ITEM_IMG_FAVOR) {
-                                    if (start == -1) {
-                                        start = mDatas.indexOf(t);
-                                    }
-                                    beans.add(t);
-                                }
-                            }
-                            for (FavBean.ItemBean t : beans) {
-                                mDatas.remove(t);
-                            }
-                            if (start != -1) {
-                                List<FavBean.ItemBean> rows = resp.getData().getRows();
-                                int size = rows.size();
-                                for (int i = 0; i <= 2; i++) {
-                                    FavBean.ItemBean t = rows.get(i);
-                                    if (null == t)
-                                        continue;
-                                    t.setTempPosition(i);
-                                    t.setTempType(TYPE_ITEM_IMG_FAVOR);
-                                }
-                                mDatas.addAll(start, rows);
-                                CallRefreshBean bean = new CallRefreshBean();
-                                bean.setStart1(start);
-                                bean.setLength1(size);
-                                return bean;
-                            }
-                            throw new Exception("error");
-                        } catch (Exception e) {
-                            throw e;
-                        }
-                    }
-                })
-                // 观看记录
-                .flatMap(new Function<CallRefreshBean, Observable<BaseResponsedBean<FavBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<FavBean>> apply(CallRefreshBean data) {
-                        String s = new Gson().toJson(data);
-                        return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 3, s);
-                    }
-                })
-                // 观看记录 => 数据处理
-                .map(new Function<BaseResponsedBean<FavBean>, CallRefreshBean>() {
-                    @Override
-                    public CallRefreshBean apply(BaseResponsedBean<FavBean> resp) throws Exception {
-
-                        CallRefreshBean data;
-                        try {
-                            data = new Gson().fromJson(resp.getExtra(), CallRefreshBean.class);
-                        } catch (Exception e) {
-                            data = new CallRefreshBean();
-                        }
-
-                        try {
-                            LinkedList<FavBean.ItemBean> beans = new LinkedList<>();
-                            int start = -1;
-                            for (FavBean.ItemBean t : mDatas) {
-                                if (null == t)
-                                    continue;
-                                if (t.getTempType() == TYPE_ITEM_IMG_HISTORY) {
-                                    if (start == -1) {
-                                        start = mDatas.indexOf(t);
-                                    }
-                                    beans.add(t);
-                                }
-                            }
-                            for (FavBean.ItemBean t : beans) {
-                                mDatas.remove(t);
-                            }
-                            if (start != -1) {
-                                List<FavBean.ItemBean> rows = resp.getData().getRows();
-                                int size = rows.size();
-                                for (int i = 0; i <= 2; i++) {
-                                    FavBean.ItemBean t = rows.get(i);
-                                    if (null == t)
-                                        continue;
-                                    t.setTempPosition(i);
-                                    t.setTempType(TYPE_ITEM_IMG_HISTORY);
-                                }
-                                mDatas.addAll(start, rows);
-                                data.setStart2(start);
-                                data.setLength2(size);
-                                return data;
-                            }
-                            throw new Exception("error");
-                        } catch (Exception e) {
-                            throw e;
-                        }
-
-                    }
-                })
-                .delay(1, TimeUnit.SECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        boolean refresh = getView().getBooleanExtra(MineFragment.BUNDLE_REFRESH, false);
-                        if (refresh) {
-                            getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, false);
-                            getView().showLoading();
+                        if (data.isContainsData()) {
+                            getView().notifyItemRangeChanged(R.id.mine_list, 0, data.getLength());
                         } else {
-                            throw new Exception();
+                            getView().notifyDataSetChanged(R.id.mine_list);
                         }
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        getView().hideLoading();
-                    }
-                })
-                .doOnNext(new Consumer<CallRefreshBean>() {
-                    @Override
-                    public void accept(CallRefreshBean data) {
-                        getView().hideLoading();
-                        getView().refreshContent(data.getStart1(), data.getLength1());
-                        getView().refreshContent(data.getStart2(), data.getLength2());
                     }
                 })
                 .subscribe());

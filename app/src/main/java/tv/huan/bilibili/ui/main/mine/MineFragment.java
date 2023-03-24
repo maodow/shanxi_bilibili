@@ -19,24 +19,11 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
     @Override
     public void initData() {
         getPresenter().setAdapter();
-        getPresenter().request();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        LogUtil.log("MineFragment => onResume => " + this);
-        getPresenter().refresh();
-    }
-
-    @Override
-    public void refreshContent() {
-        notifyDataSetChanged(R.id.mine_list);
-    }
-
-    @Override
-    public void refreshContent(int start, int length) {
-        LogUtil.log("MineFragment => onResume => start = " + start + ", length = " + length);
-        notifyItemRangeChanged(R.id.mine_list, start, length);
+        getPresenter().request();
     }
 }

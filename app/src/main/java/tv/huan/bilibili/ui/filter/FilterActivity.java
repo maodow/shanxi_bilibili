@@ -75,20 +75,10 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
     }
 
     @Override
-    public void checkNodata(boolean hasData) {
-        setVisibility(R.id.filter_nodata, hasData ? View.GONE : View.VISIBLE);
-    }
-
-    @Override
     public void checkTags() {
         ClassScrollView classLayout = findViewById(R.id.filter_class);
         int checkedIndex = classLayout.getCheckedIndex();
         setVisibility(R.id.filter_tags, checkedIndex == 0 ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void refreshContent(int start, int num) {
-        notifyItemRangeInserted(R.id.filter_content, start, num);
     }
 
     @Override

@@ -153,13 +153,13 @@ public class WebviewPresenter extends BasePresenterImpl<WebviewView> {
                         // help
                         if (aBoolean) {
                             int i = getView().getIntExtra(WebviewActivity.INTENT_HELP_TYPE, 1);
-                            return HttpClient.getHttpClient().getHttpApi().getFileUrl(i);
+                            return HttpClient.getHttpClient().getHttpApi().getFileUrl(i, null);
                         }
                         // web
                         else {
                             return Observable.create(new ObservableOnSubscribe<BaseResponsedBean<String>>() {
                                 @Override
-                                public void subscribe(ObservableEmitter<BaseResponsedBean<String>> observableEmitter) throws Exception {
+                                public void subscribe(ObservableEmitter<BaseResponsedBean<String>> observableEmitter) {
                                     BaseResponsedBean<String> baseResponsedBean = new BaseResponsedBean<>();
                                     baseResponsedBean.setData(null);
                                 }

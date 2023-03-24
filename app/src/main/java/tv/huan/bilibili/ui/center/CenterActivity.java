@@ -60,11 +60,6 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     }
 
     @Override
-    public void checkNodata(boolean hasData) {
-        setVisibility(R.id.center_nodata, hasData ? View.GONE : View.VISIBLE);
-    }
-
-    @Override
     public void updatePosition(int position) {
         notifyItemRangeChanged(R.id.center_list, position, 1);
     }

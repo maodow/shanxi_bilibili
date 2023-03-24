@@ -250,8 +250,8 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         if (isUpdate) {
                             mData.clear();
                             getView().notifyDataSetChanged(R.id.search_list);
-                            getView().setVisibility(R.id.search_nodata, View.GONE);
                         }
+                        getView().setVisibility(R.id.search_nodata, View.GONE);
                         getView().setVisibility(R.id.keyboard_tags, View.GONE);
                         getView().showInput();
                         getView().showLoading();

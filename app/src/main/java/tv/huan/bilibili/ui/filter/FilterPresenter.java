@@ -378,6 +378,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
+                        getView().setVisibility(R.id.filter_nodata, View.GONE);
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
@@ -396,12 +397,12 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         getView().refreshClass(data.getFilterClass(), data.getFilterTitle(), data.getFilterCheckPosition());
                         int size = mData.size();
                         if (size > 0) {
-                            getView().refreshContent(0, size);
+                            getView().notifyItemRangeInserted(R.id.filter_content, 0, size);
                             getView().requestFocusList();
                         } else {
                             getView().cleanFocusClass();
                         }
-                        getView().checkNodata(size > 0);
+                        getView().setVisibility(R.id.filter_nodata, size > 0 ? View.GONE : View.VISIBLE);
                         getView().checkTags();
                     }
                 }).subscribe());
@@ -481,11 +482,11 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         if (switchTab) {
                             mData.clear();
                             getView().notifyDataSetChanged(R.id.filter_content);
-                            getView().checkNodata(false);
                         }
                         if (switchTab) {
                             getView().checkTags();
                         }
+                        getView().setVisibility(R.id.filter_nodata, View.GONE);
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
@@ -502,8 +503,8 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     @Override
                     public void accept(CallPageBean data) {
                         getView().hideLoading();
-                        getView().refreshContent(data.getStart(), data.getNum());
-                        getView().checkNodata(data.isHasData());
+                        getView().notifyItemRangeInserted(R.id.filter_content, data.getStart(), data.getNum());
+                        getView().setVisibility(R.id.filter_nodata, data.isHasData() ? View.GONE : View.VISIBLE);
                         if (!switchTab && data.getNum() <= 0) {
                             getView().showToast(R.string.common_loadmore_empty);
                         }
@@ -565,11 +566,11 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         if (switchTab) {
                             mData.clear();
                             getView().notifyDataSetChanged(R.id.filter_content);
-                            getView().checkNodata(false);
                         }
                         if (switchTab) {
                             getView().checkTags();
                         }
+                        getView().setVisibility(R.id.filter_nodata, View.GONE);
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
@@ -586,8 +587,8 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     @Override
                     public void accept(CallPageBean data) {
                         getView().hideLoading();
-                        getView().refreshContent(data.getStart(), data.getNum());
-                        getView().checkNodata(data.isHasData());
+                        getView().notifyItemRangeInserted(R.id.filter_content, data.getStart(), data.getNum());
+                        getView().setVisibility(R.id.filter_nodata, data.isHasData() ? View.GONE : View.VISIBLE);
                         if (!switchTab && data.getNum() <= 0) {
                             getView().showToast(R.string.common_loadmore_empty);
                         }

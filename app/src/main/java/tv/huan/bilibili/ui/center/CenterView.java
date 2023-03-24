@@ -13,8 +13,6 @@ public interface CenterView extends BaseViewImpl {
 
     void updateFocus();
 
-    void checkNodata(boolean hasData);
-
     void updatePosition(int position);
 
     void deletePosition(int position);

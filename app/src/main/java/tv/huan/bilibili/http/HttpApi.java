@@ -46,7 +46,8 @@ public interface HttpApi {
 
     // fileType为文件类型，1Banner， 2为帮助中心，3为关于我们
     @GET("apk/getFileUrl")
-    Observable<BaseResponsedBean<String>> getFileUrl(@Query("fileType") int fileType);
+    Observable<BaseResponsedBean<String>> getFileUrl(@Query("fileType") int fileType,
+                                                     @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     // 删除历史
     @GET("data/delBookmarkById")

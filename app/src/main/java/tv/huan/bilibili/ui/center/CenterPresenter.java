@@ -37,8 +37,8 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
-import tv.huan.bilibili.bean.format.CallPageBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
+import tv.huan.bilibili.bean.format.CallPageBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
@@ -277,8 +277,8 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         if (switchTab) {
                             mDatas.clear();
                             getView().notifyDataSetChanged(R.id.center_list);
-                            getView().checkNodata(false);
                         }
+                        getView().setVisibility(R.id.center_nodata, View.GONE);
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
@@ -290,7 +290,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     @Override
                     public void accept(CallPageBean data) {
                         getView().hideLoading();
-                        getView().checkNodata(data.isHasData());
+                        getView().setVisibility(R.id.center_nodata, data.isHasData() ? View.GONE : View.VISIBLE);
                         if (data.getNum() > 0) {
                             getView().refreshContent(data.getStart(), data.getNum());
                         } else if (!switchTab) {

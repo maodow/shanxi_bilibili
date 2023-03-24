@@ -15,11 +15,7 @@ public interface FilterView extends BaseViewImpl {
 
     void refreshTags(LinkedHashMap<String, List<TagBean>> filterTags);
 
-    void checkNodata(boolean hasData);
-
     void checkTags();
-
-    void refreshContent(int start, int num);
 
     void requestFocusList();
     void cleanFocusClass();
