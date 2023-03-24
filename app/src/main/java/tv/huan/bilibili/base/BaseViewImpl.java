@@ -12,6 +12,7 @@ import lib.kalu.frame.mvp.BaseActivity;
 import lib.kalu.frame.mvp.BaseFragment;
 import lib.kalu.frame.mvp.BaseView;
 import lib.kalu.frame.mvp.util.CacheUtil;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.dialog.LoadingDialog;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -19,6 +20,27 @@ import tv.huan.bilibili.utils.GlideUtils;
 public interface BaseViewImpl extends BaseView {
 
     String KEY_INSTALL_TIME = "install_time";
+
+    @Override
+    default void showToast(@NonNull String s) {
+        if (!BuildConfig.HUAN_TOAST)
+            return;
+        BaseView.super.showToast(s);
+    }
+
+    @Override
+    default void showToast(int resId) {
+        if (!BuildConfig.HUAN_TOAST)
+            return;
+        BaseView.super.showToast(resId);
+    }
+
+    @Override
+    default void showToast(@NonNull Throwable throwable) {
+        if (!BuildConfig.HUAN_TOAST)
+            return;
+        BaseView.super.showToast(throwable);
+    }
 
     default void setImageUrl(@IdRes int id, @NonNull String url) {
         try {

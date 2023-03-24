@@ -27,6 +27,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.frame.mvp.util.OffsetUtil;
 import lib.kalu.leanback.list.RecyclerViewGrid;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
@@ -189,7 +190,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                     public Observable<BaseResponsedBean<SearchBean>> apply(CallSearchBean data) {
                         String input = data.getInput();
                         if (null != input && input.length() > 0) {
-                            int offset = mData.size();
+                            int offset = OffsetUtil.getOffset(mData, BuildConfig.HUAN_PAGE_NUM);
                             data.setStart(offset);
                             String s = new Gson().toJson(data);
                             return HttpClient.getHttpClient().getHttpApi().searchBySpell(input, offset, BuildConfig.HUAN_PAGE_NUM, s);

@@ -36,6 +36,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.frame.mvp.util.OffsetUtil;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
 import lib.kalu.leanback.list.RecyclerViewGrid;
@@ -417,7 +418,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                             // 1
                             JSONObject object = new JSONObject();
                             // 2
-                            int offset = mData.size();
+                            int offset = OffsetUtil.getOffset(mData, BuildConfig.HUAN_PAGE_NUM);
                             object.putOpt("prodId", BoxUtil.getProdId());
                             object.putOpt("offset", offset);
                             object.putOpt("size", BuildConfig.HUAN_PAGE_NUM);
@@ -531,7 +532,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 .flatMap(new Function<Integer, Observable<BaseResponsedBean<GetSecondTagAlbumsBean>>>() {
                     @Override
                     public Observable<BaseResponsedBean<GetSecondTagAlbumsBean>> apply(Integer id) {
-                        int offset = mData.size();
+                        int offset = OffsetUtil.getOffset(mData, BuildConfig.HUAN_PAGE_NUM);
                         CallPageBean pageBean = new CallPageBean();
                         pageBean.setStart(offset);
                         String s = new Gson().toJson(pageBean);

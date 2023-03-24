@@ -44,7 +44,7 @@ public final class CommomDataView extends TextView {
     }
 
 
-    private final void init() {
+    private void init() {
         setVisibility(View.INVISIBLE);
     }
 

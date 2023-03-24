@@ -88,10 +88,12 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     @Override
                     public CallWelcomeBean apply(CallWelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => 初始化支付sdk");
-                        try {
-                            Context context = getView().getContext();
-                            HeilongjiangApi.init(context);
-                        } catch (Exception e) {
+                        if (BuildConfig.HUAN_CHECK_USERID) {
+                            try {
+                                Context context = getView().getContext();
+                                HeilongjiangApi.init(context);
+                            } catch (Exception e) {
+                            }
                         }
                         return data;
                     }

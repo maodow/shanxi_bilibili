@@ -473,7 +473,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
-                        getView().showLoading();
+                        if (mDatas.size() <= 0) {
+                            getView().showLoading();
+                        }
                     }
                 })
                 .doOnError(new Consumer<Throwable>() {

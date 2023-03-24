@@ -29,6 +29,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.frame.mvp.util.OffsetUtil;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
 import lib.kalu.leanback.list.RecyclerViewGrid;
@@ -227,12 +228,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
                     public Observable<BaseResponsedBean<FavBean>> apply(Boolean v) {
-                        int offset;
-                        if (mDatas.size() <= 0) {
-                            offset = 0;
-                        } else {
-                            offset = mDatas.size();
-                        }
+                        int offset = OffsetUtil.getOffset(mDatas, BuildConfig.HUAN_PAGE_NUM);
                         CallPageBean centerBean = new CallPageBean();
                         centerBean.setStart(offset);
                         String s = new Gson().toJson(centerBean);

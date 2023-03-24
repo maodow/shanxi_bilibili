@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,6 +51,10 @@ public final class CommomChaoView extends TextViewPlus {
     }
 
     private void init() {
+        String packageName = getContext().getPackageName();
+        if (null != packageName && packageName.endsWith(".yanshi")) {
+            updateText(false);
+        }
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

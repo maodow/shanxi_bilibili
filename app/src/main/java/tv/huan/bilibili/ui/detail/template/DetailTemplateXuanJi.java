@@ -12,13 +12,13 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
-import lib.kalu.leanback.presenter.ListTvEpisodesPlusPresenter;
+import lib.kalu.leanback.presenter.ListTvEpisodesDoubleScrollViewPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class DetailTemplateXuanJi extends ListTvEpisodesPlusPresenter<MediaBean> {
+public class DetailTemplateXuanJi extends ListTvEpisodesDoubleScrollViewPresenter<MediaBean> {
 
     @Override
     public int initPaddingTop(@NonNull Context context) {
@@ -73,7 +73,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesPlusPresenter<MediaBean>
         LogUtil.log("DetailTemplateXuanJi => onBindViewHolderRange => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked);
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji2_item_name);
-            textView.setText(item.getStart() + "-" + item.getEnd());
+            textView.setText(item.getRangeStart() + "-" + item.getRangeEnd());
         } catch (Exception e) {
         }
         try {

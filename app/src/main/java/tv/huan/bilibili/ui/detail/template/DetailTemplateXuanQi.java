@@ -15,13 +15,13 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
-import lib.kalu.leanback.presenter.ListTvEpisodesGridPresenter;
+import lib.kalu.leanback.presenter.ListTvEpisodesSingleGridPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class DetailTemplateXuanQi extends ListTvEpisodesGridPresenter<MediaBean> {
+public class DetailTemplateXuanQi extends ListTvEpisodesSingleGridPresenter<MediaBean> {
 
     @Override
     public void initItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {

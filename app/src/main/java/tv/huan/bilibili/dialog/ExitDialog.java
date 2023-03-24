@@ -30,7 +30,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import tv.huan.bilibili.R;
@@ -38,6 +38,7 @@ import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
 /**
  * @author zhanghang
@@ -201,93 +202,88 @@ public class ExitDialog extends DialogFragment implements DialogInterface.OnKeyL
 
     private void setAdapter(@NonNull Dialog dialog) {
 
-        List<ExitBean> list = new ArrayList<>();
         try {
-            Bundle arguments = getArguments();
-            String string = arguments.getString(BUNDLE_DATA, null);
-            int max = arguments.getInt(BUNDLE_MAX, 2);
+            String data = getArguments().getString(BUNDLE_DATA, null);
+            if (null == data || data.length() <= 0)
+                throw new Exception("data error: " + data);
+            int max = getArguments().getInt(BUNDLE_MAX, 2);
             Gson gson = new Gson();
             Type type = new TypeToken<List<ExitBean>>() {
             }.getType();
-            List<ExitBean> fromList = gson.fromJson(string, type);
+            List<ExitBean> fromList = gson.fromJson(data, type);
             int size = fromList.size();
             int length = Math.min(size, max);
+            LinkedList<ExitBean> list = new LinkedList<>();
             for (int i = 0; i < length; i++) {
                 ExitBean exitBean = fromList.get(i);
                 if (null == exitBean)
                     continue;
                 list.add(exitBean);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        RecyclerView recyclerView = dialog.findViewById(R.id.dialog_exit_list);
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                int out = view.getResources().getDimensionPixelOffset(R.dimen.dp_76);
-                int in = view.getResources().getDimensionPixelOffset(R.dimen.dp_12);
-                int top = view.getResources().getDimensionPixelOffset(R.dimen.dp_60);
-                int position = parent.getChildAdapterPosition(view);
-//                int count = parent.getAdapter().getItemCount();
-                if (position == 0) {
-                    outRect.set(out, top, in, 0);
-                } else if (position == 1) {
-                    outRect.set(in, top, out, 0);
+            LogUtil.log("ExitDialog => setAdapter => data = " + new Gson().toJson(list));
+            if (null == list || list.size() <= 0)
+                throw new Exception("list error: " + list);
+            RecyclerView recyclerView = dialog.findViewById(R.id.dialog_exit_list);
+            GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                @Override
+                public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                    super.getItemOffsets(outRect, view, parent, state);
+                    int position = parent.getChildAdapterPosition(view);
+                    int offset = view.getContext().getResources().getDimensionPixelOffset(R.dimen.dp_12);
+                    outRect.set(position <= 0 ? 0 : offset, 0, 0, 0);
                 }
-            }
-        });
-        recyclerView.setAdapter(new RecyclerView.Adapter() {
-            @NonNull
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                Context context = parent.getContext();
-                View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_exit_item, parent, false);
-                RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(inflate) {
-                };
-                inflate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = holder.getAbsoluteAdapterPosition();
-                        ExitBean itemBean = list.get(position);
-                        JumpUtil.nextDetailFromWanliu(getContext(), itemBean.getCid(), itemBean.getName());
-                        dismiss();
+            });
+            recyclerView.setAdapter(new RecyclerView.Adapter() {
+                @NonNull
+                @Override
+                public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    Context context = parent.getContext();
+                    View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_exit_item, parent, false);
+                    RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(inflate) {
+                    };
+                    inflate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int position = holder.getAbsoluteAdapterPosition();
+                            ExitBean itemBean = list.get(position);
+                            JumpUtil.nextDetailFromWanliu(getContext(), itemBean.getCid(), itemBean.getName());
+                            dismiss();
+                        }
+                    });
+                    return holder;
+                }
+
+                @Override
+                public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+                    try {
+                        ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
+                        imageView.setVisibility(View.GONE);
+                    } catch (Exception e) {
                     }
-                });
-                return holder;
-            }
-
-            @Override
-            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
-                try {
-                    ExitBean itemBean = list.get(position);
-                    TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
-                    textView.setText(itemBean.getName());
-                } catch (Exception e) {
+                    try {
+                        ExitBean itemBean = list.get(position);
+                        TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
+                        textView.setText(itemBean.getName());
+                    } catch (Exception e) {
+                    }
+                    try {
+                        ExitBean itemBean = list.get(position);
+                        ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
+                        GlideUtils.loadHz(imageView.getContext(), itemBean.getImgs().getPoster(), imageView);
+                    } catch (Exception e) {
+                    }
                 }
-                try {
-                    ExitBean itemBean = list.get(position);
-                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
-                    GlideUtils.loadHz(imageView.getContext(), itemBean.getImgs().getPoster(), imageView);
-                } catch (Exception e) {
-                }
-                try {
-//                    ExitBean itemBean = list.get(position);
-//                    ImageView imageView = holder.itemView.findViewById(R.id.common_poster_vip);
-//                    GlideUtils.loadVt(imageView.getContext(), itemBean.getVipUrl(), imageView);
-                } catch (Exception e) {
-                }
-            }
 
-            @Override
-            public int getItemCount() {
-                return list.size();
-            }
-        });
+                @Override
+                public int getItemCount() {
+                    return list.size();
+                }
+            });
+        } catch (Exception e) {
+            LogUtil.log("ExitDialog => setAdapter => " + e.getMessage());
+        }
     }
 }
