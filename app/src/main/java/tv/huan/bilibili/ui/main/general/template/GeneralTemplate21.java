@@ -26,6 +26,7 @@ import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate;
 import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.widget.player.PlayerViewTemplate;
@@ -215,34 +216,6 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
         }
     }
 
-    private boolean isPlayerUrlNull(View v) {
-        try {
-            PlayerView playerView = v.findViewById(R.id.general_template21_player);
-            String url = playerView.getUrl();
-            return null == url || url.length() <= 0;
-        } catch (Exception e) {
-            return true;
-        }
-    }
-
-    private void pasuePlayer(View inflate) {
-
-        if (null == inflate)
-            return;
-
-        PlayerView playerView = inflate.findViewById(R.id.general_template21_player);
-        playerView.pause();
-    }
-
-    private void resumePlayer(View inflate) {
-
-        if (null == inflate)
-            return;
-
-        PlayerView playerView = inflate.findViewById(R.id.general_template21_player);
-        playerView.resume();
-    }
-
     private void stopPlayer(View inflate) {
         try {
             PlayerView playerView = inflate.findViewById(R.id.general_template21_player);
@@ -255,16 +228,30 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
     public void pausePlayer(ViewGroup viewGroup) {
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
+            String url = playerView.getUrl();
+            if (null == url || url.length() <= 0)
+                throw new Exception("url error: " + url);
+            boolean playing = playerView.isPlaying();
+            if (!playing)
+                throw new Exception("playing error: false");
             playerView.pause();
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => pausePlayer => " + e.getMessage());
         }
     }
 
     public void resumePlayer(ViewGroup viewGroup) {
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
+            String url = playerView.getUrl();
+            if (null == url || url.length() <= 0)
+                throw new Exception("url error: " + url);
+            boolean playing = playerView.isPlaying();
+            if (playing)
+                throw new Exception("playing error: true");
             playerView.resume();
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => resumePlayer => " + e.getMessage());
         }
     }
 
@@ -278,6 +265,7 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
             builder.setDelay(3000);
             playerView.start(builder.build(), s);
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => startPlayer => " + e.getMessage());
         }
     }
 

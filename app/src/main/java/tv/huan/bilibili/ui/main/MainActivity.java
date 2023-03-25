@@ -5,6 +5,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
 import org.json.JSONObject;
@@ -54,24 +55,30 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     @Override
-    public void initData() {
-        // check
-        getPresenter().checkIntent();
-        // request
-        getPresenter().showTabs();
-        // listener
-        PageView pageView = findViewById(R.id.main_content);
-        pageView.setOnPageChangeListener(new OnPageChangeListener() {
-            @Override
-            public void onLeft() {
-                leftScroll();
-            }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-            @Override
-            public void onRight() {
-                rightScroll();
-            }
-        });
+        try {
+            PageView pageView = findViewById(R.id.main_content);
+            pageView.setOnPageChangeListener(new OnPageChangeListener() {
+                @Override
+                public void onLeft() {
+                    leftScroll();
+                }
+
+                @Override
+                public void onRight() {
+                    rightScroll();
+                }
+            });
+        }catch (Exception e){
+        }
+    }
+
+    @Override
+    public void initData() {
+        getPresenter().checkIntent();
+        getPresenter().showTabs();
     }
 
     @Override

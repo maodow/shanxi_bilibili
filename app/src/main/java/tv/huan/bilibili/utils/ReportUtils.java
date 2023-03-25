@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import org.json.JSONObject;
 
+import lib.kalu.frame.mvp.util.DateUtil;
 import tv.huan.bilibili.BuildConfig;
 
 public final class ReportUtils {
@@ -425,9 +426,9 @@ public final class ReportUtils {
     public static JSONObject playVodStop(int prodId, String cid, String vid, long start, long end) {
         JSONObject object = create("play_vod_stop", prodId);
         try {
-            String startTime = TimeUtils.millis2String(start).replace(":", "").replace("-", "").trim();
+            String startTime = DateUtil.millis2String(start).replace(":", "").replace("-", "").trim();
             object.put("start_time", startTime); // "20230310 095822"
-            String endTime = TimeUtils.millis2String(end).replace(":", "").replace("-", "").trim();
+            String endTime = DateUtil.millis2String(end).replace(":", "").replace("-", "").trim();
             object.put("end_time", endTime); // "20230310 095822"
             String playTime = String.valueOf((end - start) / 1000);
             object.put("play_time", playTime); // 单位s
