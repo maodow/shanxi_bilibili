@@ -197,9 +197,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             if (position >= 0) {
                                 FavBean.ItemBean itemBean = mDatas.get(position);
                                 if (itemBean.getToType() == 9001) {
-                                    JumpUtil.nextWebAbout(v.getContext());
-                                } else if (itemBean.getToType() == 9002) {
                                     JumpUtil.nextWebHelp(v.getContext());
+                                } else if (itemBean.getToType() == 9002) {
+                                    JumpUtil.nextWebAbout(v.getContext());
                                 }
                             }
                         }

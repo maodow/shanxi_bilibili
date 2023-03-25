@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_260"
     android:layout_weight="5"
@@ -17,10 +18,11 @@
         android:layout_weight="2"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <lib.kalu.leanback.round.RoundRelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="3">
+            android:layout_weight="3"
+            app:rl_rate_width="2.225">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,13 +56,12 @@
 
             <ImageView
                 android:id="@+id/general_template21_poster"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_shape_placeholder"
-                android:scaleType="fitStart"
-                android:visibility="gone" />
+                android:scaleType="centerCrop"
+                android:visibility="visible" />
 
-        </RelativeLayout>
+        </lib.kalu.leanback.round.RoundRelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,10 +73,10 @@
                 android:id="@+id/general_template21_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:singleLine="true"
                 android:ellipsize="end"
-                android:lines="1"
                 android:gravity="center_vertical|left"
+                android:lines="1"
+                android:singleLine="true"
                 android:textColor="@color/color_838383"
                 android:textSize="@dimen/sp_12" />
 
@@ -84,9 +85,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|left"
-                android:textColor="@color/color_ff9f0a"
-                android:minEms="3"
                 android:maxEms="3"
+                android:minEms="3"
+                android:textColor="@color/color_ff9f0a"
                 android:textSize="@dimen/sp_21" />
 
         </LinearLayout>
@@ -97,9 +98,9 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:ellipsize="end"
-            android:lineSpacingExtra="@dimen/dp_4"
             android:gravity="top|left"
-            android:maxLines="5"
+            android:lineSpacingExtra="@dimen/dp_6"
+            android:maxLines="3"
             android:textColor="@color/color_838383"
             android:textSize="@dimen/sp_12" />
 
@@ -111,6 +112,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
+        android:background="@drawable/bg_shape_placeholder"
         android:focusable="false" />
 
 </LinearLayout>

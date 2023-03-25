@@ -78,7 +78,8 @@ android {
             buildConfigField("int", "HUAN_TYPE_TELEPLAY", "301")//电视剧
             buildConfigField("int", "HUAN_TYPE_FILM", "300")//电影
             buildConfigField("int", "HUAN_PAGE_NUM", "100") // 接口分页num
-            buildConfigField("boolean", "HUAN_TOAST_THROWABLE", "false") // 提示Throwable_Toast
+            buildConfigField("boolean", "HUAN_ALWAYS_SHOW_TOAST_THROWABLE", "false") // 提示Throwable_Toast
+            buildConfigField("boolean", "HUAN_ALWAYS_SHOW_DETAIL_VIP", "true")  // 详情vip按钮
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false") // 换肤skin => 暂无
             buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "false") // 华为鉴权播放开关
@@ -104,7 +105,8 @@ android {
             buildConfigField("int", "HUAN_TYPE_TELEPLAY", "301")//电视剧
             buildConfigField("int", "HUAN_TYPE_FILM", "300")//电影
             buildConfigField("int", "HUAN_PAGE_NUM", "100") // 接口分页num
-            buildConfigField("boolean", "HUAN_TOAST_THROWABLE", "true") // 提示Throwable_Toast
+            buildConfigField("boolean", "HUAN_ALWAYS_SHOW_TOAST_THROWABLE", "true") // 提示Throwable_Toast
+            buildConfigField("boolean", "HUAN_ALWAYS_SHOW_DETAIL_VIP", "false")  // 详情vip按钮
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false") // 换肤skin => 暂无
             buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "true") // 华为鉴权播放开关
@@ -149,7 +151,7 @@ dependencies {
     // mvp
     api files('libs/lib_frame_mvp_release_20230325.aar')
     // leanback
-    api files('libs/lib_leanback_r1-2-0-alpha02_release_20230324.aar')
+    api files('libs/lib_leanback_r1-2-0-alpha02_release_20230325.aar')
     // keyboard
     // api project(path: ':module_keyboard')
     api files('libs/lib_keyboard_release_20230303.aar')

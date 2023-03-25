@@ -94,13 +94,26 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        try {
-                            int position = viewHolder.getAbsoluteAdapterPosition();
-                            if (position >= 0) {
-                                GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
-                                JumpUtil.next(v.getContext(), templateBean);
-                            }
-                        } catch (Exception e) {
+                        int position = viewHolder.getAbsoluteAdapterPosition();
+                        if (position >= 0) {
+                            GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
+                            JumpUtil.next(v.getContext(), templateBean);
+                        }
+                    }
+                });
+            } catch (Exception e) {
+            }
+        }
+        // video
+        else if (viewType == 1) {
+            try {
+                view.findViewById(R.id.general_template22_root).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = viewHolder.getAbsoluteAdapterPosition();
+                        if (position >= 0) {
+                            GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
+                            JumpUtil.next(v.getContext(), templateBean);
                         }
                     }
                 });
@@ -123,7 +136,6 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             } catch (Exception e) {
             }
 
-            LogUtil.log("GeneralTemplate22 => onBindHolder => viewType = " + viewType);
             if (BuildConfig.HUAN_HUAWEI_AUTH) {
                 try {
                     Activity activity = WrapperUtil.getWrapperActivity(view.getContext());

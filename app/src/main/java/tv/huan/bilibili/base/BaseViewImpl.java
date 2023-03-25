@@ -23,7 +23,7 @@ public interface BaseViewImpl extends BaseView {
 
     @Override
     default void showToast(@NonNull Throwable throwable) {
-        if (!BuildConfig.HUAN_TOAST_THROWABLE)
+        if (!BuildConfig.HUAN_ALWAYS_SHOW_TOAST_THROWABLE)
             return;
         BaseView.super.showToast(throwable);
     }

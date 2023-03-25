@@ -129,22 +129,25 @@ public final class DetailTemplatePlayer extends Presenter {
         } catch (Exception e) {
         }
         try {
-            HeilongjiangApi.checkVip(view.getContext(), new OnStatusChangeListener() {
-                @Override
-                public void onPass() {
-                    TextView textView = view.findViewById(R.id.detail_player_item_vip);
-                    textView.setVisibility(View.GONE);
-                }
+            if (BuildConfig.HUAN_ALWAYS_SHOW_DETAIL_VIP) {
+                TextView textView = view.findViewById(R.id.detail_player_item_vip);
+                textView.setVisibility(View.VISIBLE);
+            } else {
+                HeilongjiangApi.checkVip(view.getContext(), new OnStatusChangeListener() {
+                    @Override
+                    public void onPass() {
+                        TextView textView = view.findViewById(R.id.detail_player_item_vip);
+                        textView.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onFail() {
-                    TextView textView = view.findViewById(R.id.detail_player_item_vip);
-                    textView.setVisibility(View.VISIBLE);
-                }
-            });
+                    @Override
+                    public void onFail() {
+                        TextView textView = view.findViewById(R.id.detail_player_item_vip);
+                        textView.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
         } catch (Exception e) {
-            TextView textView = view.findViewById(R.id.detail_player_item_vip);
-            textView.setVisibility(View.VISIBLE);
         }
     }
 

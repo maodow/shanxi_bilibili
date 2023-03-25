@@ -14,10 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
-import lib.kalu.leanback.presenter.ListTvRowPlusPresenter;
+import lib.kalu.leanback.presenter.ListTvRowHeadPresenter;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
@@ -31,7 +30,7 @@ import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate;
 import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.widget.player.PlayerViewTemplate;
 
-public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
     @Override
     public String initRowTitle(Context context) {
@@ -59,107 +58,63 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
     }
 
     @Override
-    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View contentView, @NonNull View view1, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
+    protected boolean canScrollHorizontally(int count) {
+        return count > 4;
+    }
+
+    @Override
+    protected void onFocusItemHolder(@NonNull Context context, @NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, boolean hasFocus) {
         try {
-            view1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-
-                    // content
-                    if (hasFocus) {
-                        try {
-                            int position = viewHolder.getAbsoluteAdapterPosition();
-                            if (position >= 0) {
-                                stopPlayer(contentView);
-                                GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
-                                updateContent(contentView, templateBean);
-                            }
-                        } catch (Exception e) {
-                        }
-                    }
-
-                    // name
-                    TextView textView = v.findViewById(R.id.common_poster_name);
-                    textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
-                }
-            });
+            TextView textView = view.findViewById(R.id.common_poster_name);
+            textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
         } catch (Exception e) {
         }
         try {
-            view1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        int position = viewHolder.getAbsoluteAdapterPosition();
-                        if (position >= 0) {
-                            GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
-                            JumpUtil.next(v.getContext(), templateBean);
-                        }
-                    } catch (Exception e) {
-                    }
-                }
-            });
+            if (!hasFocus)
+                throw new Exception();
+            View parent = (View) view.getParent().getParent();
+            stopPlayer(parent);
         } catch (Exception e) {
         }
     }
 
     @Override
-    protected void onBindHolder(@NonNull View contentView, @NonNull View view1, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
-
-        if (position == 0) {
-            try {
-                int id = contentView.getId();
-                Object tag = contentView.getTag(id);
-                if (null != tag)
-                    throw new Exception("tag warning: " + tag);
-                contentView.setTag(id, 1);
-                updateContent(contentView, templateBean);
-            } catch (Exception e) {
-            }
-        }
-
+    protected void onClickItemHolder(@NonNull Context context, @NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i) {
         try {
-            TextView textView = view1.findViewById(R.id.common_poster_name);
+            JumpUtil.next(view.getContext(), templateBean);
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    protected void onBindItemHolder(@NonNull Context context, @NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position) {
+        try {
+            TextView textView = view.findViewById(R.id.common_poster_name);
             textView.setText(templateBean.getName());
         } catch (Exception e) {
         }
         try {
-            ImageView imageView = view1.findViewById(R.id.common_poster_img);
+            ImageView imageView = view.findViewById(R.id.common_poster_img);
             GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
         } catch (Exception e) {
         }
         try {
-            ImageView imageView = view1.findViewById(R.id.common_poster_vip);
+            ImageView imageView = view.findViewById(R.id.common_poster_vip);
             GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
         } catch (Exception e) {
         }
     }
 
     @Override
-    protected boolean canScrollHorizontally(int count) {
-        return count > 4;
-    }
-
-    @Override
-    protected int initLayout(int i) {
-        return R.layout.fragment_general_item_template21b;
-    }
-
-    @Override
-    protected int initContent() {
-        return R.layout.fragment_general_item_template21a;
-    }
-
-    @Override
-    protected int initContentMarginBottom(Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
-    }
-
-    private void updateContent(View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean) {
+    protected void onBindHeadHolder(@NonNull Context context, @NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position) {
         try {
             ImageView imageView = view.findViewById(R.id.general_template21_poster);
-            imageView.setVisibility(templateBean.hasExtPoster() ? View.VISIBLE : View.GONE);
-            GlideUtils.loadHz(imageView.getContext(), templateBean.getExtPoster(), imageView);
+            boolean hasExtPoster = templateBean.hasExtPoster();
+            if (hasExtPoster) {
+                GlideUtils.loadHz(imageView.getContext(), templateBean.getExtPoster(), imageView);
+            } else {
+                imageView.setImageDrawable(null);
+            }
         } catch (Exception e) {
         }
         try {
@@ -192,10 +147,10 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
         try {
             PlayerViewTemplate playerView = view.findViewById(R.id.general_template21_player);
             PlayerComponentInitTemplate component = playerView.findComponent(PlayerComponentInitTemplate.class);
-            if (null != component) {
-                String picture = templateBean.getPicture(true);
-                component.showImage(picture);
-            }
+            if (null == component)
+                throw new Exception("component error: null");
+            String picture = templateBean.getPicture(true);
+            component.showImage(picture);
         } catch (Exception e) {
         }
 
@@ -214,6 +169,21 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
             } catch (Exception e) {
             }
         }
+    }
+
+    @Override
+    protected int initLayout() {
+        return R.layout.fragment_general_item_template21b;
+    }
+
+    @Override
+    protected int initContent() {
+        return R.layout.fragment_general_item_template21a;
+    }
+
+    @Override
+    protected int initContentMarginBottom(Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
     }
 
     private void stopPlayer(View inflate) {

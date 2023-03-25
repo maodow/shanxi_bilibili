@@ -353,6 +353,8 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                     }
                                 }
                             }
+                            // 返回顶部
+                            addPresenter((ArrayObjectAdapter) objectAdapter, -2, null);
                             return true;
                         } catch (Exception e) {
                             String poster = getView().getStringExtra(GeneralFragment.BUNDLE_POSTER);

@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_134"
-    android:paddingTop="@dimen/dp_48"
-    android:paddingBottom="@dimen/dp_48">
-
-    <!--    <TextView-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_alignParentBottom="true"-->
-    <!--        android:layout_centerHorizontal="true"-->
-    <!--        android:layout_marginBottom="@dimen/dp_48"-->
-    <!--        android:text="@string/template_bottom_hint"-->
-    <!--        android:textColor="@color/color_aaaaaa"-->
-    <!--        android:textSize="@dimen/sp_22" />-->
+    android:layout_height="@dimen/dp_48"
+    android:layout_marginBottom="@dimen/dp_40"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <Space
         android:id="@+id/template_bottom_center"
         android:layout_width="@dimen/dp_28"
         android:layout_height="0dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:focusable="false" />
 
     <tv.huan.bilibili.widget.common.CommomFocusTextView
         android:id="@+id/template_bottom_top"
@@ -30,17 +21,13 @@
         android:layout_toLeftOf="@id/template_bottom_center"
         android:layout_weight="1"
         android:background="@drawable/bg_selector_common_button"
-        android:drawableLeft="@mipmap/ic_launcher"
-        android:drawablePadding="@dimen/dp_6"
         android:focusable="true"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_16"
         android:paddingRight="@dimen/dp_16"
         android:text="@string/template_bottom_top"
         android:textColor="@color/color_selector_aaaaaa_000000"
-        android:textSize="@dimen/sp_22"
-        app:tvp_drawable_left_height="@dimen/dp_12"
-        app:tvp_drawable_left_width="@dimen/dp_22" />
+        android:textSize="@dimen/sp_18" />
 
     <tv.huan.bilibili.widget.common.CommomFocusTextView
         android:id="@+id/template_bottom_search"
@@ -50,17 +37,12 @@
         android:layout_toRightOf="@id/template_bottom_center"
         android:layout_weight="1"
         android:background="@drawable/bg_selector_common_button"
-        android:drawableLeft="@mipmap/ic_launcher"
-        android:drawablePadding="@dimen/dp_6"
         android:focusable="true"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_24"
         android:paddingRight="@dimen/dp_24"
         android:text="@string/template_bottom_search"
         android:textColor="@color/color_selector_aaaaaa_000000"
-        android:textSize="@dimen/sp_22"
-        app:tvp_drawable_left_height="@dimen/dp_12"
-        app:tvp_drawable_left_width="@dimen/dp_22" />
-
+        android:textSize="@dimen/sp_18" />
 
 </RelativeLayout>
