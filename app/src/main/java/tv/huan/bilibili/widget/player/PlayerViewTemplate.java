@@ -9,32 +9,37 @@ import androidx.annotation.RequiresApi;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.component.ComponentSpeed;
+import tv.huan.bilibili.utils.LogUtil;
 
-public final class PlayerViewTemplate21 extends PlayerView {
+public final class PlayerViewTemplate extends PlayerView {
 
-    public PlayerViewTemplate21(Context context) {
+    public PlayerViewTemplate(Context context) {
         super(context);
         init();
     }
 
-    public PlayerViewTemplate21(Context context, AttributeSet attrs) {
+    public PlayerViewTemplate(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public PlayerViewTemplate21(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PlayerViewTemplate(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public PlayerViewTemplate21(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public PlayerViewTemplate(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
     @Override
     protected void addListeren() {
+    }
+
+    @Override
+    protected void checkOnWindowVisibilityChanged(int visibility) {
     }
 
     @Override
@@ -53,7 +58,7 @@ public final class PlayerViewTemplate21 extends PlayerView {
         addComponent(speed);
 
         // init
-        PlayerComponentInitTemplate21 initTemplate21 = new PlayerComponentInitTemplate21(getContext());
+        PlayerComponentInitTemplate initTemplate21 = new PlayerComponentInitTemplate(getContext());
         addComponent(initTemplate21);
     }
 }

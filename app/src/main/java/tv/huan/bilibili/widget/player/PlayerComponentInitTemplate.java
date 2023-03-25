@@ -16,19 +16,19 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class PlayerComponentInitTemplate21 extends RelativeLayout implements ComponentApi {
+public class PlayerComponentInitTemplate extends RelativeLayout implements ComponentApi {
 
-    public PlayerComponentInitTemplate21(@NonNull Context context) {
+    public PlayerComponentInitTemplate(@NonNull Context context) {
         super(context);
         init(context);
     }
 
-    public PlayerComponentInitTemplate21(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public PlayerComponentInitTemplate(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public PlayerComponentInitTemplate21(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PlayerComponentInitTemplate(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }

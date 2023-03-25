@@ -26,9 +26,9 @@ import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
-import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate21;
+import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate;
 import tv.huan.bilibili.widget.player.PlayerView;
-import tv.huan.bilibili.widget.player.PlayerViewTemplate21;
+import tv.huan.bilibili.widget.player.PlayerViewTemplate;
 
 public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
@@ -189,8 +189,8 @@ public class GeneralTemplate21 extends ListTvRowPlusPresenter<GetSubChannelsByCh
         } catch (Exception e) {
         }
         try {
-            PlayerViewTemplate21 playerView = view.findViewById(R.id.general_template21_player);
-            PlayerComponentInitTemplate21 component = playerView.findComponent(PlayerComponentInitTemplate21.class);
+            PlayerViewTemplate playerView = view.findViewById(R.id.general_template21_player);
+            PlayerComponentInitTemplate component = playerView.findComponent(PlayerComponentInitTemplate.class);
             if (null != component) {
                 String picture = templateBean.getPicture(true);
                 component.showImage(picture);

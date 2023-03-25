@@ -12,6 +12,7 @@ import lib.kalu.frame.mvp.BaseFragment;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.ui.main.MainActivity;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.GeneralGridView;
 
 @Keep

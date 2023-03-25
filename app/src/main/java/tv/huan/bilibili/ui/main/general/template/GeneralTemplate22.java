@@ -26,9 +26,10 @@ import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
-import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate21;
+import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate;
 import tv.huan.bilibili.widget.player.PlayerView;
-import tv.huan.bilibili.widget.player.PlayerViewTemplate21;
+import tv.huan.bilibili.widget.player.PlayerViewTemplate;
 
 public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
@@ -114,14 +115,15 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         // player
         if (viewType == 1) {
             try {
-                PlayerViewTemplate21 playerView = view.findViewById(R.id.general_template22_player);
-                PlayerComponentInitTemplate21 component = playerView.findComponent(PlayerComponentInitTemplate21.class);
+                PlayerViewTemplate playerView = view.findViewById(R.id.general_template22_player);
+                PlayerComponentInitTemplate component = playerView.findComponent(PlayerComponentInitTemplate.class);
                 if (null != component) {
                     component.showImage(templateBean.getPicture(true));
                 }
             } catch (Exception e) {
             }
 
+            LogUtil.log("GeneralTemplate22 => onBindHolder => viewType = " + viewType);
             if (BuildConfig.HUAN_HUAWEI_AUTH) {
                 try {
                     Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
@@ -191,29 +193,12 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         return 5;
     }
 
-    private void pasuePlayer(View inflate) {
-
-        if (null == inflate)
-            return;
-
-        PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
-        playerView.pause();
-    }
-
-    private void resumePlayer(View inflate) {
-
-        if (null == inflate)
-            return;
-
-        PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
-        playerView.resume();
-    }
-
     public void pausePlayer(ViewGroup viewGroup) {
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);
             playerView.pause();
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate22 => pausePlayer => " + e.getMessage());
         }
     }
 
@@ -222,6 +207,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);
             playerView.resume();
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate22 => resumePlayer => " + e.getMessage());
         }
     }
 
@@ -235,6 +221,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             builder.setDelay(3000);
             playerView.start(builder.build(), s);
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate22 => startPlayer => " + e.getMessage());
         }
     }
 
