@@ -81,7 +81,7 @@
                 android:layout_width="@dimen/dp_93"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/dp_10"
-                android:background="@drawable/bg_selector_common_vip"
+                android:background="@drawable/bg_selector_common_shopping"
                 android:drawableTop="@drawable/ic_selector_common_chao"
                 android:drawablePadding="@dimen/dp_8"
                 android:focusable="true"
