@@ -79,7 +79,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int viewType) {
         // img
-        if (viewType == 2) {
+        if (viewType == 22_2) {
             try {
                 view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
@@ -105,7 +105,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             }
         }
         // video
-        else if (viewType == 1) {
+        else if (viewType == 22_1) {
             try {
                 view.findViewById(R.id.general_template22_root).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -126,7 +126,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
 
         // player
-        if (viewType == 1) {
+        if (viewType == 22_1) {
             try {
                 PlayerViewTemplate playerView = view.findViewById(R.id.general_template22_player);
                 PlayerComponentInitTemplate component = playerView.findComponent(PlayerComponentInitTemplate.class);
@@ -153,7 +153,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             }
         }
         // img
-        else if (viewType == 2) {
+        else if (viewType == 22_2) {
             try {
                 TextView textView = view.findViewById(R.id.common_poster_name);
                 textView.setText(templateBean.getName());
@@ -180,15 +180,15 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
     @Override
     protected int initItemViewType(int position, GetSubChannelsByChannelBean.ListBean.TemplateBean data) {
         if (position == 0) {
-            return 1;
+            return 22_1;
         } else {
-            return 2;
+            return 22_2;
         }
     }
 
     @Override
     protected int initLayout(int viewType) {
-        if (viewType == 1) {
+        if (viewType == 22_1) {
             return R.layout.fragment_general_item_template22a;
         } else {
             return R.layout.fragment_general_item_template22b;
