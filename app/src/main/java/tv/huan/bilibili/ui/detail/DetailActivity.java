@@ -109,7 +109,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.showData(data);
         if (!isFromUser) {
-            gridView.refreshPositionRange(data);
+//            gridView.refreshPositionRange(data);
         }
     }
 

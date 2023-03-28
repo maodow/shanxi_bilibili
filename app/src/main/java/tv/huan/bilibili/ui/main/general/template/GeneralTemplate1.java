@@ -29,7 +29,6 @@ import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
 public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
-
     @Override
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {

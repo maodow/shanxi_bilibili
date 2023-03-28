@@ -187,12 +187,12 @@ public final class DetailGridView extends LeanBackVerticalGridView {
                 throw new Exception("objectAdapter null");
             // 选集列表
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                if (null != presenter && direction == View.FOCUS_DOWN) {
-                    return presenter.dispatchKeyEventCheckedPositionEpisode(this);
-                } else if (null != presenter && direction == View.FOCUS_UP) {
-                    return presenter.dispatchKeyEventCheckedPositionRange(this);
-                }
+//                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+//                if (null != presenter && direction == View.FOCUS_DOWN) {
+//                    return presenter.dispatchKeyEventCheckedPositionEpisode(this);
+//                } else if (null != presenter && direction == View.FOCUS_UP) {
+//                    return presenter.dispatchKeyEventCheckedPositionRange(this);
+//                }
             }
             // 选期列表
             else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
@@ -270,18 +270,18 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public void refreshPositionRange(@NonNull MediaBean data) {
-        DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-        LogUtil.log("DetailGridView", "updatePlayerPosition => presenter = " + presenter);
-        if (null == presenter)
-            return;
-        int index = data.getTempIndex();
-        LogUtil.log("DetailGridView", "updatePlayerPosition => index = " + index);
-        if (index <= 0)
-            return;
-        int position = --index;
-        presenter.refreshPositionRange(this, position);
-    }
+//    public void refreshPositionRange(@NonNull MediaBean data) {
+//        DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+//        LogUtil.log("DetailGridView", "updatePlayerPosition => presenter = " + presenter);
+//        if (null == presenter)
+//            return;
+//        int index = data.getTempIndex();
+//        LogUtil.log("DetailGridView", "updatePlayerPosition => index = " + index);
+//        if (index <= 0)
+//            return;
+//        int position = --index;
+//        presenter.refreshPositionRange(this, position);
+//    }
 
     public int getPlayerNextPosition() {
         LogUtil.log("DetailGridView => getPlayerNextPosition =>");
@@ -295,7 +295,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
                 if (null != presenter) {
-                    return presenter.getEpisodeNextPosition();
+                    return presenter.getEpisodeNextPosition(this);
                 }
             }
             // 选期列表
@@ -324,7 +324,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
                 if (null != presenter) {
-                    return presenter.isEpisodeEnd();
+                    return presenter.isEpisodeEnd(this);
                 }
             }
             // 选期列表

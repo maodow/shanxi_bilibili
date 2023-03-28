@@ -12,13 +12,13 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
-import lib.kalu.leanback.presenter.ListTvEpisodesDoubleScrollViewPresenter;
+import lib.kalu.leanback.presenter.ListTvEpisodesDoubleRowPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class DetailTemplateXuanJi extends ListTvEpisodesDoubleScrollViewPresenter<MediaBean> {
+public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<MediaBean> {
 
     @Override
     public int initPaddingTop(@NonNull Context context) {
@@ -31,25 +31,25 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleScrollViewPresente
     }
 
     @Override
-    protected void onBindViewHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {
-        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked + ", data = " + item.toString());
+    public void onBindHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position) {
+        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position +", data = " + item);
         try {
             View view = v.findViewById(R.id.detail_xuanji1_item_img);
-            view.setVisibility(isPlaying ? View.VISIBLE : View.GONE);
+            view.setVisibility(item.isPlaying() ? View.VISIBLE : View.GONE);
         } catch (Exception e) {
         }
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji1_item_name);
-            textView.setVisibility(isPlaying ? View.GONE : View.VISIBLE);
+            textView.setVisibility(item.isPlaying() ? View.GONE : View.VISIBLE);
             textView.setText(String.valueOf(item.getTempIndex()));
-            textView.setTextColor(context.getResources().getColor(isChecked ? R.color.color_ff6699 : R.color.color_aaaaaa));
+            textView.setTextColor(context.getResources().getColor(item.isChecked() ? R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji1_item_popu);
             textView.setText(item.getName());
-            textView.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
-            textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+            textView.setVisibility(item.isFocus() ? View.VISIBLE : View.INVISIBLE);
+            textView.setEllipsize(item.isFocus() ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
         } catch (Exception e) {
         }
         try {
@@ -69,8 +69,8 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleScrollViewPresente
     }
 
     @Override
-    protected void onBindViewHolderRange(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position, boolean hasFocus, boolean isPlaying, boolean isChecked) {
-        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderRange => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked);
+    public void onBindHolderRange(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position) {
+//        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderRange => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked);
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji2_item_name);
             textView.setText(item.getRangeStart() + "-" + item.getRangeEnd());
@@ -78,13 +78,14 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleScrollViewPresente
         }
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji2_item_name);
-            textView.setTextColor(context.getResources().getColor(isChecked ? R.color.color_ff6699 : R.color.color_aaaaaa));
+            textView.setTextColor(context.getResources().getColor(item.isChecked() ? R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
     }
 
+
     @Override
-    protected void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position, boolean isFromUser) {
+    public void onClickEpisode(@NonNull Context context, @NonNull View view, @NonNull MediaBean item, @NonNull int position, boolean isFromUser) {
         LogUtil.log("DetailTemplateXuanJi => onClickEpisode => position = " + position + ", isFromUser = " + isFromUser);
         try {
             Activity activity = WrapperUtil.getWrapperActivity(context);
@@ -114,6 +115,11 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleScrollViewPresente
     }
 
     @Override
+    protected int initRangeNum() {
+        return 5;
+    }
+
+    @Override
     public String initRowTitle(Context context) {
         return context.getResources().getString(R.string.detail_xuanji);
     }
@@ -126,7 +132,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleScrollViewPresente
 
     @Override
     protected int initRangePadding(@NonNull Context context) {
-        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_8);
+        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_4);
         return offset;
     }
 
