@@ -287,7 +287,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                             MediaBean bean = medias.get(i);
                                             if (null == bean)
                                                 continue;
-                                            bean.setTempIndex(i + 1);
                                             bean.setTempFavor(data.isFavor());
                                             bean.setTempPlayType(data.getPlayType());
                                             bean.setTempTag(detail.getSplitTag());
@@ -333,7 +332,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                             MediaBean bean = medias.get(i);
                                             if (null == bean)
                                                 continue;
-                                            bean.setTempIndex(i + 1);
                                             bean.setTempFavor(data.isFavor());
                                             bean.setTempPlayType(data.getPlayType());
                                             bean.setTempTag(detail.getSplitTag());
@@ -397,7 +395,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             return medias.get(position);
                         } catch (Exception e) {
                             MediaBean bean = new MediaBean();
-                            bean.setTempIndex(-1);
                             bean.setTempFavor(data.isFavor());
                             bean.setTempPlayType(data.getPlayType());
                             bean.setTempRecClassId(data.getRecClassId());

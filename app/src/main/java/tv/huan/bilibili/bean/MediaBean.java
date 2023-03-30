@@ -19,7 +19,6 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
         }
     }
 
-    private int tempIndex;
     private String tempVideoUrl;
     private String tempImageUrl;
     private int tempPlayType;
@@ -30,14 +29,6 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
     private String tempRecClassId;
     private String[] tempPicList;
     private long tempSeek;
-
-    public int getTempIndex() {
-        return tempIndex;
-    }
-
-    public void setTempIndex(int tempIndex) {
-        this.tempIndex = tempIndex;
-    }
 
     public String getTempVideoUrl() {
         return tempVideoUrl;

@@ -2,7 +2,6 @@ package tv.huan.bilibili.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -124,7 +123,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             showData(data);
             // 2
             int playType = data.getTempPlayType();
-            int index = data.getTempIndex();
+            int index = data.getEpisodeIndex() + 1;
             // 免费
             if (playType > 0 && index <= playType) {
                 startHuawei(data);
@@ -218,16 +217,17 @@ public final class DetailGridView extends LeanBackVerticalGridView {
                 throw new Exception("objectAdapter null");
             // 选集列表
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-                int index = data.getTempIndex();
+                int index = data.getEpisodeIndex() + 1;
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
                 if (index > 0 && null != presenter) {
                     int position = --index;
-                    presenter.checkedPositionEpisode(this, position);
+                    ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
+                    presenter.startPlayingPosition(viewHolder.itemView, position);
                 }
             }
             // 选期列表
             else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
-                int index = data.getTempIndex();
+                int index = data.getEpisodeIndex() + 1;
                 DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
                 if (index > 0 && null != presenter) {
                     int position = --index;
@@ -255,7 +255,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
                 if (null != presenter) {
-                    presenter.checkedPositionEpisodeNext(this);
+                    presenter.startPlayingNext(this);
                 }
             }
             // 选期列表
@@ -295,7 +295,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
                 if (null != presenter) {
-                    return presenter.getEpisodeNextPosition(this);
+                    return presenter.getPlayingPositionNext(this);
                 }
             }
             // 选期列表
@@ -324,7 +324,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
                 if (null != presenter) {
-                    return presenter.isEpisodeEnd(this);
+                    return presenter.isPlayingEnd(this);
                 }
             }
             // 选期列表

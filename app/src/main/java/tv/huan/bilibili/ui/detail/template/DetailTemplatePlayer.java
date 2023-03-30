@@ -74,7 +74,7 @@ public final class DetailTemplatePlayer extends Presenter {
         try {
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
-            componentInit.setData(data.getTempImageUrl(), data.getTempTitle(), data.getTempIndex());
+            componentInit.setData(data.getTempImageUrl(), data.getTempTitle(), data.getEpisodeIndex() + 1);
             componentInit.show();
         } catch (Exception e) {
         }

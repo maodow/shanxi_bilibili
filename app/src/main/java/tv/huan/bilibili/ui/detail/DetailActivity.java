@@ -100,7 +100,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public void updateVidAndClassId(@NonNull MediaBean data) {
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
-        putIntExtra(INTENT_INDEX, data.getTempIndex());
+        putIntExtra(INTENT_INDEX, data.getEpisodeIndex() + 1);
         putStringExtra(INTENT_VID, data.getVid());
     }
 

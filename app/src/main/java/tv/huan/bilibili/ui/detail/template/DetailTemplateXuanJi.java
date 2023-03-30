@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
@@ -32,7 +34,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
 
     @Override
     public void onBindHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position) {
-        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position +", data = " + item);
+        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position + ", data = " + item);
         try {
             View view = v.findViewById(R.id.detail_xuanji1_item_img);
             view.setVisibility(item.isPlaying() ? View.VISIBLE : View.GONE);
@@ -41,7 +43,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji1_item_name);
             textView.setVisibility(item.isPlaying() ? View.GONE : View.VISIBLE);
-            textView.setText(String.valueOf(item.getTempIndex()));
+            textView.setText(String.valueOf(item.getEpisodeIndex() + 1));
             textView.setTextColor(context.getResources().getColor(item.isChecked() ? R.color.color_ff6699 : R.color.color_aaaaaa));
         } catch (Exception e) {
         }
@@ -56,7 +58,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
             ImageView imageView = v.findViewById(R.id.detail_xuanji1_item_vip);
             // 播放策略
             int playType = item.getTempPlayType();
-            int index = item.getTempIndex();
+            int index = item.getEpisodeIndex() + 1;
             if (playType > 0 && index <= playType) {
                 imageView.setVisibility(View.GONE);
             } else {
@@ -86,7 +88,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
 
     @Override
     public void onClickEpisode(@NonNull Context context, @NonNull View view, @NonNull MediaBean item, @NonNull int position, boolean isFromUser) {
-        LogUtil.log("DetailTemplateXuanJi => onClickEpisode => position = " + position + ", isFromUser = " + isFromUser);
+        LogUtil.log("DetailTemplateXuanJi => onClickEpisode => position = " + position + ", isFromUser = " + isFromUser + ", data = " + new Gson().toJson(item));
         try {
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null != activity && activity instanceof DetailActivity) {
