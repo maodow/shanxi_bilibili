@@ -108,7 +108,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
 
     @Override
     protected int initEpisodeLayout() {
-        return R.layout.activity_detail_item_xuanji_episodes;
+        return R.layout.activity_detail_item_xuanji_episode;
     }
 
     @Override
