@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -97,7 +96,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             FavBean.ItemBean itemBean = mDatas.get(position);
                             if (!itemBean.isTempDel()) {
                                 itemBean.setTempDel(true);
-                                getView().updatePosition(position);
+                                getView().notifyItemRangeChanged(R.id.center_list, position, 1);
                             }
                         }
                         return true;
@@ -114,7 +113,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             if (!itemBean.isTempDel())
                                 throw new Exception();
                             itemBean.setTempDel(false);
-                            getView().updatePosition(position);
+                            getView().notifyItemRangeChanged(R.id.center_list, position, 1);
                         } catch (Exception e) {
                             TextView textView = view.findViewById(R.id.common_poster_name);
                             textView.setEllipsize(b ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
@@ -186,30 +185,34 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
     protected final void requestTabs() {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<ArrayList<ClassBean>>() {
-            @Override
-            public void subscribe(ObservableEmitter<ArrayList<ClassBean>> observableEmitter) {
+                    @Override
+                    public void subscribe(ObservableEmitter<ArrayList<ClassBean>> observableEmitter) {
 
 //                        int position = getView().getIntExtra(CenterActivity.INTENT_SELECT, 0);
 //                        if (position < 0 || position < 1) {
 //                            position = 0;
 //                        }
-                ArrayList<lib.kalu.leanback.clazz.ClassBean> apis = new ArrayList<>();
-                for (int i = 0; i < 2; i++) {
-                    lib.kalu.leanback.clazz.ClassBean classApi = new lib.kalu.leanback.clazz.ClassBean();
-                    classApi.setChecked(i == 0);
-                    classApi.setText(i == 0 ? "观看历史" : "我的收藏");
-                    apis.add(classApi);
-                }
-                observableEmitter.onNext(apis);
-            }
-        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnNext(new Consumer<ArrayList<ClassBean>>() {
-            @Override
-            public void accept(ArrayList<ClassBean> classBeans) {
-                boolean extra = getView().getBooleanExtra(CenterActivity.INTENT_FAVORY, false);
-                getView().updateTab(classBeans, extra ? 1 : 0);
-                getView().updateFocus();
-            }
-        }).subscribe());
+                        ArrayList<lib.kalu.leanback.clazz.ClassBean> apis = new ArrayList<>();
+                        for (int i = 0; i < 2; i++) {
+                            lib.kalu.leanback.clazz.ClassBean classApi = new lib.kalu.leanback.clazz.ClassBean();
+                            classApi.setChecked(i == 0);
+                            classApi.setText(i == 0 ? "观看历史" : "我的收藏");
+                            apis.add(classApi);
+                        }
+                        observableEmitter.onNext(apis);
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnNext(new Consumer<ArrayList<ClassBean>>() {
+                    @Override
+                    public void accept(ArrayList<ClassBean> classBeans) {
+                        boolean extra = getView().getBooleanExtra(CenterActivity.INTENT_FAVORY, false);
+                        getView().updateTab(classBeans, extra ? 1 : 0);
+                        getView().setFocusable(R.id.center_search, true);
+                        getView().setFocusable(R.id.center_vip, true);
+                    }
+                }).subscribe());
     }
 
     protected void showWarning() {
@@ -293,7 +296,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             getView().showToast(R.string.common_loadmore_empty);
                         }
                         if (!isFromUser) {
-                            getView().reqFocus(data.isHasData());
+                            getView().requestFocus(data.isHasData() ? R.id.center_list : R.id.center_tabs);
                         }
                     }
                 }).subscribe());
@@ -347,7 +350,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     @Override
                     public void accept(Integer i) {
                         getView().hideLoading();
-                        getView().deletePosition(i);
+                        getView().notifyItemRangeRemoved(R.id.center_list, i, 1);
                     }
                 }).subscribe());
     }

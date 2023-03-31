@@ -108,9 +108,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public void updatePlayerInfo(@NonNull MediaBean data, boolean isFromUser) {
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.showData(data);
-        if (!isFromUser) {
-//            gridView.refreshPositionRange(data);
-        }
     }
 
     @Override

@@ -70,10 +70,11 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (null == viewHolder)
                 throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null != presenterPlayer) {
-                presenterPlayer.stopPlayer(viewHolder.itemView);
-            }
+            if (null == presenterPlayer)
+                throw new Exception("presenterPlayer error: null");
+            presenterPlayer.stopPlayer(viewHolder.itemView);
         } catch (Exception e) {
+            LogUtil.log("DetailGridView => stopPlayer => " + e.getMessage());
         }
     }
 
@@ -83,10 +84,11 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (null == viewHolder)
                 throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null != presenterPlayer) {
-                presenterPlayer.stopFull(viewHolder.itemView);
-            }
+            if (null == presenterPlayer)
+                throw new Exception("presenterPlayer error: null");
+            presenterPlayer.stopFull(viewHolder.itemView);
         } catch (Exception e) {
+            LogUtil.log("DetailGridView => stopFull => " + e.getMessage());
         }
     }
 
@@ -96,10 +98,11 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (null == viewHolder)
                 throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null != presenterPlayer) {
-                presenterPlayer.startPlayer(viewHolder.itemView, s, seek);
-            }
+            if (null == presenterPlayer)
+                throw new Exception("presenterPlayer error: null");
+            presenterPlayer.startPlayer(viewHolder.itemView, s, seek);
         } catch (Exception e) {
+            LogUtil.log("DetailGridView => startPlayer => " + e.getMessage());
         }
     }
 
@@ -109,15 +112,15 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (null == viewHolder)
                 throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null != presenterPlayer) {
-                presenterPlayer.updateFavor(viewHolder.itemView, status);
-            }
+            if (null == presenterPlayer)
+                throw new Exception("presenterPlayer error: null");
+            presenterPlayer.updateFavor(viewHolder.itemView, status);
         } catch (Exception e) {
+            LogUtil.log("DetailGridView => updateFavor => " + e.getMessage());
         }
     }
 
     public void checkPlayer(@NonNull MediaBean data) {
-        LogUtil.log("DetailGridView", "checkPlayer => ");
         try {
             // 1
             showData(data);
@@ -143,10 +146,11 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (null == viewHolder)
                 throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null != presenterPlayer) {
-                presenterPlayer.showData(viewHolder.itemView, data);
-            }
+            if (null == presenterPlayer)
+                throw new Exception("presenterPlayer error: null");
+            presenterPlayer.showData(viewHolder.itemView, data);
         } catch (Exception e) {
+            LogUtil.log("BaseGridView => showData => " + e.getMessage());
         }
     }
 
@@ -156,10 +160,11 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (null == viewHolder)
                 throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null != presenterPlayer) {
-                presenterPlayer.startHuawei(viewHolder.itemView, data);
-            }
+            if (null == presenterPlayer)
+                throw new Exception("presenterPlayer error: null");
+            presenterPlayer.startHuawei(viewHolder.itemView, data);
         } catch (Exception e) {
+            LogUtil.log("DetailGridView => startHuawei => " + e.getMessage());
         }
     }
 
@@ -169,10 +174,11 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (null == viewHolder)
                 throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null != presenterPlayer) {
-                presenterPlayer.checkAccount(viewHolder.itemView, data);
-            }
+            if (null == presenterPlayer)
+                throw new Exception("presenterPlayer error: null");
+            presenterPlayer.checkAccount(viewHolder.itemView, data);
         } catch (Exception e) {
+            LogUtil.log("DetailGridView => checkAccount => " + e.getMessage());
         }
     }
 

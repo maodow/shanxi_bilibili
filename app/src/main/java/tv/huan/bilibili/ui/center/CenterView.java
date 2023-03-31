@@ -8,12 +8,4 @@ import tv.huan.bilibili.base.BaseViewImpl;
 public interface CenterView extends BaseViewImpl {
 
     void updateTab(ArrayList<ClassBean> data, int select);
-
-    void updateFocus();
-
-    void updatePosition(int position);
-
-    void deletePosition(int position);
-
-    void reqFocus(boolean hasData);
 }

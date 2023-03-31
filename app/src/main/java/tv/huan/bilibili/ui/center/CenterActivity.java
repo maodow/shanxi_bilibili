@@ -47,25 +47,4 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
         });
         classLayout.update(data, select);
     }
-
-    @Override
-    public void updateFocus() {
-        setFocusable(R.id.center_search, true);
-        setFocusable(R.id.center_vip, true);
-    }
-
-    @Override
-    public void updatePosition(int position) {
-        notifyItemRangeChanged(R.id.center_list, position, 1);
-    }
-
-    @Override
-    public void deletePosition(int position) {
-        notifyItemRangeRemoved(R.id.center_list, position, 1);
-    }
-
-    @Override
-    public void reqFocus(boolean hasData) {
-        requestFocus(hasData ? R.id.center_list : R.id.center_tabs);
-    }
 }

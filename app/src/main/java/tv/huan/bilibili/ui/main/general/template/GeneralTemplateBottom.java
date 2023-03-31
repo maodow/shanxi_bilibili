@@ -18,8 +18,6 @@ public class GeneralTemplateBottom extends Presenter {
         try {
             Context context = viewGroup.getContext();
             View inflate = LayoutInflater.from(context).inflate(R.layout.fragment_general_item_template_bottom, viewGroup, false);
-
-            // 返回顶部
             try {
                 inflate.findViewById(R.id.template_bottom_top).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -28,17 +26,6 @@ public class GeneralTemplateBottom extends Presenter {
                             ((GeneralGridView) v.getParent().getParent()).scrollTop();
                         } catch (Exception e) {
                         }
-                    }
-                });
-            } catch (Exception e) {
-            }
-
-            // 搜索
-            try {
-                inflate.findViewById(R.id.template_bottom_search).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        JumpUtil.nextSearch(v.getContext());
                     }
                 });
             } catch (Exception e) {

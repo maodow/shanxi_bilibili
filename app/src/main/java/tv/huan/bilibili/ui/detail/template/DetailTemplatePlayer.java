@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.leanback.widget.Presenter;
 
+import com.google.gson.Gson;
+
 import org.json.JSONObject;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
@@ -70,10 +72,13 @@ public final class DetailTemplatePlayer extends Presenter {
     }
 
     public void showData(View view, MediaBean data) {
-        LogUtil.log("DetailTemplatePlayer => showData");
+        LogUtil.log("DetailTemplatePlayer => showData => view = " + view);
+        LogUtil.log("DetailTemplatePlayer => showData => data = " + new Gson().toJson(data));
         try {
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            LogUtil.log("DetailTemplatePlayer => showData => playerView = " + playerView);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
+            LogUtil.log("DetailTemplatePlayer => showData => componentInit = " + componentInit);
             componentInit.setData(data.getTempImageUrl(), data.getTempTitle(), data.getEpisodeIndex() + 1);
             componentInit.show();
         } catch (Exception e) {
