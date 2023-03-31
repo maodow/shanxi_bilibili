@@ -60,7 +60,6 @@ public class PlayerView extends PlayerLayout {
 //    }
 
     protected void addListeren() {
-        LogUtil.log("PlayerView => addListeren =>");
         setPlayerChangeListener(new OnPlayerChangeListener() {
 
             @Override
@@ -72,7 +71,6 @@ public class PlayerView extends PlayerLayout {
                 switch (playState) {
                     case PlayerType.StateType.STATE_END: //播放完成
                         Activity activity = WrapperUtil.getWrapperActivity(getContext());
-                        LogUtil.log("PlayerView => addListeren => onChange => activity = " + activity);
                         if (null != activity && activity instanceof DetailActivity) {
                             ((DetailActivity) activity).completePlayer();
                         }
@@ -83,32 +81,20 @@ public class PlayerView extends PlayerLayout {
     }
 
     protected void init() {
-
-        // 填充模式
-//        if (getId() == R.id.qvoice_video || getId() == R.id.qsquare_video || getId() == R.id.qreport_video) {
-        setScaleType(PlayerType.ScaleType.SCREEN_SCALE_16_9);
-//        } else {
-//            setScaleType(PlayerType.ScaleType.SCREEN_SCALE_MATCH_PARENT);
-//        }
-
         // loading
         ComponentLoading loading = new ComponentLoading(getContext());
         addComponent(loading);
-
         // pause
         ComponentPause pause = new ComponentPause(getContext());
         pause.setPauseImageResource(R.mipmap.ic_launcher);
-        pause.setBackgroundColor(Color.parseColor("#66000000"));
+        pause.setComponentBackgroundColorInt(Color.parseColor("#66000000"));
         addComponent(pause);
-
         // speed
         ComponentSpeed speed = new ComponentSpeed(getContext());
         addComponent(speed);
-
         // seekbar
         ComponentSeek seek = new ComponentSeek(getContext());
         addComponent(seek);
-
         // init
         PlayerComponentInit init = new PlayerComponentInit(getContext());
         addComponent(init);

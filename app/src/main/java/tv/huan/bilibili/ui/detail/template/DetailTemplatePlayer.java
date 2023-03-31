@@ -36,31 +36,31 @@ public final class DetailTemplatePlayer extends Presenter {
     @Override
     public void onViewAttachedToWindow(ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        LogUtil.log("DetailTemplatePlayer => onViewAttachedToWindow");
+//        LogUtil.log("DetailTemplatePlayer => onViewAttachedToWindow");
         stopFloat(holder.view);
     }
 
     @Override
     public void onViewDetachedFromWindow(ViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        LogUtil.log("DetailTemplatePlayer => onViewDetachedFromWindow");
+//        LogUtil.log("DetailTemplatePlayer => onViewDetachedFromWindow");
         startFloat(holder.view);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
-        LogUtil.log("DetailTemplatePlayer => onCreateViewHolder");
+//        LogUtil.log("DetailTemplatePlayer => onCreateViewHolder");
         return createViewHolder(viewGroup);
     }
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
-        LogUtil.log("DetailTemplatePlayer => onUnbindViewHolder");
+//        LogUtil.log("DetailTemplatePlayer => onUnbindViewHolder");
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
-        LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
+//        LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
     }
 
     public void updateFavor(View view, boolean status) {
@@ -72,13 +72,9 @@ public final class DetailTemplatePlayer extends Presenter {
     }
 
     public void showData(View view, MediaBean data) {
-        LogUtil.log("DetailTemplatePlayer => showData => view = " + view);
-        LogUtil.log("DetailTemplatePlayer => showData => data = " + new Gson().toJson(data));
         try {
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
-            LogUtil.log("DetailTemplatePlayer => showData => playerView = " + playerView);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
-            LogUtil.log("DetailTemplatePlayer => showData => componentInit = " + componentInit);
             componentInit.setData(data.getTempImageUrl(), data.getTempTitle(), data.getEpisodeIndex() + 1);
             componentInit.show();
         } catch (Exception e) {
