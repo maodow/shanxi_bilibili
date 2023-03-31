@@ -188,10 +188,6 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     @Override
                     public void subscribe(ObservableEmitter<ArrayList<ClassBean>> observableEmitter) {
 
-//                        int position = getView().getIntExtra(CenterActivity.INTENT_SELECT, 0);
-//                        if (position < 0 || position < 1) {
-//                            position = 0;
-//                        }
                         ArrayList<lib.kalu.leanback.clazz.ClassBean> apis = new ArrayList<>();
                         for (int i = 0; i < 2; i++) {
                             lib.kalu.leanback.clazz.ClassBean classApi = new lib.kalu.leanback.clazz.ClassBean();
@@ -209,8 +205,6 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     public void accept(ArrayList<ClassBean> classBeans) {
                         boolean extra = getView().getBooleanExtra(CenterActivity.INTENT_FAVORY, false);
                         getView().updateTab(classBeans, extra ? 1 : 0);
-                        getView().setFocusable(R.id.center_search, true);
-                        getView().setFocusable(R.id.center_vip, true);
                     }
                 }).subscribe());
     }
@@ -363,8 +357,8 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
             if (focusId == R.id.center_tabs) {
                 ClassScrollView classLayout = (ClassScrollView) getView().getCurrentFocus();
                 classLayout.clearFocus();
-                LogUtil.log("CenterPresenter => dispatchKeyEvent => up_action_down => classLayout = " + classLayout);
                 int index = classLayout.getCheckedIndex();
+                LogUtil.log("CenterPresenter => dispatchKeyEvent => up_action_down => index = " + index);
                 getView().setFocusable(R.id.center_vip, index > 0);
                 getView().setFocusable(R.id.center_search, index <= 0);
             } else if (focusId == R.id.center_search || focusId == R.id.center_vip) {
