@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -399,7 +398,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                         int size = mData.size();
                         if (size > 0) {
                             getView().notifyItemRangeInserted(R.id.filter_content, 0, size);
-                            getView().requestFocusList();
+                            getView().requestFocus(R.id.filter_content);
                         } else {
                             getView().cleanFocusClass();
                         }

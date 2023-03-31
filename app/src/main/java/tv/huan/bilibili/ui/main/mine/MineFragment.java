@@ -1,10 +1,11 @@
 package tv.huan.bilibili.ui.main.mine;
 
+import android.view.View;
+
 import androidx.annotation.Keep;
 
 import lib.kalu.frame.mvp.BaseFragment;
 import tv.huan.bilibili.R;
-import tv.huan.bilibili.utils.LogUtil;
 
 @Keep
 public class MineFragment extends BaseFragment<MineView, MinePresenter> implements MineView {
@@ -25,5 +26,15 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
     public void onResume() {
         super.onResume();
         getPresenter().request();
+    }
+
+    @Override
+    public void onHide() {
+        setVisibility(getView(), View.GONE);
+    }
+
+    @Override
+    public void onShow() {
+        setVisibility(getView(), View.VISIBLE);
     }
 }

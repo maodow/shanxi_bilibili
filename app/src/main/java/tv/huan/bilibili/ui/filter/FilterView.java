@@ -17,6 +17,5 @@ public interface FilterView extends BaseViewImpl {
 
     void checkTags();
 
-    void requestFocusList();
     void cleanFocusClass();
 }

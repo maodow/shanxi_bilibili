@@ -26,21 +26,13 @@ public class WelcomeActivity extends BaseActivity<WelcomeView, WelcomePresenter>
 
     @Override
     public void initData() {
-        // request
         getPresenter().request();
     }
 
     @Override
-    public void refreshAD(String backgroundUrl) {
-        setVisibility(R.id.welcome_img, View.VISIBLE);
+    public void updateBackground(String backgroundUrl) {
         ImageView imageView = findViewById(R.id.welcome_img);
         GlideUtils.load(getContext(), backgroundUrl, imageView);
-    }
-
-    @Override
-    public void refreshTime(String str) {
-        setVisibility(R.id.welcome_time, View.VISIBLE);
-        setText(R.id.welcome_time, str);
     }
 
     @Override

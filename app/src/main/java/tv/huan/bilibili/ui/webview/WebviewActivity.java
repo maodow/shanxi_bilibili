@@ -31,11 +31,11 @@ public final class WebviewActivity extends BaseActivity<WebviewView, WebviewPres
         webView.loadUrl(s);
     }
 
-//    @Override
-//    public void showHtml(@NonNull String s) {
-//        if (null == s || s.length() <= 0)
-//            return;
-//        WebView webView = findViewById(R.id.webview);
-//        webView.loadData(s, "text/html", "UTF-8");
-//    }
+    @Override
+    public void showHtml(@NonNull String s) {
+        if (null == s || s.length() <= 0)
+            return;
+        WebView webView = findViewById(R.id.webview_html);
+        webView.loadData(s, "text/html", "UTF-8");
+    }
 }

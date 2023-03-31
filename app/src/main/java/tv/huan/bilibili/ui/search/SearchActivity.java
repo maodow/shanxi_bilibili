@@ -64,12 +64,7 @@ public class SearchActivity extends BaseActivity<SearchView, SearchPresenter> im
     }
 
     @Override
-    public void showTitle(@NonNull String s) {
-        setText(R.id.keyboard_title, s);
-    }
-
-    @Override
-    public void showInput() {
+    public void updateInput() {
         KeyboardLinearLayout keyboardView = findViewById(R.id.search_keyboard);
         String input = keyboardView.getInput();
         setText(R.id.search_input, input);

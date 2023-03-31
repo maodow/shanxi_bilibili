@@ -7,8 +7,6 @@ import tv.huan.bilibili.bean.MediaBean;
 
 public interface DetailView extends BaseViewImpl {
 
-    void refreshContent();
-
     void showDialog(@NonNull String title, @NonNull String data1, @NonNull String data2);
 
     void cancleFavor(@NonNull String cid, @NonNull String recClassId);

@@ -80,11 +80,6 @@ public class FilterActivity extends BaseActivity<FilterView, FilterPresenter> im
     }
 
     @Override
-    public void requestFocusList() {
-        requestFocus(R.id.filter_content);
-    }
-
-    @Override
     public void cleanFocusClass() {
         ClassScrollView classLayout = findViewById(R.id.filter_class);
         classLayout.clearFocus();

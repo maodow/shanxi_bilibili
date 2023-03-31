@@ -63,6 +63,7 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
 
     @Override
     public void onHide() {
+        setVisibility(getView(), View.GONE);
         tv.huan.bilibili.widget.GeneralGridView gridView = findViewById(R.id.general_list);
         gridView.pausePlayer();
         gridView.pauseMessage();
@@ -70,6 +71,7 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
 
     @Override
     public void onShow() {
+        setVisibility(getView(), View.VISIBLE);
         getPresenter().showBackground();
         tv.huan.bilibili.widget.GeneralGridView gridView = findViewById(R.id.general_list);
         gridView.resumePlayer();

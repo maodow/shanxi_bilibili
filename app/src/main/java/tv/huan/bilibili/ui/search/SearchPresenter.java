@@ -254,7 +254,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         }
                         getView().setVisibility(R.id.search_nodata, View.GONE);
                         getView().setVisibility(R.id.keyboard_tags, View.GONE);
-                        getView().showInput();
+                        getView().updateInput();
                         getView().showLoading();
                     }
                 }).doOnError(new Consumer<Throwable>() {
@@ -266,7 +266,7 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                     @Override
                     public void accept(CallSearchBean data) {
                         getView().hideLoading();
-                        getView().showTitle(data.getTitle());
+                        getView().setText(R.id.keyboard_title, data.getTitle());
                         if (null == data.getTags()) {
                             getView().setVisibility(R.id.keyboard_tags, View.GONE);
                         } else {

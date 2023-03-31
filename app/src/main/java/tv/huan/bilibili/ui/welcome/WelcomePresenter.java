@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.welcome;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -244,7 +245,8 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     public void accept(CallWelcomeBean data) {
                         LogUtil.log("WelcomePresenter => request => doOnNext => " + new Gson().toJson(data));
                         if (data.containsAd()) {
-                            getView().refreshAD(data.getAdUrl());
+                            getView().setVisibility(R.id.welcome_img, View.VISIBLE);
+                            getView().updateBackground(data.getAdUrl());
                             intervalTime(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
                         } else {
                             getView().next(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag());
@@ -269,7 +271,8 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                             getView().next(data, select, type, cid, classId, secondTag);
                         } else {
                             int num = (int) (time - aLong);
-                            getView().refreshTime(num + "s");
+                            getView().setVisibility(R.id.welcome_time, View.VISIBLE);
+                            getView().setText(R.id.welcome_time, num + "s");
                         }
                     }
                 })

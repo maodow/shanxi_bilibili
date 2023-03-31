@@ -6,5 +6,5 @@ import tv.huan.bilibili.base.BaseViewImpl;
 
 public interface Special1View extends BaseViewImpl {
 
-    void refreshContent(@NonNull String str);
+    void updateBackground(@NonNull String str);
 }

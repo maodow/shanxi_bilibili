@@ -8,5 +8,5 @@ public interface WebviewView extends BaseViewImpl {
 
     void showUrl(@NonNull String s);
 
-//    void showHtml(@NonNull String s);
+    void showHtml(@NonNull String s);
 }

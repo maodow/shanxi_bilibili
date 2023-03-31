@@ -26,8 +26,8 @@ import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.SpecialBean;
+import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
@@ -172,7 +172,8 @@ public class Special1Presenter extends BasePresenterImpl<Special1View> {
                     @Override
                     public void accept(String str) {
                         getView().hideLoading();
-                        getView().refreshContent(str);
+                        getView().updateBackground(str);
+                        getView().notifyDataSetChanged(R.id.special1_list);
                     }
                 })
                 .subscribe());

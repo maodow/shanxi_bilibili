@@ -1,7 +1,6 @@
 package tv.huan.bilibili.ui.main;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
@@ -9,11 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -149,6 +143,8 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                             if (null == fragment || fragment.isHidden()) continue;
                             if (fragment instanceof GeneralFragment) {
                                 ((GeneralFragment) fragment).onHide();
+                            } else if (fragment instanceof MineFragment) {
+                                ((MineFragment) fragment).onHide();
                             }
                             fragments[i] = fragment;
                         }
@@ -172,6 +168,8 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                 getView().showFragment(fragment);
                 if (fragment instanceof GeneralFragment) {
                     ((GeneralFragment) fragment).onShow();
+                } else if (fragment instanceof MineFragment) {
+                    ((MineFragment) fragment).onShow();
                 }
             }
         }).subscribe());

@@ -8,8 +8,8 @@ import tv.huan.bilibili.base.BaseViewImpl;
 @Keep
 public interface MineView extends BaseViewImpl {
 
-    @Override
-    default void showToast(@NonNull String s) {
-        BaseViewImpl.super.showToast(s);
-    }
+    void onHide();
+
+    void onShow();
+
 }

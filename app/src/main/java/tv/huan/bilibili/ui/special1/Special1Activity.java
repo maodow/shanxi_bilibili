@@ -26,8 +26,7 @@ public class Special1Activity extends BaseActivity<Special1View, Special1Present
     }
 
     @Override
-    public void refreshContent(@NonNull String str) {
-        notifyDataSetChanged(R.id.special1_list);
+    public void updateBackground(@NonNull String str) {
         ImageView imageView = findViewById(R.id.special1_img);
         GlideUtils.load(getContext(), str, imageView);
     }

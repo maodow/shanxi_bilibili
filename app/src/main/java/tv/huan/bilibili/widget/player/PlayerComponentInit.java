@@ -11,11 +11,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.core.component.ComponentApi;
 import lib.kalu.mediaplayer.util.MPLogUtil;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.utils.GlideUtils;
+import tv.huan.bilibili.utils.LogUtil;
 
 public class PlayerComponentInit extends RelativeLayout implements ComponentApi {
 
@@ -85,19 +89,23 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
 //        findViewById(R.id.module_mediaplayer_component_init_bg).setVisibility(View.VISIBLE);
     }
 
-    public final void setData(@NonNull String imgUrl, @NonNull String title, @NonNull int position) {
+    public final void setData(@NonNull MediaBean data) {
+        LogUtil.log("PlayerComponentInit => setData => data = " + new Gson().toJson(data));
         try {
             ImageView imageView = findViewById(R.id.detail_player_item_cover);
-            GlideUtils.loadHz(imageView.getContext(), imgUrl, imageView);
+            GlideUtils.loadHz(imageView.getContext(), data.getTempImageUrl(), imageView);
         } catch (Exception e) {
         }
         try {
             TextView textView = findViewById(R.id.detail_player_item_data);
-            if (position >= 1) {
+            String title = data.getTempTitle();
+            int episodeIndex = data.getEpisodeIndex();
+            if (episodeIndex < 0) {
+                textView.setText(title);
+            } else {
+                int position = episodeIndex + 1;
                 String string = textView.getResources().getString(R.string.detail_playing_index, title, position);
                 textView.setText(string);
-            } else {
-                textView.setText(title);
             }
         } catch (Exception e) {
         }

@@ -418,14 +418,14 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
-                        getView().refreshContent();
+                        getView().notifyDataSetChanged(R.id.detail_list);
                     }
                 }).doOnNext(new Consumer<MediaBean>() {
                     @Override
                     public void accept(MediaBean data) {
                         getView().hideLoading();
+                        getView().notifyDataSetChanged(R.id.detail_list);
                         getView().updateVidAndClassId(data);
-                        getView().refreshContent();
                         getView().updatePlayerInfo(data, false);
                         getView().delayStartPlayer(data, false);
                     }
@@ -677,7 +677,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 .subscribe());
     }
 
-    protected void requestHuaweiAuth(String cid, long  seek) {
+    protected void requestHuaweiAuth(String cid, long seek) {
         addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
                     @Override
                     public void subscribe(ObservableEmitter<String> emitter) {

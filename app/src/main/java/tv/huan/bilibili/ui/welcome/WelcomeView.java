@@ -6,9 +6,7 @@ import tv.huan.bilibili.base.BaseViewImpl;
 
 public interface WelcomeView extends BaseViewImpl {
 
-    void refreshAD(@NonNull String backgroundUrl);
-
-    void refreshTime(@NonNull String text);
+    void updateBackground(@NonNull String url);
 
     void next();
 

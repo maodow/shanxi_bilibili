@@ -59,15 +59,8 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void initData() {
-        // adapter
         getPresenter().setAdapter();
-        // request
         getPresenter().request();
-    }
-
-    @Override
-    public void refreshContent() {
-        notifyDataSetChanged(R.id.detail_list);
     }
 
     @Override
@@ -99,9 +92,9 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void updateVidAndClassId(@NonNull MediaBean data) {
+        putStringExtra(INTENT_VID, data.getVid());
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
         putIntExtra(INTENT_INDEX, data.getEpisodeIndex() + 1);
-        putStringExtra(INTENT_VID, data.getVid());
     }
 
     @Override
