@@ -149,19 +149,18 @@ dependencies {
     // autosize
     api files('libs/lib_autosize_v1.2.1_release.aar')
     // mvp
-    api files('libs/lib_frame_mvp_release_20230325.aar')
+    api files('libs/lib_frame_mvp_release_20230331.aar')
     // leanback
     api files('libs/lib_leanback_r1-2-0-alpha02_release_20230331.aar')
     // keyboard
     // api project(path: ':module_keyboard')
     api files('libs/lib_keyboard_release_20230303.aar')
     // player
-    api files('libs/lib_mediaplayer_ui_release_20230325.aar')
+    api files('libs/lib_mediaplayer_ui_release_20230331.aar')
     api files('libs/lib_mediaplayer_exo_r2.18.5_ff4.4_audio_release_20230322.aar')
     // heilongjiang
     // api project(path: ':huan_heilongjiang')
     api files('libs/lib_huan_heilongjiang_release_20230321.aar')
-
     // core
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.recyclerview:recyclerview:1.3.0' // 1.2.1
