@@ -20,8 +20,8 @@ import lib.kalu.leanback.tab.listener.OnTabChangeListener;
 import lib.kalu.leanback.tab.model.TabModel;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.ExitDialog;
+import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.widget.GeneralGridView;
-import tv.huan.bilibili.widget.player.PlayerView;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
 
@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     rightScroll();
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
         }
     }
 
@@ -160,21 +160,28 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     @Override
-    public <T extends androidx.leanback.widget.Presenter>  void huaweiAuth(Class<T> cls, Class<?> obj,  String cid) {
+    public <T extends androidx.leanback.widget.Presenter> void huaweiAuth(Class<T> cls, Class<?> obj, String cid) {
         getPresenter().requestHuaweiAuth(cls, obj, cid);
     }
 
     @Override
-    public <T extends androidx.leanback.widget.Presenter>  void huaweiSucc(Class<T> cls, Class<?> obj,  String s) {
-        getPresenter().startPlayerFromFragment(cls, obj,  s);
+    public <T extends androidx.leanback.widget.Presenter> void huaweiSucc(Class<T> cls, Class<?> obj, String s) {
+        getPresenter().startPlayerFromFragment(cls, obj, s);
     }
 
     @Override
     public void onCall(@NonNull int code, @NonNull JSONObject object) {
         super.onCall(code, object);
         if (code == 1100) {
+            ADUtil.adExit(getApplicationContext());
             getPresenter().reportAppExit();
             onBackPressed();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        ADUtil.adRelease();
+        super.onBackPressed();
     }
 }

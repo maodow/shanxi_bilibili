@@ -177,3 +177,7 @@
 -keep class * implements tv.huan.bilibili.base.BaseViewImpl  {
       public <init>();
  }
+
+# ad
+-keep class tv.scene.ad.** { *; }
+-keep public interface tv.scene.ad.net.download.** {*;}

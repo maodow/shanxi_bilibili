@@ -28,6 +28,7 @@ import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallWelcomeBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.MainActivity;
+import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.heilongjiang.HeilongjiangApi;
 
@@ -42,6 +43,10 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
         addDisposable(Observable.create(new ObservableOnSubscribe<CallWelcomeBean>() {
                     @Override
                     public void subscribe(ObservableEmitter<CallWelcomeBean> emitter) {
+
+                        // ad
+                        ADUtil.adSplash(getView().getContext());
+
                         CallWelcomeBean welcomeBean = new CallWelcomeBean();
                         try {
                             // 3

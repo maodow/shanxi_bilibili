@@ -19,7 +19,7 @@ import lib.kalu.mediaplayer.listener.OnPlayerChangeListener;
 import lib.kalu.mediaplayer.widget.player.PlayerLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.ui.detail.DetailActivity;
-import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.utils.ADUtil;
 
 public class PlayerView extends PlayerLayout {
     public PlayerView(Context context) {
@@ -47,7 +47,6 @@ public class PlayerView extends PlayerLayout {
         addListeren();
     }
 
-
 //    @Override
 //    public void start(@NonNull String url) {
 //        // 1
@@ -58,6 +57,13 @@ public class PlayerView extends PlayerLayout {
 //        builder.setLoop(true);
 //        super.start(builder.build(), url);
 //    }
+
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        ADUtil.adRelease();
+    }
 
     protected void addListeren() {
         setPlayerChangeListener(new OnPlayerChangeListener() {
@@ -74,6 +80,12 @@ public class PlayerView extends PlayerLayout {
                         if (null != activity && activity instanceof DetailActivity) {
                             ((DetailActivity) activity).completePlayer();
                         }
+                        break;
+                    case PlayerType.StateType.STATE_PAUSE: //暂停
+                        ADUtil.adPause(getContext().getApplicationContext());
+                        break;
+                    case PlayerType.StateType.STATE_INIT: //播放前贴片
+                        ADUtil.adPlaying(getContext().getApplicationContext());
                         break;
                 }
             }

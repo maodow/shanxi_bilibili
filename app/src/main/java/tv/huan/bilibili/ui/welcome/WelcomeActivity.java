@@ -1,7 +1,6 @@
 package tv.huan.bilibili.ui.welcome;
 
 import android.content.Intent;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -9,6 +8,7 @@ import androidx.annotation.NonNull;
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.ui.main.MainActivity;
+import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 
 public class WelcomeActivity extends BaseActivity<WelcomeView, WelcomePresenter> implements WelcomeView {
@@ -53,7 +53,13 @@ public class WelcomeActivity extends BaseActivity<WelcomeView, WelcomePresenter>
         intent.putExtra(MainActivity.INTENT_CLASSID, classId);
         intent.putExtra(MainActivity.INTENT_SECOND_TAG, secondTag);
         startActivity(intent);
-        finish();
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
+        ADUtil.adRelease();
+        super.onBackPressed();
     }
 }
 
