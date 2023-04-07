@@ -38,7 +38,6 @@ public final class ADUtil {
 
     public static void adInit(Application application) {
         try {
-
             SceneAdConfig config = new SceneAdConfig.Builder()
                     //appkey到后台申请，每个应用保证唯一性
                     .setAppKey("7dc15107ec1341ae80bf5f49fee16af2")
@@ -62,89 +61,101 @@ public final class ADUtil {
 
     public static void adSplash(Context context) {
 
-        AdSlot slot = new AdSlot.Builder()
-                .setCodeId("test-kaiping")
-                .setDisplayCountDown(false)
-                .setMediaView(null)
-                .build();
-
         adCreateAdFactory(context);
-        mINormAdFactory.loadAd(slot, new AbsAdListener() {
-            @Override
-            public void onError(int code, String message) {
-                LogUtil.log("ADUtil => adSplash => onError => code = " + code + ", message = " + message);
-            }
 
-            @Override
-            public void onLoadAd(INormAd normAd) {
-                LogUtil.log("ADUtil => adSplash => onLoadAd");
-            }
-        });
+        try {
+            mINormAdFactory.loadAd(new AdSlot.Builder()
+                    .setCodeId("test-kaiping")
+                    .setDisplayCountDown(false)
+                    .setMediaView(null)
+                    .build(), new AbsAdListener() {
+                @Override
+                public void onError(int code, String message) {
+                    LogUtil.log("ADUtil => adSplash => onError => code = " + code + ", message = " + message);
+                }
+
+                @Override
+                public void onLoadAd(INormAd normAd) {
+                    LogUtil.log("ADUtil => adSplash => onLoadAd");
+                }
+            });
+        } catch (Exception e) {
+            LogUtil.log("ADUtil => adSplash => " + e.getMessage());
+        }
     }
 
     public static void adPlaying(Context context) {
 
-        AdSlot slot = new AdSlot.Builder()
-                .setCodeId("test-kaiping")
-                .setDisplayCountDown(false)
-                .setMediaView(null)
-                .build();
-
         adCreateAdFactory(context);
-        mINormAdFactory.loadAd(slot, new AbsAdListener() {
-            @Override
-            public void onError(int code, String message) {
-                LogUtil.log("ADUtil => adPlaying => onError => code = " + code + ", message = " + message);
-            }
 
-            @Override
-            public void onLoadAd(INormAd normAd) {
-                LogUtil.log("ADUtil => adPlaying => onLoadAd");
-            }
-        });
+        try {
+            mINormAdFactory.loadAd(new AdSlot.Builder()
+                    .setCodeId("test-kaiping")
+                    .setDisplayCountDown(false)
+                    .setMediaView(null)
+                    .build(), new AbsAdListener() {
+                @Override
+                public void onError(int code, String message) {
+                    LogUtil.log("ADUtil => adPlaying => onError => code = " + code + ", message = " + message);
+                }
+
+                @Override
+                public void onLoadAd(INormAd normAd) {
+                    LogUtil.log("ADUtil => adPlaying => onLoadAd");
+                }
+            });
+        } catch (Exception e) {
+            LogUtil.log("ADUtil => adPlaying => " + e.getMessage());
+        }
     }
 
     public static void adPause(Context context) {
 
-        AdSlot slot = new AdSlot.Builder()
-                .setCodeId("test-zanting")
-                .setDisplayCountDown(false)
-                .setMediaView(null)
-                .build();
-
         adCreateAdFactory(context);
-        mINormAdFactory.loadAd(slot, new AbsAdListener() {
-            @Override
-            public void onError(int code, String message) {
-                LogUtil.log("ADUtil => adPause => onError => code = " + code + ", message = " + message);
-            }
 
-            @Override
-            public void onLoadAd(INormAd normAd) {
-                LogUtil.log("ADUtil => adPause => onLoadAd");
-            }
-        });
+        try {
+            mINormAdFactory.loadAd(new AdSlot.Builder()
+                    .setCodeId("test-zanting")
+                    .setDisplayCountDown(false)
+                    .setMediaView(null)
+                    .build(), new AbsAdListener() {
+                @Override
+                public void onError(int code, String message) {
+                    LogUtil.log("ADUtil => adPause => onError => code = " + code + ", message = " + message);
+                }
+
+                @Override
+                public void onLoadAd(INormAd normAd) {
+                    LogUtil.log("ADUtil => adPause => onLoadAd");
+                }
+            });
+        } catch (Exception e) {
+            LogUtil.log("ADUtil => adPause => " + e.getMessage());
+        }
     }
 
     public static void adExit(Context context) {
 
-        AdSlot slot = new AdSlot.Builder()
-                .setCodeId("test-tuichu")
-                .setDisplayCountDown(false)
-                .setMediaView(null)
-                .build();
-
         adCreateAdFactory(context);
-        mINormAdFactory.loadAd(slot, new AbsAdListener() {
-            @Override
-            public void onError(int code, String message) {
-                LogUtil.log("ADUtil => adExit => onError => code = " + code + ", message = " + message);
-            }
 
-            @Override
-            public void onLoadAd(INormAd normAd) {
-                LogUtil.log("ADUtil => adExit => onLoadAd");
-            }
-        });
+        try {
+            mINormAdFactory.loadAd(new AdSlot.Builder()
+                    .setCodeId("test-tuichu")
+                    .setDisplayCountDown(false)
+                    .setMediaView(null)
+                    .build(), new AbsAdListener() {
+                @Override
+                public void onError(int code, String message) {
+                    LogUtil.log("ADUtil => adExit => onError => code = " + code + ", message = " + message);
+                }
+
+                @Override
+                public void onLoadAd(INormAd normAd) {
+                    LogUtil.log("ADUtil => adExit => onLoadAd");
+                }
+            });
+        } catch (Exception e) {
+            LogUtil.log("ADUtil => adExit => " + e.getMessage());
+        }
     }
 }
