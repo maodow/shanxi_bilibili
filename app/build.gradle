@@ -160,8 +160,8 @@ dependencies {
     // api project(path: ':module_keyboard')
     api files('libs/lib_keyboard_release_20230303.aar')
     // player
-    api files('libs/lib_mediaplayer_ui_release_20230407.aar')
-    api files('libs/lib_mediaplayer_exo_r2.18.5_ff4.4_audio_release_20230407.aar')
+    api files('libs/lib_mediaplayer_ui_release_20230408.aar')
+    api files('libs/lib_mediaplayer_exo_r2.18.5_ff4.4_audio_release_20230408.aar')
     // heilongjiang
     // api project(path: ':huan_heilongjiang')
     api files('libs/lib_huan_heilongjiang_release_20230407.aar')

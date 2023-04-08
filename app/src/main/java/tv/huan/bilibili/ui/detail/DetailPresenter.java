@@ -525,8 +525,21 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     }
 
     protected boolean dispatchEvent(KeyEvent event) {
+        // center
+        if (event.getAction() == KeyEvent.ACTION_DOWN && (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER || event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+            try {
+                PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
+                boolean isFull = playerView.isFull();
+                // full
+                if (isFull) {
+                    playerView.toggle();
+                    return true;
+                }
+            } catch (Exception e) {
+            }
+        }
         // down
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
             int focusId = getView().getCurrentFocusId();
             if (focusId == R.id.detail_player_item_vip || focusId == R.id.detail_player_item_full || focusId == R.id.detail_player_item_favor) {
                 DetailGridView gridView = getView().findViewById(R.id.detail_list);

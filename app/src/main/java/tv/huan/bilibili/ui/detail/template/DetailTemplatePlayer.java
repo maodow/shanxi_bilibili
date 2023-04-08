@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.leanback.widget.Presenter;
 
@@ -350,12 +349,7 @@ public final class DetailTemplatePlayer extends Presenter {
                 public void onClick(View v) {
                     ViewGroup viewGroup = (ViewGroup) v.getParent().getParent().getParent();
                     PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
-                    boolean full = playerView.isFull();
-                    if (full) {
-                        playerView.toggle();
-                    } else {
-                        playerView.startFull();
-                    }
+                    playerView.startFull();
                 }
             });
             return new ViewHolder(view);
