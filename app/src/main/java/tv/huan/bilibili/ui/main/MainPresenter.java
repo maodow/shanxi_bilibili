@@ -43,6 +43,7 @@ import tv.huan.bilibili.dialog.WarningDialog;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.general.GeneralFragment;
 import tv.huan.bilibili.ui.main.mine.MineFragment;
+import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.heilongjiang.HeilongjiangApi;
@@ -354,6 +355,7 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        ADUtil.adExit(getView().getContext().getApplicationContext());
                         observableEmitter.onNext(true);
                     }
                 }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<List<ExitBean>>>>() {

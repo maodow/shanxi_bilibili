@@ -47,18 +47,6 @@ public class PlayerView extends PlayerLayout {
         addListeren();
     }
 
-//    @Override
-//    public void start(@NonNull String url) {
-//        // 1
-//        release();
-//        // 2
-//        StartBuilder.Builder builder = new StartBuilder.Builder();
-//        builder.setLive(false);
-//        builder.setLoop(true);
-//        super.start(builder.build(), url);
-//    }
-
-
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -80,12 +68,6 @@ public class PlayerView extends PlayerLayout {
                         if (null != activity && activity instanceof DetailActivity) {
                             ((DetailActivity) activity).completePlayer();
                         }
-                        break;
-                    case PlayerType.StateType.STATE_PAUSE: //暂停
-                        ADUtil.adPause(getContext().getApplicationContext());
-                        break;
-                    case PlayerType.StateType.STATE_INIT: //播放前贴片
-                        ADUtil.adPlaying(getContext().getApplicationContext());
                         break;
                 }
             }
@@ -110,5 +92,11 @@ public class PlayerView extends PlayerLayout {
         // init
         PlayerComponentInit init = new PlayerComponentInit(getContext());
         addComponent(init);
+        // adPause
+        PlayerComponentADPause pauseAD = new PlayerComponentADPause(getContext());
+        addComponent(pauseAD);
+        // adStart
+        PlayerComponentADStart startAD = new PlayerComponentADStart(getContext());
+        addComponent(startAD);
     }
 }

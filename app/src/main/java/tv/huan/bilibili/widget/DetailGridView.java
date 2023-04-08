@@ -176,7 +176,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
             if (null == presenterPlayer)
                 throw new Exception("presenterPlayer error: null");
-            presenterPlayer.checkAccount(viewHolder.itemView, data);
+            presenterPlayer.checkVip(viewHolder.itemView, data);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => checkAccount => " + e.getMessage());
         }

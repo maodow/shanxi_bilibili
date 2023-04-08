@@ -3,6 +3,9 @@ package tv.huan.bilibili.utils;
 import android.app.Application;
 import android.content.Context;
 
+import java.util.LinkedList;
+
+import lib.kalu.frame.mvp.util.DevicesUtil;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.scene.ad.opensdk.AdSlot;
@@ -10,26 +13,19 @@ import tv.scene.ad.opensdk.INormAd;
 import tv.scene.ad.opensdk.SceneAdConfig;
 import tv.scene.ad.opensdk.SceneAdSDK;
 import tv.scene.ad.opensdk.basecallback.AbsAdListener;
-import tv.scene.ad.opensdk.basecallback.INormAdFactory;
 
 public final class ADUtil {
 
-    private static INormAdFactory mINormAdFactory = null;
-
-    private static void adCreateAdFactory(Context context) {
-        adRelease();
-        try {
-            mINormAdFactory = SceneAdSDK.getAdManager().createAdFactory(context);
-        } catch (Exception e) {
-            LogUtil.log("ADUtil => adCreateAdFactory => " + e.getMessage());
-        }
-    }
+    private static final LinkedList<INormAd> mINormAd = new LinkedList<>();
 
     public static void adRelease() {
         try {
-            if (null == mINormAdFactory)
-                throw new Exception("waring mINormAdFactory is null");
-            mINormAdFactory.releasePoint();
+            while (mINormAd.size() > 0) {
+                INormAd iNormAd = mINormAd.removeFirst();
+                if (null != iNormAd) {
+                    iNormAd.release();
+                }
+            }
             LogUtil.log("ADUtil => adRelease => succ");
         } catch (Exception e) {
             LogUtil.log("ADUtil => adRelease => " + e.getMessage());
@@ -40,16 +36,17 @@ public final class ADUtil {
         try {
             SceneAdConfig config = new SceneAdConfig.Builder()
                     //appkey到后台申请，每个应用保证唯一性
-                    .setAppKey("7dc15107ec1341ae80bf5f49fee16af2")
+                    .setAppKey("Ylk5hg")
+//                    .setAppKey("7dc15107ec1341ae80bf5f49fee16af2")
                     //应用名称，对接应用添加
                     .setAppName(application.getResources().getString(R.string.app_name))
                     //测试阶段打开，可以通过日志排查问题，上线时去除该调用
                     .setOpenLog(BuildConfig.HUAN_LOG)
-                    .setDebugUrl(BuildConfig.HUAN_LOG)
+                    .setDebugUrl(false)
                     //厂商设置
-                    .setManufacture("厂商渠道")
+                    .setManufacture("heilongjiang-yd-bilibili")
                     //机型设置
-                    .setDeviceModel("机型")
+                    .setDeviceModel(DevicesUtil.getDeviceModel())
                     .setRequestTimeOutSeconds(10)
                     .builder();
             SceneAdSDK.init(application, config);
@@ -61,11 +58,9 @@ public final class ADUtil {
 
     public static void adSplash(Context context) {
 
-        adCreateAdFactory(context);
-
         try {
-            mINormAdFactory.loadAd(new AdSlot.Builder()
-                    .setCodeId("test-kaiping")
+            SceneAdSDK.getAdManager().createAdFactory(context).loadAd(new AdSlot.Builder()
+                    .setCodeId("operator-openscreen-hlj-cmcc")
                     .setDisplayCountDown(false)
                     .setMediaView(null)
                     .build(), new AbsAdListener() {
@@ -76,6 +71,7 @@ public final class ADUtil {
 
                 @Override
                 public void onLoadAd(INormAd normAd) {
+                    mINormAd.add(normAd);
                     LogUtil.log("ADUtil => adSplash => onLoadAd");
                 }
             });
@@ -86,11 +82,9 @@ public final class ADUtil {
 
     public static void adPlaying(Context context) {
 
-        adCreateAdFactory(context);
-
         try {
-            mINormAdFactory.loadAd(new AdSlot.Builder()
-                    .setCodeId("test-kaiping")
+            SceneAdSDK.getAdManager().createAdFactory(context).loadAd(new AdSlot.Builder()
+                    .setCodeId("operator-preroll-hlj-cmcc")
                     .setDisplayCountDown(false)
                     .setMediaView(null)
                     .build(), new AbsAdListener() {
@@ -101,6 +95,7 @@ public final class ADUtil {
 
                 @Override
                 public void onLoadAd(INormAd normAd) {
+                    mINormAd.add(normAd);
                     LogUtil.log("ADUtil => adPlaying => onLoadAd");
                 }
             });
@@ -111,11 +106,9 @@ public final class ADUtil {
 
     public static void adPause(Context context) {
 
-        adCreateAdFactory(context);
-
         try {
-            mINormAdFactory.loadAd(new AdSlot.Builder()
-                    .setCodeId("test-zanting")
+            SceneAdSDK.getAdManager().createAdFactory(context).loadAd(new AdSlot.Builder()
+                    .setCodeId("operator-pause-hlj-cmcc")
                     .setDisplayCountDown(false)
                     .setMediaView(null)
                     .build(), new AbsAdListener() {
@@ -126,6 +119,7 @@ public final class ADUtil {
 
                 @Override
                 public void onLoadAd(INormAd normAd) {
+                    mINormAd.add(normAd);
                     LogUtil.log("ADUtil => adPause => onLoadAd");
                 }
             });
@@ -136,11 +130,9 @@ public final class ADUtil {
 
     public static void adExit(Context context) {
 
-        adCreateAdFactory(context);
-
         try {
-            mINormAdFactory.loadAd(new AdSlot.Builder()
-                    .setCodeId("test-tuichu")
+            SceneAdSDK.getAdManager().createAdFactory(context).loadAd(new AdSlot.Builder()
+                    .setCodeId("operator-quit-hlj-cmcc")
                     .setDisplayCountDown(false)
                     .setMediaView(null)
                     .build(), new AbsAdListener() {
@@ -151,6 +143,7 @@ public final class ADUtil {
 
                 @Override
                 public void onLoadAd(INormAd normAd) {
+                    mINormAd.add(normAd);
                     LogUtil.log("ADUtil => adExit => onLoadAd");
                 }
             });

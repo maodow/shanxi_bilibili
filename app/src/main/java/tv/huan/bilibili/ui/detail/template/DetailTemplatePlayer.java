@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.leanback.widget.Presenter;
 
@@ -161,10 +162,10 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    public void checkAccount(View view, MediaBean data) {
-        LogUtil.log("DetailTemplatePlayer => checkAccount");
+    public void checkVip(View view, MediaBean data) {
         try {
-            HeilongjiangApi.checkVip(view.getContext(), new OnStatusChangeListener() {
+            LogUtil.log("DetailTemplatePlayer => checkAccount");
+            HeilongjiangApi.checkVip(view.getContext(), !BuildConfig.HUAN_CHECK_VIP, new OnStatusChangeListener() {
                 @Override
                 public void onPass() {
                     startHuawei(view, data);
@@ -349,8 +350,10 @@ public final class DetailTemplatePlayer extends Presenter {
                 public void onClick(View v) {
                     ViewGroup viewGroup = (ViewGroup) v.getParent().getParent().getParent();
                     PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
-                    String url = playerView.getUrl();
-                    if (null != url && url.length() > 0) {
+                    boolean full = playerView.isFull();
+                    if (full) {
+                        playerView.toggle();
+                    } else {
                         playerView.startFull();
                     }
                 }
