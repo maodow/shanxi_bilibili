@@ -37,7 +37,6 @@ public final class ADUtil {
             SceneAdConfig config = new SceneAdConfig.Builder()
                     //appkey到后台申请，每个应用保证唯一性
                     .setAppKey("Ylk5hg")
-//                    .setAppKey("7dc15107ec1341ae80bf5f49fee16af2")
                     //应用名称，对接应用添加
                     .setAppName(application.getResources().getString(R.string.app_name))
                     //测试阶段打开，可以通过日志排查问题，上线时去除该调用
@@ -60,7 +59,7 @@ public final class ADUtil {
 
         try {
             SceneAdSDK.getAdManager().createAdFactory(context).loadAd(new AdSlot.Builder()
-                    .setCodeId("operator-openscreen-hlj-cmcc")
+                    .setCodeId("operator-openscreen-hlj-cmcc-bl")
                     .setDisplayCountDown(false)
                     .setMediaView(null)
                     .build(), new AbsAdListener() {
@@ -84,7 +83,7 @@ public final class ADUtil {
 
         try {
             SceneAdSDK.getAdManager().createAdFactory(context).loadAd(new AdSlot.Builder()
-                    .setCodeId("operator-preroll-hlj-cmcc")
+                    .setCodeId("operator-preroll-hlj-cmcc-bl")
                     .setDisplayCountDown(false)
                     .setMediaView(null)
                     .build(), new AbsAdListener() {
@@ -108,7 +107,7 @@ public final class ADUtil {
 
         try {
             SceneAdSDK.getAdManager().createAdFactory(context).loadAd(new AdSlot.Builder()
-                    .setCodeId("operator-pause-hlj-cmcc")
+                    .setCodeId("operator-pause-hlj-cmcc-bl")
                     .setDisplayCountDown(false)
                     .setMediaView(null)
                     .build(), new AbsAdListener() {
@@ -132,7 +131,7 @@ public final class ADUtil {
 
         try {
             SceneAdSDK.getAdManager().createAdFactory(context).loadAd(new AdSlot.Builder()
-                    .setCodeId("operator-quit-hlj-cmcc")
+                    .setCodeId("operator-quit-hlj-cmcc-bl")
                     .setDisplayCountDown(false)
                     .setMediaView(null)
                     .build(), new AbsAdListener() {
