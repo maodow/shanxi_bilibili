@@ -183,7 +183,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             GetMediasByCid2Bean data = getMediasByCid2BeanBaseResponsedBean.getData();
                             detailBean.setRecAlbums(data.getRecAlbums());
                         } catch (Exception e) {
-                            detailBean.setAlbum(null);
+                            detailBean.setRecAlbums(null);
                         }
                         return detailBean;
                     }
