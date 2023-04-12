@@ -6,7 +6,6 @@ import android.content.Context;
 import java.util.LinkedList;
 
 import lib.kalu.frame.mvp.util.DevicesUtil;
-import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.scene.ad.opensdk.AdSlot;
 import tv.scene.ad.opensdk.INormAd;
@@ -40,7 +39,7 @@ public final class ADUtil {
                     //应用名称，对接应用添加
                     .setAppName(application.getResources().getString(R.string.app_name))
                     //测试阶段打开，可以通过日志排查问题，上线时去除该调用
-                    .setOpenLog(BuildConfig.HUAN_LOG)
+                    .setOpenLog(false)
                     .setDebugUrl(false)
                     //厂商设置
                     .setManufacture("heilongjiang-yd-bilibili")
