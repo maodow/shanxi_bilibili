@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.player.PlayerType;
+import lib.kalu.mediaplayer.core.component.ComponentError;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.component.ComponentPause;
 import lib.kalu.mediaplayer.core.component.ComponentSeek;
@@ -83,6 +84,9 @@ public class PlayerView extends PlayerLayout {
         pause.setPauseImageResource(R.mipmap.ic_launcher);
         pause.setComponentBackgroundColorInt(Color.parseColor("#66000000"));
         addComponent(pause);
+        // error
+        ComponentError error = new ComponentError(getContext());
+        addComponent(error);
         // speed
         ComponentSpeed speed = new ComponentSpeed(getContext());
         addComponent(speed);

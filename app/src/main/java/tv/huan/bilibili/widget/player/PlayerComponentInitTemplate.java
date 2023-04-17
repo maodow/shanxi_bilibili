@@ -55,7 +55,10 @@ public class PlayerComponentInitTemplate extends RelativeLayout implements Compo
                 bringToFront();
                 show();
                 break;
-            case PlayerType.StateType.STATE_START:
+            case PlayerType.StateType.STATE_ERROR:
+            case PlayerType.StateType.STATE_ERROR_IGNORE:
+            case PlayerType.StateType.STATE_ERROR_NET:
+            case PlayerType.StateType.STATE_LOADING_START:
                 LogUtil.log("PlayerComponentInitTemplate21[gone] => playState = " + playState);
                 gone();
                 break;
@@ -75,7 +78,6 @@ public class PlayerComponentInitTemplate extends RelativeLayout implements Compo
     public final void showImage(@NonNull String imgUrl) {
         try {
             ImageView imageView = findViewById(R.id.common_player_component_init_template21_img);
-            LogUtil.log("PlayerComponentInitTemplate => showImage => imageView = " + imageView);
             GlideUtils.loadHz(imageView.getContext(), imgUrl, imageView);
         } catch (Exception e) {
             LogUtil.log("PlayerComponentInitTemplate => showImage => " + e.getMessage());
