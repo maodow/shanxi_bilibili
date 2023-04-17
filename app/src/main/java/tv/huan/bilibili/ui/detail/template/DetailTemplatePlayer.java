@@ -201,7 +201,7 @@ public final class DetailTemplatePlayer extends Presenter {
                     throw new Exception("activity error: null");
                 if (!(activity instanceof DetailActivity))
                     throw new Exception("activity error: " + activity);
-                ((DetailActivity) activity).huaweiAuth(data.getCid(), data.getTempSeek());
+                ((DetailActivity) activity).huaweiAuth(data.getMovieCode(), data.getTempSeek());
             } catch (Exception e) {
                 LogUtil.log("DetailTemplatePlayer => startHuawei => " + e.getMessage());
             }

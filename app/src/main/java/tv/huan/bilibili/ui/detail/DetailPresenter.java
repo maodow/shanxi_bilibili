@@ -690,11 +690,11 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 .subscribe());
     }
 
-    protected void requestHuaweiAuth(String cid, long seek) {
+    protected void requestHuaweiAuth(String movieCode, long seek) {
         addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
                     @Override
                     public void subscribe(ObservableEmitter<String> emitter) {
-                        emitter.onNext(cid);
+                        emitter.onNext(movieCode);
                     }
                 })
                 .flatMap(new Function<String, Observable<BaseAuthorizationBean>>() {

@@ -55,7 +55,7 @@ public class PlayerComponentInitTemplate extends RelativeLayout implements Compo
                 bringToFront();
                 show();
                 break;
-            default:
+            case PlayerType.StateType.STATE_START:
                 LogUtil.log("PlayerComponentInitTemplate21[gone] => playState = " + playState);
                 gone();
                 break;

@@ -6,6 +6,7 @@ import lib.kalu.leanback.presenter.bean.TvEpisodesPlusItemBean;
 
 public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable {
 
+    private String movieCode;
     private String vid;
     private String cid;
     private int classId;
@@ -80,6 +81,14 @@ public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable
 
     public void setClassId(int classId) {
         this.classId = classId;
+    }
+
+    public String getMovieCode() {
+        return movieCode;
+    }
+
+    public void setMovieCode(String movieCode) {
+        this.movieCode = movieCode;
     }
 
     public String getCid() {

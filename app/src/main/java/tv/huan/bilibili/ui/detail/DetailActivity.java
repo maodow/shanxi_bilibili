@@ -150,8 +150,8 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void huaweiAuth(String cid, long seek) {
-        getPresenter().requestHuaweiAuth(cid, seek);
+    public void huaweiAuth(String movieCode, long seek) {
+        getPresenter().requestHuaweiAuth(movieCode, seek);
     }
 
     @Override

@@ -55,6 +55,7 @@ public final class HuanApp extends Application {
                 .setLog(false)
                 .setKernel(PlayerType.KernelType.EXO)
                 .setRender(PlayerType.RenderType.TEXTURE_VIEW)
+                .setExoFFmpeg(PlayerType.FFmpegType.EXO_EXTENSION_RENDERER_OFF)
                 .setCacheType(PlayerType.CacheType.NONE)
                 .build();
         PlayerManager.getInstance().setConfig(build);

@@ -60,7 +60,7 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
                 bringToFront();
                 show();
                 break;
-            default:
+            case PlayerType.StateType.STATE_START:
                 MPLogUtil.log("ComponentInit[gone] => playState = " + playState);
                 gone();
                 break;
