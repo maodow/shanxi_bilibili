@@ -153,7 +153,7 @@ dependencies {
     // mvp
     api files('libs/lib_frame_mvp_release_20230331.aar')
     // leanback
-    api files('libs/lib_leanback_r1-2-0-alpha02_release_20230411.aar')
+    api files('libs/lib_leanback_r1-2-0-alpha02_release_20230417.aar')
     // keyboard
     // api project(path: ':module_keyboard')
     api files('libs/lib_keyboard_release_20230303.aar')
