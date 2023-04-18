@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -205,7 +204,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         return 5;
     }
 
-    public void pausePlayer(ViewGroup viewGroup) {
+    public void pausePlayer(View viewGroup) {
         LogUtil.log("GeneralTemplate22 => pausePlayer =>");
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);
@@ -216,7 +215,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         }
     }
 
-    public void resumePlayer(ViewGroup viewGroup) {
+    public void resumePlayer(View viewGroup) {
         LogUtil.log("GeneralTemplate22 => resumePlayer =>");
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);

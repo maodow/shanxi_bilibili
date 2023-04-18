@@ -4,12 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.component.ComponentSpeed;
+import tv.huan.bilibili.utils.ADUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
 public final class PlayerViewTemplate extends PlayerView {
 
@@ -38,9 +42,9 @@ public final class PlayerViewTemplate extends PlayerView {
     protected void addListeren() {
     }
 
-    @Override
-    protected void checkOnWindowVisibilityChanged(int visibility) {
-    }
+//    @Override
+//    protected void checkOnWindowVisibilityChanged(int visibility) {
+//    }
 
     @Override
     protected void init() {

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -21,6 +23,7 @@ import lib.kalu.mediaplayer.widget.player.PlayerLayout;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.ADUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
 public class PlayerView extends PlayerLayout {
     public PlayerView(Context context) {
