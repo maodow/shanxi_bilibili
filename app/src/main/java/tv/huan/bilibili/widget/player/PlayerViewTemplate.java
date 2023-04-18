@@ -1,6 +1,7 @@
 package tv.huan.bilibili.widget.player;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
 
@@ -9,7 +10,6 @@ import androidx.annotation.RequiresApi;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.component.ComponentSpeed;
-import tv.huan.bilibili.utils.LogUtil;
 
 public final class PlayerViewTemplate extends PlayerView {
 
@@ -51,6 +51,7 @@ public final class PlayerViewTemplate extends PlayerView {
 
         // loading
         ComponentLoading loading = new ComponentLoading(getContext());
+        loading.setComponentBackgroundColorInt(Color.parseColor("#000000"));
         addComponent(loading);
 
         // speed

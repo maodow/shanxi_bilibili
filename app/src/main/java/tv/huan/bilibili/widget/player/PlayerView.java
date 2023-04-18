@@ -78,10 +78,11 @@ public class PlayerView extends PlayerLayout {
     protected void init() {
         // loading
         ComponentLoading loading = new ComponentLoading(getContext());
+        loading.setComponentBackgroundColorInt(Color.parseColor("#000000"));
         addComponent(loading);
         // pause
         ComponentPause pause = new ComponentPause(getContext());
-        pause.setPauseImageResource(R.mipmap.ic_launcher);
+        pause.setComponentImageResource(R.mipmap.ic_launcher);
         pause.setComponentBackgroundColorInt(Color.parseColor("#66000000"));
         addComponent(pause);
         // error

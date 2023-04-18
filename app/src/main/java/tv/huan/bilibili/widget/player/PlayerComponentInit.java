@@ -62,7 +62,6 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
                 break;
             case PlayerType.StateType.STATE_ERROR:
             case PlayerType.StateType.STATE_ERROR_IGNORE:
-            case PlayerType.StateType.STATE_ERROR_NET:
             case PlayerType.StateType.STATE_LOADING_START:
                 MPLogUtil.log("ComponentInit[gone] => playState = " + playState);
                 gone();
