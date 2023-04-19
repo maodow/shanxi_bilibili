@@ -12,6 +12,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
 import tv.huan.bilibili.widget.DetailGridView;
+import tv.huan.heilongjiang.HeilongjiangApi;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 
@@ -137,9 +138,14 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void jumpVip() {
-        Toast.makeText(getApplicationContext(), "观看当前视频, 需要开通会员", Toast.LENGTH_SHORT).show();
-//        HeilongjiangApi.jumpVip(getApplicationContext(), null);
+    public void jumpVip(boolean isFromUser) {
+        try {
+            if (!isFromUser)
+                throw new Exception();
+            HeilongjiangApi.jumpVip(getApplicationContext(), null);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "观看当前视频, 需要开通会员", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

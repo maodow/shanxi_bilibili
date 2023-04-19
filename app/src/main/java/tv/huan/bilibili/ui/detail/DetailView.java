@@ -31,11 +31,11 @@ public interface DetailView extends BaseViewImpl {
 
     void completePlayer();
 
-    void jumpVip();
+    void jumpVip(boolean isFromUser);
 
     void stopFull();
 
-    void huaweiAuth(String cid, long  seek);
+    void huaweiAuth(String cid, long seek);
 
-    void huaweiSucc(String s, long  seek);
+    void huaweiSucc(String s, long seek);
 }

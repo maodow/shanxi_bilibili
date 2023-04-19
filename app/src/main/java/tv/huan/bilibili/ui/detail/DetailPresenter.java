@@ -265,121 +265,109 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         return data;
                     }
                 })
-                // 选期列表 => 数据处理
+                // 数据处理
+                .map(new Function<CallDetailBean, CallDetailBean>() {
+                    @Override
+                    public CallDetailBean apply(CallDetailBean data) {
+                        try {
+                            List<MediaBean> medias = data.getMedias();
+                            if (null == medias || medias.size() <= 0)
+                                throw new Exception();
+                            MediaDetailBean detail = data.getAlbum();
+                            for (MediaBean bean : medias) {
+                                bean.setTempFavor(data.isFavor());
+                                bean.setTempPlayType(data.getPlayType());
+                                bean.setTempTag(detail.getSplitTag());
+                                bean.setTempTitle(detail.getName());
+                                bean.setTemoInfo(detail.getInfo());
+                                bean.setTempRecClassId(data.getRecClassId());
+                                bean.setTempImageUrl(detail.getPicture(true));
+                                bean.setTempPicList(data.getAlbum().getPicList());
+                            }
+                        } catch (Exception e) {
+                        }
+                        return data;
+                    }
+                })
+                // 选期列表
                 .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
                     public CallDetailBean apply(CallDetailBean data) {
                         try {
                             MediaDetailBean detail = data.getAlbum();
                             boolean xuanQi = detail.isXuanQi();
-                            if (xuanQi) {
-                                List<MediaBean> medias = data.getMedias();
-                                if (null != medias) {
-                                    int size = medias.size();
-                                    if (size > 0) {
-                                        // 1 上报 => 选期
-                                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                                        reportDetailSelectionsButtonShow(cid);
-
-                                        // 2
-                                        DetailTemplateXuanQi.DetailTemplateXuanQiList xuanqiData = new DetailTemplateXuanQi.DetailTemplateXuanQiList();
-                                        for (int i = 0; i < size; i++) {
-                                            MediaBean bean = medias.get(i);
-                                            if (null == bean)
-                                                continue;
-                                            bean.setTempFavor(data.isFavor());
-                                            bean.setTempPlayType(data.getPlayType());
-                                            bean.setTempTag(detail.getSplitTag());
-                                            bean.setTempTitle(detail.getName());
-                                            bean.setTemoInfo(detail.getInfo());
-                                            bean.setTempRecClassId(data.getRecClassId());
-                                            bean.setTempImageUrl(detail.getPicture(true));
-                                            xuanqiData.add(bean);
-                                        }
-                                        VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                                        RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                                        ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                                        ((ArrayObjectAdapter) objectAdapter).add(xuanqiData);
-                                    }
-                                }
-                            }
+                            if (!xuanQi)
+                                throw new Exception();
+                            List<MediaBean> medias = data.getMedias();
+                            if (null == medias || medias.size() <= 0)
+                                throw new Exception();
+                            // 1
+                            String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                            reportDetailSelectionsButtonShow(cid);
+                            // 2
+                            DetailTemplateXuanQi.DetailTemplateXuanQiList xuanqiData = new DetailTemplateXuanQi.DetailTemplateXuanQiList();
+                            xuanqiData.addAll(data.getMedias());
+                            // 3
+                            VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
+                            RecyclerView.Adapter adapter = verticalGridView.getAdapter();
+                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+                            ((ArrayObjectAdapter) objectAdapter).add(xuanqiData);
                         } catch (Exception e) {
                         }
                         return data;
                     }
                 })
-                // 选集列表 => 数据处理
+                // 选集列表
                 .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
                     public CallDetailBean apply(CallDetailBean data) {
-
                         try {
                             MediaDetailBean detail = data.getAlbum();
                             boolean xuanJi = detail.isXuanJi();
-                            if (xuanJi) {
-                                List<MediaBean> medias = data.getMedias();
-                                if (null != medias) {
-                                    int size = medias.size();
-                                    if (size > 0) {
-
-                                        // 上报
-                                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                                        reportDetailSelectionsButtonShow(cid);
-
-                                        // 2
-                                        DetailTemplateXuanJi.DetailTemplateXuanJiList xuanjiData = new DetailTemplateXuanJi.DetailTemplateXuanJiList();
-                                        for (int i = 0; i < size; i++) {
-                                            MediaBean bean = medias.get(i);
-                                            if (null == bean)
-                                                continue;
-                                            bean.setTempFavor(data.isFavor());
-                                            bean.setTempPlayType(data.getPlayType());
-                                            bean.setTempTag(detail.getSplitTag());
-                                            bean.setTempTitle(detail.getName());
-                                            bean.setTemoInfo(detail.getInfo());
-                                            bean.setTempRecClassId(data.getRecClassId());
-                                            bean.setTempImageUrl(detail.getPicture(true));
-                                            xuanjiData.add(bean);
-                                        }
-                                        VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                                        RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                                        ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                                        ((ArrayObjectAdapter) objectAdapter).add(xuanjiData);
-                                    }
-                                }
-                            }
+                            if (!xuanJi)
+                                throw new Exception();
+                            List<MediaBean> medias = data.getMedias();
+                            if (null == medias || medias.size() <= 0)
+                                throw new Exception();
+                            // 1
+                            String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                            reportDetailSelectionsButtonShow(cid);
+                            // 2
+                            DetailTemplateXuanJi.DetailTemplateXuanJiList xuanjiData = new DetailTemplateXuanJi.DetailTemplateXuanJiList();
+                            xuanjiData.addAll(data.getMedias());
+                            // 3
+                            VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
+                            RecyclerView.Adapter adapter = verticalGridView.getAdapter();
+                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+                            ((ArrayObjectAdapter) objectAdapter).add(xuanjiData);
                         } catch (Exception e) {
                         }
                         return data;
                     }
                 })
-                // 猜你喜欢 => 数据处理
+                // 猜你喜欢
                 .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
                     public CallDetailBean apply(CallDetailBean data) {
                         try {
                             List<RecMediaBean> albums = data.getRecAlbums();
-                            if (null != albums) {
-                                int size = albums.size();
-                                if (size > 0) {
-                                    // 上报
-                                    String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                                    reportDetailRecommendShow(cid);
-
-                                    // 2
-                                    DetailTemplateFavor.DetailTemplateFavList favorData = new DetailTemplateFavor.DetailTemplateFavList();
-                                    for (int i = 0; i < size; i++) {
-                                        MediaBean bean = albums.get(i);
-                                        if (null == bean)
-                                            continue;
-                                        favorData.add(bean);
-                                    }
-                                    VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                                    RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                                    ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                                    ((ArrayObjectAdapter) objectAdapter).add(favorData);
-                                }
+                            if (null == albums || albums.size() <= 0)
+                                throw new Exception();
+                            // 1
+                            String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                            reportDetailRecommendShow(cid);
+                            // 2
+                            DetailTemplateFavor.DetailTemplateFavList favorData = new DetailTemplateFavor.DetailTemplateFavList();
+                            for (RecMediaBean bean : albums) {
+                                if (null == bean)
+                                    continue;
+                                favorData.add(bean);
                             }
+                            // 3
+                            VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
+                            RecyclerView.Adapter adapter = verticalGridView.getAdapter();
+                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+                            ((ArrayObjectAdapter) objectAdapter).add(favorData);
                         } catch (Exception e) {
                         }
                         return data;
@@ -392,6 +380,8 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         try {
                             int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
                             List<MediaBean> medias = data.getMedias();
+                            if (null == medias || medias.size() <= 0)
+                                throw new Exception();
                             return medias.get(position);
                         } catch (Exception e) {
                             MediaBean bean = new MediaBean();
@@ -402,6 +392,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             bean.setTempTitle(data.getAlbum().getName());
                             bean.setTemoInfo(data.getAlbum().getInfo());
                             bean.setTempImageUrl(data.getAlbum().getPicture(true));
+                            bean.setTempPicList(data.getAlbum().getPicList());
                             bean.setTempVideoUrl(null);
                             return bean;
                         }
@@ -590,7 +581,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     protected final void delayStartPlayer(@NonNull MediaBean data, boolean isFromUser) {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
+                    public void subscribe(ObservableEmitter<Boolean> emitter) {
                         emitter.onNext(isFromUser);
                     }
                 })
@@ -693,7 +684,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     protected void requestHuaweiAuth(String movieCode, long seek) {
         addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
                     @Override
-                    public void subscribe(ObservableEmitter<String> emitter) {
+                    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                        if (null == movieCode || movieCode.length() <= 0)
+                            throw new Exception("鉴权失败: not contains movieCode");
                         emitter.onNext(movieCode);
                     }
                 })
@@ -718,14 +711,15 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 .map(new Function<BaseAuthorizationBean, String>() {
                     @Override
                     public String apply(BaseAuthorizationBean resp) throws Exception {
-                        try {
-                            String url = resp.getData().get(0).getPlayurl();
-                            if (null == url || url.length() <= 0)
-                                throw new Exception();
-                            return url;
-                        } catch (Exception e) {
-                            throw new Exception("华为鉴权失败:" + resp.getReturncode());
-                        }
+                        if (null == resp)
+                            throw new Exception("鉴权失败: not contains resp");
+                        List<BaseAuthorizationBean.ItemBean> data = resp.getData();
+                        if (null == data || data.size() <= 0)
+                            throw new Exception("鉴权失败: " + resp.getReturncode());
+                        String url = data.get(0).getPlayurl();
+                        if (null == url || url.length() <= 0)
+                            throw new Exception("鉴权失败: " + resp.getReturncode());
+                        return url;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)

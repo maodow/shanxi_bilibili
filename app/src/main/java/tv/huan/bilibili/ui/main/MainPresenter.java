@@ -433,14 +433,15 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                 .map(new Function<BaseAuthorizationBean, String>() {
                     @Override
                     public String apply(BaseAuthorizationBean resp) throws Exception {
-                        try {
-                            String url = resp.getData().get(0).getPlayurl();
-                            if (null == url || url.length() <= 0)
-                                throw new Exception();
-                            return url;
-                        } catch (Exception e) {
-                            throw new Exception("华为鉴权失败:" + resp.getReturncode());
-                        }
+                        if (null == resp)
+                            throw new Exception("鉴权失败: not contains resp");
+                        List<BaseAuthorizationBean.ItemBean> data = resp.getData();
+                        if (null == data || data.size() <= 0)
+                            throw new Exception("鉴权失败: " + resp.getReturncode());
+                        String url = data.get(0).getPlayurl();
+                        if (null == url || url.length() <= 0)
+                            throw new Exception("鉴权失败: " + resp.getReturncode());
+                        return url;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)

@@ -187,7 +187,7 @@ public final class DetailTemplatePlayer extends Presenter {
                 throw new Exception("activity error: null");
             if (!(activity instanceof DetailActivity))
                 throw new Exception("activity error: " + activity);
-            ((DetailActivity) activity).jumpVip();
+            ((DetailActivity) activity).jumpVip(false);
         } catch (Exception e) {
             LogUtil.log("DetailTemplatePlayer => startShopping => " + e.getMessage());
         }
@@ -316,7 +316,7 @@ public final class DetailTemplatePlayer extends Presenter {
                     Activity activity = WrapperUtil.getWrapperActivity(v.getContext());
                     LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
                     if (null != activity && activity instanceof DetailActivity) {
-                        ((DetailActivity) activity).jumpVip();
+                        ((DetailActivity) activity).jumpVip(true);
                     }
                 }
             });
