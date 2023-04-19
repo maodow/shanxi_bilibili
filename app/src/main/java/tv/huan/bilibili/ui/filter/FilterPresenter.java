@@ -69,32 +69,47 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
 
     protected void setAdapter() {
         RecyclerView recyclerView = getView().findViewById(R.id.filter_content);
-        recyclerView.setLayoutManager(new AutoMeasureNoGridLayoutManager(getView().getContext(), 5));
+        recyclerView.setLayoutManager(new AutoMeasureNoGridLayoutManager(getView().getContext(), 3));
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_96);
-                int v = offset / 10;
+//                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_96);
+//                int v = offset / 10;
+//                outRect.set(0, 0, offset, offset);
+//                int position = parent.getChildAdapterPosition(view);
+//
+//                int i = position % 5;
+//                if (i == 0) {
+//                    outRect.set(0, 0, v * 2, 0);
+//                } else if (i == 4) {
+//                    outRect.set(v * 2, 0, 0, 0);
+//                } else {
+//                    outRect.set(v, 0, v, 0);
+//                }
+//
+//                if (i == 1) {
+//                    view.setTranslationX(-v / 2);
+//                } else if (i == 3) {
+//                    view.setTranslationX(v / 2);
+//                } else {
+//                    view.setTranslationX(0);
+//                }
+
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_48);
+                int v = offset / 6;
                 outRect.set(0, 0, offset, offset);
                 int position = parent.getChildAdapterPosition(view);
 
-                int i = position % 5;
+                int i = position % 3;
                 if (i == 0) {
                     outRect.set(0, 0, v * 2, 0);
-                } else if (i == 4) {
+                } else if (i == 2) {
                     outRect.set(v * 2, 0, 0, 0);
                 } else {
                     outRect.set(v, 0, v, 0);
                 }
 
-                if (i == 1) {
-                    view.setTranslationX(-v / 2);
-                } else if (i == 3) {
-                    view.setTranslationX(v / 2);
-                } else {
-                    view.setTranslationX(0);
-                }
             }
         });
         recyclerView.setAdapter(new RecyclerView.Adapter() {
@@ -142,7 +157,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 try {
                     GetSecondTagAlbumsBean.ItemBean itemBean = mData.get(position);
                     ImageView imageView = holder.itemView.findViewById(R.id.common_poster_img);
-                    GlideUtils.loadVt(imageView.getContext(), itemBean.getPicture(false), imageView);
+                    GlideUtils.loadHz(imageView.getContext(), itemBean.getPicture(true), imageView);
                 } catch (Exception e) {
                 }
                 try {

@@ -78,7 +78,7 @@ public class DetailTemplateFavor extends ListTvRowPresenter<MediaBean> {
         }
         try {
             ImageView imageView = view.findViewById(R.id.common_poster_img);
-            GlideUtils.loadVt(imageView.getContext(), album.getPicture(false), imageView);
+            GlideUtils.loadHz(imageView.getContext(), album.getPicture(true), imageView);
         } catch (Exception e) {
         }
         try {
