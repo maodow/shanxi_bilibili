@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
+import lib.kalu.mediaplayer.core.component.ComponentPause;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
@@ -65,6 +66,7 @@ public final class DetailTemplatePlayer extends Presenter {
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_favor);
             textView.setText(view.getResources().getString(status ? R.string.detail_favor_yes : R.string.detail_favor_no));
+            textView.setSelected(status);
         } catch (Exception e) {
         }
     }
@@ -95,6 +97,12 @@ public final class DetailTemplatePlayer extends Presenter {
         try {
             TextView textView = view.findViewById(R.id.detail_player_item_title);
             textView.setText(data.getTempTitle());
+        } catch (Exception e) {
+        }
+        try {
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            ComponentPause component = playerView.findComponent(ComponentPause.class);
+            component.setComponentTitleText(data.getTempTitle());
         } catch (Exception e) {
         }
         try {
@@ -131,6 +139,7 @@ public final class DetailTemplatePlayer extends Presenter {
             if (BuildConfig.HUAN_ALWAYS_SHOW_DETAIL_VIP) {
                 TextView textView = view.findViewById(R.id.detail_player_item_vip);
                 textView.setVisibility(View.VISIBLE);
+                textView.requestFocus();
             } else {
                 HeilongjiangApi.checkVip(view.getContext(), new OnStatusChangeListener() {
                     @Override
@@ -143,6 +152,7 @@ public final class DetailTemplatePlayer extends Presenter {
                     public void onFail() {
                         TextView textView = view.findViewById(R.id.detail_player_item_vip);
                         textView.setVisibility(View.VISIBLE);
+                        textView.requestFocus();
                     }
                 });
             }
@@ -344,6 +354,7 @@ public final class DetailTemplatePlayer extends Presenter {
                 }
             });
             // 全屏
+            view.findViewById(R.id.detail_player_item_full).requestFocus();
             view.findViewById(R.id.detail_player_item_full).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

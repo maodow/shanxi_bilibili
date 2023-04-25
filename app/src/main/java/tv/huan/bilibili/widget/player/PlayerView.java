@@ -5,8 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -20,7 +18,6 @@ import lib.kalu.mediaplayer.core.component.ComponentSeek;
 import lib.kalu.mediaplayer.core.component.ComponentSpeed;
 import lib.kalu.mediaplayer.listener.OnPlayerChangeListener;
 import lib.kalu.mediaplayer.widget.player.PlayerLayout;
-import tv.huan.bilibili.R;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.utils.LogUtil;
@@ -61,6 +58,17 @@ public class PlayerView extends PlayerLayout {
         setPlayerChangeListener(new OnPlayerChangeListener() {
 
             @Override
+            public void onWindow(int state) {
+                if (state == PlayerType.WindowType.FULL) {
+                    setFocusable(true);
+                    requestFocus();
+                } else {
+                    setFocusable(false);
+                }
+                LogUtil.log("PlayerView11", "onWindow => state = " + state);
+            }
+
+            @Override
             public void onProgress(@NonNull long position, @NonNull long duration) {
             }
 
@@ -85,7 +93,6 @@ public class PlayerView extends PlayerLayout {
         addComponent(loading);
         // pause
         ComponentPause pause = new ComponentPause(getContext());
-        pause.setComponentImageResource(R.mipmap.ic_launcher);
         pause.setComponentBackgroundColorInt(Color.parseColor("#66000000"));
         addComponent(pause);
         // error

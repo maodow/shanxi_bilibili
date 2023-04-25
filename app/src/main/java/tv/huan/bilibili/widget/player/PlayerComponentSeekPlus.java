@@ -1,4 +1,4 @@
-//package tv.huan.huanshiTV.widget.player;
+//package tv.huan.bilibili.widget.player;
 //
 //import android.content.Context;
 //import android.graphics.Rect;
@@ -23,18 +23,16 @@
 //import java.util.List;
 //
 //import lib.kalu.mediaplayer.config.player.PlayerType;
-//import lib.kalu.mediaplayer.core.controller.base.ControllerWrapper;
-//import lib.kalu.mediaplayer.core.controller.impl.ComponentApi;
+//import lib.kalu.mediaplayer.core.component.ComponentApi;
 //import tv.huan.bilibili.R;
-//import tv.huan.huanshiTV.bean.Media;
 //
-//public class PlayerComponentSeek extends RelativeLayout implements ComponentApi {
+//public class PlayerComponentSeekPlus extends RelativeLayout implements ComponentApi {
 //    protected ControllerWrapper mControllerWrapper;
 //    private boolean isOK = true;
 //
 //    private List<Media> mMedias = new ArrayList<>();
 //
-//    public PlayerComponentSeek(@NonNull Context context) {
+//    public PlayerComponentSeekPlus(@NonNull Context context) {
 //        super(context);
 //        this.init();
 //    }

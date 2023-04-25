@@ -625,33 +625,41 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
             int focusId = getView().getCurrentFocusId();
             LogUtil.log("FilterPresenter => dispatchEvent => up");
             if (focusId == R.id.filter_class) {
-                ClassScrollView classLayout = (ClassScrollView) getView().getCurrentFocus();
+                ClassScrollView classLayout = (ClassScrollView) getView().findViewById(R.id.filter_class);
                 int index = classLayout.getCheckedIndex();
                 LogUtil.log("FilterPresenter => dispatchEvent => index = " + index);
                 if (index <= 0) {
                     getView().setFocusable(R.id.filter_search, true);
-                    getView().setFocusable(R.id.filter_vip, true);
                     getView().requestFocus(R.id.filter_search);
                     return true;
                 }
             } else if (focusId == R.id.filter_item) {
-                View focus = getView().getCurrentFocus();
-                RecyclerView recyclerView = getView().findViewById(R.id.filter_content);
-                int adapterPosition = recyclerView.getChildAdapterPosition(focus);
-                getView().setVisibility(R.id.filter_tags, adapterPosition <= 9 ? View.VISIBLE : View.GONE);
+                ClassScrollView classLayout = (ClassScrollView) getView().findViewById(R.id.filter_class);
+                int index = classLayout.getCheckedIndex();
+                if (index == 0) {
+                    View focus = getView().getCurrentFocus();
+                    RecyclerView recyclerView = getView().findViewById(R.id.filter_content);
+                    int adapterPosition = recyclerView.getChildAdapterPosition(focus);
+                    getView().setVisibility(R.id.filter_tags, adapterPosition <= 9 ? View.VISIBLE : View.GONE);
+                } else {
+                    getView().setVisibility(R.id.filter_tags, View.GONE);
+                }
             }
         }
         // down
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
             int focusId = getView().getCurrentFocusId();
-            if (focusId == R.id.filter_search || focusId == R.id.filter_vip) {
+            if (focusId == R.id.filter_search) {
                 getView().setFocusable(R.id.filter_search, false);
-                getView().setFocusable(R.id.filter_vip, false);
                 return true;
             } else if (focusId == R.id.filter_item) {
                 RecyclerViewGrid recyclerView = getView().findViewById(R.id.filter_content);
                 int itemCount = recyclerView.getAdapter().getItemCount();
-                if (itemCount > 5) {
+                ClassScrollView classLayout = (ClassScrollView) getView().findViewById(R.id.filter_class);
+                int index = classLayout.getCheckedIndex();
+                if (index == 0 && itemCount > 5) {
+                    getView().setVisibility(R.id.filter_tags, View.GONE);
+                } else {
                     getView().setVisibility(R.id.filter_tags, View.GONE);
                 }
                 int focusPosition = recyclerView.findFocusPosition();
@@ -669,7 +677,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
         // right
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
             int focusId = getView().getCurrentFocusId();
-            if (focusId == R.id.filter_vip) {
+            if (focusId == R.id.filter_search) {
                 return true;
             } else if (focusId == R.id.filter_class) {
                 ClassScrollView classLayout = getView().findViewById(R.id.filter_class);

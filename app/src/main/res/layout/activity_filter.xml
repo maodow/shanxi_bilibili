@@ -32,26 +32,26 @@
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />
 
-    <!-- vip -->
-    <tv.huan.bilibili.widget.common.CommomChaoView
-        android:id="@+id/filter_vip"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_24"
-        android:layout_alignTop="@id/filter_search"
-        android:layout_marginLeft="@dimen/dp_14"
-        android:layout_toRightOf="@id/filter_search"
-        android:background="@drawable/bg_selector_common_vip"
-        android:drawableLeft="@drawable/ic_selector_common_chao"
-        android:drawablePadding="@dimen/dp_8"
-        android:focusable="false"
-        android:gravity="center"
-        android:minEms="5"
-        android:paddingLeft="@dimen/dp_10"
-        android:paddingRight="@dimen/dp_14"
-        android:textColor="@color/color_selector_aaaaaa_ffffff"
-        android:textSize="@dimen/sp_14"
-        app:tvp_drawable_left_height="@dimen/dp_14"
-        app:tvp_drawable_left_width="@dimen/dp_14" />
+<!--    &lt;!&ndash; vip &ndash;&gt;-->
+<!--    <tv.huan.bilibili.widget.common.CommomChaoView-->
+<!--        android:id="@+id/filter_vip"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="@dimen/dp_24"-->
+<!--        android:layout_alignTop="@id/filter_search"-->
+<!--        android:layout_marginLeft="@dimen/dp_14"-->
+<!--        android:layout_toRightOf="@id/filter_search"-->
+<!--        android:background="@drawable/bg_selector_common_vip"-->
+<!--        android:drawableLeft="@drawable/ic_selector_common_chao"-->
+<!--        android:drawablePadding="@dimen/dp_8"-->
+<!--        android:focusable="false"-->
+<!--        android:gravity="center"-->
+<!--        android:minEms="5"-->
+<!--        android:paddingLeft="@dimen/dp_10"-->
+<!--        android:paddingRight="@dimen/dp_14"-->
+<!--        android:textColor="@color/color_selector_aaaaaa_ffffff"-->
+<!--        android:textSize="@dimen/sp_14"-->
+<!--        app:tvp_drawable_left_height="@dimen/dp_14"-->
+<!--        app:tvp_drawable_left_width="@dimen/dp_14" />-->
 
     <!-- logo -->
     <ImageView

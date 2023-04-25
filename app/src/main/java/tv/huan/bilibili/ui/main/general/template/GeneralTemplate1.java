@@ -10,9 +10,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +86,38 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
         }
         // 文字
         else {
+            // 跳转详情
+            try {
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = viewHolder.getAbsoluteAdapterPosition();
+                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+                        JumpUtil.next(v.getContext(), bean);
+                    }
+                });
+            } catch (Exception e) {
+            }
+            // 获取焦点
+            try {
+                view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        // focus
+                        mHasFocus = hasFocus;
+                        int position = viewHolder.getAbsoluteAdapterPosition();
+                        if (hasFocus) {
+                            // center
+                            refreshBanner(v, list, position);
+                        }
+                        // selected
+                        refreshSelected(list, position);
+                        // right
+                        refreshRight(v, hasFocus);
+                    }
+                });
+            } catch (Exception e) {
+            }
             try {
                 view.setOnKeyListener(new View.OnKeyListener() {
                     @Override
@@ -94,38 +129,6 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
                     }
                 });
             } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-
-                        int position = viewHolder.getAbsoluteAdapterPosition();
-                        // focus
-                        mHasFocus = hasFocus;
-                        // center
-                        refreshBanner(v, list, position);
-                        // selected
-                        refreshSelected(list, position);
-                        // right
-                        refreshRight(v, hasFocus);
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = viewHolder.getAbsoluteAdapterPosition();
-                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                        JumpUtil.next(v.getContext(), bean);
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -142,9 +145,14 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
             } catch (Exception e) {
             }
             try {
+                String picture = templateBean.getPicture(true);
+                if (null == picture || picture.length() <= 0)
+                    throw new Exception();
                 ImageView vImg = v.findViewById(R.id.common_poster_img);
-                GlideUtils.load(vImg.getContext(), templateBean.getPicture(true), vImg);
+                GlideUtils.load(vImg.getContext(), picture, vImg);
             } catch (Exception e) {
+                ImageView vImg = v.findViewById(R.id.common_poster_img);
+                vImg.setImageDrawable(null);
             }
             try {
                 ImageView imageView = v.findViewById(R.id.common_poster_vip);
@@ -200,13 +208,15 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
     }
 
     private final void refreshBanner(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
+//        Toast.makeText(v.getContext(), "position = " + position, Toast.LENGTH_SHORT).show();
         try {
             GetSubChannelsByChannelBean.ListBean.TemplateBean news = list.get(position);
             GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(0);
+//            LogUtil.log("HFGFHJHJ", new Gson().toJson(news));
+//            LogUtil.log("HFGFHJHJ", new Gson().toJson(olds));
             olds.copyPic(news);
             notifyItemRangeChanged(v, 0, 1);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

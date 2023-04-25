@@ -259,7 +259,6 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                                 if (null == t)
                                     continue;
                                 int preTemplate = t.getPreTemplate();
-                                LinkedList<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateInserts;
                                 // 模板1
                                 if (1 == preTemplate) {
                                     List<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateData = t.getTemplateData();
