@@ -71,7 +71,7 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    public void showData(View view, MediaBean data) {
+    public void showData(View view, MediaBean data, boolean isFromUser) {
         try {
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
@@ -113,6 +113,8 @@ public final class DetailTemplatePlayer extends Presenter {
         try {
             LinearLayout linearLayout = view.findViewById(R.id.detail_player_item_pic);
             int childCount = linearLayout.getChildCount();
+            if (childCount > 1)
+                throw new Exception();
             for (int i = 0; i < childCount - 1; i++) {
                 linearLayout.removeViewAt(i);
             }
@@ -139,7 +141,9 @@ public final class DetailTemplatePlayer extends Presenter {
             if (BuildConfig.HUAN_ALWAYS_SHOW_DETAIL_VIP) {
                 TextView textView = view.findViewById(R.id.detail_player_item_vip);
                 textView.setVisibility(View.VISIBLE);
-                textView.requestFocus();
+                if (!isFromUser) {
+                    textView.requestFocus();
+                }
             } else {
                 HeilongjiangApi.checkVip(view.getContext(), new OnStatusChangeListener() {
                     @Override
@@ -152,7 +156,9 @@ public final class DetailTemplatePlayer extends Presenter {
                     public void onFail() {
                         TextView textView = view.findViewById(R.id.detail_player_item_vip);
                         textView.setVisibility(View.VISIBLE);
-                        textView.requestFocus();
+                        if (!isFromUser) {
+                            textView.requestFocus();
+                        }
                     }
                 });
             }

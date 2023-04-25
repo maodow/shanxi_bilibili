@@ -100,7 +100,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public void updatePlayerInfo(@NonNull MediaBean data, boolean isFromUser) {
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.showData(data);
+        gridView.showData(data, true);
     }
 
     @Override
@@ -109,9 +109,9 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void checkPlayer(@NonNull MediaBean data) {
+    public void checkPlayer(@NonNull MediaBean data, boolean isFromUser) {
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.checkPlayer(data);
+        gridView.checkPlayer(data, isFromUser);
     }
 
     @Override
@@ -142,6 +142,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         try {
             if (!isFromUser)
                 throw new Exception();
+            Toast.makeText(getApplicationContext(), "即将跳转开通会员", Toast.LENGTH_SHORT).show();
             HeilongjiangApi.jumpVip(getApplicationContext(), null);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "观看当前视频, 需要开通会员", Toast.LENGTH_SHORT).show();

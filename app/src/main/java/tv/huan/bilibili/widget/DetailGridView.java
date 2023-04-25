@@ -120,10 +120,10 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public void checkPlayer(@NonNull MediaBean data) {
+    public void checkPlayer(@NonNull MediaBean data, boolean isFromUser) {
         try {
             // 1
-            showData(data);
+            showData(data, isFromUser);
             // 2
             int playType = data.getTempPlayType();
             int index = data.getEpisodeIndex() + 1;
@@ -139,7 +139,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public void showData(@NonNull MediaBean data) {
+    public void showData(@NonNull MediaBean data, boolean isFromUser) {
         stopPlayer();
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
@@ -148,7 +148,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
             if (null == presenterPlayer)
                 throw new Exception("presenterPlayer error: null");
-            presenterPlayer.showData(viewHolder.itemView, data);
+            presenterPlayer.showData(viewHolder.itemView, data, isFromUser);
         } catch (Exception e) {
             LogUtil.log("BaseGridView => showData => " + e.getMessage());
         }
@@ -242,7 +242,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             }
             // 电影
             else {
-                checkPlayer(data);
+                checkPlayer(data, true);
             }
         } catch (Exception e) {
             LogUtil.log("DetailGridView", "checkedPlayerPosition => " + e.getMessage());

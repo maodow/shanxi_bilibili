@@ -597,7 +597,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(Boolean a) {
                         if (a) {
-                            getView().checkPlayer(data);
+                            getView().checkPlayer(data, isFromUser);
                         } else {
                             getView().checkedPlayerPosition(data);
                         }
@@ -724,15 +724,23 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
                 .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                })
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().showToast(throwable);
+                        getView().hideLoading();
                     }
                 })
                 .doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(String s) {
+                        getView().hideLoading();
                         getView().huaweiSucc(s, seek);
                     }
                 })

@@ -19,7 +19,7 @@ public interface DetailView extends BaseViewImpl {
 
     void delayStartPlayer(@NonNull MediaBean data, boolean isFromUser);
 
-    void checkPlayer(@NonNull MediaBean data);
+    void checkPlayer(@NonNull MediaBean data, boolean isFromUser);
 
     void updatePlayerInfo(@NonNull MediaBean data, boolean isFromUser);
 
