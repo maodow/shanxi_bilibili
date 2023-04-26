@@ -6,12 +6,21 @@ import tv.huan.bilibili.bean.base.BaseDataBean;
 
 public final class CallWelcomeBean extends BaseDataBean implements Serializable {
 
+    private boolean checkStatus;
     private int adTime;
     private String adUrl;
     private int select;
     private int type;
     private String secondTag;
     private String data;
+
+    public boolean isCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(boolean checkStatus) {
+        this.checkStatus = checkStatus;
+    }
 
     public String getData() {
         return data;

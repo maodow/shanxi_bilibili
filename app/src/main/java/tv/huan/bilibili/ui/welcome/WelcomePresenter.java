@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -28,7 +27,6 @@ import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.GetPopupInfoBeanBase;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallWelcomeBean;
-import tv.huan.bilibili.exception.HeilongjiangSdkException;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.ADUtil;
@@ -47,21 +45,10 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     @Override
                     public void subscribe(ObservableEmitter<CallWelcomeBean> emitter) throws Exception {
 
-                        boolean checkStatus = false;
-                        for (int i = 0; i < 5; i++) {
-                            checkStatus = HeilongjiangUtil.getCheckStatus();
-                            if (checkStatus)
-                                break;
-                            HeilongjiangUtil.updateCheckVip(getView().getContext());
-                            SystemClock.sleep(i == 0 ? 400 : 1000);
-                        }
-                        if (!checkStatus)
-                            throw new HeilongjiangSdkException();
-
+                        CallWelcomeBean welcomeBean = new CallWelcomeBean();
                         // ad
                         ADUtil.adSplash(getView().getContext());
 
-                        CallWelcomeBean welcomeBean = new CallWelcomeBean();
                         try {
                             // 3
                             int select = getView().getIntExtra(WelcomeActivity.INTENT_SELECT, 1);
@@ -137,6 +124,22 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         } catch (Exception e) {
                             throw e;
                         }
+                    }
+                })
+                // 获取vip状态
+                .map(new Function<CallWelcomeBean, CallWelcomeBean>() {
+                    @Override
+                    public CallWelcomeBean apply(CallWelcomeBean callWelcomeBean) throws Exception {
+                        for (int i = 0; i < 5; i++) {
+                            boolean checkStatus = HeilongjiangUtil.getCheckStatus();
+                            if (checkStatus) {
+                                callWelcomeBean.setCheckStatus(true);
+                                break;
+                            }
+                            HeilongjiangUtil.updateCheckVip(getView().getContext());
+                            SystemClock.sleep(i == 0 ? 400 : 1000);
+                        }
+                        return callWelcomeBean;
                     }
                 })
                 // 首次打开app上报
@@ -256,11 +259,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     @Override
                     public void accept(Throwable throwable) {
                         LogUtil.log("WelcomePresenter => request => doOnError =>");
-                        if (throwable instanceof HeilongjiangSdkException) {
-                            Toast.makeText(getView().getContext(), "移动sdk初始化失败", Toast.LENGTH_SHORT).show();
-                        } else {
-                            getView().next();
-                        }
+                        getView().next();
                     }
                 })
                 .doOnNext(new Consumer<CallWelcomeBean>() {
@@ -270,16 +269,16 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         if (data.containsAd()) {
                             getView().setVisibility(R.id.welcome_img, View.VISIBLE);
                             getView().updateBackground(data.getAdUrl());
-                            intervalTime(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
+                            intervalTime(data.isCheckStatus(),data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
                         } else {
-                            getView().next(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag());
+                            getView().next(data.isCheckStatus(), data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag());
                         }
                     }
                 })
                 .subscribe());
     }
 
-    private void intervalTime(@NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag, @NonNull int time) {
+    private void intervalTime(@NonNull boolean checkStaus,@NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag, @NonNull int time) {
 
         // 延时1s ，每间隔1s，时间单位
         addDisposable(Observable.interval(1, 1, TimeUnit.SECONDS)
@@ -291,7 +290,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         // 取消订阅
                         if (aLong >= time) {
                             dispose();
-                            getView().next(data, select, type, cid, classId, secondTag);
+                            getView().next(checkStaus, data, select, type, cid, classId, secondTag);
                         } else {
                             int num = (int) (time - aLong);
                             getView().setVisibility(R.id.welcome_time, View.VISIBLE);

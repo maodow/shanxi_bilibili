@@ -61,6 +61,24 @@ public final class DetailTemplatePlayer extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
 //        LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
+
+        // 默认焦点
+        try {
+            boolean containsVip = HeilongjiangUtil.getVipStatus();
+            if (containsVip) {
+                if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
+                    viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.GONE);
+                    viewHolder.view.findViewById(R.id.detail_player_item_full).requestFocus();
+                }
+            } else {
+                if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
+                    viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.VISIBLE);
+                    viewHolder.view.findViewById(R.id.detail_player_item_vip).requestFocus();
+                }
+            }
+        } catch (Exception e) {
+        }
+
         // 播放器信息
         try {
             PlayerView playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
@@ -149,34 +167,13 @@ public final class DetailTemplatePlayer extends Presenter {
     }
 
     public void checkVipStatus(View view, MediaBean data, boolean isFromUser) {
-
         LogUtil.log("DetailTemplatePlayer => checkVipStatus => isFromUser = " + isFromUser);
 
         boolean containsVip = HeilongjiangUtil.getVipStatus();
 
         if (containsVip) {
-            if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
-                try {
-                    view.findViewById(R.id.detail_player_item_vip).setVisibility(View.GONE);
-                } catch (Exception e) {
-                }
-                try {
-                    view.findViewById(R.id.detail_player_item_full).requestFocus();
-                } catch (Exception e) {
-                }
-            }
             startHuawei(view, data);
         } else {
-            if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
-                try {
-                    view.findViewById(R.id.detail_player_item_vip).setVisibility(View.VISIBLE);
-                } catch (Exception e) {
-                }
-                try {
-                    view.findViewById(R.id.detail_player_item_vip).requestFocus();
-                } catch (Exception e) {
-                }
-            }
             jumpVip(view);
         }
     }

@@ -29,7 +29,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public static final String INTENT_FROM_SPECIAL_SCENEID = "intent_from_special_sceneid";
     public static final String INTENT_FROM_SPECIAL_TOPID = "intent_from_special_topid";
     public static final String INTENT_FROM_SPECIAL_TOPNAME = "intent_from_special_topname";
-    //    private static final String INTENT_UPDATE = "intent_update";
     protected static final String INTENT_VID = "intent_vid";
     protected static final String INTENT_INDEX = "intent_index";
     protected static final String INTENT_REC_CLASSID = "intent_rec_classid";
@@ -103,8 +102,13 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         putStringExtra(INTENT_VID, data.getVid());
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
         putIntExtra(INTENT_INDEX, data.getEpisodeIndex() + 1);
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.startPlayerPosition(data, isFromUser);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                DetailGridView gridView = findViewById(R.id.detail_list);
+                gridView.startPlayerPosition(data, isFromUser);
+            }
+        }, 1000);
     }
 
     @Override

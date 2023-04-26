@@ -263,28 +263,12 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         return detailBean;
                     }
                 })
-//                // 数据处理
-//                .map(new Function<CallDetailBean, CallDetailBean>() {
-//                    @Override
-//                    public CallDetailBean apply(CallDetailBean data) {
-//                        try {
-//                            List<MediaBean> medias = data.getMedias();
-//                            if (null == medias || medias.size() <= 0)
-//                                throw new Exception();
-//                            MediaDetailBean detail = data.getAlbum();
-//                            for (MediaBean bean : medias) {
-//
-//                            }
-//                        } catch (Exception e) {
-//                        }
-//                        return data;
-//                    }
-//                })
                 // 播放器 => ui
                 .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
                     public CallDetailBean apply(CallDetailBean data) {
                         try {
+                            // 1
                             DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = new DetailTemplatePlayer.DetailTemplatePlayerObject();
                             playerObject.setTempFavor(data.isFavor());
                             playerObject.setEpisodeIndex(data.getDefaultPosition());
@@ -296,11 +280,11 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             playerObject.setTempImageUrl(data.getAlbum().getPicture(true));
                             playerObject.setTempPicList(data.getAlbum().getPicList());
                             playerObject.setTempVideoUrl(null);
-                            VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                            RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            ((ArrayObjectAdapter) objectAdapter).add(playerObject, true);
+                            // 2
+                            ArrayObjectAdapter objectAdapter = getView().getArrayObjectAdapter(R.id.detail_list);
+                            objectAdapter.add(playerObject, false);
                         } catch (Exception e) {
+                            LogUtil.log("DetailPresenter => request => 播放器 => " + e.getMessage());
                         }
                         return data;
                     }
@@ -324,11 +308,10 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             DetailTemplateXuanQi.DetailTemplateXuanQiList xuanqiData = new DetailTemplateXuanQi.DetailTemplateXuanQiList();
                             xuanqiData.addAll(data.getMedias());
                             // 3
-                            VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                            RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            ((ArrayObjectAdapter) objectAdapter).add(xuanqiData, true);
+                            ArrayObjectAdapter objectAdapter = getView().getArrayObjectAdapter(R.id.detail_list);
+                            objectAdapter.add(xuanqiData, false);
                         } catch (Exception e) {
+                            LogUtil.log("DetailPresenter => request => 选期列表 => " + e.getMessage());
                         }
                         return data;
                     }
@@ -352,11 +335,10 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             DetailTemplateXuanJi.DetailTemplateXuanJiList xuanjiData = new DetailTemplateXuanJi.DetailTemplateXuanJiList();
                             xuanjiData.addAll(data.getMedias());
                             // 3
-                            VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                            RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            ((ArrayObjectAdapter) objectAdapter).add(xuanjiData, true);
+                            ArrayObjectAdapter objectAdapter = getView().getArrayObjectAdapter(R.id.detail_list);
+                            objectAdapter.add(xuanjiData, false);
                         } catch (Exception e) {
+                            LogUtil.log("DetailPresenter => request => 选集列表 => " + e.getMessage());
                         }
                         return data;
                     }
@@ -380,11 +362,10 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                 favorData.add(bean);
                             }
                             // 3
-                            VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
-                            RecyclerView.Adapter adapter = verticalGridView.getAdapter();
-                            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            ((ArrayObjectAdapter) objectAdapter).add(favorData, true);
+                            ArrayObjectAdapter objectAdapter = getView().getArrayObjectAdapter(R.id.detail_list);
+                            objectAdapter.add(favorData, false);
                         } catch (Exception e) {
+                            LogUtil.log("DetailPresenter => request => 猜你喜欢 => " + e.getMessage());
                         }
                         return data;
                     }
@@ -400,12 +381,13 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
-//                        getView().notifyDataSetChanged(R.id.detail_list);
+                        getView().notifyDataSetChanged(R.id.detail_list);
                     }
                 }).doOnNext(new Consumer<CallDetailBean>() {
                     @Override
                     public void accept(CallDetailBean data) {
                         getView().hideLoading();
+                        getView().notifyDataRangeInsertLeanBack(R.id.detail_list);
                         getView().startPlayerPosition(data.getMedias().get(data.getDefaultPosition()), false);
                     }
                 }).subscribe());

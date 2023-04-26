@@ -18,6 +18,15 @@ public class CallDetailBean implements Serializable {
     private List<MediaBean> medias; //剧集
     private List<RecMediaBean> recAlbums; //猜你喜欢
     private int defaultPosition;
+//    private int adapterCount;
+//
+//    public int getAdapterCount() {
+//        return adapterCount;
+//    }
+//
+//    public void setAdapterCount(int adapterCount) {
+//        this.adapterCount = adapterCount;
+//    }
 
     public int getDefaultPosition() {
         return defaultPosition;

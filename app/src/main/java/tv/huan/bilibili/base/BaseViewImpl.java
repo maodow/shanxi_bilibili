@@ -7,6 +7,11 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.BaseGridView;
+import androidx.leanback.widget.ItemBridgeAdapter;
+import androidx.leanback.widget.ObjectAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import lib.kalu.frame.mvp.BaseActivity;
 import lib.kalu.frame.mvp.BaseFragment;
@@ -20,6 +25,27 @@ import tv.huan.bilibili.utils.GlideUtils;
 public interface BaseViewImpl extends BaseView {
 
     String KEY_INSTALL_TIME = "install_time";
+
+    default ArrayObjectAdapter getArrayObjectAdapter(@IdRes int id) {
+        try {
+            BaseGridView baseGridView = (BaseGridView) ((BaseView) this).findViewById(id);
+            RecyclerView.Adapter adapter = baseGridView.getAdapter();
+            return (ArrayObjectAdapter) ((ItemBridgeAdapter) adapter).getAdapter();
+        } catch (Exception var5) {
+            return null;
+        }
+    }
+
+    default void notifyDataRangeInsertLeanBack(@IdRes int id) {
+        try {
+            BaseGridView baseGridView = (BaseGridView) ((BaseView) this).findViewById(id);
+            RecyclerView.Adapter adapter = baseGridView.getAdapter();
+            ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
+            int size = objectAdapter.size();
+            objectAdapter.notifyItemRangeInserted(0, size);
+        } catch (Exception var5) {
+        }
+    }
 
     @Override
     default void showToast(@NonNull Throwable throwable) {

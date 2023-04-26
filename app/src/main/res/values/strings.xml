@@ -10,6 +10,8 @@
     <string name="dialog_warning_sure">确定</string>
 
     <string name="welcome_warning">获取用户信息失败，请稍后重试</string>
+    <string name="welcome_warning2">移动sdk初始化成功</string>
+    <string name="welcome_warning3">移动sdk初始化失败</string>
     <string name="detail_warning">即将为您播放</string>
     <string name="detail_warning_next">即将播放，第%1$d集</string>
 

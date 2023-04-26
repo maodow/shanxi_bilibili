@@ -224,63 +224,6 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public void startPlayer(@NonNull MediaBean data, boolean isFromUser) {
-//        // 用户点击
-//        if (isFromUser) {
-//            checkPlayer(data, true);
-//        }
-//        // 默认
-//        else {
-//            try {
-//                ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-//                ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-//                Object o = objectAdapter.get(1);
-//                if (null == o)
-//                    throw new Exception("objectAdapter null");
-//                // 选集列表
-//                if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-//                    int index = data.getEpisodeIndex() + 1;
-//                    DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-//                    if (index > 0 && null != presenter) {
-//                        int position = --index;
-//                        ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
-//                        presenter.checkedPlayingPosition(viewHolder.itemView, position);
-//                    }
-//                }
-//                // 选期列表
-//                else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
-//                    int index = data.getEpisodeIndex() + 1;
-//                    DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
-//                    if (index > 0 && null != presenter) {
-//                        int position = --index;
-//                        presenter.checkedPlayingPosition(this, position);
-//                    }
-//                }
-//                // 电影
-//                else {
-//                    checkPlayer(data, false);
-//                }
-//            } catch (Exception e) {
-//                LogUtil.log("DetailGridView", "startPlayer => " + e.getMessage());
-//            }
-//        }
-    }
-
-//    public void updateInfo(@NonNull MediaBean data, boolean isFromUser) {
-//        stopPlayer();
-//        try {
-//            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-//            if (null == viewHolder)
-//                throw new Exception("viewHolder error: null");
-//            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-//            if (null == presenterPlayer)
-//                throw new Exception("presenterPlayer error: null");
-//            presenterPlayer.updateInfo(viewHolder.itemView, data, isFromUser);
-//        } catch (Exception e) {
-//            LogUtil.log("BaseGridView => updateInfo => " + e.getMessage());
-//        }
-//    }
-
     public boolean dispatchKeyEvent(int direction) {
 
         try {
@@ -296,6 +239,10 @@ public final class DetailGridView extends LeanBackVerticalGridView {
 //                    return presenter.dispatchKeyEventCheckedPositionEpisode(this);
 //                } else if (null != presenter && direction == View.FOCUS_UP) {
 //                    return presenter.dispatchKeyEventCheckedPositionRange(this);
+//                }
+//                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+//                if (null != presenter) {
+//                    return presenter.dispatchKeyEventCheckedPosition(this);
 //                }
             }
             // 选期列表
