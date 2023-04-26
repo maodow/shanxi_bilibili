@@ -2,6 +2,8 @@ package tv.huan.bilibili.ui.detail;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -91,33 +93,18 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void updateVidAndClassId(@NonNull MediaBean data) {
+    public void updatePlayerPosition(@NonNull MediaBean data) {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.updatePlayerPosition(data);
+    }
+
+    @Override
+    public void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser) {
         putStringExtra(INTENT_VID, data.getVid());
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
         putIntExtra(INTENT_INDEX, data.getEpisodeIndex() + 1);
-    }
-
-    @Override
-    public void updatePlayerInfo(@NonNull MediaBean data, boolean isFromUser) {
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.showData(data, true);
-    }
-
-    @Override
-    public void delayStartPlayer(@NonNull MediaBean data, boolean isFromUser) {
-        getPresenter().delayStartPlayer(data, isFromUser);
-    }
-
-    @Override
-    public void checkPlayer(@NonNull MediaBean data, boolean isFromUser) {
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.checkPlayer(data, isFromUser);
-    }
-
-    @Override
-    public void checkedPlayerPosition(@NonNull MediaBean data) {
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.checkedPlayerPosition(data);
+        gridView.startPlayerPosition(data, isFromUser);
     }
 
     @Override
@@ -138,15 +125,14 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void jumpVip(boolean isFromUser) {
-        try {
-            if (!isFromUser)
-                throw new Exception();
-            Toast.makeText(getApplicationContext(), "即将跳转开通会员", Toast.LENGTH_SHORT).show();
-            HeilongjiangApi.jumpVip(getApplicationContext(), null);
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "观看当前视频, 需要开通会员", Toast.LENGTH_SHORT).show();
-        }
+    public void jumpVip() {
+        Toast.makeText(getApplicationContext(), "观看当前视频, 需要开通会员, 即将跳转订购页面", Toast.LENGTH_SHORT).show();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                HeilongjiangApi.jumpVip(getApplicationContext(), null);
+            }
+        }, 2000);
     }
 
     @Override

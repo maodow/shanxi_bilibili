@@ -8,7 +8,7 @@
     app:rl_corner_top_left="8dp">
 
     <include
-        layout="@layout/common_poster"
+        layout="@layout/common_poster2"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

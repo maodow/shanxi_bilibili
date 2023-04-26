@@ -6,6 +6,7 @@ import java.util.List;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.RecMediaBean;
+import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 
 public class CallDetailBean implements Serializable {
 
@@ -16,6 +17,15 @@ public class CallDetailBean implements Serializable {
     private MediaDetailBean album; //媒资详情
     private List<MediaBean> medias; //剧集
     private List<RecMediaBean> recAlbums; //猜你喜欢
+    private int defaultPosition;
+
+    public int getDefaultPosition() {
+        return defaultPosition;
+    }
+
+    public void setDefaultPosition(int defaultPosition) {
+        this.defaultPosition = defaultPosition;
+    }
 
     public MediaDetailBean getAlbum() {
         return album;

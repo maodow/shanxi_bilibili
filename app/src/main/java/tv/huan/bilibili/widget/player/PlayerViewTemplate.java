@@ -4,16 +4,13 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import lib.kalu.mediaplayer.config.player.PlayerType;
+import lib.kalu.mediaplayer.core.component.ComponentError;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.component.ComponentSpeed;
-import tv.huan.bilibili.utils.ADUtil;
-import tv.huan.bilibili.utils.LogUtil;
 
 public final class PlayerViewTemplate extends PlayerView {
 
@@ -65,5 +62,10 @@ public final class PlayerViewTemplate extends PlayerView {
         // init
         PlayerComponentInitTemplate initTemplate21 = new PlayerComponentInitTemplate(getContext());
         addComponent(initTemplate21);
+
+        // error
+        ComponentError error = new ComponentError(getContext());
+        error.setComponentBackgroundColorInt(Color.BLACK);
+        addComponent(error);
     }
 }

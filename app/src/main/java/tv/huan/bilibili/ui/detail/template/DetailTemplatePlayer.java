@@ -19,7 +19,6 @@ import lib.kalu.mediaplayer.core.component.ComponentPause;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
-import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
@@ -49,7 +48,10 @@ public final class DetailTemplatePlayer extends Presenter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
 //        LogUtil.log("DetailTemplatePlayer => onCreateViewHolder");
-        return createViewHolder(viewGroup);
+        Context context = viewGroup.getContext();
+        View inflate = LayoutInflater.from(context).inflate(R.layout.activity_detail_item_player, viewGroup, false);
+        addListener(inflate);
+        return new ViewHolder(inflate);
     }
 
     @Override
@@ -60,58 +62,47 @@ public final class DetailTemplatePlayer extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
 //        LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
-    }
-
-    public void updateFavor(View view, boolean status) {
+        // 播放器信息
         try {
-            TextView textView = view.findViewById(R.id.detail_player_item_favor);
-            textView.setText(view.getResources().getString(status ? R.string.detail_favor_yes : R.string.detail_favor_no));
-            textView.setSelected(status);
-        } catch (Exception e) {
-        }
-    }
-
-    public void showData(View view, MediaBean data, boolean isFromUser) {
-        try {
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerView playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
-            componentInit.setData(data);
+            componentInit.setData((MediaBean) o);
             componentInit.show();
         } catch (Exception e) {
         }
         try {
-            TextView textView = view.findViewById(R.id.detail_player_item_favor);
-            textView.setText(view.getResources().getString(data.isTempFavor() ? R.string.detail_favor_yes : R.string.detail_favor_no));
+            TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_favor);
+            textView.setText(viewHolder.view.getResources().getString(((MediaBean) o).isTempFavor() ? R.string.detail_favor_yes : R.string.detail_favor_no));
             JSONObject object = new JSONObject();
-            object.put("cid", data.getCid());
-            object.put("recClassId", data.getRecClassId());
+            object.put("cid", ((MediaBean) o).getCid());
+            object.put("recClassId", ((MediaBean) o).getRecClassId());
             textView.setTag(R.id.detail_player_item_favor, object);
 
         } catch (Exception e) {
         }
         try {
-            TextView textView = view.findViewById(R.id.detail_player_item_tag);
-            textView.setText(data.getTempTag());
+            TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_tag);
+            textView.setText(((MediaBean) o).getTempTag());
         } catch (Exception e) {
         }
         try {
-            TextView textView = view.findViewById(R.id.detail_player_item_title);
-            textView.setText(data.getTempTitle());
+            TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_title);
+            textView.setText(((MediaBean) o).getTempTitle());
         } catch (Exception e) {
         }
         try {
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerView playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
             ComponentPause component = playerView.findComponent(ComponentPause.class);
-            component.setComponentTitleText(data.getTempTitle());
+            component.setComponentTitleText(((MediaBean) o).getTempTitle());
         } catch (Exception e) {
         }
         try {
-            TextView textView = view.findViewById(R.id.detail_player_item_info);
-            textView.setText(data.getTemoInfo());
+            TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_info);
+            textView.setText(((MediaBean) o).getTemoInfo());
         } catch (Exception e) {
         }
         try {
-            LinearLayout linearLayout = view.findViewById(R.id.detail_player_item_pic);
+            LinearLayout linearLayout = viewHolder.view.findViewById(R.id.detail_player_item_pic);
             int childCount = linearLayout.getChildCount();
             if (childCount > 1)
                 throw new Exception();
@@ -120,7 +111,7 @@ public final class DetailTemplatePlayer extends Presenter {
             }
             int length;
             try {
-                length = data.getTempPicList().length;
+                length = ((MediaBean) o).getTempPicList().length;
             } catch (Exception e) {
                 length = 0;
             }
@@ -132,78 +123,81 @@ public final class DetailTemplatePlayer extends Presenter {
                 int margin = linearLayout.getContext().getResources().getDimensionPixelOffset(i == length - 1 ? R.dimen.dp_8 : R.dimen.dp_4);
                 params.setMargins(0, 0, margin, 0);
                 picView.setLayoutParams(params);
-                GlideUtils.loadHz(picView.getContext(), data.getTempPicList()[i], picView);
+                GlideUtils.loadHz(picView.getContext(), ((MediaBean) o).getTempPicList()[i], picView);
                 linearLayout.addView(picView, i);
             }
         } catch (Exception e) {
         }
-        try {
-            if (BuildConfig.HUAN_ALWAYS_SHOW_DETAIL_VIP) {
-                TextView textView = view.findViewById(R.id.detail_player_item_vip);
-                textView.setVisibility(View.VISIBLE);
-                if (!isFromUser) {
-                    textView.requestFocus();
-                }
-            } else {
-                HeilongjiangApi.checkVip(view.getContext(), new OnStatusChangeListener() {
-                    @Override
-                    public void onPass() {
-                        TextView textView = view.findViewById(R.id.detail_player_item_vip);
-                        textView.setVisibility(View.GONE);
-                    }
+    }
 
-                    @Override
-                    public void onFail() {
-                        TextView textView = view.findViewById(R.id.detail_player_item_vip);
-                        textView.setVisibility(View.VISIBLE);
-                        if (!isFromUser) {
-                            textView.requestFocus();
-                        }
-                    }
-                });
-            }
+    public void updateFavor(View view, boolean status) {
+        try {
+            TextView textView = view.findViewById(R.id.detail_player_item_favor);
+            textView.setText(view.getResources().getString(status ? R.string.detail_favor_yes : R.string.detail_favor_no));
+            textView.setSelected(status);
         } catch (Exception e) {
         }
     }
 
-    private void hideWarning(View viewGroup) {
-        LogUtil.log("DetailTemplatePlayer => hideWarning");
+    public void updatePosition(View view, int position) {
         try {
-            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
-            componentInit.gone();
+            componentInit.updatePosition(position);
+            componentInit.show();
         } catch (Exception e) {
-            LogUtil.log("DetailTemplatePlayer => hideWarning => " + e.getMessage());
         }
     }
 
-    public void checkVip(View view, MediaBean data) {
+    public void checkVipStatus(View view, MediaBean data, boolean isFromUser) {
+
+        LogUtil.log("DetailTemplatePlayer => checkVipStatus => isFromUser = " + isFromUser);
+
         try {
-            LogUtil.log("DetailTemplatePlayer => checkAccount");
             HeilongjiangApi.checkVip(view.getContext(), !BuildConfig.HUAN_CHECK_VIP, new OnStatusChangeListener() {
                 @Override
                 public void onPass() {
+                    if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
+                        try {
+                            view.findViewById(R.id.detail_player_item_vip).setVisibility(View.GONE);
+                        } catch (Exception e) {
+                        }
+                        try {
+                            view.findViewById(R.id.detail_player_item_full).requestFocus();
+                        } catch (Exception e) {
+                        }
+                    }
                     startHuawei(view, data);
                 }
 
                 @Override
                 public void onFail() {
-                    startShopping(view);
+                    if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
+                        try {
+                            view.findViewById(R.id.detail_player_item_vip).setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                        }
+                        try {
+                            view.findViewById(R.id.detail_player_item_vip).requestFocus();
+                        } catch (Exception e) {
+                        }
+                    }
+                    jumpVip(view);
                 }
             });
         } catch (Exception e) {
-            LogUtil.log("DetailTemplatePlayer => checkAccount => " + e.getMessage());
+            LogUtil.log("DetailTemplatePlayer => checkVipStatus => " + e.getMessage());
         }
     }
 
-    private void startShopping(View view) {
+    private void jumpVip(View view) {
         try {
             Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
             if (null == activity)
                 throw new Exception("activity error: null");
             if (!(activity instanceof DetailActivity))
                 throw new Exception("activity error: " + activity);
-            ((DetailActivity) activity).jumpVip(false);
+            ((DetailActivity) activity).jumpVip();
         } catch (Exception e) {
             LogUtil.log("DetailTemplatePlayer => startShopping => " + e.getMessage());
         }
@@ -303,16 +297,13 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private ViewHolder createViewHolder(ViewGroup viewGroup) {
+    private void addListener(View viewGroup) {
         try {
-            Context context = viewGroup.getContext();
-            View view = LayoutInflater.from(context).inflate(R.layout.activity_detail_item_player, viewGroup, false);
             // 简介
-            view.findViewById(R.id.detail_player_item_info).setOnClickListener(new View.OnClickListener() {
+            viewGroup.findViewById(R.id.detail_player_item_info).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Activity activity = WrapperUtil.getWrapperActivity(v.getContext());
-                    LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
                     if (null != activity && activity instanceof DetailActivity) {
                         ViewGroup group = (ViewGroup) v.getParent();
                         TextView v1 = group.findViewById(R.id.detail_player_item_title);
@@ -326,18 +317,18 @@ public final class DetailTemplatePlayer extends Presenter {
                 }
             });
             // 会员
-            view.findViewById(R.id.detail_player_item_vip).setOnClickListener(new View.OnClickListener() {
+            viewGroup.findViewById(R.id.detail_player_item_vip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Activity activity = WrapperUtil.getWrapperActivity(v.getContext());
                     LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
                     if (null != activity && activity instanceof DetailActivity) {
-                        ((DetailActivity) activity).jumpVip(true);
+                        ((DetailActivity) activity).jumpVip();
                     }
                 }
             });
             // 收藏
-            view.findViewById(R.id.detail_player_item_favor).setOnClickListener(new View.OnClickListener() {
+            viewGroup.findViewById(R.id.detail_player_item_favor).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Activity activity = WrapperUtil.getWrapperActivity(v.getContext());
@@ -359,9 +350,7 @@ public final class DetailTemplatePlayer extends Presenter {
                     }
                 }
             });
-            // 全屏
-            view.findViewById(R.id.detail_player_item_full).requestFocus();
-            view.findViewById(R.id.detail_player_item_full).setOnClickListener(new View.OnClickListener() {
+            viewGroup.findViewById(R.id.detail_player_item_full).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ViewGroup viewGroup = (ViewGroup) v.getParent().getParent().getParent();
@@ -369,12 +358,10 @@ public final class DetailTemplatePlayer extends Presenter {
                     playerView.startFull();
                 }
             });
-            return new ViewHolder(view);
         } catch (Exception e) {
-            return null;
         }
     }
 
-    public static class DetailTemplatePlayerObject extends BaseDataBean {
+    public static class DetailTemplatePlayerObject extends MediaBean {
     }
 }

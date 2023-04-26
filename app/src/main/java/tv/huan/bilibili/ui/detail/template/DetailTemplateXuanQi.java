@@ -10,8 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
@@ -19,7 +17,6 @@ import lib.kalu.leanback.presenter.ListTvEpisodesSingleGridPresenter;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.DetailActivity;
-import tv.huan.bilibili.utils.LogUtil;
 
 public class DetailTemplateXuanQi extends ListTvEpisodesSingleGridPresenter<MediaBean> {
 
@@ -83,12 +80,13 @@ public class DetailTemplateXuanQi extends ListTvEpisodesSingleGridPresenter<Medi
     @Override
     protected void onClickHolder(@NonNull Context context, @NonNull View v, @NonNull MediaBean t, @NonNull int position, boolean isFromUser) {
         try {
+            if (!isFromUser)
+                throw new Exception();
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null != activity && activity instanceof DetailActivity) {
                 ((DetailActivity) activity).stopPlayer();
-                ((DetailActivity) activity).updateVidAndClassId(t);
-                ((DetailActivity) activity).updatePlayerInfo(t, true);
-                ((DetailActivity) activity).delayStartPlayer(t, true);
+                ((DetailActivity) activity).updatePlayerPosition(t);
+                ((DetailActivity) activity).startPlayerPosition(t, true);
             }
         } catch (Exception e) {
         }

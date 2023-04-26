@@ -33,6 +33,12 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
     }
 
     @Override
+    public void onBindViewHolder(ViewHolder viewHolder, Object item) {
+        super.onBindViewHolder(viewHolder, item);
+        LogUtil.log("DetailTemplateXuanJi => onBindViewHolder => data = " + new Gson().toJson(item));
+    }
+
+    @Override
     public void onBindHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position) {
         LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position + ", data = " + item);
         try {
@@ -90,12 +96,13 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
     public void onClickEpisode(@NonNull Context context, @NonNull View view, @NonNull MediaBean item, @NonNull int position, boolean isFromUser) {
         LogUtil.log("DetailTemplateXuanJi => onClickEpisode => position = " + position + ", isFromUser = " + isFromUser + ", data = " + new Gson().toJson(item));
         try {
+            if (!isFromUser)
+                throw new Exception();
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null != activity && activity instanceof DetailActivity) {
                 ((DetailActivity) activity).stopPlayer();
-                ((DetailActivity) activity).updateVidAndClassId(item);
-                ((DetailActivity) activity).updatePlayerInfo(item, true);
-                ((DetailActivity) activity).delayStartPlayer(item, true);
+                ((DetailActivity) activity).updatePlayerPosition(item);
+                ((DetailActivity) activity).startPlayerPosition(item, true);
             }
         } catch (Exception e) {
         }

@@ -112,4 +112,16 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
         } catch (Exception e) {
         }
     }
+
+    public final void updatePosition(@NonNull int position) {
+        try {
+            TextView textView = findViewById(R.id.detail_player_item_data);
+            String s = String.valueOf(textView.getText());
+            int index = s.indexOf("第");
+            String substring = s.substring(0, index - 2);
+            String string = textView.getResources().getString(R.string.detail_playing_index, substring, position + 1);
+            textView.setText(string);
+        } catch (Exception e) {
+        }
+    }
 }

@@ -15,15 +15,9 @@ public interface DetailView extends BaseViewImpl {
 
     void updateFavor(boolean status);
 
-    void updateVidAndClassId(@NonNull MediaBean data);
+    void updatePlayerPosition(@NonNull MediaBean data);
 
-    void delayStartPlayer(@NonNull MediaBean data, boolean isFromUser);
-
-    void checkPlayer(@NonNull MediaBean data, boolean isFromUser);
-
-    void updatePlayerInfo(@NonNull MediaBean data, boolean isFromUser);
-
-    void checkedPlayerPosition(@NonNull MediaBean data);
+    void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser);
 
     void checkedPlayerPositionNext();
 
@@ -31,7 +25,7 @@ public interface DetailView extends BaseViewImpl {
 
     void completePlayer();
 
-    void jumpVip(boolean isFromUser);
+    void jumpVip();
 
     void stopFull();
 

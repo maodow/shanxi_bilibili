@@ -6,23 +6,18 @@ import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.leanback.round.RoundLinearLayout;
-import lib.kalu.leanback.round.RoundRelativeLayout;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
@@ -31,7 +26,7 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+public final class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
     @Override
     public String initRowTitle(Context context) {
         if (BuildConfig.HUAN_TEST_TEMPLATE_ENABLE) {
@@ -79,57 +74,40 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
     }
 
     @Override
-    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int i) {
+    protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int viewType) {
 
-        // 图片
-        if (i == 1) {
+        if (viewType == 1)
+            return;
+        // 跳转详情
+        try {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = viewHolder.getAbsoluteAdapterPosition();
+                    GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
+                    JumpUtil.next(v.getContext(), bean);
+                }
+            });
+        } catch (Exception e) {
         }
-        // 文字
-        else {
-            // 跳转详情
-            try {
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = viewHolder.getAbsoluteAdapterPosition();
-                        GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(position);
-                        JumpUtil.next(v.getContext(), bean);
+        // 获取焦点
+        try {
+            view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    int position = viewHolder.getAbsoluteAdapterPosition();
+                    if (hasFocus) {
+                        updateData(list, position);
+                        updateCheckedPosition(list, position);
+                        notifyItemRangeChanged(v, 0, 1);
                     }
-                });
-            } catch (Exception e) {
-            }
-            // 获取焦点
-            try {
-                view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        // focus
-                        mHasFocus = hasFocus;
-                        int position = viewHolder.getAbsoluteAdapterPosition();
-                        if (hasFocus) {
-                            // center
-                            refreshBanner(v, list, position);
-                        }
-                        // selected
-                        refreshSelected(list, position);
-                        // right
-                        refreshRight(v, hasFocus);
-                    }
-                });
-            } catch (Exception e) {
-            }
-            try {
-                view.setOnKeyListener(new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                            notifyItemRangeChanged(v, 1, 5);
-                        }
-                        return false;
-                    }
-                });
-            } catch (Exception e) {
-            }
+                    notifyItemRangeChanged(v, 1, 5);
+
+                    // focus
+                    mHasFocus = hasFocus;
+                }
+            });
+        } catch (Exception e) {
         }
     }
 
@@ -138,7 +116,6 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
 
         // 图片
         if (viewType == 1) {
-
             try {
                 TextView textView = v.findViewById(R.id.common_poster_name);
                 textView.setText(templateBean.getName());
@@ -178,76 +155,29 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
             TextView vDesc = v.findViewById(R.id.album_item_template01_desc);
             vDesc.setText(templateBean.getName());
             vDesc.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+            // 4
+            try {
+                if (hasFocus) {
+                    Resources resources = v.getResources();
+                    int offset = resources.getDimensionPixelOffset(R.dimen.dp_8);
+                    ((RoundLinearLayout) v).refreshRound(offset, offset, offset, offset);
+                } else {
+                    ((RoundLinearLayout) v).resetRound();
+                }
+            } catch (Exception e) {
+            }
         }
     }
 
-    @Override
-    protected int initItemViewType(int position, GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean) {
-        if (position == 0) {
-            return 1;
-        } else if (position == 1) {
-            return 2;
-        } else if (position == 5) {
-            return 3;
-        } else {
-            return 4;
-        }
-    }
-
-    @Override
-    protected int initLayout(int viewType) {
-        if (viewType == 1) {
-            return R.layout.fragment_general_item_template01a;
-        } else if (viewType == 2) {
-            return R.layout.fragment_general_item_template01b;
-        } else if (viewType == 3) {
-            return R.layout.fragment_general_item_template01d;
-        } else {
-            return R.layout.fragment_general_item_template01c;
-        }
-    }
-
-    private final void refreshBanner(@NonNull View v, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
-//        Toast.makeText(v.getContext(), "position = " + position, Toast.LENGTH_SHORT).show();
+    private void updateData(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
         try {
-            GetSubChannelsByChannelBean.ListBean.TemplateBean news = list.get(position);
-            GetSubChannelsByChannelBean.ListBean.TemplateBean olds = list.get(0);
-//            LogUtil.log("HFGFHJHJ", new Gson().toJson(news));
-//            LogUtil.log("HFGFHJHJ", new Gson().toJson(olds));
-            olds.copyPic(news);
-            notifyItemRangeChanged(v, 0, 1);
+            GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
+            list.set(0, templateBean);
         } catch (Exception e) {
         }
     }
 
-    private final void refreshRight(@NonNull View v, @NonNull boolean hasFocus) {
-
-        // refresh
-        notifyItemRangeChanged(v, 1, 5);
-
-        // RoundRelativeLayout
-        if (v instanceof RoundRelativeLayout) {
-            if (hasFocus) {
-                Resources resources = v.getResources();
-                int offset = resources.getDimensionPixelOffset(R.dimen.dp_8);
-                ((RoundRelativeLayout) v).refreshRound(offset, offset, offset, offset);
-            } else {
-                ((RoundRelativeLayout) v).resetRound();
-            }
-        }
-        // RoundLinearLayout
-        else if (v instanceof RoundLinearLayout) {
-            if (hasFocus) {
-                Resources resources = v.getResources();
-                int offset = resources.getDimensionPixelOffset(R.dimen.dp_8);
-                ((RoundLinearLayout) v).refreshRound(offset, offset, offset, offset);
-            } else {
-                ((RoundLinearLayout) v).resetRound();
-            }
-        }
-    }
-
-    private final void refreshSelected(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
+    private void updateCheckedPosition(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
         int size = list.size();
         if (size > 6) {
             size = 6;
@@ -260,7 +190,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
         }
     }
 
-    private final int nextPosition(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
+    private int nextPosition(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
         int position = -1;
         try {
             int size = list.size();
@@ -287,7 +217,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
         return position;
     }
 
-    private final int selectPosition(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
+    private int selectPosition(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
         int position = -1;
         try {
             int size = list.size();
@@ -319,7 +249,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
         mHandler.sendMessageDelayed(message, start ? 0 : 2000);
     }
 
-    private final void cleanLoop() {
+    private void cleanLoop() {
         LogUtil.log("GeneralTemplate1", "cleanLoop =>");
         mHandler.removeMessages(0x10013);
         mHandler.removeMessages(0x10023);
@@ -361,7 +291,7 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
                             int position = nextPosition(list);
                             if (position == -1) {
                                 position = 1;
-                                refreshSelected(list, 1);
+                                updateCheckedPosition(list, 1);
                             }
 //                    Log.e("GeneralTemplate1", "handleMessage => position = " + position);
                             int size = list.size();
@@ -369,9 +299,9 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
                                 size = 6;
                             }
                             // selected
-                            refreshSelected(list, position);
+                            updateCheckedPosition(list, position);
                             // center
-                            refreshBanner((View) objects[0], list, position);
+                            updateData(list, position);
                             // item
                             notifyItemRangeChanged((View) objects[0], 1, size - 1);
                             // loop
@@ -401,12 +331,12 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
         }
     };
 
-    public final void pauseMessage() {
+    public void pauseMessage() {
         mPause = true;
         LogUtil.log("GeneralTemplate1", "pauseMessage =>");
     }
 
-    public final void resumeMessage() {
+    public void resumeMessage() {
         mPause = false;
         if (null != mMessage && null != mMessage[0]) {
             Message message = new Message();
@@ -417,6 +347,32 @@ public class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsByChanne
             mHandler.removeCallbacksAndMessages(null);
             mHandler.sendMessageDelayed(message, 2000);
             LogUtil.log("GeneralTemplate1", "resumeMessage =>");
+        }
+    }
+
+    @Override
+    protected int initItemViewType(int position, GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean) {
+        if (position == 0) {
+            return 1;
+        } else if (position == 1) {
+            return 2;
+        } else if (position == 5) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
+    @Override
+    protected int initLayout(int viewType) {
+        if (viewType == 1) {
+            return R.layout.fragment_general_item_template01a;
+        } else if (viewType == 2) {
+            return R.layout.fragment_general_item_template01b;
+        } else if (viewType == 3) {
+            return R.layout.fragment_general_item_template01d;
+        } else {
+            return R.layout.fragment_general_item_template01c;
         }
     }
 

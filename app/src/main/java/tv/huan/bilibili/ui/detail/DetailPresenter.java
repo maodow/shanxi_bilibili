@@ -63,21 +63,29 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     }
 
     protected void request() {
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<CallDetailBean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> emitter) {
-                        emitter.onNext(true);
+                    public void subscribe(ObservableEmitter<CallDetailBean> emitter) {
+                        CallDetailBean detailBean = new CallDetailBean();
+                        try {
+                            int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
+                            detailBean.setDefaultPosition(position);
+                        } catch (Exception e) {
+                            detailBean.setDefaultPosition(0);
+                        }
+                        emitter.onNext(detailBean);
                     }
                 })
                 // 媒资数据
-                .flatMap(new Function<Boolean, ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>>>() {
+                .flatMap(new Function<CallDetailBean, ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>>>() {
                     @Override
-                    public ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>> apply(Boolean o) {
+                    public ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>> apply(CallDetailBean data) {
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                         if (null == cid) {
                             cid = "";
                         }
-                        return HttpClient.getHttpClient().getHttpApi().getMediasByCid2(cid);
+                        String s = new Gson().toJson(data);
+                        return HttpClient.getHttpClient().getHttpApi().getMediasByCid2(cid, s);
                     }
                 })
                 // 媒资数据 => 数据处理
@@ -137,7 +145,12 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                         }
 
-                        CallDetailBean detailBean = new CallDetailBean();
+                        CallDetailBean detailBean;
+                        try {
+                            detailBean = new Gson().fromJson(getMediasByCid2BeanBaseResponsedBean.getExtra(), CallDetailBean.class);
+                        } catch (Exception e) {
+                            detailBean = new CallDetailBean();
+                        }
 
                         // recClassId
                         try {
@@ -250,46 +263,49 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         return detailBean;
                     }
                 })
-                // 播放器 => 数据处理
+//                // 数据处理
+//                .map(new Function<CallDetailBean, CallDetailBean>() {
+//                    @Override
+//                    public CallDetailBean apply(CallDetailBean data) {
+//                        try {
+//                            List<MediaBean> medias = data.getMedias();
+//                            if (null == medias || medias.size() <= 0)
+//                                throw new Exception();
+//                            MediaDetailBean detail = data.getAlbum();
+//                            for (MediaBean bean : medias) {
+//
+//                            }
+//                        } catch (Exception e) {
+//                        }
+//                        return data;
+//                    }
+//                })
+                // 播放器 => ui
                 .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
                     public CallDetailBean apply(CallDetailBean data) {
                         try {
-                            DetailTemplatePlayer.DetailTemplatePlayerObject playerData = new DetailTemplatePlayer.DetailTemplatePlayerObject();
+                            DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = new DetailTemplatePlayer.DetailTemplatePlayerObject();
+                            playerObject.setTempFavor(data.isFavor());
+                            playerObject.setEpisodeIndex(data.getDefaultPosition());
+                            playerObject.setTempPlayType(data.getPlayType());
+                            playerObject.setTempRecClassId(data.getRecClassId());
+                            playerObject.setTempTag(data.getAlbum().getSplitTag());
+                            playerObject.setTempTitle(data.getAlbum().getName());
+                            playerObject.setTemoInfo(data.getAlbum().getInfo());
+                            playerObject.setTempImageUrl(data.getAlbum().getPicture(true));
+                            playerObject.setTempPicList(data.getAlbum().getPicList());
+                            playerObject.setTempVideoUrl(null);
                             VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
                             RecyclerView.Adapter adapter = verticalGridView.getAdapter();
                             ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            ((ArrayObjectAdapter) objectAdapter).add(playerData);
+                            ((ArrayObjectAdapter) objectAdapter).add(playerObject, true);
                         } catch (Exception e) {
                         }
                         return data;
                     }
                 })
-                // 数据处理
-                .map(new Function<CallDetailBean, CallDetailBean>() {
-                    @Override
-                    public CallDetailBean apply(CallDetailBean data) {
-                        try {
-                            List<MediaBean> medias = data.getMedias();
-                            if (null == medias || medias.size() <= 0)
-                                throw new Exception();
-                            MediaDetailBean detail = data.getAlbum();
-                            for (MediaBean bean : medias) {
-                                bean.setTempFavor(data.isFavor());
-                                bean.setTempPlayType(data.getPlayType());
-                                bean.setTempTag(detail.getSplitTag());
-                                bean.setTempTitle(detail.getName());
-                                bean.setTemoInfo(detail.getInfo());
-                                bean.setTempRecClassId(data.getRecClassId());
-                                bean.setTempImageUrl(detail.getPicture(true));
-                                bean.setTempPicList(data.getAlbum().getPicList());
-                            }
-                        } catch (Exception e) {
-                        }
-                        return data;
-                    }
-                })
-                // 选期列表
+                // 选期列表 => ui
                 .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
                     public CallDetailBean apply(CallDetailBean data) {
@@ -311,13 +327,13 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
                             RecyclerView.Adapter adapter = verticalGridView.getAdapter();
                             ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            ((ArrayObjectAdapter) objectAdapter).add(xuanqiData);
+                            ((ArrayObjectAdapter) objectAdapter).add(xuanqiData, true);
                         } catch (Exception e) {
                         }
                         return data;
                     }
                 })
-                // 选集列表
+                // 选集列表 => ui
                 .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
                     public CallDetailBean apply(CallDetailBean data) {
@@ -339,13 +355,13 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
                             RecyclerView.Adapter adapter = verticalGridView.getAdapter();
                             ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            ((ArrayObjectAdapter) objectAdapter).add(xuanjiData);
+                            ((ArrayObjectAdapter) objectAdapter).add(xuanjiData, true);
                         } catch (Exception e) {
                         }
                         return data;
                     }
                 })
-                // 猜你喜欢
+                // 猜你喜欢 => ui
                 .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
                     public CallDetailBean apply(CallDetailBean data) {
@@ -367,35 +383,10 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             VerticalGridView verticalGridView = getView().findViewById(R.id.detail_list);
                             RecyclerView.Adapter adapter = verticalGridView.getAdapter();
                             ObjectAdapter objectAdapter = ((ItemBridgeAdapter) adapter).getAdapter();
-                            ((ArrayObjectAdapter) objectAdapter).add(favorData);
+                            ((ArrayObjectAdapter) objectAdapter).add(favorData, true);
                         } catch (Exception e) {
                         }
                         return data;
-                    }
-                })
-                // 默认position => 数据处理
-                .map(new Function<CallDetailBean, MediaBean>() {
-                    @Override
-                    public MediaBean apply(CallDetailBean data) {
-                        try {
-                            int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
-                            List<MediaBean> medias = data.getMedias();
-                            if (null == medias || medias.size() <= 0)
-                                throw new Exception();
-                            return medias.get(position);
-                        } catch (Exception e) {
-                            MediaBean bean = new MediaBean();
-                            bean.setTempFavor(data.isFavor());
-                            bean.setTempPlayType(data.getPlayType());
-                            bean.setTempRecClassId(data.getRecClassId());
-                            bean.setTempTag(data.getAlbum().getSplitTag());
-                            bean.setTempTitle(data.getAlbum().getName());
-                            bean.setTemoInfo(data.getAlbum().getInfo());
-                            bean.setTempImageUrl(data.getAlbum().getPicture(true));
-                            bean.setTempPicList(data.getAlbum().getPicList());
-                            bean.setTempVideoUrl(null);
-                            return bean;
-                        }
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -409,16 +400,13 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().hideLoading();
-                        getView().notifyDataSetChanged(R.id.detail_list);
+//                        getView().notifyDataSetChanged(R.id.detail_list);
                     }
-                }).doOnNext(new Consumer<MediaBean>() {
+                }).doOnNext(new Consumer<CallDetailBean>() {
                     @Override
-                    public void accept(MediaBean data) {
+                    public void accept(CallDetailBean data) {
                         getView().hideLoading();
-                        getView().notifyDataSetChanged(R.id.detail_list);
-                        getView().updateVidAndClassId(data);
-                        getView().updatePlayerInfo(data, false);
-                        getView().delayStartPlayer(data, false);
+                        getView().startPlayerPosition(data.getMedias().get(data.getDefaultPosition()), false);
                     }
                 }).subscribe());
     }
@@ -578,34 +566,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         return false;
     }
 
-    protected final void delayStartPlayer(@NonNull MediaBean data, boolean isFromUser) {
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Boolean> emitter) {
-                        emitter.onNext(isFromUser);
-                    }
-                })
-//                .delay(isFromUser ? 4000 : 1, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        getView().showToast(throwable);
-                    }
-                })
-                .doOnNext(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean a) {
-                        if (a) {
-                            getView().checkPlayer(data, isFromUser);
-                        } else {
-                            getView().checkedPlayerPosition(data);
-                        }
-                    }
-                })
-                .subscribe());
-    }
-
     protected void checkPlayerNext() {
         LogUtil.log("DetailPresenter => checkPlayerNext =>");
         addDisposable(Observable.create(new ObservableOnSubscribe<Integer>() {
@@ -727,20 +687,20 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
-                        getView().showLoading();
+//                        getView().showLoading();
                     }
                 })
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().showToast(throwable);
-                        getView().hideLoading();
+//                        getView().hideLoading();
                     }
                 })
                 .doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(String s) {
-                        getView().hideLoading();
+//                        getView().hideLoading();
                         getView().huaweiSucc(s, seek);
                     }
                 })

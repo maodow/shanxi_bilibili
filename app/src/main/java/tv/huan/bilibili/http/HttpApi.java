@@ -80,7 +80,8 @@ public interface HttpApi {
 
     // 获取影片详情
     @GET("media/getMediasByCid2/{cid}")
-    Observable<BaseResponsedBean<GetMediasByCid2Bean>> getMediasByCid2(@Path("cid") String cid);
+    Observable<BaseResponsedBean<GetMediasByCid2Bean>> getMediasByCid2(@Path("cid") String cid,
+                                                                       @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     // 首字母搜索
     @GET("album/getAlbumBySpell2")

@@ -7,6 +7,8 @@ import android.view.ViewParent;
 import androidx.leanback.widget.VerticalGridView;
 
 import lib.kalu.leanback.round.RoundRelativeLayout;
+import tv.huan.bilibili.R;
+import tv.huan.bilibili.utils.LogUtil;
 
 public class Template1RelativeLayout extends RoundRelativeLayout {
     public Template1RelativeLayout(Context context) {
@@ -33,14 +35,13 @@ public class Template1RelativeLayout extends RoundRelativeLayout {
             int width = verticalGridView.getWidth();
             int left = verticalGridView.getPaddingLeft();
             int right = verticalGridView.getPaddingRight();
-            int w = (int) ((int) ((width - left - right) / 10) * 7.5);
-            int h = (int) width / 4;
-            int specW = MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY);
-            int specH = MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY);
+            float w = (width - left - right) * 0.75F;
+            float h = getResources().getDimensionPixelOffset(R.dimen.dp_225);
+            int specW = MeasureSpec.makeMeasureSpec((int) w, MeasureSpec.EXACTLY);
+            int specH = MeasureSpec.makeMeasureSpec((int) h, MeasureSpec.EXACTLY);
             super.onMeasure(specW, specH);
-            setMeasuredDimension(w, h);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.log("Template1RelativeLayoutLeft => onMeasure => " + e.getMessage());
         }
     }
 }
