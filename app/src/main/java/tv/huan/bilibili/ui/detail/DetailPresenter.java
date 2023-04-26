@@ -6,9 +6,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ItemBridgeAdapter;
-import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.VerticalGridView;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
@@ -261,6 +259,22 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                         }
                         return detailBean;
+                    }
+                })
+                // 数据处理
+                .map(new Function<CallDetailBean, CallDetailBean>() {
+                    @Override
+                    public CallDetailBean apply(CallDetailBean data) {
+                        try {
+                            List<MediaBean> medias = data.getMedias();
+                            if (null == medias || medias.size() <= 0)
+                                throw new Exception();
+                            for (MediaBean bean : medias) {
+                                bean.setTempPlayType(data.getPlayType());
+                            }
+                        } catch (Exception e) {
+                        }
+                        return data;
                     }
                 })
                 // 播放器 => ui
