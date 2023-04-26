@@ -11,8 +11,7 @@ import androidx.core.view.ViewCompat;
 
 import lib.kalu.leanback.plus.TextViewPlus;
 import tv.huan.bilibili.R;
-import tv.huan.heilongjiang.HeilongjiangApi;
-import tv.huan.heilongjiang.OnStatusChangeListener;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public final class CommomChaoView extends TextViewPlus {
     public CommomChaoView(@NonNull Context context) {
@@ -53,31 +52,18 @@ public final class CommomChaoView extends TextViewPlus {
     private void init() {
         String packageName = getContext().getPackageName();
         if (null != packageName && packageName.endsWith(".yanshi")) {
-            updateText(false);
+            setText(getResources().getString( R.string.menu_chao_no));
         }
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HeilongjiangApi.jumpVip(getContext(), null);
+                HeilongjiangUtil.jumpVip(getContext(), null);
             }
         });
     }
 
     private void checkVip() {
-        HeilongjiangApi.checkVip(getContext(), new OnStatusChangeListener() {
-            @Override
-            public void onPass() {
-                updateText(true);
-            }
-
-            @Override
-            public void onFail() {
-                updateText(false);
-            }
-        });
-    }
-
-    private void updateText(boolean succ) {
-        setText(getResources().getString(succ ? R.string.menu_chao_yes : R.string.menu_chao_no));
+        boolean containsVip = HeilongjiangUtil.getVipStatus();
+        setText(getResources().getString(containsVip ? R.string.menu_chao_yes : R.string.menu_chao_no));
     }
 }

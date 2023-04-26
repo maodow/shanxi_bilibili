@@ -47,7 +47,7 @@ import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.bilibili.widget.player.PlayerView;
-import tv.huan.heilongjiang.HeilongjiangApi;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public class DetailPresenter extends BasePresenterImpl<DetailView> {
     public DetailPresenter(@NonNull DetailView detailView) {
@@ -663,7 +663,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         object.put("idflag", "1");
                         String json = String.valueOf(object);
                         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), json);
-                        String url = HeilongjiangApi.getEpgServer(getView().getContext());
+                        String url = HeilongjiangUtil.getEpgServer(getView().getContext());
                         return HttpClient.getHttpClient().getHttpApi().huaweiAuth(url, requestBody, s);
                     }
                 })

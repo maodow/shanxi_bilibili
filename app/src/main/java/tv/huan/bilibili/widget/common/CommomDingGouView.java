@@ -8,8 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import lib.kalu.leanback.plus.TextViewPlus;
-import tv.huan.heilongjiang.HeilongjiangApi;
-import tv.huan.heilongjiang.OnStatusChangeListener;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public final class CommomDingGouView extends TextViewPlus {
     public CommomDingGouView(@NonNull Context context) {
@@ -46,20 +45,7 @@ public final class CommomDingGouView extends TextViewPlus {
     }
 
     private void checkVip() {
-        HeilongjiangApi.checkVip(getContext(), new OnStatusChangeListener() {
-            @Override
-            public void onPass() {
-                updateVisibility(false);
-            }
-
-            @Override
-            public void onFail() {
-                updateVisibility(true);
-            }
-        });
-    }
-
-    private void updateVisibility(boolean succ) {
-        setVisibility(succ ? View.VISIBLE : View.GONE);
+        boolean containsVip = HeilongjiangUtil.getVipStatus();
+        setVisibility(!containsVip ? View.VISIBLE : View.GONE);
     }
 }

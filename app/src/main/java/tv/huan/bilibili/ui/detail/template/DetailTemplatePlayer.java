@@ -26,8 +26,7 @@ import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.PlayerView;
-import tv.huan.heilongjiang.HeilongjiangApi;
-import tv.huan.heilongjiang.OnStatusChangeListener;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public final class DetailTemplatePlayer extends Presenter {
 
@@ -153,40 +152,32 @@ public final class DetailTemplatePlayer extends Presenter {
 
         LogUtil.log("DetailTemplatePlayer => checkVipStatus => isFromUser = " + isFromUser);
 
-        try {
-            HeilongjiangApi.checkVip(view.getContext(), !BuildConfig.HUAN_CHECK_VIP, new OnStatusChangeListener() {
-                @Override
-                public void onPass() {
-                    if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
-                        try {
-                            view.findViewById(R.id.detail_player_item_vip).setVisibility(View.GONE);
-                        } catch (Exception e) {
-                        }
-                        try {
-                            view.findViewById(R.id.detail_player_item_full).requestFocus();
-                        } catch (Exception e) {
-                        }
-                    }
-                    startHuawei(view, data);
-                }
+        boolean containsVip = HeilongjiangUtil.getVipStatus();
 
-                @Override
-                public void onFail() {
-                    if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
-                        try {
-                            view.findViewById(R.id.detail_player_item_vip).setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                        }
-                        try {
-                            view.findViewById(R.id.detail_player_item_vip).requestFocus();
-                        } catch (Exception e) {
-                        }
-                    }
-                    jumpVip(view);
+        if (containsVip) {
+            if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
+                try {
+                    view.findViewById(R.id.detail_player_item_vip).setVisibility(View.GONE);
+                } catch (Exception e) {
                 }
-            });
-        } catch (Exception e) {
-            LogUtil.log("DetailTemplatePlayer => checkVipStatus => " + e.getMessage());
+                try {
+                    view.findViewById(R.id.detail_player_item_full).requestFocus();
+                } catch (Exception e) {
+                }
+            }
+            startHuawei(view, data);
+        } else {
+            if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
+                try {
+                    view.findViewById(R.id.detail_player_item_vip).setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                }
+                try {
+                    view.findViewById(R.id.detail_player_item_vip).requestFocus();
+                } catch (Exception e) {
+                }
+            }
+            jumpVip(view);
         }
     }
 

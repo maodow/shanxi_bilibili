@@ -624,16 +624,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
             int focusId = getView().getCurrentFocusId();
             LogUtil.log("FilterPresenter => dispatchEvent => up");
-            if (focusId == R.id.filter_class) {
-                ClassScrollView classLayout = (ClassScrollView) getView().findViewById(R.id.filter_class);
-                int index = classLayout.getCheckedIndex();
-                LogUtil.log("FilterPresenter => dispatchEvent => index = " + index);
-                if (index <= 0) {
-                    getView().setFocusable(R.id.filter_search, true);
-                    getView().requestFocus(R.id.filter_search);
-                    return true;
-                }
-            } else if (focusId == R.id.filter_item) {
+            if (focusId == R.id.filter_item) {
                 ClassScrollView classLayout = (ClassScrollView) getView().findViewById(R.id.filter_class);
                 int index = classLayout.getCheckedIndex();
                 if (index == 0) {
@@ -649,10 +640,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
         // down
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
             int focusId = getView().getCurrentFocusId();
-            if (focusId == R.id.filter_search) {
-                getView().setFocusable(R.id.filter_search, false);
-                return true;
-            } else if (focusId == R.id.filter_item) {
+            if (focusId == R.id.filter_item) {
                 RecyclerViewGrid recyclerView = getView().findViewById(R.id.filter_content);
                 int itemCount = recyclerView.getAdapter().getItemCount();
                 ClassScrollView classLayout = (ClassScrollView) getView().findViewById(R.id.filter_class);
@@ -677,22 +665,13 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
         // right
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
             int focusId = getView().getCurrentFocusId();
-            if (focusId == R.id.filter_search) {
-                return true;
-            } else if (focusId == R.id.filter_class) {
+            if (focusId == R.id.filter_class) {
                 ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
                 int index = classLayout.getCheckedIndex();
                 if (index <= 0) {
                     getView().requestFocus(R.id.filter_tags);
                     return true;
                 }
-            }
-        }
-        // left
-        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
-            int focusId = getView().getCurrentFocusId();
-            if (focusId == R.id.filter_search) {
-                return true;
             }
         }
         return false;

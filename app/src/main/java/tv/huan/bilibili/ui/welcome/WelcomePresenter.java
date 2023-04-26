@@ -1,8 +1,10 @@
 package tv.huan.bilibili.ui.welcome;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -26,11 +28,12 @@ import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.GetPopupInfoBeanBase;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallWelcomeBean;
+import tv.huan.bilibili.exception.HeilongjiangSdkException;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.heilongjiang.HeilongjiangApi;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
 
@@ -42,7 +45,18 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<CallWelcomeBean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<CallWelcomeBean> emitter) {
+                    public void subscribe(ObservableEmitter<CallWelcomeBean> emitter) throws Exception {
+
+                        boolean checkStatus = false;
+                        for (int i = 0; i < 5; i++) {
+                            checkStatus = HeilongjiangUtil.getCheckStatus();
+                            if (checkStatus)
+                                break;
+                            HeilongjiangUtil.updateCheckVip(getView().getContext());
+                            SystemClock.sleep(i == 0 ? 400 : 1000);
+                        }
+                        if (!checkStatus)
+                            throw new HeilongjiangSdkException();
 
                         // ad
                         ADUtil.adSplash(getView().getContext());
@@ -97,7 +111,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         if (BuildConfig.HUAN_CHECK_USERID) {
                             try {
                                 Context context = getView().getContext();
-                                HeilongjiangApi.init(context);
+                                HeilongjiangUtil.init(context);
                             } catch (Exception e) {
                             }
                         }
@@ -112,7 +126,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         try {
                             if (BuildConfig.HUAN_CHECK_USERID) {
                                 Context context = getView().getContext();
-                                String userId = HeilongjiangApi.getUserId(context);
+                                String userId = HeilongjiangUtil.getUserId(context);
                                 LogUtil.log("WelcomePresenter => request => userId = " + userId);
                                 if (null == userId || userId.length() <= 0) {
                                     String s = getView().getString(R.string.welcome_warning);
@@ -242,7 +256,11 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     @Override
                     public void accept(Throwable throwable) {
                         LogUtil.log("WelcomePresenter => request => doOnError =>");
-                        getView().next();
+                        if (throwable instanceof HeilongjiangSdkException) {
+                            Toast.makeText(getView().getContext(), "移动sdk初始化失败", Toast.LENGTH_SHORT).show();
+                        } else {
+                            getView().next();
+                        }
                     }
                 })
                 .doOnNext(new Consumer<CallWelcomeBean>() {

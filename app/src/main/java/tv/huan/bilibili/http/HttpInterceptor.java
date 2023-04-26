@@ -9,7 +9,7 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.heilongjiang.BuildConfig;
-import tv.huan.heilongjiang.HeilongjiangApi;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public final class HttpInterceptor extends OkhttpInterceptorStandard {
 
@@ -21,7 +21,7 @@ public final class HttpInterceptor extends OkhttpInterceptorStandard {
             // huawei
             if (!endsWith)
                 throw new Exception("not huawei");
-            String userToken = HeilongjiangApi.getUserToken(FrameContext.getApplicationContext());
+            String userToken = HeilongjiangUtil.getUserToken(FrameContext.getApplicationContext());
             if (null == userToken || userToken.length() <= 0) {
                 userToken = "";
             }

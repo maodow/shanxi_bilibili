@@ -16,7 +16,7 @@ import lib.kalu.mediaplayer.config.player.PlayerType;
 import tv.huan.bilibili.crash.HuanCrash;
 import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.heilongjiang.HeilongjiangApi;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public final class HuanApp extends Application {
 
@@ -35,7 +35,7 @@ public final class HuanApp extends Application {
         super.onCreate();
 
         ADUtil.adInit(this);
-        HeilongjiangApi.setLogger(true);
+        HeilongjiangUtil.setLogger(true);
         LogUtil.setLogger(true);
         MvpUtil.setLogger(true);
         LeanBackUtil.setLogger(true);

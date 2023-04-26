@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,8 +71,10 @@ public final class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsBy
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
         super.onBindViewHolder(viewHolder, item);
-        cleanLoop();
-        nextLoop(viewHolder.view, item, 0x10013, true);
+        try {
+            startLoop(viewHolder, 0x10013, 0);
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -97,12 +101,10 @@ public final class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsBy
                 public void onFocusChange(View v, boolean hasFocus) {
                     int position = viewHolder.getAbsoluteAdapterPosition();
                     if (hasFocus) {
-                        updateData(list, position);
-                        updateCheckedPosition(list, position);
-                        notifyItemRangeChanged(v, 0, 1);
+                        setNextCheckedPosition(position);
+                        updatePositionImage(v, position);
                     }
                     notifyItemRangeChanged(v, 1, 5);
-
                     // focus
                     mHasFocus = hasFocus;
                 }
@@ -113,7 +115,6 @@ public final class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsBy
 
     @Override
     protected void onBindHolder(@NonNull View v, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
-
         // 图片
         if (viewType == 1) {
             try {
@@ -169,84 +170,36 @@ public final class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsBy
         }
     }
 
-    private void updateData(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
+    private void updatePositionImage(@NonNull View view, @NonNull int position) {
         try {
-            GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
-            list.set(0, templateBean);
+            GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = get(position);
+            if (null == templateBean)
+                throw new Exception();
+            set(0, templateBean);
+            notifyItemRangeChanged(view, 0, 1);
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate1", "updatePositionImage => " + e.getMessage());
         }
     }
 
-    private void updateCheckedPosition(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int position) {
-        int size = list.size();
-        if (size > 6) {
-            size = 6;
-        }
-        for (int i = 1; i < size; i++) {
-            GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
-            if (null == bean)
-                continue;
-            bean.setTempChecked(i == position);
-        }
-    }
-
-    private int nextPosition(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
-        int position = -1;
+    private void updatePositionText(@NonNull View view) {
         try {
-            int size = list.size();
-            if (size > 6) {
-                size = 6;
-            }
-            for (int i = 1; i < size; i++) {
-                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
-                boolean selected = bean.isTempChecked();
-                if (selected) {
-                    if (i >= 6) {
-                        if (size >= 3) {
-                            position = 2;
-                        }
-                    } else {
-                        position = i + 1;
-                    }
-                    break;
-                }
-            }
+            int max = initMax();
+            if (max <= 0)
+                throw new Exception();
+            notifyItemRangeChanged(view, 1, max - 1);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.log("GeneralTemplate1", "updatePositionText => " + e.getMessage());
         }
-        return position;
     }
 
-    private int selectPosition(@NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list) {
-        int position = -1;
-        try {
-            int size = list.size();
-            if (size > 6) {
-                size = 6;
-            }
-            for (int i = 1; i < size; i++) {
-                GetSubChannelsByChannelBean.ListBean.TemplateBean bean = list.get(i);
-                boolean selected = bean.isChecked();
-                if (selected) {
-                    position = i;
-                    break;
-                }
-            }
-        } catch (Exception e) {
-        }
-        return position;
-    }
-
-    private final void nextLoop(@NonNull Object obj0, @NonNull Object obj1, @NonNull int what, boolean start) {
-        LogUtil.log("GeneralTemplate1", "nextLoop => what = " + what);
+    private void startLoop(@NonNull ViewHolder viewHolder, @NonNull int what, long delayMillis) {
+        LogUtil.log("GeneralTemplate1", "startLoop => what = " + what);
         Message message = new Message();
-        Object[] objects = new Object[2];
-        objects[0] = obj0;
-        objects[1] = obj1;
-        message.obj = objects;
+        message.obj = viewHolder;
         message.what = what;
-        mHandler.removeMessages(what);
-        mHandler.sendMessageDelayed(message, start ? 0 : 2000);
+        cleanLoop();
+        mHandler.sendMessageDelayed(message, delayMillis);
     }
 
     private void cleanLoop() {
@@ -280,56 +233,79 @@ public final class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsBy
 
                     // not loop
                     if (mHasFocus) {
-                        Object[] objects = (Object[]) msg.obj;
-                        nextLoop(objects[0], objects[1], 0x10023, false);
+                        startLoop((ViewHolder) msg.obj, 0x10023, 2000);
                     }
                     // loop
                     else {
-                        Object[] objects = (Object[]) msg.obj;
-                        List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list = (List<GetSubChannelsByChannelBean.ListBean.TemplateBean>) objects[1];
-                        if (null != list) {
-                            int position = nextPosition(list);
-                            if (position == -1) {
-                                position = 1;
-                                updateCheckedPosition(list, 1);
-                            }
-//                    Log.e("GeneralTemplate1", "handleMessage => position = " + position);
-                            int size = list.size();
-                            if (size > 6) {
-                                size = 6;
-                            }
-                            // selected
-                            updateCheckedPosition(list, position);
-                            // center
-                            updateData(list, position);
-                            // item
-                            notifyItemRangeChanged((View) objects[0], 1, size - 1);
-                            // loop
-                            nextLoop(objects[0], list, 0x10013, false);
-                        }
+                        int nextCheckedPosition = getNextCheckedPosition();
+                        // center
+                        updatePositionImage(((ViewHolder) msg.obj).view, nextCheckedPosition);
+                        // item
+                        updatePositionText(((ViewHolder) msg.obj).view);
+                        // loop
+                        startLoop((ViewHolder) msg.obj, 0x10013, 2000);
                     }
                 }
                 // 0x10023
                 else if (msg.what == 0x10023) {
                     // not loop
                     if (mHasFocus) {
-                        Object[] objects = (Object[]) msg.obj;
-                        nextLoop(objects[0], objects[1], 0x10023, false);
+                        startLoop((ViewHolder) msg.obj, 0x10023, 2000);
                     }
                     // loop
                     else {
-                        Object[] objects = (Object[]) msg.obj;
-                        nextLoop(objects[0], objects[1], 0x10033, true);
+                        startLoop((ViewHolder) msg.obj, 0x10033, 0);
                     }
                 }
                 // 0x10033
                 else if (msg.what == 0x10033) {
-                    Object[] objects = (Object[]) msg.obj;
-                    nextLoop(objects[0], objects[1], 0x10013, false);
+                    startLoop((ViewHolder) msg.obj, 0x10013, 2000);
                 }
             }
         }
     };
+
+    private int getCheckedPosition() {
+        try {
+            for (int i = 1; i < initMax(); i++) {
+                GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = get(i);
+                if (null == templateBean)
+                    continue;
+                if (templateBean.isTempChecked()) {
+                    templateBean.setTempChecked(false);
+                    return i;
+                }
+            }
+            throw new Exception();
+        } catch (Exception e) {
+            LogUtil.log("GeneralTemplate1", "getCheckedPosition => " + e.getMessage());
+            return 1;
+        }
+    }
+
+    private int getNextCheckedPosition() {
+        try {
+            int nextCheckedPosition = getCheckedPosition() + 1;
+            if (nextCheckedPosition >= initMax()) {
+                nextCheckedPosition = 1;
+            }
+            GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = get(nextCheckedPosition);
+            templateBean.setTempChecked(true);
+            return nextCheckedPosition;
+        } catch (Exception e) {
+            LogUtil.log("GeneralTemplate1", "getNextCheckedPosition => " + e.getMessage());
+            return 1;
+        }
+    }
+
+    private void setNextCheckedPosition(int position) {
+        for (int i = 0; i < initMax(); i++) {
+            GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = get(i);
+            if (null == templateBean)
+                continue;
+            templateBean.setTempChecked(position == i);
+        }
+    }
 
     public void pauseMessage() {
         mPause = true;
@@ -410,6 +386,6 @@ public final class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsBy
         return false;
     }
 
-    public static class GeneralTemplate1List extends ArrayList {
+    public static class GeneralTemplate1List extends ArrayList<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
     }
 }

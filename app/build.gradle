@@ -164,7 +164,7 @@ dependencies {
     api files('libs/lib_mediaplayer_exo_r2.18.5_ff4.4_audio_release_20230417.aar')
     // heilongjiang
     // api project(path: ':huan_heilongjiang')
-    api files('libs/lib_huan_heilongjiang_release_20230407.aar')
+    api files('libs/lib_huan_heilongjiang_release_20230426.aar')
     // ad
     implementation files('libs/adsdk_v4.3.1.2_20230412_release.aar')
     implementation 'com.alibaba:fastjson:1.2.58'

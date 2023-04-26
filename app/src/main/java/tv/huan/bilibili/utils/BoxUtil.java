@@ -10,7 +10,7 @@ import java.util.Enumeration;
 
 import lib.kalu.frame.mvp.context.FrameContext;
 import tv.huan.bilibili.BuildConfig;
-import tv.huan.heilongjiang.HeilongjiangApi;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public final class BoxUtil {
 
@@ -32,7 +32,7 @@ public final class BoxUtil {
     public static String getUserId() {
         try {
             Context context = FrameContext.getApplicationContext();
-            String userId = HeilongjiangApi.getUserId(context);
+            String userId = HeilongjiangUtil.getUserId(context);
             if (null == userId || userId.length() <= 0)
                 throw new Exception("userId error: null");
             return userId;

@@ -14,7 +14,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
 import tv.huan.bilibili.widget.DetailGridView;
-import tv.huan.heilongjiang.HeilongjiangApi;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 
@@ -130,7 +130,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                HeilongjiangApi.jumpVip(getApplicationContext(), null);
+                HeilongjiangUtil.jumpVip(getApplicationContext(), null);
             }
         }, 2000);
     }
