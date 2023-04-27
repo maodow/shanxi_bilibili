@@ -294,6 +294,8 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             playerObject.setTempImageUrl(data.getAlbum().getPicture(true));
                             playerObject.setTempPicList(data.getAlbum().getPicList());
                             playerObject.setTempVideoUrl(null);
+                            playerObject.setCid(data.getAlbum().getCid());
+                            playerObject.setRecClassId(data.getRecClassId());
                             // 2
                             ArrayObjectAdapter objectAdapter = getView().getArrayObjectAdapter(R.id.detail_list);
                             objectAdapter.add(playerObject, false);
