@@ -130,8 +130,44 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         }
                     });
                 }
-                // image
-                else if (viewType == TYPE_ITEM_IMG_FAVOR || viewType == TYPE_ITEM_IMG_HISTORY) {
+                // 观看历史
+                else if (viewType == TYPE_ITEM_IMG_HISTORY) {
+                    inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (hasFocus) {
+                                ((RecyclerView) v.getParent()).scrollToPosition(1);
+                            }
+                        }
+                    });
+                }
+                // 观看历史
+                else if (viewType == TYPE_ITEM_IMG_HISTORY) {
+                    inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            TextView textView = v.findViewById(R.id.common_poster_name);
+                            textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+                            if (hasFocus) {
+                                ((RecyclerView) v.getParent()).scrollToPosition(1);
+                            }
+                        }
+                    });
+                    inflate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int position = holder.getAbsoluteAdapterPosition();
+                            if (position > 0) {
+                                FavBean.ItemBean itemBean = mDatas.get(position);
+                                itemBean.setToType(1);
+                                getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, true);
+                                JumpUtil.next(v.getContext(), itemBean);
+                            }
+                        }
+                    });
+                }
+                // 我的收藏
+                else if (viewType == TYPE_ITEM_IMG_FAVOR) {
                     inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                         @Override
                         public void onFocusChange(View view, boolean b) {
@@ -152,14 +188,23 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         }
                     });
                 }
-                // more
+                // 全部**
                 else if (viewType == TYPE_ITEM_MORE) {
                     inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                         @Override
                         public void onFocusChange(View v, boolean hasFocus) {
                             getView().setSelected(v, R.id.mine_more_icon, hasFocus);
                             getView().setSelected(v, R.id.mine_more_name, hasFocus);
-
+                            int position = holder.getAbsoluteAdapterPosition();
+                            if (position >= 0) {
+                                FavBean.ItemBean itemBean = mDatas.get(position);
+                                int toType = itemBean.getToType();
+                                if (toType == 8001) {
+                                    if (hasFocus) {
+                                        ((RecyclerView) v.getParent()).scrollToPosition(1);
+                                    }
+                                }
+                            }
                         }
                     });
                     inflate.setOnClickListener(new View.OnClickListener() {
