@@ -23,11 +23,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.frame.mvp.util.CacheUtil;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.Auth2BeanBase;
+import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.FavorBean;
 import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.MediaBean;
@@ -600,6 +602,8 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         int endFlag = isEnd ? 0 : 1;
                         uploadPlayHistory(cid, vid, classId, pos, endFlag, duration, position);
                         // 3
+                        CacheUtil.setCache(getView().getContext(), "cache_update_history_net", "1");
+                        // 4
                         emitter.onNext(true);
                     }
                 })

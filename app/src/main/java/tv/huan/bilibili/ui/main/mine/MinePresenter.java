@@ -1,6 +1,5 @@
 package tv.huan.bilibili.ui.main.mine;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
 import android.text.TextUtils;
@@ -18,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -538,78 +535,188 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 .subscribe());
     }
 
-    protected final void updateLocalCache() {
-        addDisposable(Observable.create(new ObservableOnSubscribe<JSONObject>() {
+//    protected final void updateLocalCache() {
+//        addDisposable(Observable.create(new ObservableOnSubscribe<JSONObject>() {
+//                    @Override
+//                    public void subscribe(ObservableEmitter<JSONObject> emitter) throws Exception {
+//                        try {
+//                            String s = CacheUtil.getCache(getView().getContext(), "cache_center");
+//                            if (null == s || s.length() <= 0)
+//                                throw new Exception();
+//                            emitter.onNext(new JSONObject(s));
+//                        } catch (Exception e) {
+//                            throw e;
+//                        }
+//                    }
+//                })
+//                .map(new Function<JSONObject, Boolean>() {
+//                    @Override
+//                    public Boolean apply(JSONObject object) {
+//                        try {
+//                            int index = object.optInt("index", -1);
+//                            if (index == -1)
+//                                throw new Exception();
+//                            String s = object.optString("data", null);
+//                            if (null == s || s.length() <= 0)
+//                                throw new Exception();
+//                            Type type = new TypeToken<ArrayList<FavBean.ItemBean>>() {
+//                            }.getType();
+//                            ArrayList<FavBean.ItemBean> inserBeans = new Gson().fromJson(s, type);
+//                            for (FavBean.ItemBean t : inserBeans) {
+//                                if (null == t)
+//                                    continue;
+//                                t.setTempPosition(inserBeans.indexOf(t));
+//                                t.setTempType(index == 0 ? TYPE_ITEM_IMG_HISTORY : TYPE_ITEM_IMG_FAVOR);
+//                            }
+//
+//                            ArrayList<FavBean.ItemBean> delBeans = new ArrayList<>();
+//                            for (FavBean.ItemBean t : mDatas) {
+//                                if (null == t)
+//                                    continue;
+//                                int tempType = t.getTempType();
+//                                if (index == 0 && tempType == TYPE_ITEM_IMG_HISTORY) {
+//                                    delBeans.add(t);
+//                                } else if (index == 1 && tempType == TYPE_ITEM_IMG_FAVOR) {
+//                                    delBeans.add(t);
+//                                }
+//                            }
+//                            for (FavBean.ItemBean t : delBeans) {
+//                                if (null == t)
+//                                    continue;
+//                                mDatas.remove(t);
+//                            }
+//
+//                            if (index == 0) {
+//                                mDatas.addAll(2, inserBeans);
+//                            } else if (index == 1) {
+//                                int i = mDatas.size() - 4;
+//                                mDatas.addAll(i, inserBeans);
+//                            }
+//                            return true;
+//                        } catch (Exception e) {
+//                            return false;
+//                        }
+//                    }
+//                })
+//                .map(new Function<Boolean, Boolean>() {
+//                    @Override
+//                    public Boolean apply(Boolean aBoolean) {
+//                        try {
+//                            CacheUtil.setCache(getView().getContext(), "cache_center", "");
+//                        } catch (Exception e) {
+//                        }
+//                        return aBoolean;
+//                    }
+//                })
+//                .compose(ComposeSchedulers.io_main())
+//                .doOnSubscribe(new Consumer<Disposable>() {
+//                    @Override
+//                    public void accept(Disposable disposable) {
+//                    }
+//                })
+//                .doOnError(new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) {
+//                        getView().showToast("获取缓存失败");
+//                    }
+//                })
+//                .doOnNext(new Consumer<Boolean>() {
+//                    @Override
+//                    public void accept(Boolean aBoolean) {
+//                        if (aBoolean) {
+//                            getView().notifyDataRangeChanged(R.id.mine_list);
+//                            getView().showToast("刷新缓存成功");
+//                        } else {
+//                            getView().showToast("刷新缓存失败");
+//                        }
+//                    }
+//                })
+//                .subscribe());
+//    }
+
+    protected final void updateHistory() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
                     @Override
-                    public void subscribe(ObservableEmitter<JSONObject> emitter) throws Exception {
+                    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
                         try {
-                            String s = CacheUtil.getCache(getView().getContext(), "center_cache");
-                            if (null == s || s.length() <= 0)
+                            if (mDatas.size() <= 0)
                                 throw new Exception();
-                            emitter.onNext(new JSONObject(s));
+                            String s1 = CacheUtil.getCache(getView().getContext(), "cache_update_history_net");
+                            String s2 = CacheUtil.getCache(getView().getContext(), "cache_update_history_local");
+                            CacheUtil.setCache(getView().getContext(), "cache_update_history_net", "");
+                            CacheUtil.setCache(getView().getContext(), "cache_update_history_local", "");
+                            if (null != s1 && s1.length() > 0) {
+                                emitter.onNext("");
+                            } else if (null != s2 && s2.length() > 0) {
+                                emitter.onNext(s2);
+                            } else {
+                                throw new Exception();
+                            }
                         } catch (Exception e) {
                             throw e;
                         }
                     }
                 })
-                .map(new Function<JSONObject, Boolean>() {
-                    @SuppressLint("CheckResult")
+                // 接口 => 观看历史
+                .flatMap(new Function<String, Observable<BaseResponsedBean<FavBean>>>() {
                     @Override
-                    public Boolean apply(JSONObject object) {
-                        try {
-                            int index = object.optInt("index", -1);
-                            if (index == -1)
-                                throw new Exception();
-                            String s = object.optString("data", null);
-                            if (null == s || s.length() <= 0)
-                                throw new Exception();
-                            Type type = new TypeToken<ArrayList<FavBean.ItemBean>>() {
-                            }.getType();
-                            ArrayList<FavBean.ItemBean> inserBeans = new Gson().fromJson(s, type);
-                            for (FavBean.ItemBean t : inserBeans) {
-                                if (null == t)
-                                    continue;
-                                t.setTempPosition(inserBeans.indexOf(t));
-                                t.setTempType(index == 0 ? TYPE_ITEM_IMG_HISTORY : TYPE_ITEM_IMG_FAVOR);
-                            }
+                    public Observable<BaseResponsedBean<FavBean>> apply(String data) {
 
-                            ArrayList<FavBean.ItemBean> delBeans = new ArrayList<>();
-                            for (FavBean.ItemBean t : mDatas) {
-                                if (null == t)
-                                    continue;
-                                int tempType = t.getTempType();
-                                if (index == 0 && tempType == TYPE_ITEM_IMG_HISTORY) {
-                                    delBeans.add(t);
-                                } else if (index == 1 && tempType == TYPE_ITEM_IMG_FAVOR) {
-                                    delBeans.add(t);
+                        if (null == data || data.length() <= 0) {
+                            return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 3, null);
+                        } else {
+                            return Observable.create(new ObservableOnSubscribe<BaseResponsedBean<FavBean>>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<BaseResponsedBean<FavBean>> emitter) {
+                                    BaseResponsedBean responsedBean = new BaseResponsedBean();
+                                    try {
+                                        Type type = new TypeToken<ArrayList<FavBean.ItemBean>>() {
+                                        }.getType();
+                                        ArrayList<FavBean.ItemBean> inserBeans = new Gson().fromJson(data, type);
+                                        responsedBean.setData(inserBeans);
+                                    } catch (Exception e) {
+                                    }
+                                    emitter.onNext(responsedBean);
                                 }
-                            }
-                            for (FavBean.ItemBean t : delBeans) {
-                                if (null == t)
-                                    continue;
-                                mDatas.remove(t);
-                            }
-
-                            if (index == 0) {
-                                mDatas.addAll(2, inserBeans);
-                            } else if (index == 1) {
-                                int i = mDatas.size() - 4;
-                                mDatas.addAll(i, inserBeans);
-                            }
-                            return true;
-                        } catch (Exception e) {
-                            return false;
+                            });
                         }
                     }
                 })
-                .map(new Function<Boolean, Boolean>() {
+                // 数据处理 => 观看历史
+                .map(new Function<BaseResponsedBean<FavBean>, Boolean>() {
                     @Override
-                    public Boolean apply(Boolean aBoolean) {
+                    public Boolean apply(BaseResponsedBean<FavBean> resp) {
+
+                        ArrayList<FavBean.ItemBean> inserBeans = new ArrayList<>();
                         try {
-                            CacheUtil.setCache(getView().getContext(), "center_cache", "");
+                            List<FavBean.ItemBean> list = resp.getData().getRows();
+                            for (int i = 0; i <= 2; i++) {
+                                FavBean.ItemBean t = list.get(i);
+                                if (null == t)
+                                    continue;
+                                t.setTempPosition(i);
+                                t.setTempType(TYPE_ITEM_IMG_HISTORY);
+                                inserBeans.add(t);
+                            }
                         } catch (Exception e) {
                         }
-                        return aBoolean;
+
+                        ArrayList<FavBean.ItemBean> delBeans = new ArrayList<>();
+                        for (FavBean.ItemBean t : mDatas) {
+                            if (null == t)
+                                continue;
+                            int tempType = t.getTempType();
+                            if (tempType == TYPE_ITEM_IMG_HISTORY) {
+                                delBeans.add(t);
+                            }
+                        }
+                        for (FavBean.ItemBean t : delBeans) {
+                            if (null == t)
+                                continue;
+                            mDatas.remove(t);
+                        }
+                        mDatas.addAll(2, inserBeans);
+                        return true;
                     }
                 })
                 .compose(ComposeSchedulers.io_main())
@@ -621,7 +728,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        getView().showToast("获取缓存失败");
+                        getView().showToast("获取历史缓存失败");
                     }
                 })
                 .doOnNext(new Consumer<Boolean>() {
@@ -629,9 +736,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                     public void accept(Boolean aBoolean) {
                         if (aBoolean) {
                             getView().notifyDataRangeChanged(R.id.mine_list);
-                            getView().showToast("刷新缓存成功");
+                            getView().showToast("刷新历史缓存成功");
                         } else {
-                            getView().showToast("刷新缓存失败");
+                            getView().showToast("刷新历史缓存失败");
                         }
                     }
                 })

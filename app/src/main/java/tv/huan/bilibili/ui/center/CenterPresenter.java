@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -449,11 +447,11 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
             ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
             int checkedIndex = classLayout.getCheckedIndex();
 
-            JSONObject object = new JSONObject();
-            object.put("data", new Gson().toJson(itemBeans));
-            object.put("index", checkedIndex);
-            CacheUtil.setCache(getView().getContext(), "center_cache", object.toString());
-
+            if (checkedIndex == 0) {
+                CacheUtil.setCache(getView().getContext(), "cache_update_history_local", new Gson().toJson(itemBeans));
+            } else if (checkedIndex == 1) {
+                CacheUtil.setCache(getView().getContext(), "cache_update_favor_local", new Gson().toJson(itemBeans));
+            }
         } catch (Exception e) {
         }
     }
