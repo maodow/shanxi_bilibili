@@ -48,7 +48,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void finish() {
-        stopPlayer();
+        releasePlayer();
         super.finish();
     }
 
@@ -98,6 +98,23 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
+    public boolean isPlayerPlayingPosition(@NonNull int position) {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        return gridView.isPlayerPlayingPosition(position);
+    }
+
+    @Override
+    public void startPlayerPosition(@NonNull int position) {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                DetailGridView gridView = findViewById(R.id.detail_list);
+                gridView.startPlayerPosition(position);
+            }
+        }, 1000);
+    }
+
+    @Override
     public void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser) {
         putStringExtra(INTENT_VID, data.getVid());
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
@@ -112,20 +129,9 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void checkedPlayerPositionNext() {
+    public void releasePlayer() {
         DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.checkedPlayerPositionNext();
-    }
-
-    @Override
-    public void stopPlayer() {
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.stopPlayer();
-    }
-
-    @Override
-    public void completePlayer() {
-        getPresenter().checkPlayerNext();
+        gridView.releasePlayer();
     }
 
     @Override
@@ -154,5 +160,10 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public void huaweiSucc(String s, long seek) {
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.startPlayer(s, seek);
+    }
+
+    @Override
+    public int getPlayerNextPosition() {
+        return getPresenter().getPlayerNextPosition();
     }
 }

@@ -29,10 +29,6 @@ public class PlayerViewSpecial extends PlayerView {
     }
 
     @Override
-    protected void addListeren() {
-    }
-
-    @Override
     protected void init() {
 
         // 填充模式

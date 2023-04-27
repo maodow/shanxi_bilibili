@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.core.component.ComponentError;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
-import lib.kalu.mediaplayer.core.component.ComponentSpeed;
+import lib.kalu.mediaplayer.core.component.ComponentNet;
 
 public final class PlayerViewTemplate extends PlayerView {
 
@@ -35,10 +35,6 @@ public final class PlayerViewTemplate extends PlayerView {
         init();
     }
 
-    @Override
-    protected void addListeren() {
-    }
-
 //    @Override
 //    protected void checkOnWindowVisibilityChanged(int visibility) {
 //    }
@@ -55,9 +51,9 @@ public final class PlayerViewTemplate extends PlayerView {
         loading.setComponentBackgroundColorInt(Color.parseColor("#000000"));
         addComponent(loading);
 
-        // speed
-        ComponentSpeed speed = new ComponentSpeed(getContext());
-        addComponent(speed);
+        // net
+        ComponentNet net = new ComponentNet(getContext());
+        addComponent(net);
 
         // init
         PlayerComponentInitTemplate initTemplate21 = new PlayerComponentInitTemplate(getContext());

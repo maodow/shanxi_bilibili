@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -83,11 +84,16 @@ public class DetailTemplateXuanQi extends ListTvEpisodesSingleGridPresenter<Medi
             if (!isFromUser)
                 throw new Exception();
             Activity activity = WrapperUtil.getWrapperActivity(context);
-            if (null != activity && activity instanceof DetailActivity) {
-                ((DetailActivity) activity).stopPlayer();
-                ((DetailActivity) activity).updatePlayerPosition(t);
-                ((DetailActivity) activity).startPlayerPosition(t, true);
-            }
+            if (null == activity)
+                throw new Exception();
+            if (!(activity instanceof DetailActivity))
+                throw new Exception();
+            boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(position);
+            if (playingPosition)
+                throw new Exception();
+            ((DetailActivity) activity).releasePlayer();
+            ((DetailActivity) activity).updatePlayerPosition(t);
+            ((DetailActivity) activity).startPlayerPosition(t, true);
         } catch (Exception e) {
         }
     }

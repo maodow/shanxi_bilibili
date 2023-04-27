@@ -1,89 +1,47 @@
 package tv.huan.bilibili.widget.player;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import lib.kalu.frame.mvp.util.WrapperUtil;
-import lib.kalu.mediaplayer.config.player.PlayerType;
+import lib.kalu.mediaplayer.core.component.ComponentComplete;
 import lib.kalu.mediaplayer.core.component.ComponentError;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
+import lib.kalu.mediaplayer.core.component.ComponentNet;
 import lib.kalu.mediaplayer.core.component.ComponentPause;
 import lib.kalu.mediaplayer.core.component.ComponentSeek;
-import lib.kalu.mediaplayer.core.component.ComponentSpeed;
-import lib.kalu.mediaplayer.listener.OnPlayerChangeListener;
 import lib.kalu.mediaplayer.widget.player.PlayerLayout;
-import tv.huan.bilibili.ui.detail.DetailActivity;
 import tv.huan.bilibili.utils.ADUtil;
-import tv.huan.bilibili.utils.LogUtil;
 
 public class PlayerView extends PlayerLayout {
     public PlayerView(Context context) {
         super(context);
         init();
-        addListeren();
     }
 
     public PlayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
-        addListeren();
     }
 
     public PlayerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
-        addListeren();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public PlayerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
-        addListeren();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         ADUtil.adRelease();
-    }
-
-    protected void addListeren() {
-        setPlayerChangeListener(new OnPlayerChangeListener() {
-
-            @Override
-            public void onWindow(int state) {
-                if (state == PlayerType.WindowType.FULL) {
-                    setFocusable(true);
-                    requestFocus();
-                } else {
-                    setFocusable(false);
-                }
-                LogUtil.log("PlayerView11", "onWindow => state = " + state);
-            }
-
-            @Override
-            public void onProgress(@NonNull long position, @NonNull long duration) {
-            }
-
-            @Override
-            public void onChange(int playState) {
-                switch (playState) {
-                    case PlayerType.StateType.STATE_END: //播放完成
-                        Activity activity = WrapperUtil.getWrapperActivity(getContext());
-                        if (null != activity && activity instanceof DetailActivity) {
-                            ((DetailActivity) activity).completePlayer();
-                        }
-                        break;
-                }
-            }
-        });
     }
 
     protected void init() {
@@ -98,15 +56,18 @@ public class PlayerView extends PlayerLayout {
         // error
         ComponentError error = new ComponentError(getContext());
         addComponent(error);
-        // speed
-        ComponentSpeed speed = new ComponentSpeed(getContext());
-        addComponent(speed);
+        // net
+        ComponentNet net = new ComponentNet(getContext());
+        addComponent(net);
         // seekbar
         ComponentSeek seek = new ComponentSeek(getContext());
         addComponent(seek);
         // init
         PlayerComponentInit init = new PlayerComponentInit(getContext());
         addComponent(init);
+        // complete
+        ComponentComplete complete = new ComponentComplete(getContext());
+        addComponent(complete);
         // adPause
         PlayerComponentADPause pauseAD = new PlayerComponentADPause(getContext());
         addComponent(pauseAD);

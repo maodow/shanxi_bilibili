@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -99,11 +100,16 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
             if (!isFromUser)
                 throw new Exception();
             Activity activity = WrapperUtil.getWrapperActivity(context);
-            if (null != activity && activity instanceof DetailActivity) {
-                ((DetailActivity) activity).stopPlayer();
-                ((DetailActivity) activity).updatePlayerPosition(item);
-                ((DetailActivity) activity).startPlayerPosition(item, true);
-            }
+            if (null == activity)
+                throw new Exception();
+            if (!(activity instanceof DetailActivity))
+                throw new Exception();
+            boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(position);
+            if (playingPosition)
+                throw new Exception();
+            ((DetailActivity) activity).releasePlayer();
+            ((DetailActivity) activity).updatePlayerPosition(item);
+            ((DetailActivity) activity).startPlayerPosition(item, true);
         } catch (Exception e) {
         }
     }

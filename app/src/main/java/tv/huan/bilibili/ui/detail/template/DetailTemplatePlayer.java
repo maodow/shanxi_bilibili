@@ -8,14 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.leanback.widget.Presenter;
 
 import org.json.JSONObject;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
+import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
+import lib.kalu.mediaplayer.core.component.ComponentComplete;
 import lib.kalu.mediaplayer.core.component.ComponentPause;
+import lib.kalu.mediaplayer.listener.OnPlayerChangeListener;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
@@ -166,6 +170,19 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
+    public boolean checkPlayerPlayingPosition(View view, int position) {
+        try {
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            String url = playerView.getUrl();
+            if (null == url || url.length() <= 0)
+                return false;
+            PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
+            return componentInit.checkPlayerPlayingPosition(position);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public void checkVipStatus(View view, MediaBean data, boolean isFromUser) {
         LogUtil.log("DetailTemplatePlayer => checkVipStatus => isFromUser = " + isFromUser);
 
@@ -233,7 +250,7 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    public void stopPlayer(View view) {
+    public void releasePlayer(View view) {
         try {
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
             playerView.stop();
@@ -246,7 +263,6 @@ public final class DetailTemplatePlayer extends Presenter {
     public void startPlayer(View view, String s, long seek) {
         LogUtil.log("DetailTemplatePlayer => startPlayer");
         try {
-            stopPlayer(view);
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(false);
             builder.setDelay(4000);
@@ -286,8 +302,10 @@ public final class DetailTemplatePlayer extends Presenter {
     }
 
     private void addListener(View viewGroup) {
+
+        // 简介
         try {
-            // 简介
+
             viewGroup.findViewById(R.id.detail_player_item_info).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -304,7 +322,11 @@ public final class DetailTemplatePlayer extends Presenter {
                     }
                 }
             });
-            // 会员
+        } catch (Exception e) {
+        }
+
+        // 会员
+        try {
             viewGroup.findViewById(R.id.detail_player_item_vip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -315,7 +337,11 @@ public final class DetailTemplatePlayer extends Presenter {
                     }
                 }
             });
-            // 收藏
+        } catch (Exception e) {
+        }
+
+        // 收藏
+        try {
             viewGroup.findViewById(R.id.detail_player_item_favor).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -338,12 +364,49 @@ public final class DetailTemplatePlayer extends Presenter {
                     }
                 }
             });
+        } catch (Exception e) {
+        }
+
+        // 全屏
+        try {
             viewGroup.findViewById(R.id.detail_player_item_full).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ViewGroup viewGroup = (ViewGroup) v.getParent().getParent().getParent();
                     PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
                     playerView.startFull();
+                }
+            });
+        } catch (Exception e) {
+        }
+
+        try {
+            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            playerView.setPlayerChangeListener(new OnPlayerChangeListener() {
+
+                @Override
+                public void onChange(int playState) {
+                    switch (playState) {
+                        // 播放完成
+                        case PlayerType.StateType.STATE_END:
+                            try {
+                                Activity activity = WrapperUtil.getWrapperActivity(playerView.getContext());
+                                if (null == activity)
+                                    throw new Exception();
+                                if (!(activity instanceof DetailActivity))
+                                    throw new Exception();
+                                int nextPosition = ((DetailActivity) activity).getPlayerNextPosition();
+                                if (nextPosition < 0)
+                                    throw new Exception();
+                                String s = activity.getString(R.string.detail_warning_next, nextPosition);
+                                Toast.makeText(activity.getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+//                                ComponentComplete component = playerView.findComponent(ComponentComplete.class);
+//                                component.setComponentText(s);
+                                ((DetailActivity) activity).startPlayerPosition(nextPosition);
+                            } catch (Exception e) {
+                            }
+                            break;
+                    }
                 }
             });
         } catch (Exception e) {

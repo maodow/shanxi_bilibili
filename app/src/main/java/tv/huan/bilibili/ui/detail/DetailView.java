@@ -17,13 +17,13 @@ public interface DetailView extends BaseViewImpl {
 
     void updatePlayerPosition(@NonNull MediaBean data);
 
+    boolean isPlayerPlayingPosition(@NonNull int position);
+
+    void startPlayerPosition(@NonNull int position);
+
     void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser);
 
-    void checkedPlayerPositionNext();
-
-    void stopPlayer();
-
-    void completePlayer();
+    void releasePlayer();
 
     void jumpVip();
 
@@ -32,4 +32,6 @@ public interface DetailView extends BaseViewImpl {
     void huaweiAuth(String cid, long seek);
 
     void huaweiSucc(String s, long seek);
+
+    int getPlayerNextPosition();
 }

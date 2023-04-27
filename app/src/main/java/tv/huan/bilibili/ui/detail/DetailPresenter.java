@@ -564,39 +564,19 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         return false;
     }
 
-    protected void checkPlayerNext() {
-        LogUtil.log("DetailPresenter => checkPlayerNext =>");
-        addDisposable(Observable.create(new ObservableOnSubscribe<Integer>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                        DetailGridView gridView = getView().findViewById(R.id.detail_list);
-                        boolean playingEnd = gridView.isPlayingEnd();
-                        if (playingEnd)
-                            throw new Exception("播放结束");
-                        int nextPosition = gridView.getPlayerNextPosition();
-                        if (nextPosition < 0)
-                            throw new Exception("播放完成");
-                        emitter.onNext(nextPosition + 1);
-                    }
-                })
-                .compose(ComposeSchedulers.io_main())
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        getView().showToast(throwable);
-                        getView().stopFull();
-                    }
-                })
-                .doOnNext(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) {
-                        String s = getView().getString(R.string.detail_warning_next, integer);
-                        LogUtil.log("DetailPresenter => checkPlayerNext => s = " + s);
-                        getView().showToast(s);
-                        getView().checkedPlayerPositionNext();
-                    }
-                })
-                .subscribe());
+    protected int getPlayerNextPosition() {
+        try {
+            DetailGridView gridView = getView().findViewById(R.id.detail_list);
+            boolean playingEnd = gridView.isPlayingEnd();
+            if (playingEnd)
+                throw new Exception("播放结束");
+            int nextPosition = gridView.getPlayerNextPosition();
+            if (nextPosition < 0)
+                throw new Exception("播放错误");
+            return nextPosition;
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     protected void uploadBackupPress() {

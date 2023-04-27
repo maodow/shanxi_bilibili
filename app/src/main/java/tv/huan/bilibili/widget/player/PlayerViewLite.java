@@ -8,7 +8,7 @@ import androidx.annotation.RequiresApi;
 
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
-import lib.kalu.mediaplayer.core.component.ComponentSpeed;
+import lib.kalu.mediaplayer.core.component.ComponentNet;
 
 public final class PlayerViewLite extends PlayerView {
 
@@ -33,10 +33,6 @@ public final class PlayerViewLite extends PlayerView {
         init();
     }
 
-    @Override
-    protected void addListeren() {
-    }
-
 //    @Override
 //    public void start(@NonNull String url) {
 //        // 1
@@ -59,8 +55,8 @@ public final class PlayerViewLite extends PlayerView {
         ComponentLoading loading = new ComponentLoading(getContext());
         addComponent(loading);
 
-        // speed
-        ComponentSpeed speed = new ComponentSpeed(getContext());
-        addComponent(speed);
+        // net
+        ComponentNet net = new ComponentNet(getContext());
+        addComponent(net);
     }
 }

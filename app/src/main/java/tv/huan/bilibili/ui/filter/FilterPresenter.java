@@ -643,17 +643,31 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
             if (focusId == R.id.filter_item) {
                 RecyclerViewGrid recyclerView = getView().findViewById(R.id.filter_content);
                 int itemCount = recyclerView.getAdapter().getItemCount();
-                ClassScrollView classLayout = (ClassScrollView) getView().findViewById(R.id.filter_class);
-                int index = classLayout.getCheckedIndex();
-                if (index == 0 && itemCount > 5) {
-                    getView().setVisibility(R.id.filter_tags, View.GONE);
+                int row;
+                int v = itemCount / 4;
+                if (v == 0) {
+                    row = v;
+                } else {
+                    row = v + 1;
+                }
+                int focusPosition = recyclerView.findFocusPosition();
+                int rowReal;
+                int vReal = focusPosition / 4;
+                if (vReal == 0) {
+                    rowReal = vReal;
+                } else {
+                    rowReal = vReal + 1;
+                }
+
+                ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
+                int checkedIndex = classLayout.getCheckedIndex();
+                if (checkedIndex == 0) {
+                    getView().setVisibility(R.id.filter_tags, focusPosition >= 4 ? View.GONE : View.VISIBLE);
                 } else {
                     getView().setVisibility(R.id.filter_tags, View.GONE);
                 }
-                int focusPosition = recyclerView.findFocusPosition();
-                if (itemCount > 0 && itemCount - focusPosition <= 5) {
-                    ClassScrollView scrollView = getView().findViewById(R.id.filter_class);
-                    int checkedIndex = scrollView.getCheckedIndex();
+
+                if (rowReal == row) {
                     if (checkedIndex == 0) {
                         searchAlbumByTypeNews(false);
                     } else {

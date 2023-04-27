@@ -111,9 +111,9 @@ android {
             // 提示Throwable_Toast
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false") // 换肤skin => 暂无
-            buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "true") // 华为鉴权播放开关
-            buildConfigField("boolean", "HUAN_CHECK_USERID", "true") // 检测userId, 开启获取失败禁止进去主页
-            buildConfigField("boolean", "HUAN_CHECK_VIP", "true") // 检测vip
+            buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "false") // 华为鉴权播放开关
+            buildConfigField("boolean", "HUAN_CHECK_USERID", "false") // 检测userId, 开启获取失败禁止进去主页
+            buildConfigField("boolean", "HUAN_CHECK_VIP", "false") // 检测vip
             buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false") // 测试模板1-22
             buildConfigField("boolean", "HUAN_TEST_WHITE_VIP", "false")  // 详情vip按钮
             buildConfigField("String", "HUAN_API", "\"http://36.138.129.3:8082/mediaApi/\"")
@@ -160,7 +160,7 @@ dependencies {
     // api project(path: ':module_keyboard')
     api files('libs/lib_keyboard_release_20230303.aar')
     // player
-    api files('libs/lib_mediaplayer_ui_release_20230425.aar')
+    api files('libs/lib_mediaplayer_ui_release_20230427.aar')
     api files('libs/lib_mediaplayer_exo_r2.18.5_ff4.4_audio_release_20230417.aar')
     // heilongjiang
     // api project(path: ':huan_heilongjiang')

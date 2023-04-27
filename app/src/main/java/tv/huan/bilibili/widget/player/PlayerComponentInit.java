@@ -124,4 +124,16 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
         } catch (Exception e) {
         }
     }
+
+    public final boolean checkPlayerPlayingPosition(@NonNull int position) {
+        try {
+            TextView textView = findViewById(R.id.detail_player_item_data);
+            String s = String.valueOf(textView.getText());
+            int index = s.indexOf("第");
+            String substring = s.substring(index + 1, index + 2);
+            return Integer.parseInt(substring) == position + 1;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
