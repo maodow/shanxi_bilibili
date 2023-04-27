@@ -74,8 +74,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:ellipsize="end"
-                android:gravity="center_vertical|left"
+                android:gravity="bottom|left"
                 android:lines="1"
+                android:paddingBottom="@dimen/dp_12"
                 android:singleLine="true"
                 android:textColor="@color/color_838383"
                 android:textSize="@dimen/sp_12" />
@@ -84,8 +85,10 @@
                 android:id="@+id/general_template21_score"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical|left"
+                android:layout_marginLeft="@dimen/dp_4"
+                android:gravity="bottom|left"
                 android:maxEms="3"
+                android:paddingBottom="@dimen/dp_10"
                 android:minEms="3"
                 android:textColor="@color/color_ff9f0a"
                 android:textSize="@dimen/sp_21" />
