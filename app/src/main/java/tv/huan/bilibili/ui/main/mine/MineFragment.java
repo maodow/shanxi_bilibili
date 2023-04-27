@@ -26,6 +26,7 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
     @Override
     public void onResume() {
         super.onResume();
+        getPresenter().updateFavor();
         getPresenter().updateHistory();
     }
 
@@ -37,6 +38,7 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
     @Override
     public void onShow() {
         setVisibility(getView(), View.VISIBLE);
+        getPresenter().updateFavor();
         getPresenter().updateHistory();
     }
 }

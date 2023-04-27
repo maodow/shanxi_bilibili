@@ -109,11 +109,9 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                     public void onFocusChange(View view, boolean b) {
                         try {
                             int position = holder.getAbsoluteAdapterPosition();
-                            if (position < 0)
-                                throw new Exception();
+                            if (position < 0) throw new Exception();
                             FavBean.ItemBean itemBean = mDatas.get(position);
-                            if (!itemBean.isTempDel())
-                                throw new Exception();
+                            if (!itemBean.isTempDel()) throw new Exception();
                             itemBean.setTempDel(false);
                             getView().notifyItemRangeChanged(R.id.center_list, position, 1);
                         } catch (Exception e) {
@@ -187,28 +185,25 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
     protected final void requestTabs() {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<ArrayList<ClassBean>>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<ArrayList<ClassBean>> observableEmitter) {
+            @Override
+            public void subscribe(ObservableEmitter<ArrayList<ClassBean>> observableEmitter) {
 
-                        ArrayList<lib.kalu.leanback.clazz.ClassBean> apis = new ArrayList<>();
-                        for (int i = 0; i < 2; i++) {
-                            lib.kalu.leanback.clazz.ClassBean classApi = new lib.kalu.leanback.clazz.ClassBean();
-                            classApi.setChecked(i == 0);
-                            classApi.setText(i == 0 ? "观看历史" : "我的收藏");
-                            apis.add(classApi);
-                        }
-                        observableEmitter.onNext(apis);
-                    }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnNext(new Consumer<ArrayList<ClassBean>>() {
-                    @Override
-                    public void accept(ArrayList<ClassBean> classBeans) {
-                        boolean extra = getView().getBooleanExtra(CenterActivity.INTENT_FAVORY, false);
-                        getView().updateTab(classBeans, extra ? 1 : 0);
-                    }
-                }).subscribe());
+                ArrayList<lib.kalu.leanback.clazz.ClassBean> apis = new ArrayList<>();
+                for (int i = 0; i < 2; i++) {
+                    lib.kalu.leanback.clazz.ClassBean classApi = new lib.kalu.leanback.clazz.ClassBean();
+                    classApi.setChecked(i == 0);
+                    classApi.setText(i == 0 ? "观看历史" : "我的收藏");
+                    apis.add(classApi);
+                }
+                observableEmitter.onNext(apis);
+            }
+        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnNext(new Consumer<ArrayList<ClassBean>>() {
+            @Override
+            public void accept(ArrayList<ClassBean> classBeans) {
+                boolean extra = getView().getBooleanExtra(CenterActivity.INTENT_FAVORY, false);
+                getView().updateTab(classBeans, extra ? 1 : 0);
+            }
+        }).subscribe());
     }
 
     protected void showWarning() {
@@ -264,9 +259,7 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         centerBean.setHasData(mDatas.size() > 0);
                         return centerBean;
                     }
-                }).delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
+                }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
                         if (switchTab) {
@@ -301,58 +294,55 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
     private void delData(@NonNull String cid, @NonNull int position) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
-                        int checkedIndex = classLayout.getCheckedIndex();
-                        observableEmitter.onNext(checkedIndex == 0);
-                    }
-                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean v) {
-                        if (v) {
-                            return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
-                        } else {
-                            return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
-                        }
-                    }
-                }).map(new Function<BaseResponsedBean<CallOptBean>, CallCenterDelBaen>() {
-                    @Override
-                    public CallCenterDelBaen apply(BaseResponsedBean<CallOptBean> resp) throws Exception {
-                        try {
-                            boolean succ = resp.getData().isSucc();
-                            if (!succ)
-                                throw new Exception("操作失败");
-                            mDatas.remove(position);
-                            CallCenterDelBaen centerDelBaen = new CallCenterDelBaen();
-                            centerDelBaen.setPosition(position);
-                            centerDelBaen.setEmpty(mDatas.isEmpty());
-                            return centerDelBaen;
-                        } catch (Exception e) {
-                            throw e;
-                        }
-                    }
-                }).delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) {
-                        getView().showLoading();
-                    }
-                }).doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        getView().hideLoading();
-                        getView().showToast(throwable);
-                    }
-                }).doOnNext(new Consumer<CallCenterDelBaen>() {
-                    @Override
-                    public void accept(CallCenterDelBaen data) {
-                        getView().hideLoading();
-                        getView().setVisibility(R.id.center_nodata, data.isEmpty() ? View.VISIBLE : View.GONE);
-                        getView().notifyItemRangeRemoved(R.id.center_list, data.getPosition(), 1);
-                    }
-                }).subscribe());
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
+                int checkedIndex = classLayout.getCheckedIndex();
+                observableEmitter.onNext(checkedIndex == 0);
+            }
+        }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
+            @Override
+            public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean v) {
+                if (v) {
+                    return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
+                } else {
+                    return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
+                }
+            }
+        }).map(new Function<BaseResponsedBean<CallOptBean>, CallCenterDelBaen>() {
+            @Override
+            public CallCenterDelBaen apply(BaseResponsedBean<CallOptBean> resp) throws Exception {
+                try {
+                    boolean succ = resp.getData().isSucc();
+                    if (!succ) throw new Exception("操作失败");
+                    mDatas.remove(position);
+                    CallCenterDelBaen centerDelBaen = new CallCenterDelBaen();
+                    centerDelBaen.setPosition(position);
+                    centerDelBaen.setEmpty(mDatas.isEmpty());
+                    return centerDelBaen;
+                } catch (Exception e) {
+                    throw e;
+                }
+            }
+        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) {
+                getView().showLoading();
+            }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                getView().hideLoading();
+                getView().showToast(throwable);
+            }
+        }).doOnNext(new Consumer<CallCenterDelBaen>() {
+            @Override
+            public void accept(CallCenterDelBaen data) {
+                getView().hideLoading();
+                getView().setVisibility(R.id.center_nodata, data.isEmpty() ? View.VISIBLE : View.GONE);
+                getView().notifyItemRangeRemoved(R.id.center_list, data.getPosition(), 1);
+            }
+        }).subscribe());
     }
 
     protected boolean dispatchKey(KeyEvent event) {
@@ -433,26 +423,38 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
         return false;
     }
 
-    protected final void updateLocalCache() {
+    protected final void onBackPressed() {
 
-        try {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> emitter) {
+                try {
 
-            ArrayList<FavBean.ItemBean> itemBeans = new ArrayList<>();
-            for (FavBean.ItemBean t : mDatas) {
-                if (itemBeans.size() >= 3)
-                    break;
-                itemBeans.add(t);
+                    ArrayList<FavBean.ItemBean> itemBeans = new ArrayList<>();
+                    for (FavBean.ItemBean t : mDatas) {
+                        if (itemBeans.size() >= 3) break;
+                        itemBeans.add(t);
+                    }
+
+                    ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
+                    int checkedIndex = classLayout.getCheckedIndex();
+
+                    if (checkedIndex == 0) {
+                        CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_HISTORY_LOCAL, new Gson().toJson(itemBeans));
+                    } else if (checkedIndex == 1) {
+                        CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_FAVOR_LOCAL, new Gson().toJson(itemBeans));
+                    }
+
+                    emitter.onNext(true);
+                } catch (Exception e) {
+                    emitter.onNext(false);
+                }
             }
-
-            ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
-            int checkedIndex = classLayout.getCheckedIndex();
-
-            if (checkedIndex == 0) {
-                CacheUtil.setCache(getView().getContext(), "cache_update_history_local", new Gson().toJson(itemBeans));
-            } else if (checkedIndex == 1) {
-                CacheUtil.setCache(getView().getContext(), "cache_update_favor_local", new Gson().toJson(itemBeans));
+        }).compose(ComposeSchedulers.io_main()).doOnNext(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean data) {
+                getView().callFinish();
             }
-        } catch (Exception e) {
-        }
+        }).subscribe());
     }
 }

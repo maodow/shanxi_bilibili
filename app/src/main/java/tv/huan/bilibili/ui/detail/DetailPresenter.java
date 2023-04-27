@@ -26,6 +26,7 @@ import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
 import lib.kalu.frame.mvp.util.CacheUtil;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.Auth2BeanBase;
@@ -269,8 +270,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     public CallDetailBean apply(CallDetailBean data) {
                         try {
                             List<MediaBean> medias = data.getMedias();
-                            if (null == medias || medias.size() <= 0)
-                                throw new Exception();
+                            if (null == medias || medias.size() <= 0) throw new Exception();
                             for (MediaBean bean : medias) {
                                 bean.setTempPlayType(data.getPlayType());
                             }
@@ -314,11 +314,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         try {
                             MediaDetailBean detail = data.getAlbum();
                             boolean xuanQi = detail.isXuanQi();
-                            if (!xuanQi)
-                                throw new Exception();
+                            if (!xuanQi) throw new Exception();
                             List<MediaBean> medias = data.getMedias();
-                            if (null == medias || medias.size() <= 0)
-                                throw new Exception();
+                            if (null == medias || medias.size() <= 0) throw new Exception();
                             // 1
                             String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                             reportDetailSelectionsButtonShow(cid);
@@ -341,11 +339,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         try {
                             MediaDetailBean detail = data.getAlbum();
                             boolean xuanJi = detail.isXuanJi();
-                            if (!xuanJi)
-                                throw new Exception();
+                            if (!xuanJi) throw new Exception();
                             List<MediaBean> medias = data.getMedias();
-                            if (null == medias || medias.size() <= 0)
-                                throw new Exception();
+                            if (null == medias || medias.size() <= 0) throw new Exception();
                             // 1
                             String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                             reportDetailSelectionsButtonShow(cid);
@@ -367,16 +363,14 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     public CallDetailBean apply(CallDetailBean data) {
                         try {
                             List<RecMediaBean> albums = data.getRecAlbums();
-                            if (null == albums || albums.size() <= 0)
-                                throw new Exception();
+                            if (null == albums || albums.size() <= 0) throw new Exception();
                             // 1
                             String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                             reportDetailRecommendShow(cid);
                             // 2
                             DetailTemplateFavor.DetailTemplateFavList favorData = new DetailTemplateFavor.DetailTemplateFavList();
                             for (RecMediaBean bean : albums) {
-                                if (null == bean)
-                                    continue;
+                                if (null == bean) continue;
                                 favorData.add(bean);
                             }
                             // 3
@@ -387,10 +381,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         }
                         return data;
                     }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
+                }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
                         getView().showLoading();
@@ -414,93 +405,81 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     protected void addFavor(@NonNull String cid, @NonNull String recClassId) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        observableEmitter.onNext(true);
-                    }
-                })
-                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavorBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<FavorBean>> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().addFavorite(cid, recClassId);
-                    }
-                })
-                .map(new Function<BaseResponsedBean<FavorBean>, Boolean>() {
-                    @Override
-                    public Boolean apply(BaseResponsedBean<FavorBean> favorBeanBaseResponsedBean) {
-                        try {
-                            return favorBeanBaseResponsedBean.getData().isFavor();
-                        } catch (Exception e) {
-                            return false;
-                        }
-                    }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) {
-                        getView().showLoading();
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        getView().hideLoading();
-                    }
-                })
-                .doOnNext(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) {
-                        getView().hideLoading();
-                        getView().updateFavor(true);
-                    }
-                })
-                .subscribe());
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                observableEmitter.onNext(true);
+            }
+        }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavorBean>>>() {
+            @Override
+            public Observable<BaseResponsedBean<FavorBean>> apply(Boolean aBoolean) {
+                return HttpClient.getHttpClient().getHttpApi().addFavorite(cid, recClassId);
+            }
+        }).map(new Function<BaseResponsedBean<FavorBean>, Boolean>() {
+            @Override
+            public Boolean apply(BaseResponsedBean<FavorBean> favorBeanBaseResponsedBean) {
+                try {
+                    boolean favor = favorBeanBaseResponsedBean.getData().isFavor();
+                    CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_FAVOR_NET, "1");
+                    return favor;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) {
+                getView().showLoading();
+            }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                getView().hideLoading();
+            }
+        }).doOnNext(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) {
+                getView().hideLoading();
+                getView().updateFavor(true);
+            }
+        }).subscribe());
     }
 
     protected void cancleFavor(@NonNull String cid) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                        observableEmitter.onNext(true);
-                    }
-                })
-                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean aBoolean) {
-                        return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
-                    }
-                })
-                .map(new Function<BaseResponsedBean<CallOptBean>, Boolean>() {
-                    @Override
-                    public Boolean apply(BaseResponsedBean<CallOptBean> resp) {
-                        return resp.getData().isSucc();
-                    }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) {
-                        getView().showLoading();
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        getView().hideLoading();
-                    }
-                })
-                .doOnNext(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) {
-                        getView().hideLoading();
-                        getView().updateFavor(false);
-                    }
-                })
-                .subscribe());
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                observableEmitter.onNext(true);
+            }
+        }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
+            @Override
+            public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean aBoolean) {
+                return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
+            }
+        }).map(new Function<BaseResponsedBean<CallOptBean>, Boolean>() {
+            @Override
+            public Boolean apply(BaseResponsedBean<CallOptBean> resp) {
+                boolean favor =resp.getData().isSucc();
+                CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_FAVOR_NET, "1");
+                return favor;
+            }
+        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) {
+                getView().showLoading();
+            }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                getView().hideLoading();
+            }
+        }).doOnNext(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) {
+                getView().hideLoading();
+                getView().updateFavor(false);
+            }
+        }).subscribe());
     }
 
     protected boolean dispatchEvent(KeyEvent event) {
@@ -570,57 +549,51 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         try {
             DetailGridView gridView = getView().findViewById(R.id.detail_list);
             boolean playingEnd = gridView.isPlayingEnd();
-            if (playingEnd)
-                throw new Exception("播放结束");
+            if (playingEnd) throw new Exception("播放结束");
             int nextPosition = gridView.getPlayerNextPosition();
-            if (nextPosition < 0)
-                throw new Exception("播放错误");
+            if (nextPosition < 0) throw new Exception("播放错误");
             return nextPosition;
         } catch (Exception e) {
             return -1;
         }
     }
 
-    protected void uploadBackupPress() {
+    protected void onBackPressed() {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-                    // 上报数据
-                    @Override
-                    public void subscribe(ObservableEmitter<Boolean> emitter) {
+            // 上报数据
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> emitter) {
 
-                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
-                        String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
-                        // 1
-                        long start = getView().getLongExtra(DetailActivity.INTENT_START_TIME, 0);
-                        long end = System.currentTimeMillis();
-                        reportPlayVodStop(cid, vid, start, end);
-                        // 2
-                        long duration = getView().getLongExtra(DetailActivity.INTENT_CUR_DURATION, 0);
-                        long position = getView().getLongExtra(DetailActivity.INTENT_CUR_POSITION, 0);
-                        boolean isEnd = position > 0 && duration > 0 && position >= duration;
-                        String classId = getView().getStringExtra(DetailActivity.INTENT_REC_CLASSID, "");
-                        int pos = getView().getIntExtra(DetailActivity.INTENT_INDEX, 1);
-                        int endFlag = isEnd ? 0 : 1;
-                        uploadPlayHistory(cid, vid, classId, pos, endFlag, duration, position);
-                        // 3
-                        CacheUtil.setCache(getView().getContext(), "cache_update_history_net", "1");
-                        // 4
-                        emitter.onNext(true);
-                    }
-                })
-                .compose(ComposeSchedulers.io_main())
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        getView().callFinish();
-                    }
-                })
-                .doOnNext(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) {
-                        getView().callFinish();
-                    }
-                })
-                .subscribe());
+                String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
+                String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
+                // 1
+                long start = getView().getLongExtra(DetailActivity.INTENT_START_TIME, 0);
+                long end = System.currentTimeMillis();
+                reportPlayVodStop(cid, vid, start, end);
+                // 2
+                long duration = getView().getLongExtra(DetailActivity.INTENT_CUR_DURATION, 0);
+                long position = getView().getLongExtra(DetailActivity.INTENT_CUR_POSITION, 0);
+                boolean isEnd = position > 0 && duration > 0 && position >= duration;
+                String classId = getView().getStringExtra(DetailActivity.INTENT_REC_CLASSID, "");
+                int pos = getView().getIntExtra(DetailActivity.INTENT_INDEX, 1);
+                int endFlag = isEnd ? 0 : 1;
+                uploadPlayHistory(cid, vid, classId, pos, endFlag, duration, position);
+                // 3
+                CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_HISTORY_NET, "1");
+                // 4
+                emitter.onNext(true);
+            }
+        }).compose(ComposeSchedulers.io_main()).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                getView().callFinish();
+            }
+        }).doOnNext(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) {
+                getView().callFinish();
+            }
+        }).subscribe());
     }
 
     protected void requestHuaweiAuth(String movieCode, long seek) {
@@ -631,8 +604,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             throw new Exception("鉴权失败: not contains movieCode");
                         emitter.onNext(movieCode);
                     }
-                })
-                .flatMap(new Function<String, Observable<BaseAuthorizationBean>>() {
+                }).flatMap(new Function<String, Observable<BaseAuthorizationBean>>() {
                     @Override
                     public Observable<BaseAuthorizationBean> apply(String s) throws Exception {
                         JSONObject object = new JSONObject();
@@ -653,8 +625,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 .map(new Function<BaseAuthorizationBean, String>() {
                     @Override
                     public String apply(BaseAuthorizationBean resp) throws Exception {
-                        if (null == resp)
-                            throw new Exception("鉴权失败: not contains resp");
+                        if (null == resp) throw new Exception("鉴权失败: not contains resp");
                         List<BaseAuthorizationBean.ItemBean> data = resp.getData();
                         if (null == data || data.size() <= 0)
                             throw new Exception("鉴权失败: " + resp.getReturncode());
@@ -663,29 +634,23 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             throw new Exception("鉴权失败: " + resp.getReturncode());
                         return url;
                     }
-                })
-                .delay(40, TimeUnit.MILLISECONDS)
-                .compose(ComposeSchedulers.io_main())
-                .doOnSubscribe(new Consumer<Disposable>() {
+                }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
 //                        getView().showLoading();
                     }
-                })
-                .doOnError(new Consumer<Throwable>() {
+                }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         getView().showToast(throwable);
 //                        getView().hideLoading();
                     }
-                })
-                .doOnNext(new Consumer<String>() {
+                }).doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(String s) {
 //                        getView().hideLoading();
                         getView().huaweiSucc(s, seek);
                     }
-                })
-                .subscribe());
+                }).subscribe());
     }
 }

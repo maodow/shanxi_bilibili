@@ -21,8 +21,7 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
 
     @Override
     public void onBackPressed() {
-        getPresenter().updateLocalCache();
-        super.onBackPressed();
+        getPresenter().onBackPressed();
     }
 
     @Override
