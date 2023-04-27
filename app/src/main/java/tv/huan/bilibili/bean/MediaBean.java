@@ -5,6 +5,7 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 
 import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.bean.base.BaseImageBean;
 
 @Keep
@@ -29,6 +30,35 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
     private String tempRecClassId;
     private String[] tempPicList;
     private long tempSeek;
+    private int tempType;
+
+    public void setTempType(int tempType) {
+        this.tempType = tempType;
+    }
+
+    public boolean isXuanQi() {
+        //  选期 => 教育、体育、综艺
+        if (tempType == BuildConfig.HUAN_TYPE_EDUCATION || tempType == BuildConfig.HUAN_TYPE_SPORTS || tempType == BuildConfig.HUAN_TYPE_VARIETY) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isXuanJi() {
+        // 电影
+        if (tempType == BuildConfig.HUAN_TYPE_FILM) {
+            return false;
+        }
+        //  选期 => 教育、体育、综艺
+        else if (tempType == BuildConfig.HUAN_TYPE_EDUCATION || tempType == BuildConfig.HUAN_TYPE_SPORTS || tempType == BuildConfig.HUAN_TYPE_VARIETY) {
+            return false;
+        }
+        // 选集
+        else {
+            return true;
+        }
+    }
 
     public String getTempVideoUrl() {
         return tempVideoUrl;

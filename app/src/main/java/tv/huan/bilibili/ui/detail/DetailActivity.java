@@ -9,10 +9,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 

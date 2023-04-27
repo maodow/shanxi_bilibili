@@ -68,12 +68,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public void subscribe(ObservableEmitter<CallDetailBean> emitter) {
                         CallDetailBean detailBean = new CallDetailBean();
-                        try {
-                            int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
-                            detailBean.setDefaultPosition(position);
-                        } catch (Exception e) {
-                            detailBean.setDefaultPosition(0);
-                        }
                         emitter.onNext(detailBean);
                     }
                 })
@@ -163,17 +157,14 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         // 播放策略
                         try {
                             GetMediasByCid2Bean data = getMediasByCid2BeanBaseResponsedBean.getData();
-                            MediaDetailBean album = data.getAlbum();
                             // 免费
-                            if (0 == album.getProductType()) {
-                                detailBean.setPlayType(Integer.MAX_VALUE);
+                            if (0 == data.getAlbum().getProductType()) {
+                                data.getAlbum().setPlayType(Integer.MAX_VALUE);
                             }
                             // 收费
                             else {
-                                detailBean.setPlayType(album.getPlayType());
                             }
                         } catch (Exception e) {
-                            detailBean.setPlayType(0);
                         }
 
                         // 详情
@@ -227,7 +218,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         try {
                             boolean whiteUser = auth2Bean.isWhiteUser();
                             if (whiteUser) {
-                                detailBean.setPlayType(Integer.MAX_VALUE);
+                                detailBean.getAlbum().setPlayType(Integer.MAX_VALUE);
                             }
                         } catch (Exception e) {
                         }
@@ -269,10 +260,13 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public CallDetailBean apply(CallDetailBean data) {
                         try {
+                            int playType = data.getAlbum().getPlayType();
+                            int type = data.getAlbum().getType();
                             List<MediaBean> medias = data.getMedias();
                             if (null == medias || medias.size() <= 0) throw new Exception();
                             for (MediaBean bean : medias) {
-                                bean.setTempPlayType(data.getPlayType());
+                                bean.setTempPlayType(playType);
+                                bean.setTempType(type);
                             }
                         } catch (Exception e) {
                         }
@@ -287,8 +281,14 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             // 1
                             DetailTemplatePlayer.DetailTemplatePlayerObject playerObject = new DetailTemplatePlayer.DetailTemplatePlayerObject();
                             playerObject.setTempFavor(data.isFavor());
-                            playerObject.setEpisodeIndex(data.getDefaultPosition());
-                            playerObject.setTempPlayType(data.getPlayType());
+                            boolean xuanJi = data.getAlbum().isXuanJi();
+                            boolean xuanQi = data.getAlbum().isXuanQi();
+                            if (xuanJi || xuanQi) {
+                                playerObject.setEpisodeIndex(data.getDefaultPosition());
+                            } else {
+                                playerObject.setEpisodeIndex(-1);
+                            }
+                            playerObject.setTempType(data.getAlbum().getType());
                             playerObject.setTempRecClassId(data.getRecClassId());
                             playerObject.setTempTag(data.getAlbum().getSplitTag());
                             playerObject.setTempTitle(data.getAlbum().getName());
@@ -381,6 +381,22 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         }
                         return data;
                     }
+                })
+                // 默认position
+                .map(new Function<CallDetailBean, CallDetailBean>() {
+                    @Override
+                    public CallDetailBean apply(CallDetailBean callDetailBean) {
+                        try {
+                            int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
+                            int size = callDetailBean.getMedias().size();
+                            if (position + 1 > size)
+                                throw new Exception();
+                            callDetailBean.setDefaultPosition(position);
+                        } catch (Exception e) {
+                            callDetailBean.setDefaultPosition(0);
+                        }
+                        return callDetailBean;
+                    }
                 }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
@@ -395,6 +411,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 }).doOnNext(new Consumer<CallDetailBean>() {
                     @Override
                     public void accept(CallDetailBean data) {
+                        LogUtil.log("DetailActivity => doOnNext => position = " + new Gson().toJson(data));
                         getView().hideLoading();
                         getView().notifyDataRangeInsertLeanBack(R.id.detail_list);
                         getView().startPlayerPosition(data.getMedias().get(data.getDefaultPosition()), false);
@@ -459,7 +476,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         }).map(new Function<BaseResponsedBean<CallOptBean>, Boolean>() {
             @Override
             public Boolean apply(BaseResponsedBean<CallOptBean> resp) {
-                boolean favor =resp.getData().isSucc();
+                boolean favor = resp.getData().isSucc();
                 CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_FAVOR_NET, "1");
                 return favor;
             }

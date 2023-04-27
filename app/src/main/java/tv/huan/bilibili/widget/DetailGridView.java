@@ -37,11 +37,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     public long getPlayerPosition() {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             return presenterPlayer.getPosition(viewHolder.itemView);
         } catch (Exception e) {
             return 0;
@@ -51,11 +49,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     public long getPlayerDuraion() {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             return presenterPlayer.getDuration(viewHolder.itemView);
         } catch (Exception e) {
             return 0;
@@ -65,11 +61,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     public void releasePlayer() {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             presenterPlayer.releasePlayer(viewHolder.itemView);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => stopPlayer => " + e.getMessage());
@@ -79,11 +73,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     public void stopFull() {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             presenterPlayer.stopFull(viewHolder.itemView);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => stopFull => " + e.getMessage());
@@ -93,11 +85,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     public void startPlayer(@NonNull String s, long seek) {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             presenterPlayer.startPlayer(viewHolder.itemView, s, seek);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => startPlayer => " + e.getMessage());
@@ -107,11 +97,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     public void updateFavor(boolean status) {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             presenterPlayer.updateFavor(viewHolder.itemView, status);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => updateFavor => " + e.getMessage());
@@ -121,11 +109,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     public void updatePlayerPosition(@NonNull MediaBean data) {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             presenterPlayer.updatePosition(viewHolder.itemView, data.getEpisodeIndex());
         } catch (Exception e) {
             LogUtil.log("DetailGridView => updatePlayerPosition => " + e.getMessage());
@@ -135,11 +121,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     public boolean isPlayerPlayingPosition(@NonNull int position) {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             return presenterPlayer.checkPlayerPlayingPosition(viewHolder.itemView, position);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => isPlayerPlayingPosition => " + e.getMessage());
@@ -152,8 +136,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
             Object o = objectAdapter.get(1);
-            if (null == o)
-                throw new Exception("objectAdapter null");
+            if (null == o) throw new Exception("objectAdapter null");
             // 选集列表
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
@@ -184,33 +167,42 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (isFromUser) {
                 checkPlayerPosition(data, true);
             } else {
-                ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-                ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-                Object o = objectAdapter.get(1);
-                if (null == o)
-                    throw new Exception("objectAdapter null");
                 // 选集列表
-                if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-                    int index = data.getEpisodeIndex() + 1;
-                    DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                    if (index > 0 && null != presenter) {
-                        int position = --index;
-                        ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
-                        presenter.checkedPlayingPosition(viewHolder.itemView, position);
+                if (data.isXuanJi()) {
+                    ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+                    ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+                    Object o = objectAdapter.get(1);
+                    if (null != o && o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
+                        int index = data.getEpisodeIndex() + 1;
+                        DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+                        if (index > 0 && null != presenter) {
+                            int position = --index;
+                            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
+                            presenter.checkedPlayingPosition(viewHolder.itemView, position);
+                        } else {
+                            throw new Exception("xuanji error");
+                        }
                     } else {
-                        throw new Exception("xuanji error");
+                        throw new Exception("objectAdapter null");
                     }
                 }
                 // 选期列表
-                else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
-                    int index = data.getEpisodeIndex() + 1;
-                    DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
-                    if (index > 0 && null != presenter) {
-                        int position = --index;
-                        ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanQi.DetailTemplateXuanQiList.class);
-                        presenter.checkedPlayingPosition(viewHolder.itemView, position);
+                else if (data.isXuanQi()) {
+                    ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+                    ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+                    Object o = objectAdapter.get(1);
+                    if (null != o && o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
+                        int index = data.getEpisodeIndex() + 1;
+                        DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
+                        if (index > 0 && null != presenter) {
+                            int position = --index;
+                            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanQi.DetailTemplateXuanQiList.class);
+                            presenter.checkedPlayingPosition(viewHolder.itemView, position);
+                        } else {
+                            throw new Exception("xuanqi error");
+                        }
                     } else {
-                        throw new Exception("xuanqi error");
+                        throw new Exception("objectAdapter null");
                     }
                 }
                 // 电影
@@ -225,6 +217,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
 
     private void checkPlayerPosition(@NonNull MediaBean data, boolean isFromUser) {
         try {
+
             int playType = data.getTempPlayType();
             int index = data.getEpisodeIndex() + 1;
             // 免费
@@ -246,11 +239,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
 
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             presenterPlayer.checkVipStatus(viewHolder.itemView, data, isFromUser);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => checkPlayerPositionVipStatus => " + e.getMessage());
@@ -260,11 +251,9 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     private void checkPlayerPositionHuawei(@NonNull MediaBean data) {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder)
-                throw new Exception("viewHolder error: null");
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer)
-                throw new Exception("presenterPlayer error: null");
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
             presenterPlayer.startHuawei(viewHolder.itemView, data);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => checkPlayerPositionHuawei => " + e.getMessage());
@@ -277,8 +266,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
             Object o = objectAdapter.get(1);
-            if (null == o)
-                throw new Exception("objectAdapter null");
+            if (null == o) throw new Exception("objectAdapter null");
             // 选集列表
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
 //                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
@@ -339,23 +327,19 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
             Object o = objectAdapter.get(1);
-            if (null == o)
-                throw new Exception("objectAdapter null");
+            if (null == o) throw new Exception("objectAdapter null");
             // 选集列表
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
-                if (null == viewHolder)
-                    throw new Exception("viewHolder error: null");
+                if (null == viewHolder) throw new Exception("viewHolder error: null");
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                if (null == presenter)
-                    throw new Exception("presenter error: null");
+                if (null == presenter) throw new Exception("presenter error: null");
                 return presenter.getPlayingPositionNext(viewHolder.itemView);
             }
             // 选期列表
             else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
                 DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
-                if (null == presenter)
-                    throw new Exception("presenter error: null");
+                if (null == presenter) throw new Exception("presenter error: null");
                 return presenter.getPlayingPositionNext();
             }
             throw new Exception("not find");
@@ -371,16 +355,13 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
             Object o = objectAdapter.get(1);
-            if (null == o)
-                throw new Exception("objectAdapter null");
+            if (null == o) throw new Exception("objectAdapter null");
             // 选集列表
             if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
-                if (null == viewHolder)
-                    throw new Exception("viewHolder error: null");
+                if (null == viewHolder) throw new Exception("viewHolder error: null");
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                if (null == presenter)
-                    throw new Exception("presenter error: null");
+                if (null == presenter) throw new Exception("presenter error: null");
                 return presenter.isPlayingPositionLast(viewHolder.itemView);
             }
             // 选期列表

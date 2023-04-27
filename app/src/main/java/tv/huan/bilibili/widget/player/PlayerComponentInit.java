@@ -101,13 +101,12 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
         try {
             TextView textView = findViewById(R.id.detail_player_item_data);
             String title = data.getTempTitle();
-            int episodeIndex = data.getEpisodeIndex();
-            if (episodeIndex < 0) {
-                textView.setText(title);
-            } else {
-                int position = episodeIndex + 1;
+            if (data.isXuanJi() || data.isXuanQi()) {
+                int position = data.getEpisodeIndex() + 1;
                 String string = textView.getResources().getString(R.string.detail_playing_index, title, position);
                 textView.setText(string);
+            } else {
+                textView.setText(title);
             }
         } catch (Exception e) {
         }

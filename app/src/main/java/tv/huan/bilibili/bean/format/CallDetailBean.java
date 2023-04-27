@@ -11,7 +11,6 @@ import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 public class CallDetailBean implements Serializable {
 
     private boolean favor; //收藏状态
-    private int playType; // 播放策略, vip前几集免费看
     private String recClassId;
 
     private MediaDetailBean album; //媒资详情
@@ -58,14 +57,6 @@ public class CallDetailBean implements Serializable {
 
     public void setRecAlbums(List<RecMediaBean> recAlbums) {
         this.recAlbums = recAlbums;
-    }
-
-    public int getPlayType() {
-        return playType;
-    }
-
-    public void setPlayType(int playType) {
-        this.playType = playType;
     }
 
     public String getRecClassId() {

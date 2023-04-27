@@ -261,11 +261,10 @@ public final class DetailTemplatePlayer extends Presenter {
     }
 
     public void startPlayer(View view, String s, long seek) {
-        LogUtil.log("DetailTemplatePlayer => startPlayer");
         try {
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(false);
-            builder.setDelay(4000);
+            builder.setDelay(1000);
             builder.setSeek(seek);
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
             playerView.start(builder.build(), s);
