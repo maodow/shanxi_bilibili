@@ -38,6 +38,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
+import tv.huan.bilibili.bean.format.CallCenterDelBaen;
 import tv.huan.bilibili.bean.format.CallOptBean;
 import tv.huan.bilibili.bean.format.CallPageBean;
 import tv.huan.bilibili.http.HttpClient;
@@ -314,15 +315,18 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
                         }
                     }
-                }).map(new Function<BaseResponsedBean<CallOptBean>, Integer>() {
+                }).map(new Function<BaseResponsedBean<CallOptBean>, CallCenterDelBaen>() {
                     @Override
-                    public Integer apply(BaseResponsedBean<CallOptBean> resp) throws Exception {
+                    public CallCenterDelBaen apply(BaseResponsedBean<CallOptBean> resp) throws Exception {
                         try {
                             boolean succ = resp.getData().isSucc();
                             if (!succ)
                                 throw new Exception("操作失败");
                             mDatas.remove(position);
-                            return position;
+                            CallCenterDelBaen centerDelBaen = new CallCenterDelBaen();
+                            centerDelBaen.setPosition(position);
+                            centerDelBaen.setEmpty(mDatas.isEmpty());
+                            return centerDelBaen;
                         } catch (Exception e) {
                             throw e;
                         }
@@ -340,11 +344,12 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                         getView().hideLoading();
                         getView().showToast(throwable);
                     }
-                }).doOnNext(new Consumer<Integer>() {
+                }).doOnNext(new Consumer<CallCenterDelBaen>() {
                     @Override
-                    public void accept(Integer i) {
+                    public void accept(CallCenterDelBaen data) {
                         getView().hideLoading();
-                        getView().notifyItemRangeRemoved(R.id.center_list, i, 1);
+                        getView().setVisibility(R.id.center_nodata, data.isEmpty() ? View.VISIBLE : View.GONE);
+                        getView().notifyItemRangeRemoved(R.id.center_list, data.getPosition(), 1);
                     }
                 }).subscribe());
     }
