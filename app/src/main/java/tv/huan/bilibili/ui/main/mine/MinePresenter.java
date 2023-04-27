@@ -1,5 +1,6 @@
 package tv.huan.bilibili.ui.main.mine;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
 import android.text.TextUtils;
@@ -15,8 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +34,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.FavBean;
@@ -126,17 +132,6 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         public void onFocusChange(View v, boolean hasFocus) {
                             if (hasFocus) {
                                 ((RecyclerView) v.getParent().getParent().getParent()).scrollToPosition(0);
-                            }
-                        }
-                    });
-                }
-                // 观看历史
-                else if (viewType == TYPE_ITEM_IMG_HISTORY) {
-                    inflate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                            if (hasFocus) {
-                                ((RecyclerView) v.getParent()).scrollToPosition(1);
                             }
                         }
                     });
@@ -537,6 +532,106 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             getView().notifyItemRangeChanged(R.id.mine_list, 0, data.getLength());
                         } else {
                             getView().notifyDataSetChanged(R.id.mine_list);
+                        }
+                    }
+                })
+                .subscribe());
+    }
+
+    protected final void updateLocalCache() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<JSONObject>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<JSONObject> emitter) throws Exception {
+                        try {
+                            String s = CacheUtil.getCache(getView().getContext(), "center_cache");
+                            if (null == s || s.length() <= 0)
+                                throw new Exception();
+                            emitter.onNext(new JSONObject(s));
+                        } catch (Exception e) {
+                            throw e;
+                        }
+                    }
+                })
+                .map(new Function<JSONObject, Boolean>() {
+                    @SuppressLint("CheckResult")
+                    @Override
+                    public Boolean apply(JSONObject object) {
+                        try {
+                            int index = object.optInt("index", -1);
+                            if (index == -1)
+                                throw new Exception();
+                            String s = object.optString("data", null);
+                            if (null == s || s.length() <= 0)
+                                throw new Exception();
+                            Type type = new TypeToken<ArrayList<FavBean.ItemBean>>() {
+                            }.getType();
+                            ArrayList<FavBean.ItemBean> inserBeans = new Gson().fromJson(s, type);
+                            for (FavBean.ItemBean t : inserBeans) {
+                                if (null == t)
+                                    continue;
+                                t.setTempPosition(inserBeans.indexOf(t));
+                                t.setTempType(index == 0 ? TYPE_ITEM_IMG_HISTORY : TYPE_ITEM_IMG_FAVOR);
+                            }
+
+                            ArrayList<FavBean.ItemBean> delBeans = new ArrayList<>();
+                            for (FavBean.ItemBean t : mDatas) {
+                                if (null == t)
+                                    continue;
+                                int tempType = t.getTempType();
+                                if (index == 0 && tempType == TYPE_ITEM_IMG_HISTORY) {
+                                    delBeans.add(t);
+                                } else if (index == 1 && tempType == TYPE_ITEM_IMG_FAVOR) {
+                                    delBeans.add(t);
+                                }
+                            }
+                            for (FavBean.ItemBean t : delBeans) {
+                                if (null == t)
+                                    continue;
+                                mDatas.remove(t);
+                            }
+
+                            if (index == 0) {
+                                mDatas.addAll(2, inserBeans);
+                            } else if (index == 1) {
+                                int i = mDatas.size() - 4;
+                                mDatas.addAll(i, inserBeans);
+                            }
+                            return true;
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    }
+                })
+                .map(new Function<Boolean, Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean aBoolean) {
+                        try {
+                            CacheUtil.setCache(getView().getContext(), "center_cache", "");
+                        } catch (Exception e) {
+                        }
+                        return aBoolean;
+                    }
+                })
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().showToast("获取缓存失败");
+                    }
+                })
+                .doOnNext(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) {
+                        if (aBoolean) {
+                            getView().notifyDataRangeChanged(R.id.mine_list);
+                            getView().showToast("刷新缓存成功");
+                        } else {
+                            getView().showToast("刷新缓存失败");
                         }
                     }
                 })

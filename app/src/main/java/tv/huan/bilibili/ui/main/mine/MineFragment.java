@@ -20,12 +20,12 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
     @Override
     public void initData() {
         getPresenter().setAdapter();
+        getPresenter().request();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getPresenter().request();
     }
 
     @Override

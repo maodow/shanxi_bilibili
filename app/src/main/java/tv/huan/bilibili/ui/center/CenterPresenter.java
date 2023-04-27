@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.frame.mvp.util.CacheUtil;
 import lib.kalu.frame.mvp.util.OffsetUtil;
 import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
@@ -430,5 +433,28 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
             }
         }
         return false;
+    }
+
+    protected final void updateLocalCache() {
+
+        try {
+
+            ArrayList<FavBean.ItemBean> itemBeans = new ArrayList<>();
+            for (FavBean.ItemBean t : mDatas) {
+                if (itemBeans.size() >= 3)
+                    break;
+                itemBeans.add(t);
+            }
+
+            ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
+            int checkedIndex = classLayout.getCheckedIndex();
+
+            JSONObject object = new JSONObject();
+            object.put("data", new Gson().toJson(itemBeans));
+            object.put("index", checkedIndex);
+            CacheUtil.setCache(getView().getContext(), "center_cache", object.toString());
+
+        } catch (Exception e) {
+        }
     }
 }

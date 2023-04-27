@@ -12,11 +12,18 @@ import lib.kalu.leanback.clazz.ClassBean;
 import lib.kalu.leanback.clazz.ClassScrollView;
 import lib.kalu.leanback.clazz.OnCheckedChangeListener;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.utils.LogUtil;
 
 public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> implements CenterView {
 
     public static final String INTENT_FAVORY = "intent_favory"; // 我的收藏
+
+    @Override
+    public void onBackPressed() {
+        getPresenter().updateLocalCache();
+        super.onBackPressed();
+    }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
