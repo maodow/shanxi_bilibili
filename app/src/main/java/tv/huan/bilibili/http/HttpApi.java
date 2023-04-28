@@ -26,6 +26,7 @@ import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
 import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.bean.SpecialBean;
 import tv.huan.bilibili.bean.base.BaseAuthorizationBean;
+import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
 
@@ -61,6 +62,11 @@ public interface HttpApi {
     // 取消收藏
     @GET("data/cancelFavorite")
     Observable<BaseResponsedBean<CallOptBean>> cancelFavorite(@Query("cid") String cid);
+
+    // 查询观看记录
+    @GET("data/getLastBookmark")
+    Observable<BaseResponsedBean<BaseDataBean>> getLastBookmark(@Query("cid") String cid,
+                                                                @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     // 查询收藏
     @GET("data/checkFavorite")

@@ -9,20 +9,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.Gson;
-
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
-import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 
-    public static final String INTENT_SEEK = "intent_seek";
-    public static final String INTENT_POSITION = "intent_position";
     public static final String INTENT_CID = "intent_cid";
     public static final String INTENT_FROM_SEARCH = "intent_from_search";
     public static final String INTENT_FROM_SEARCH_KEY = "intent_from_search_key";
@@ -124,13 +119,13 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
             @Override
             public void run() {
                 DetailGridView gridView = findViewById(R.id.detail_list);
-                gridView.startPlayerPosition(data, false);
+                gridView.startPlayerPosition(data, 0, 0, false);
             }
         }, 1000);
     }
 
     @Override
-    public void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser) {
+    public void startPlayerPosition(@NonNull MediaBean data, @NonNull int pos, @NonNull long seek, boolean isFromUser) {
         putStringExtra(INTENT_VID, data.getVid());
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
         putIntExtra(INTENT_INDEX, data.getEpisodeIndex() + 1);
@@ -138,7 +133,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
             @Override
             public void run() {
                 DetailGridView gridView = findViewById(R.id.detail_list);
-                gridView.startPlayerPosition(data, isFromUser);
+                gridView.startPlayerPosition(data, pos, seek, isFromUser);
             }
         }, 1000);
     }

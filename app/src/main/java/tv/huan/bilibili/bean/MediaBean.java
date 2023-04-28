@@ -29,9 +29,9 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
     private String temoInfo;
     private String tempRecClassId;
     private String[] tempPicList;
-    private long tempSeek;
     private int tempType;
     private String tempMoiveCode;
+
 
     public String getTempMoiveCode() {
         return tempMoiveCode;
@@ -139,14 +139,6 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
 
     public void setTempPicList(String[] tempPicList) {
         this.tempPicList = tempPicList;
-    }
-
-    public long getTempSeek() {
-        return tempSeek;
-    }
-
-    public void setTempSeek(long tempSeek) {
-        this.tempSeek = tempSeek;
     }
 
     @Override

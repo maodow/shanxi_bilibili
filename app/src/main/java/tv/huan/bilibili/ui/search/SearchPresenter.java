@@ -112,7 +112,10 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                                 KeyboardLinearLayout keyboardView = getView().findViewById(R.id.search_keyboard);
                                 String result = keyboardView.getInput();
                                 String lowerCase = result.toLowerCase();
-                                JumpUtil.nextDetailFromSearch(v.getContext(), itemBean.getCid(), lowerCase);
+                                itemBean.setFromSearch(true);
+                                itemBean.setFromSearchKeys(lowerCase);
+                                JumpUtil.next(v.getContext(), itemBean);
+//                                JumpUtil.nextDetailFromSearch(v.getContext(), itemBean.getCid(), lowerCase);
                             }
                         }
                     });

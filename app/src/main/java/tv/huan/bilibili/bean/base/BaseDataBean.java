@@ -21,6 +21,54 @@ public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable
     private String playLength;
     private int pos;
 
+
+    private boolean fromSearch = false;
+    private String fromSearchKeys = null;
+
+    private boolean fromSpecial = false;
+    private int fromSpecialTopId = 0;
+    private String fromSpecialTopName = null;
+
+    public boolean isFromSpecial() {
+        return fromSpecial;
+    }
+
+    public void setFromSpecial(boolean fromSpecial) {
+        this.fromSpecial = fromSpecial;
+    }
+
+    public int getFromSpecialTopId() {
+        return fromSpecialTopId;
+    }
+
+    public void setFromSpecialTopId(int fromSpecialTopId) {
+        this.fromSpecialTopId = fromSpecialTopId;
+    }
+
+    public String getFromSpecialTopName() {
+        return fromSpecialTopName;
+    }
+
+    public void setFromSpecialTopName(String fromSpecialTopName) {
+        this.fromSpecialTopName = fromSpecialTopName;
+    }
+
+    public boolean isFromSearch() {
+        return fromSearch;
+    }
+
+    public void setFromSearch(boolean fromSearch) {
+        this.fromSearch = fromSearch;
+    }
+
+    public String getFromSearchKeys() {
+        return fromSearchKeys;
+    }
+
+    public void setFromSearchKeys(String fromSearchKeys) {
+        this.fromSearchKeys = fromSearchKeys;
+    }
+
     public long getSeek() {
         try {
             long l = Long.parseLong(playTime);

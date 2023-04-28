@@ -48,12 +48,16 @@ public final class JumpUtil {
                 throw new Exception("cid error: " + cid);
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra(DetailActivity.INTENT_CID, cid);
-            int position = data.getPosition();
-            Log.e("JumpUtil", "nextDetail => position = " + position);
-            intent.putExtra(DetailActivity.INTENT_POSITION, position);
-            long seek = data.getSeek();
-            Log.e("JumpUtil", "nextDetail => seek = " + seek);
-            intent.putExtra(DetailActivity.INTENT_SEEK, seek);
+            if (data.isFromSearch()) {
+                intent.putExtra(DetailActivity.INTENT_FROM_SEARCH, data.isFromSearch());
+                intent.putExtra(DetailActivity.INTENT_FROM_SEARCH_KEY, data.getFromSearchKeys());
+            }
+            if (data.isFromSpecial()) {
+                intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL, data.isFromSpecial());
+                intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL_SCENEID, data.getFromSpecialTopId());
+                intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL_TOPID, data.getFromSpecialTopId());
+                intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL_TOPNAME, data.getFromSpecialTopName());
+            }
             context.startActivity(intent);
         } catch (Exception e) {
             Log.e("JumpUtil", "nextDetail => " + e.getMessage());
@@ -118,36 +122,12 @@ public final class JumpUtil {
         context.startActivity(intent);
     }
 
-    public static void nextDetailFromSearch(@NonNull Context context, @NonNull String cid, @NonNull String keys) {
-        if (null != cid && cid.length() > 0) {
-            Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra(DetailActivity.INTENT_CID, cid);
-            intent.putExtra(DetailActivity.INTENT_FROM_SEARCH, true);
-            intent.putExtra(DetailActivity.INTENT_FROM_SEARCH_KEY, keys);
-            context.startActivity(intent);
-        }
-    }
-
     public static void nextDetailFromWanliu(@NonNull Context context, @NonNull String cid, @NonNull String name) {
         if (null != cid && cid.length() > 0) {
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra(DetailActivity.INTENT_CID, cid);
             intent.putExtra(DetailActivity.INTENT_FROM_WANLIU, true);
             intent.putExtra(DetailActivity.INTENT_FROM_WANLIU_KEY, name);
-            context.startActivity(intent);
-        }
-    }
-
-    public static void nextDetailFromSpecial(@NonNull Context context, @NonNull String cid, int sceneId, int topicId, String topicName) {
-
-        Log.e("JumpUtil", "nextDetailFromSpecial => cid = " + cid + ", sceneId = " + sceneId + ", topicId = " + topicId + ", topicName = " + topicName);
-        if (null != cid && cid.length() > 0) {
-            Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra(DetailActivity.INTENT_CID, cid);
-            intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL, true);
-            intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL_SCENEID, sceneId);
-            intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL_TOPID, topicId);
-            intent.putExtra(DetailActivity.INTENT_FROM_SPECIAL_TOPNAME, topicName);
             context.startActivity(intent);
         }
     }

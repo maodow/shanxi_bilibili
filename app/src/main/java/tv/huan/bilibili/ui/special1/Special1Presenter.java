@@ -67,7 +67,10 @@ public class Special1Presenter extends BasePresenterImpl<Special1View> {
                     public void onClick(View v) {
                         int position = holder.getAbsoluteAdapterPosition();
                         SpecialBean.ItemBean itemBean = mData.get(position);
-                        JumpUtil.nextDetailFromSpecial(v.getContext(), itemBean.getCid(), itemBean.getTempTopicId(), itemBean.getTempTopicId(), itemBean.getTempTopicName());
+                        itemBean.setFromSpecial(true);
+                        itemBean.setFromSpecialTopId(itemBean.getTempTopicId());
+                        itemBean.setFromSpecialTopName(itemBean.getTempTopicName());
+                        JumpUtil.next(v.getContext(), itemBean);
                     }
                 });
                 try {

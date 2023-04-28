@@ -36,6 +36,7 @@ import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.RecMediaBean;
 import tv.huan.bilibili.bean.base.BaseAuthorizationBean;
+import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallDetailBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
@@ -192,6 +193,61 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         return detailBean;
                     }
                 })
+                // 观看记录
+                .flatMap(new Function<CallDetailBean, ObservableSource<BaseResponsedBean<BaseDataBean>>>() {
+                    @Override
+                    public ObservableSource<BaseResponsedBean<BaseDataBean>> apply(CallDetailBean data) {
+                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                        if (null == cid) {
+                            cid = "";
+                        }
+                        String s = new Gson().toJson(data);
+                        return HttpClient.getHttpClient().getHttpApi().getLastBookmark(cid, s);
+                    }
+                })
+                // 观看记录 => 数据处理
+                .map(new Function<BaseResponsedBean<BaseDataBean>, CallDetailBean>() {
+                    @Override
+                    public CallDetailBean apply(BaseResponsedBean<BaseDataBean> responsedBean) {
+                        CallDetailBean detailBean;
+                        try {
+                            detailBean = new Gson().fromJson(responsedBean.getExtra(), CallDetailBean.class);
+                        } catch (Exception e) {
+                            detailBean = new CallDetailBean();
+                        }
+                        try {
+                            BaseDataBean data = responsedBean.getData();
+                            if (null == data)
+                                throw new Exception();
+                            List<MediaBean> medias = detailBean.getMedias();
+                            if (null == medias)
+                                throw new Exception();
+                            int size = medias.size();
+                            if (size <= 0)
+                                throw new Exception();
+
+                            int pos = data.getPos();
+                            if (pos < 0 || pos + 1 >= size) {
+                                pos = 0;
+                            }
+                            detailBean.setSeek(data.getSeek());
+                            detailBean.setPos(pos);
+
+                            int playType = detailBean.getAlbum().getPlayType();
+                            int type = detailBean.getAlbum().getType();
+                            for (int i = 0; i < size; i++) {
+                                MediaBean mediaBean = medias.get(i);
+                                if (null == mediaBean)
+                                    continue;
+                                mediaBean.setTempPlayType(playType);
+                                mediaBean.setTempType(type);
+                            }
+
+                        } catch (Exception e) {
+                        }
+                        return detailBean;
+                    }
+                })
                 // 白名单
                 .flatMap(new Function<CallDetailBean, ObservableSource<Auth2BeanBase>>() {
                     @Override
@@ -254,24 +310,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         return detailBean;
                     }
                 })
-                // 数据处理
-                .map(new Function<CallDetailBean, CallDetailBean>() {
-                    @Override
-                    public CallDetailBean apply(CallDetailBean data) {
-                        try {
-                            int playType = data.getAlbum().getPlayType();
-                            int type = data.getAlbum().getType();
-                            List<MediaBean> medias = data.getMedias();
-                            if (null == medias || medias.size() <= 0) throw new Exception();
-                            for (MediaBean bean : medias) {
-                                bean.setTempPlayType(playType);
-                                bean.setTempType(type);
-                            }
-                        } catch (Exception e) {
-                        }
-                        return data;
-                    }
-                })
                 // 播放器 => ui
                 .map(new Function<CallDetailBean, CallDetailBean>() {
                     @Override
@@ -283,11 +321,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             boolean xuanJi = data.getAlbum().isXuanJi();
                             boolean xuanQi = data.getAlbum().isXuanQi();
                             if (xuanJi || xuanQi) {
-                                playerObject.setEpisodeIndex(data.getDefaultPosition());
                                 playerObject.setTempMoiveCode(null);
                                 playerObject.setTempPlayType(0);
                             } else {
-                                playerObject.setEpisodeIndex(-1);
                                 try {
                                     playerObject.setTempMoiveCode(data.getMedias().get(0).getMovieCode());
                                 } catch (Exception e) {
@@ -299,6 +335,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                     playerObject.setTempPlayType(0);
                                 }
                             }
+                            playerObject.setEpisodeIndex(-1);
                             playerObject.setTempType(data.getAlbum().getType());
                             playerObject.setTempRecClassId(data.getRecClassId());
                             playerObject.setTempTag(data.getAlbum().getSplitTag());
@@ -392,22 +429,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         }
                         return data;
                     }
-                })
-                // 默认position
-                .map(new Function<CallDetailBean, CallDetailBean>() {
-                    @Override
-                    public CallDetailBean apply(CallDetailBean callDetailBean) {
-                        try {
-                            int position = getView().getIntExtra(DetailActivity.INTENT_POSITION, 0);
-                            int size = callDetailBean.getMedias().size();
-                            if (position + 1 > size)
-                                throw new Exception();
-                            callDetailBean.setDefaultPosition(position);
-                        } catch (Exception e) {
-                            callDetailBean.setDefaultPosition(0);
-                        }
-                        return callDetailBean;
-                    }
                 }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
@@ -422,10 +443,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 }).doOnNext(new Consumer<CallDetailBean>() {
                     @Override
                     public void accept(CallDetailBean data) {
-                        LogUtil.log("DetailActivity => doOnNext => position = " + new Gson().toJson(data));
                         getView().hideLoading();
                         getView().notifyDataRangeInsertLeanBack(R.id.detail_list);
-                        getView().startPlayerPosition(data.getMedias().get(data.getDefaultPosition()), false);
+                        getView().startPlayerPosition(data.getMedias().get(data.getPos()), data.getPos(), data.getSeek(), false);
                     }
                 }).subscribe());
     }

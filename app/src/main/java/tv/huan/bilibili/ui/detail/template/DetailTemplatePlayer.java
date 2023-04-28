@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import org.json.JSONObject;
@@ -201,13 +202,13 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    public void checkVipStatus(View view, MediaBean data, boolean isFromUser) {
+    public void checkVipStatus(View view, MediaBean data, @NonNull long seek, boolean isFromUser) {
         LogUtil.log("DetailTemplatePlayer => checkVipStatus => isFromUser = " + isFromUser);
 
         boolean containsVip = HeilongjiangUtil.getVipStatus();
 
         if (containsVip) {
-            startHuawei(view, data);
+            startHuawei(view, data, seek);
         } else {
             showVip(view);
             jumpVip(view);
@@ -237,7 +238,7 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    public void startHuawei(View view, MediaBean data) {
+    public void startHuawei(View view, MediaBean data, @NonNull long seek) {
         if (BuildConfig.HUAN_HUAWEI_AUTH) {
             try {
                 Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
@@ -245,7 +246,7 @@ public final class DetailTemplatePlayer extends Presenter {
                     throw new Exception("activity error: null");
                 if (!(activity instanceof DetailActivity))
                     throw new Exception("activity error: " + activity);
-                ((DetailActivity) activity).huaweiAuth(data.getMovieCode(), data.getTempSeek());
+                ((DetailActivity) activity).huaweiAuth(data.getMovieCode(), seek);
             } catch (Exception e) {
                 LogUtil.log("DetailTemplatePlayer => startHuawei => " + e.getMessage());
             }
@@ -280,7 +281,9 @@ public final class DetailTemplatePlayer extends Presenter {
     }
 
     public void startPlayer(View view, String s, long seek) {
+        seek = 23000;
         try {
+            LogUtil.log("DetailTemplatePlayer => startPlayer => seek = " + seek + ", s = " + s);
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(false);
             builder.setDelay(1000);

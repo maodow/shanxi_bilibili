@@ -6,7 +6,6 @@ import java.util.List;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.RecMediaBean;
-import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 
 public class CallDetailBean implements Serializable {
 
@@ -16,23 +15,24 @@ public class CallDetailBean implements Serializable {
     private MediaDetailBean album; //媒资详情
     private List<MediaBean> medias; //剧集
     private List<RecMediaBean> recAlbums; //猜你喜欢
-    private int defaultPosition;
-//    private int adapterCount;
-//
-//    public int getAdapterCount() {
-//        return adapterCount;
-//    }
-//
-//    public void setAdapterCount(int adapterCount) {
-//        this.adapterCount = adapterCount;
-//    }
 
-    public int getDefaultPosition() {
-        return defaultPosition;
+    private int pos;
+    private long seek;
+
+    public int getPos() {
+        return pos;
     }
 
-    public void setDefaultPosition(int defaultPosition) {
-        this.defaultPosition = defaultPosition;
+    public void setPos(int pos) {
+        this.pos = pos;
+    }
+
+    public long getSeek() {
+        return seek;
+    }
+
+    public void setSeek(long seek) {
+        this.seek = seek;
     }
 
     public MediaDetailBean getAlbum() {

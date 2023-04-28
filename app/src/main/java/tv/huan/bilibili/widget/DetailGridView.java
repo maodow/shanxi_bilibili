@@ -167,54 +167,36 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser) {
+    public void startPlayerPosition(@NonNull MediaBean data, @NonNull int pos, @NonNull long seek, boolean isFromUser) {
         LogUtil.log("DetailGridView", "startPlayerPosition => isFromUser = " + isFromUser + ", data = " + new Gson().toJson(data));
 
         try {
             if (isFromUser) {
-                checkPlayerPosition(data, true);
+                checkPlayerPosition(data, seek, true);
             } else {
                 // 选集列表
                 if (data.isXuanJi()) {
-                    ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-                    ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-                    Object o = objectAdapter.get(1);
-                    if (null != o && o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-                        int index = data.getEpisodeIndex() + 1;
-                        DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                        if (index > 0 && null != presenter) {
-                            int position = --index;
-                            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
-                            presenter.checkedPlayingPosition(viewHolder.itemView, position);
-                        } else {
-                            throw new Exception("xuanji error");
-                        }
+                    DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+                    if (null != presenter) {
+                        ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
+                        presenter.checkedPlayingPosition(viewHolder.itemView, pos);
                     } else {
-                        throw new Exception("objectAdapter null");
+                        throw new Exception("xuanji error");
                     }
                 }
                 // 选期列表
                 else if (data.isXuanQi()) {
-                    ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-                    ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-                    Object o = objectAdapter.get(1);
-                    if (null != o && o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
-                        int index = data.getEpisodeIndex() + 1;
-                        DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
-                        if (index > 0 && null != presenter) {
-                            int position = --index;
-                            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanQi.DetailTemplateXuanQiList.class);
-                            presenter.checkedPlayingPosition(viewHolder.itemView, position);
-                        } else {
-                            throw new Exception("xuanqi error");
-                        }
+                    DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
+                    if (null != presenter) {
+                        ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanQi.DetailTemplateXuanQiList.class);
+                        presenter.checkedPlayingPosition(viewHolder.itemView, pos);
                     } else {
-                        throw new Exception("objectAdapter null");
+                        throw new Exception("xuanqi error");
                     }
                 }
                 // 电影
                 else {
-                    checkPlayerPosition(data, false);
+                    checkPlayerPosition(data, seek, false);
                 }
             }
         } catch (Exception e) {
@@ -222,7 +204,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
-    private void checkPlayerPosition(@NonNull MediaBean data, boolean isFromUser) {
+    private void checkPlayerPosition(@NonNull MediaBean data, long seek, boolean isFromUser) {
         try {
 
             int playType = data.getTempPlayType();
@@ -230,18 +212,18 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             LogUtil.log("DetailGridView", "checkPlayerPosition => playType = " + playType + ", index = " + index);
             // 免费
             if (playType > 0 && index <= playType) {
-                checkPlayerPositionHuawei(data);
+                checkPlayerPositionHuawei(data, seek);
             }
             // 收费
             else {
-                checkPlayerPositionVipStatus(data, isFromUser);
+                checkPlayerPositionVipStatus(data, seek, isFromUser);
             }
         } catch (Exception e) {
             LogUtil.log("DetailGridView", "checkPlayerPosition => " + e.getMessage());
         }
     }
 
-    private void checkPlayerPositionVipStatus(@NonNull MediaBean data, boolean isFromUser) {
+    private void checkPlayerPositionVipStatus(@NonNull MediaBean data, long seek, boolean isFromUser) {
 
         LogUtil.log("DetailGridView => checkPlayerPositionVipStatus => isFromUser = " + isFromUser);
 
@@ -250,19 +232,19 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
             if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
-            presenterPlayer.checkVipStatus(viewHolder.itemView, data, isFromUser);
+            presenterPlayer.checkVipStatus(viewHolder.itemView, data, seek, isFromUser);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => checkPlayerPositionVipStatus => " + e.getMessage());
         }
     }
 
-    private void checkPlayerPositionHuawei(@NonNull MediaBean data) {
+    private void checkPlayerPositionHuawei(@NonNull MediaBean data, long seek) {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
             if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
             if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
-            presenterPlayer.startHuawei(viewHolder.itemView, data);
+            presenterPlayer.startHuawei(viewHolder.itemView, data, seek);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => checkPlayerPositionHuawei => " + e.getMessage());
         }
