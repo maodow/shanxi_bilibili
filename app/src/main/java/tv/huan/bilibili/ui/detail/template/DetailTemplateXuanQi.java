@@ -91,7 +91,6 @@ public class DetailTemplateXuanQi extends ListTvEpisodesSingleGridPresenter<Medi
             boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(position);
             if (playingPosition)
                 throw new Exception();
-            ((DetailActivity) activity).releasePlayer();
             ((DetailActivity) activity).updatePlayerPosition(t);
             ((DetailActivity) activity).startPlayerPosition(t, true);
         } catch (Exception e) {

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.leanback.widget.Presenter;
 
@@ -17,7 +16,6 @@ import org.json.JSONObject;
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
-import lib.kalu.mediaplayer.core.component.ComponentComplete;
 import lib.kalu.mediaplayer.core.component.ComponentPause;
 import lib.kalu.mediaplayer.listener.OnPlayerChangeListener;
 import tv.huan.bilibili.BuildConfig;
@@ -29,6 +27,7 @@ import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerComponentInit;
+import tv.huan.bilibili.widget.player.PlayerComponentVip;
 import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 
@@ -53,7 +52,6 @@ public final class DetailTemplatePlayer extends Presenter {
 //        LogUtil.log("DetailTemplatePlayer => onCreateViewHolder");
         Context context = viewGroup.getContext();
         View inflate = LayoutInflater.from(context).inflate(R.layout.activity_detail_item_player, viewGroup, false);
-        addListener(inflate);
         return new ViewHolder(inflate);
     }
 
@@ -65,6 +63,16 @@ public final class DetailTemplatePlayer extends Presenter {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object o) {
 //        LogUtil.log("DetailTemplatePlayer => onBindViewHolder");
+
+        try {
+            int id = viewHolder.view.getId();
+            Object tag = viewHolder.view.getTag(id);
+            if (null != tag)
+                throw new Exception();
+            viewHolder.view.setTag(id, 1);
+            addListener(viewHolder.view, o);
+        } catch (Exception e) {
+        }
 
         // 默认焦点
         try {
@@ -86,11 +94,20 @@ public final class DetailTemplatePlayer extends Presenter {
         // 播放器信息
         try {
             PlayerView playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
-            PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
-            componentInit.setData((MediaBean) o);
-            componentInit.show();
+            PlayerComponentInit component = playerView.findComponent(PlayerComponentInit.class);
+            component.setData((MediaBean) o);
+            component.show();
         } catch (Exception e) {
         }
+
+        // vip
+        try {
+            PlayerView playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
+            PlayerComponentVip component = playerView.findComponent(PlayerComponentVip.class);
+            component.setData((MediaBean) o);
+        } catch (Exception e) {
+        }
+
         try {
             TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_favor);
             textView.setText(viewHolder.view.getResources().getString(((MediaBean) o).isTempFavor() ? R.string.detail_favor_yes : R.string.detail_favor_no));
@@ -191,7 +208,18 @@ public final class DetailTemplatePlayer extends Presenter {
         if (containsVip) {
             startHuawei(view, data);
         } else {
+            showVip(view);
             jumpVip(view);
+        }
+    }
+
+    private void showVip(View view) {
+        try {
+            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerComponentVip component = playerView.findComponent(PlayerComponentVip.class);
+            component.show();
+        } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => showVip => " + e.getMessage());
         }
     }
 
@@ -204,7 +232,7 @@ public final class DetailTemplatePlayer extends Presenter {
                 throw new Exception("activity error: " + activity);
             ((DetailActivity) activity).jumpVip();
         } catch (Exception e) {
-            LogUtil.log("DetailTemplatePlayer => startShopping => " + e.getMessage());
+            LogUtil.log("DetailTemplatePlayer => jumpVip => " + e.getMessage());
         }
     }
 
@@ -250,16 +278,6 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    public void releasePlayer(View view) {
-        try {
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
-            playerView.stop();
-            playerView.release();
-        } catch (Exception e) {
-            LogUtil.log("DetailTemplatePlayer => startPlayer => " + e.getMessage());
-        }
-    }
-
     public void startPlayer(View view, String s, long seek) {
         try {
             StartBuilder.Builder builder = new StartBuilder.Builder();
@@ -300,7 +318,7 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    private void addListener(View viewGroup) {
+    private void addListener(View viewGroup, Object o) {
 
         // 简介
         try {
@@ -345,7 +363,6 @@ public final class DetailTemplatePlayer extends Presenter {
                 @Override
                 public void onClick(View v) {
                     Activity activity = WrapperUtil.getWrapperActivity(v.getContext());
-                    LogUtil.log("DetailTemplatePlayer => createViewHolder => onClick => activity = " + activity);
                     if (null != activity && activity instanceof DetailActivity) {
                         try {
                             JSONObject object = (JSONObject) v.getTag(R.id.detail_player_item_favor);
@@ -389,20 +406,25 @@ public final class DetailTemplatePlayer extends Presenter {
                         // 播放完成
                         case PlayerType.StateType.STATE_END:
                             try {
+                                if (null == o)
+                                    throw new Exception();
                                 Activity activity = WrapperUtil.getWrapperActivity(playerView.getContext());
                                 if (null == activity)
                                     throw new Exception();
                                 if (!(activity instanceof DetailActivity))
                                     throw new Exception();
-                                int nextPosition = ((DetailActivity) activity).getPlayerNextPosition();
-                                if (nextPosition < 0) {
-                                    ComponentComplete component = playerView.findComponent(ComponentComplete.class);
-                                    component.setComponentText(R.string.detail_warning_complete);
-                                } else {
-                                    String s = activity.getString(R.string.detail_warning_next, nextPosition + 1);
-                                    ComponentComplete component = playerView.findComponent(ComponentComplete.class);
-                                    component.setComponentText(s);
-                                    ((DetailActivity) activity).startPlayerPosition(nextPosition);
+                                MediaBean mediaBean = (MediaBean) o;
+                                int index = mediaBean.getEpisodeIndex();
+                                // 电影
+                                if (index == -1) {
+                                    ((DetailActivity) activity).startPlayerPosition(mediaBean);
+                                }
+                                // 剧集
+                                else {
+                                    int nextPosition = ((DetailActivity) activity).getPlayerNextPosition();
+                                    PlayerComponentInit component = playerView.findComponent(PlayerComponentInit.class);
+                                    component.updatePosition(nextPosition < 0 ? 0 : nextPosition);
+                                    ((DetailActivity) activity).startPlayerPosition(nextPosition < 0 ? 0 : nextPosition);
                                 }
                             } catch (Exception e) {
                             }

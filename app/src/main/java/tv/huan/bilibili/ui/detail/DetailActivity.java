@@ -51,7 +51,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void finish() {
-        releasePlayer();
+        getPresenter().releasePlayer();
         super.finish();
     }
 
@@ -96,6 +96,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void updatePlayerPosition(@NonNull MediaBean data) {
+        getPresenter().releasePlayer();
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.updatePlayerPosition(data);
     }
@@ -118,6 +119,17 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
+    public void startPlayerPosition(@NonNull MediaBean data) {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                DetailGridView gridView = findViewById(R.id.detail_list);
+                gridView.startPlayerPosition(data, true);
+            }
+        }, 1000);
+    }
+
+    @Override
     public void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser) {
         putStringExtra(INTENT_VID, data.getVid());
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
@@ -129,12 +141,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
                 gridView.startPlayerPosition(data, isFromUser);
             }
         }, 1000);
-    }
-
-    @Override
-    public void releasePlayer() {
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.releasePlayer();
     }
 
     @Override

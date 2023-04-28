@@ -16,6 +16,13 @@
         android:background="@drawable/bg_shape_placeholder"
         android:scaleType="centerCrop" />
 
+    <View
+        android:id="@+id/detail_player_item_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/color_aa000000" />
+
     <ImageView
         android:id="@+id/detail_player_item_playing"
         android:layout_width="@dimen/dp_34"
@@ -33,7 +40,7 @@
         android:layout_marginTop="@dimen/dp_10"
         android:text="@string/detail_warning"
         android:textColor="@color/color_white"
-        android:textSize="@dimen/sp_16" />
+        android:textSize="@dimen/sp_18" />
 
     <TextView
         android:id="@+id/detail_player_item_data"
@@ -45,7 +52,7 @@
         android:lines="1"
         android:singleLine="true"
         android:textColor="@color/color_white"
-        android:textSize="@dimen/sp_14" />
+        android:textSize="@dimen/sp_16" />
 
     <ImageView
         android:id="@+id/detail_player_item_logo"

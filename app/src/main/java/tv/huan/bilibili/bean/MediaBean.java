@@ -31,6 +31,15 @@ public class MediaBean extends BaseImageBean implements Serializable, TvPresente
     private String[] tempPicList;
     private long tempSeek;
     private int tempType;
+    private String tempMoiveCode;
+
+    public String getTempMoiveCode() {
+        return tempMoiveCode;
+    }
+
+    public void setTempMoiveCode(String tempMoiveCode) {
+        this.tempMoiveCode = tempMoiveCode;
+    }
 
     public void setTempType(int tempType) {
         this.tempType = tempType;

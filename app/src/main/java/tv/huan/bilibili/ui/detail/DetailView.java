@@ -21,9 +21,9 @@ public interface DetailView extends BaseViewImpl {
 
     void startPlayerPosition(@NonNull int position);
 
-    void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser);
+    void startPlayerPosition(@NonNull MediaBean data);
 
-    void releasePlayer();
+    void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser);
 
     void jumpVip();
 

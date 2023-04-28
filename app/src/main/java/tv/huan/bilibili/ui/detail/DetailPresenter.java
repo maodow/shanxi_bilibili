@@ -30,7 +30,6 @@ import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.Auth2BeanBase;
-import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.FavorBean;
 import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.MediaBean;
@@ -285,8 +284,20 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             boolean xuanQi = data.getAlbum().isXuanQi();
                             if (xuanJi || xuanQi) {
                                 playerObject.setEpisodeIndex(data.getDefaultPosition());
+                                playerObject.setTempMoiveCode(null);
+                                playerObject.setTempPlayType(0);
                             } else {
                                 playerObject.setEpisodeIndex(-1);
+                                try {
+                                    playerObject.setTempMoiveCode(data.getMedias().get(0).getMovieCode());
+                                } catch (Exception e) {
+                                    playerObject.setTempMoiveCode(null);
+                                }
+                                try {
+                                    playerObject.setTempPlayType(data.getAlbum().getPlayType());
+                                } catch (Exception e) {
+                                    playerObject.setTempPlayType(0);
+                                }
                             }
                             playerObject.setTempType(data.getAlbum().getType());
                             playerObject.setTempRecClassId(data.getRecClassId());
@@ -669,5 +680,16 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         getView().huaweiSucc(s, seek);
                     }
                 }).subscribe());
+    }
+
+    protected void releasePlayer() {
+        try {
+            PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
+            if (null == playerView)
+                throw new Exception();
+            playerView.stop();
+            playerView.release();
+        } catch (Exception e) {
+        }
     }
 }

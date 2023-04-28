@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ItemBridgeAdapter;
 
+import com.google.gson.Gson;
+
 import lib.kalu.leanback.list.LeanBackVerticalGridView;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
@@ -55,18 +57,6 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             return presenterPlayer.getDuration(viewHolder.itemView);
         } catch (Exception e) {
             return 0;
-        }
-    }
-
-    public void releasePlayer() {
-        try {
-            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder) throw new Exception("viewHolder error: null");
-            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
-            presenterPlayer.releasePlayer(viewHolder.itemView);
-        } catch (Exception e) {
-            LogUtil.log("DetailGridView => stopPlayer => " + e.getMessage());
         }
     }
 
@@ -132,13 +122,12 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     }
 
     public void startPlayerPosition(@NonNull int position) {
+        LogUtil.log("DetailGridView", "startPlayerPosition => position = " + position);
         try {
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            Object o = objectAdapter.get(1);
-            if (null == o) throw new Exception("objectAdapter null");
             // 选集列表
-            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
+            if (objectAdapter.size() > 1 && null != objectAdapter.get(1) && objectAdapter.get(1) instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
                 DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
                 if (null != presenter) {
                     ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
@@ -148,7 +137,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
                 }
             }
             // 选期列表
-            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
+            else if (objectAdapter.size() > 1 && null != objectAdapter.get(1) && objectAdapter.get(1) instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
                 DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
                 if (null != presenter) {
                     ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanQi.DetailTemplateXuanQiList.class);
@@ -157,12 +146,18 @@ public final class DetailGridView extends LeanBackVerticalGridView {
                     throw new Exception("xuanqi error");
                 }
             }
+            // 电影
+            else {
+                throw new Exception("player error");
+            }
         } catch (Exception e) {
             LogUtil.log("DetailGridView", "startPlayerPosition => " + e.getMessage());
         }
     }
 
     public void startPlayerPosition(@NonNull MediaBean data, boolean isFromUser) {
+        LogUtil.log("DetailGridView", "startPlayerPosition => isFromUser = " + isFromUser + ", data = " + new Gson().toJson(data));
+
         try {
             if (isFromUser) {
                 checkPlayerPosition(data, true);
@@ -220,6 +215,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
 
             int playType = data.getTempPlayType();
             int index = data.getEpisodeIndex() + 1;
+            LogUtil.log("DetailGridView", "checkPlayerPosition => playType = " + playType + ", index = " + index);
             // 免费
             if (playType > 0 && index <= playType) {
                 checkPlayerPositionHuawei(data);

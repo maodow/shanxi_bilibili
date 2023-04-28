@@ -28,6 +28,7 @@
     <string name="detail_cai">猜你喜欢</string>
     <string name="detail_full">全屏播放</string>
     <string name="detail_vip">开通会员</string>
+    <string name="detail_vip_warning">您的试看已结束，VIP专享影片\n请开通VIP会员后观看</string>
     <string name="detail_favor_yes">已收藏</string>
     <string name="detail_favor_no">收藏</string>
     <string name="detail_xuanji">选集列表</string>

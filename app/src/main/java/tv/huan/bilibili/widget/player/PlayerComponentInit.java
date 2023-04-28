@@ -56,8 +56,8 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
     public void callPlayerEvent(@NonNull int playState) {
         switch (playState) {
             case PlayerType.StateType.STATE_INIT:
+            case PlayerType.StateType.STATE_END:
                 MPLogUtil.log("ComponentInit[show] => playState = " + playState);
-                bringToFront();
                 show();
                 break;
             case PlayerType.StateType.STATE_ERROR:
@@ -71,28 +71,34 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
 
     @Override
     public void gone() {
-        findViewById(R.id.detail_player_item_center).setVisibility(View.GONE);
-        findViewById(R.id.detail_player_item_cover).setVisibility(View.GONE);
-        findViewById(R.id.detail_player_item_playing).setVisibility(View.GONE);
-        findViewById(R.id.detail_player_item_warning).setVisibility(View.GONE);
-        findViewById(R.id.detail_player_item_data).setVisibility(View.GONE);
-        findViewById(R.id.detail_player_item_logo).setVisibility(View.GONE);
+        try {
+            findViewById(R.id.detail_player_item_center).setVisibility(View.GONE);
+            findViewById(R.id.detail_player_item_cover).setVisibility(View.GONE);
+            findViewById(R.id.detail_player_item_shadow).setVisibility(View.GONE);
+            findViewById(R.id.detail_player_item_playing).setVisibility(View.GONE);
+            findViewById(R.id.detail_player_item_warning).setVisibility(View.GONE);
+            findViewById(R.id.detail_player_item_data).setVisibility(View.GONE);
+            findViewById(R.id.detail_player_item_logo).setVisibility(View.GONE);
+        } catch (Exception e) {
+        }
     }
 
     @Override
     public void show() {
-        findViewById(R.id.detail_player_item_center).setVisibility(View.VISIBLE);
-        findViewById(R.id.detail_player_item_cover).setVisibility(View.VISIBLE);
-        findViewById(R.id.detail_player_item_playing).setVisibility(View.VISIBLE);
-        findViewById(R.id.detail_player_item_warning).setVisibility(View.VISIBLE);
-        findViewById(R.id.detail_player_item_data).setVisibility(View.VISIBLE);
-        findViewById(R.id.detail_player_item_logo).setVisibility(View.VISIBLE);
-//        findViewById(R.id.module_mediaplayer_component_init_txt).setVisibility(View.VISIBLE);
-//        findViewById(R.id.module_mediaplayer_component_init_bg).setVisibility(View.VISIBLE);
+        try {
+            bringToFront();
+            findViewById(R.id.detail_player_item_center).setVisibility(View.VISIBLE);
+            findViewById(R.id.detail_player_item_cover).setVisibility(View.VISIBLE);
+            findViewById(R.id.detail_player_item_shadow).setVisibility(View.VISIBLE);
+            findViewById(R.id.detail_player_item_playing).setVisibility(View.VISIBLE);
+            findViewById(R.id.detail_player_item_warning).setVisibility(View.VISIBLE);
+            findViewById(R.id.detail_player_item_data).setVisibility(View.VISIBLE);
+            findViewById(R.id.detail_player_item_logo).setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+        }
     }
 
     public final void setData(@NonNull MediaBean data) {
-        LogUtil.log("PlayerComponentInit => setData => data = " + new Gson().toJson(data));
         try {
             ImageView imageView = findViewById(R.id.detail_player_item_cover);
             GlideUtils.loadHz(imageView.getContext(), data.getTempImageUrl(), imageView);

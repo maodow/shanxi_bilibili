@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -41,7 +40,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
 
     @Override
     public void onBindHolderEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position) {
-        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position + ", data = " + item);
+//        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderEpisode => position = " + position + ", data = " + new Gson().toJson(item));
         try {
             View view = v.findViewById(R.id.detail_xuanji1_item_img);
             view.setVisibility(item.isPlaying() ? View.VISIBLE : View.GONE);
@@ -107,7 +106,6 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
             boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(position);
             if (playingPosition)
                 throw new Exception();
-            ((DetailActivity) activity).releasePlayer();
             ((DetailActivity) activity).updatePlayerPosition(item);
             ((DetailActivity) activity).startPlayerPosition(item, true);
         } catch (Exception e) {

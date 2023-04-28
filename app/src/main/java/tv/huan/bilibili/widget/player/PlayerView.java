@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 
 import androidx.annotation.RequiresApi;
 
-import lib.kalu.mediaplayer.core.component.ComponentComplete;
 import lib.kalu.mediaplayer.core.component.ComponentError;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
 import lib.kalu.mediaplayer.core.component.ComponentNet;
@@ -65,9 +64,12 @@ public class PlayerView extends PlayerLayout {
         // init
         PlayerComponentInit init = new PlayerComponentInit(getContext());
         addComponent(init);
+        // vip
+        PlayerComponentVip vip = new PlayerComponentVip(getContext());
+        addComponent(vip);
         // complete
-        ComponentComplete complete = new ComponentComplete(getContext());
-        addComponent(complete);
+//        ComponentComplete complete = new ComponentComplete(getContext());
+//        addComponent(complete);
         // adPause
         PlayerComponentADPause pauseAD = new PlayerComponentADPause(getContext());
         addComponent(pauseAD);
