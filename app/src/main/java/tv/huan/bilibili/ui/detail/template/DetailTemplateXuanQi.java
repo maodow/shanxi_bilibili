@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -81,8 +80,6 @@ public class DetailTemplateXuanQi extends ListTvEpisodesSingleGridPresenter<Medi
     @Override
     protected void onClickHolder(@NonNull Context context, @NonNull View v, @NonNull MediaBean t, @NonNull int position, boolean isFromUser) {
         try {
-            if (!isFromUser)
-                throw new Exception();
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null == activity)
                 throw new Exception();
@@ -91,6 +88,9 @@ public class DetailTemplateXuanQi extends ListTvEpisodesSingleGridPresenter<Medi
             boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(position);
             if (playingPosition)
                 throw new Exception();
+            if (isFromUser) {
+                ((DetailActivity) activity).startFull();
+            }
             ((DetailActivity) activity).updatePlayerPosition(t);
             ((DetailActivity) activity).startPlayerPosition(t, true);
         } catch (Exception e) {

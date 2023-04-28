@@ -124,7 +124,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
             @Override
             public void run() {
                 DetailGridView gridView = findViewById(R.id.detail_list);
-                gridView.startPlayerPosition(data, true);
+                gridView.startPlayerPosition(data, false);
             }
         }, 1000);
     }
@@ -155,12 +155,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    public void stopFull() {
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        gridView.stopFull();
-    }
-
-    @Override
     public void huaweiAuth(String movieCode, long seek) {
         getPresenter().requestHuaweiAuth(movieCode, seek);
     }
@@ -174,5 +168,11 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public int getPlayerNextPosition() {
         return getPresenter().getPlayerNextPosition();
+    }
+
+    @Override
+    public void startFull() {
+        DetailGridView gridView = findViewById(R.id.detail_list);
+        gridView.startFull();
     }
 }

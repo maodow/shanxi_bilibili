@@ -96,8 +96,6 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
     public void onClickEpisode(@NonNull Context context, @NonNull View view, @NonNull MediaBean item, @NonNull int position, boolean isFromUser) {
         LogUtil.log("DetailTemplateXuanJi => onClickEpisode => position = " + position + ", isFromUser = " + isFromUser + ", data = " + new Gson().toJson(item));
         try {
-            if (!isFromUser)
-                throw new Exception();
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null == activity)
                 throw new Exception();
@@ -106,6 +104,9 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
             boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(position);
             if (playingPosition)
                 throw new Exception();
+            if (isFromUser) {
+                ((DetailActivity) activity).startFull();
+            }
             ((DetailActivity) activity).updatePlayerPosition(item);
             ((DetailActivity) activity).startPlayerPosition(item, true);
         } catch (Exception e) {

@@ -72,6 +72,18 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
+    public void startFull() {
+        try {
+            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+            if (null == viewHolder) throw new Exception("viewHolder error: null");
+            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
+            presenterPlayer.startFull(viewHolder.itemView);
+        } catch (Exception e) {
+            LogUtil.log("DetailGridView => startFull => " + e.getMessage());
+        }
+    }
+
     public void startPlayer(@NonNull String s, long seek) {
         try {
             ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);

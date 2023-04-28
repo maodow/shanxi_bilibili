@@ -301,6 +301,15 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
+    public void startFull(View view) {
+        try {
+            ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
+            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            playerView.startFull();
+        } catch (Exception e) {
+        }
+    }
+
     private void stopFloat(View view) {
         try {
             ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
