@@ -101,12 +101,12 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
                 throw new Exception();
             if (!(activity instanceof DetailActivity))
                 throw new Exception();
-            boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(position);
-            if (playingPosition)
-                throw new Exception();
             if (isFromUser) {
                 ((DetailActivity) activity).startFull();
             }
+            boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(position);
+            if (playingPosition)
+                throw new Exception();
             ((DetailActivity) activity).updatePlayerPosition(item);
             ((DetailActivity) activity).startPlayerPosition(item, true);
         } catch (Exception e) {

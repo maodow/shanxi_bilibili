@@ -681,7 +681,12 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
                 int index = classLayout.getCheckedIndex();
                 if (index <= 0) {
-                    getView().requestFocus(R.id.filter_tags);
+                    boolean visibility = getView().isVisibility(R.id.filter_tags);
+                    if (visibility) {
+                        getView().requestFocus(R.id.filter_tags);
+                    } else {
+                        getView().requestFocus(R.id.filter_content);
+                    }
                     return true;
                 }
             }
