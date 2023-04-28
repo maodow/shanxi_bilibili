@@ -11,15 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
-
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.core.component.ComponentApi;
 import lib.kalu.mediaplayer.util.MPLogUtil;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.utils.GlideUtils;
-import tv.huan.bilibili.utils.LogUtil;
 
 public class PlayerComponentInit extends RelativeLayout implements ComponentApi {
 
@@ -105,26 +102,16 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
         } catch (Exception e) {
         }
         try {
-            TextView textView = findViewById(R.id.detail_player_item_data);
-            String title = data.getTempTitle();
-            if (data.isXuanJi() || data.isXuanQi()) {
-                int position = data.getEpisodeIndex() + 1;
-                String string = textView.getResources().getString(R.string.detail_playing_index, title, position);
-                textView.setText(string);
-            } else {
-                textView.setText(title);
-            }
+            TextView textView = findViewById(R.id.detail_player_item_data_name);
+            textView.setText(data.getTempTitle());
         } catch (Exception e) {
         }
     }
 
     public final void updatePosition(@NonNull int position) {
         try {
-            TextView textView = findViewById(R.id.detail_player_item_data);
-            String s = String.valueOf(textView.getText());
-            int index = s.indexOf("第");
-            String substring = s.substring(0, index - 2);
-            String string = textView.getResources().getString(R.string.detail_playing_index, substring, position + 1);
+            TextView textView = findViewById(R.id.detail_player_item_data_position);
+            String string = textView.getResources().getString(R.string.detail_playing_position, position + 1);
             textView.setText(string);
         } catch (Exception e) {
         }
@@ -132,7 +119,7 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
 
     public final boolean checkPlayerPlayingPosition(@NonNull int position) {
         try {
-            TextView textView = findViewById(R.id.detail_player_item_data);
+            TextView textView = findViewById(R.id.detail_player_item_data_position);
             String s = String.valueOf(textView.getText());
             int index = s.indexOf("第");
             String substring = s.substring(index + 1, index + 2);

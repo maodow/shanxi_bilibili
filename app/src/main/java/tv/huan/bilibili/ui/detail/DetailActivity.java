@@ -128,7 +128,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     public void startPlayerPosition(@NonNull MediaBean data, @NonNull int pos, @NonNull long seek, boolean isFromUser) {
         putStringExtra(INTENT_VID, data.getVid());
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
-        putIntExtra(INTENT_INDEX, data.getEpisodeIndex() + 1);
+        putIntExtra(INTENT_INDEX, pos);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {

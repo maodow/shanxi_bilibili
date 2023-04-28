@@ -33,7 +33,8 @@
     <string name="detail_favor_no">收藏</string>
     <string name="detail_xuanji">选集列表</string>
     <string name="detail_xuanqi">选期列表</string>
-    <string name="detail_playing_index">%1$s&#160;&#160;第%2$d集</string>
+<!--    <string name="detail_playing_index">%1$s&#160;&#160;第%2$d集</string>-->
+    <string name="detail_playing_position">第%1$d集</string>
 
     <string name="menu_chao_no">开通大会员</string>
     <string name="menu_chao_yes">续费会员</string>

@@ -335,7 +335,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                     playerObject.setTempPlayType(0);
                                 }
                             }
-                            playerObject.setEpisodeIndex(-1);
                             playerObject.setTempType(data.getAlbum().getType());
                             playerObject.setTempRecClassId(data.getRecClassId());
                             playerObject.setTempTag(data.getAlbum().getSplitTag());
@@ -445,7 +444,8 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     public void accept(CallDetailBean data) {
                         getView().hideLoading();
                         getView().notifyDataRangeInsertLeanBack(R.id.detail_list);
-                        getView().startPlayerPosition(data.getMedias().get(data.getPos()), data.getPos(), data.getSeek(), false);
+                        getView().startPlayerPosition(data.getMedias().get(data.getPos()), data.getPos(), 50000, false);
+//                        getView().startPlayerPosition(data.getMedias().get(data.getPos()), data.getPos(), data.getSeek(), false);
                     }
                 }).subscribe());
     }

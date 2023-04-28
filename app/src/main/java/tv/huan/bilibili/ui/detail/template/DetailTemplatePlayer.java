@@ -253,7 +253,7 @@ public final class DetailTemplatePlayer extends Presenter {
         } else {
             try {
                 String url = BoxUtil.getTestVideoUrl();
-                startPlayer(view, url, 0);
+                startPlayer(view, url, seek);
             } catch (Exception e) {
                 LogUtil.log("DetailTemplatePlayer => startHuawei => " + e.getMessage());
             }
@@ -281,7 +281,6 @@ public final class DetailTemplatePlayer extends Presenter {
     }
 
     public void startPlayer(View view, String s, long seek) {
-        seek = 23000;
         try {
             LogUtil.log("DetailTemplatePlayer => startPlayer => seek = " + seek + ", s = " + s);
             StartBuilder.Builder builder = new StartBuilder.Builder();

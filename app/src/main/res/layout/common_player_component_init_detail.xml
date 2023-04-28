@@ -20,8 +20,8 @@
         android:id="@+id/detail_player_item_shadow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="@color/color_aa000000" />
+        android:background="@color/color_aa000000"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/detail_player_item_playing"
@@ -42,17 +42,35 @@
         android:textColor="@color/color_white"
         android:textSize="@dimen/sp_18" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/detail_player_item_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/detail_player_item_warning"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dp_10"
-        android:lines="1"
-        android:singleLine="true"
-        android:textColor="@color/color_white"
-        android:textSize="@dimen/sp_16" />
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/detail_player_item_data_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_16" />
+
+        <TextView
+            android:id="@+id/detail_player_item_data_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_16" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/detail_player_item_logo"
