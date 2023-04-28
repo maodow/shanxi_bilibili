@@ -641,23 +641,11 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
             int focusId = getView().getCurrentFocusId();
             if (focusId == R.id.filter_item) {
+
                 RecyclerViewGrid recyclerView = getView().findViewById(R.id.filter_content);
                 int itemCount = recyclerView.getAdapter().getItemCount();
-                int row;
-                int v = itemCount / 4;
-                if (v == 0) {
-                    row = v;
-                } else {
-                    row = v + 1;
-                }
+                int v = itemCount % 4;
                 int focusPosition = recyclerView.findFocusPosition();
-                int rowReal;
-                int vReal = focusPosition / 4;
-                if (vReal == 0) {
-                    rowReal = vReal;
-                } else {
-                    rowReal = vReal + 1;
-                }
 
                 ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
                 int checkedIndex = classLayout.getCheckedIndex();
@@ -667,11 +655,21 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                     getView().setVisibility(R.id.filter_tags, View.GONE);
                 }
 
-                if (rowReal == row) {
-                    if (checkedIndex == 0) {
-                        searchAlbumByTypeNews(false);
-                    } else {
-                        requestContent(false);
+                if (v == 0) {
+                    if (itemCount - focusPosition <= 4) {
+                        if (checkedIndex == 0) {
+                            searchAlbumByTypeNews(false);
+                        } else {
+                            requestContent(false);
+                        }
+                    }
+                } else {
+                    if (itemCount - focusPosition <= v) {
+                        if (checkedIndex == 0) {
+                            searchAlbumByTypeNews(false);
+                        } else {
+                            requestContent(false);
+                        }
                     }
                 }
             }

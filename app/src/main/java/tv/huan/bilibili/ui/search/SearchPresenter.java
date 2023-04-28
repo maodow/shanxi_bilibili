@@ -307,23 +307,16 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                 if (null != input && input.length() > 0) {
                     RecyclerViewGrid recyclerView = getView().findViewById(R.id.search_list);
                     int itemCount = recyclerView.getAdapter().getItemCount();
-                    int row;
-                    int v = itemCount / 3;
-                    if (v == 0) {
-                        row = v;
-                    } else {
-                        row = v + 1;
-                    }
+                    int v = itemCount % 3;
                     int focusPosition = recyclerView.findFocusPosition();
-                    int rowReal;
-                    int vReal = focusPosition / 3;
-                    if (vReal == 0) {
-                        rowReal = vReal;
+                    if (v == 0) {
+                        if (itemCount - focusPosition <= 3) {
+                            request(false);
+                        }
                     } else {
-                        rowReal = vReal + 1;
-                    }
-                    if (rowReal == row) {
-                        request(false);
+                        if (itemCount - focusPosition <= v) {
+                            request(false);
+                        }
                     }
                 }
             }

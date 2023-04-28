@@ -395,13 +395,15 @@ public final class DetailTemplatePlayer extends Presenter {
                                 if (!(activity instanceof DetailActivity))
                                     throw new Exception();
                                 int nextPosition = ((DetailActivity) activity).getPlayerNextPosition();
-                                if (nextPosition < 0)
-                                    throw new Exception();
-                                String s = activity.getString(R.string.detail_warning_next, nextPosition);
-                                Toast.makeText(activity.getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-//                                ComponentComplete component = playerView.findComponent(ComponentComplete.class);
-//                                component.setComponentText(s);
-                                ((DetailActivity) activity).startPlayerPosition(nextPosition);
+                                if (nextPosition < 0) {
+                                    ComponentComplete component = playerView.findComponent(ComponentComplete.class);
+                                    component.setComponentText(R.string.detail_warning_complete);
+                                } else {
+                                    String s = activity.getString(R.string.detail_warning_next, nextPosition + 1);
+                                    ComponentComplete component = playerView.findComponent(ComponentComplete.class);
+                                    component.setComponentText(s);
+                                    ((DetailActivity) activity).startPlayerPosition(nextPosition);
+                                }
                             } catch (Exception e) {
                             }
                             break;
