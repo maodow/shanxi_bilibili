@@ -31,7 +31,7 @@ public interface DetailView extends BaseViewImpl {
 
     void huaweiSucc(String s, long seek);
 
-    int getPlayerNextPosition();
+//    int getPlayerNextPosition();
 
     void startFull();
 }

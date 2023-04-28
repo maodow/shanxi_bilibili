@@ -426,17 +426,20 @@ public final class DetailTemplatePlayer extends Presenter {
                                 if (!(activity instanceof DetailActivity))
                                     throw new Exception();
                                 MediaBean mediaBean = (MediaBean) o;
-                                int index = mediaBean.getEpisodeIndex();
-                                // 电影
-                                if (index == -1) {
-                                    ((DetailActivity) activity).startPlayerPosition(mediaBean);
-                                }
                                 // 剧集
-                                else {
-                                    int nextPosition = ((DetailActivity) activity).getPlayerNextPosition();
+                                if (mediaBean.isXuanJi() || mediaBean.isXuanQi()) {
+                                    int tempLegnth = mediaBean.getTempLegnth();
                                     PlayerComponentInit component = playerView.findComponent(PlayerComponentInit.class);
-                                    component.updatePosition(nextPosition < 0 ? 0 : nextPosition);
-                                    ((DetailActivity) activity).startPlayerPosition(nextPosition < 0 ? 0 : nextPosition);
+                                    int nextPosition = component.getPosition();
+                                    if (nextPosition + 1 >= tempLegnth) {
+                                        nextPosition = 0;
+                                    }
+                                    component.updatePosition(nextPosition);
+                                    ((DetailActivity) activity).startPlayerPosition(nextPosition);
+                                }
+                                // 电影
+                                else {
+                                    ((DetailActivity) activity).startPlayerPosition(mediaBean);
                                 }
                             } catch (Exception e) {
                             }

@@ -335,6 +335,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                     playerObject.setTempPlayType(0);
                                 }
                             }
+                            playerObject.setTempLegnth(data.getMedias().size());
                             playerObject.setTempType(data.getAlbum().getType());
                             playerObject.setTempRecClassId(data.getRecClassId());
                             playerObject.setTempTag(data.getAlbum().getSplitTag());
@@ -593,18 +594,18 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         return false;
     }
 
-    protected int getPlayerNextPosition() {
-        try {
-            DetailGridView gridView = getView().findViewById(R.id.detail_list);
-            boolean playingEnd = gridView.isPlayingEnd();
-            if (playingEnd) throw new Exception("播放结束");
-            int nextPosition = gridView.getPlayerNextPosition();
-            if (nextPosition < 0) throw new Exception("播放错误");
-            return nextPosition;
-        } catch (Exception e) {
-            return -1;
-        }
-    }
+//    protected int getPlayerNextPosition() {
+//        try {
+//            DetailGridView gridView = getView().findViewById(R.id.detail_list);
+//            boolean playingEnd = gridView.isPlayingEnd();
+//            if (playingEnd) throw new Exception("播放结束");
+//            int nextPosition = gridView.getPlayerNextPosition();
+//            if (nextPosition < 0) throw new Exception("播放错误");
+//            return nextPosition;
+//        } catch (Exception e) {
+//            return -1;
+//        }
+//    }
 
     protected void onBackPressed() {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {

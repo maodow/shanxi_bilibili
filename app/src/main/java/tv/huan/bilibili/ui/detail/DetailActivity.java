@@ -160,10 +160,10 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         gridView.startPlayer(s, seek);
     }
 
-    @Override
-    public int getPlayerNextPosition() {
-        return getPresenter().getPlayerNextPosition();
-    }
+//    @Override
+//    public int getPlayerNextPosition() {
+//        return getPresenter().getPlayerNextPosition();
+//    }
 
     @Override
     public void startFull() {

@@ -311,60 +311,60 @@ public final class DetailGridView extends LeanBackVerticalGridView {
 //        }
 //    }
 
-    public int getPlayerNextPosition() {
-        LogUtil.log("DetailGridView => getPlayerNextPosition =>");
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            Object o = objectAdapter.get(1);
-            if (null == o) throw new Exception("objectAdapter null");
-            // 选集列表
-            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-                ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
-                if (null == viewHolder) throw new Exception("viewHolder error: null");
-                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                if (null == presenter) throw new Exception("presenter error: null");
-                return presenter.getPlayingPositionNext(viewHolder.itemView);
-            }
-            // 选期列表
-            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
-                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
-                if (null == presenter) throw new Exception("presenter error: null");
-                return presenter.getPlayingPositionNext();
-            }
-            throw new Exception("not find");
-        } catch (Exception e) {
-            LogUtil.log("DetailGridView", "checkedPlayerPositionNext => " + e.getMessage());
-            return -1;
-        }
-    }
+//    public int getPlayerNextPosition() {
+//        LogUtil.log("DetailGridView => getPlayerNextPosition =>");
+//        try {
+//            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+//            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+//            Object o = objectAdapter.get(1);
+//            if (null == o) throw new Exception("objectAdapter null");
+//            // 选集列表
+//            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
+//                ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
+//                if (null == viewHolder) throw new Exception("viewHolder error: null");
+//                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+//                if (null == presenter) throw new Exception("presenter error: null");
+//                return presenter.getPlayingPositionNext(viewHolder.itemView);
+//            }
+//            // 选期列表
+//            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
+//                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
+//                if (null == presenter) throw new Exception("presenter error: null");
+//                return presenter.getPlayingPositionNext();
+//            }
+//            throw new Exception("not find");
+//        } catch (Exception e) {
+//            LogUtil.log("DetailGridView", "checkedPlayerPositionNext => " + e.getMessage());
+//            return -1;
+//        }
+//    }
 
-    public boolean isPlayingEnd() {
-        LogUtil.log("DetailGridView => isPlayingEnd =>");
-        try {
-            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
-            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-            Object o = objectAdapter.get(1);
-            if (null == o) throw new Exception("objectAdapter null");
-            // 选集列表
-            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
-                ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
-                if (null == viewHolder) throw new Exception("viewHolder error: null");
-                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
-                if (null == presenter) throw new Exception("presenter error: null");
-                return presenter.isPlayingPositionLast(viewHolder.itemView);
-            }
-            // 选期列表
-            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
-                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
-                if (null != presenter) {
-                    return presenter.isPlayingPositionLast();
-                }
-            }
-            throw new Exception("not find");
-        } catch (Exception e) {
-            LogUtil.log("DetailGridView", "isPlayingEnd => " + e.getMessage());
-            return false;
-        }
-    }
+//    public boolean isPlayingEnd() {
+//        LogUtil.log("DetailGridView => isPlayingEnd =>");
+//        try {
+//            ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+//            ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
+//            Object o = objectAdapter.get(1);
+//            if (null == o) throw new Exception("objectAdapter null");
+//            // 选集列表
+//            if (o instanceof DetailTemplateXuanJi.DetailTemplateXuanJiList) {
+//                ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
+//                if (null == viewHolder) throw new Exception("viewHolder error: null");
+//                DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
+//                if (null == presenter) throw new Exception("presenter error: null");
+//                return presenter.isPlayingPositionLast(viewHolder.itemView);
+//            }
+//            // 选期列表
+//            else if (o instanceof DetailTemplateXuanQi.DetailTemplateXuanQiList) {
+//                DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
+//                if (null != presenter) {
+//                    return presenter.isPlayingPositionLast();
+//                }
+//            }
+//            throw new Exception("not find");
+//        } catch (Exception e) {
+//            LogUtil.log("DetailGridView", "isPlayingEnd => " + e.getMessage());
+//            return false;
+//        }
+//    }
 }
