@@ -280,30 +280,28 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         }
         // back
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            boolean visibility = getView().isVisibility(R.id.main_search);
-            LogUtil.log("MainPresenter", "back => visibility = " + visibility);
-            if (visibility) {
-                TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
-                int checkedIndex = tabLayout.getCheckedIndex();
+            int focusId = getView().getCurrentFocusId();
+            TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+            int checkedIndex = tabLayout.getCheckedIndex();
+            if (focusId != R.id.main_tabs) {
+                tabLayout.scrollToPosition(checkedIndex);
+                getView().requestFocus(R.id.main_tabs);
+                getView().contentScrollTop();
+            } else {
                 int itemCount = tabLayout.getItemCount();
                 if (itemCount > 1 && checkedIndex != 1) {
                     tabLayout.scrollToPosition(1);
-                    getView().contentScrollTop();
                 } else {
                     requestExit();
                 }
-            } else {
-                getView().contentScrollTop();
             }
             return true;
         }
         // up
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
             int focusId = getView().getCurrentFocusId();
-            LogUtil.log("MainPresenter => dispatchKeyEvent => up_action_down => ");
             if (focusId == R.id.main_tabs) {
                 TabLayout tabLayout = (TabLayout) getView().getCurrentFocus();
-                LogUtil.log("MainPresenter => dispatchKeyEvent => up_action_down => tabLayout = " + tabLayout);
                 tabLayout.checkedCurrentItem();
                 int index = tabLayout.getCheckedIndex();
                 getView().setFocusable(R.id.main_vip, index > 0);
@@ -316,7 +314,6 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
             int focusId = getView().getCurrentFocusId();
             if (focusId == R.id.main_search || focusId == R.id.main_vip) {
-                LogUtil.log("MainPresenter => dispatchKeyEvent => down_action_down => ");
                 getView().setFocusable(R.id.main_vip, false);
                 getView().setFocusable(R.id.main_search, false);
                 TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
@@ -327,7 +324,6 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         // right
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
             int focusId = getView().getCurrentFocusId();
-            LogUtil.log("MainPresenter => dispatchKeyEvent => right_action_down => " + getView().getCurrentFocus());
             if (focusId == R.id.main_search) {
                 getView().setFocusable(R.id.main_vip, true);
                 getView().setFocusable(R.id.main_search, false);
@@ -339,7 +335,6 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         // left
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
             int focusId = getView().getCurrentFocusId();
-            LogUtil.log("MainPresenter => dispatchKeyEvent => left_action_down => " + getView().getCurrentFocus());
             if (focusId == R.id.main_vip) {
                 getView().setFocusable(R.id.main_search, true);
                 getView().setFocusable(R.id.main_vip, false);
