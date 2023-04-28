@@ -110,6 +110,7 @@ public final class DetailTemplatePlayer extends Presenter {
 
         try {
             TextView textView = viewHolder.view.findViewById(R.id.detail_player_item_favor);
+            textView.setSelected(((MediaBean) o).isTempFavor());
             textView.setText(viewHolder.view.getResources().getString(((MediaBean) o).isTempFavor() ? R.string.detail_favor_yes : R.string.detail_favor_no));
             JSONObject object = new JSONObject();
             object.put("cid", ((MediaBean) o).getCid());
