@@ -457,7 +457,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         } else {
                             itemFavor.setTempPosition(0);
                         }
-                        itemFavor.setTempDrawable(R.drawable.ic_selector_common_favor2);
+                        itemFavor.setTempDrawable(R.drawable.ic_selector_common_favor3);
                         itemFavor.setToType(8002);
                         mDatas.add(itemFavor);
 
