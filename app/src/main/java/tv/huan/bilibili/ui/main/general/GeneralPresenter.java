@@ -62,6 +62,7 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplate8;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate9;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplateBottom;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplateClass;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.GeneralGridView;
 
 @Keep
@@ -167,6 +168,7 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                 .map(new Function<BaseResponsedBean<GetSubChannelsByChannelBean>, CallGeneralBean>() {
                     @Override
                     public CallGeneralBean apply(BaseResponsedBean<GetSubChannelsByChannelBean> resp) {
+
                         CallGeneralBean generalBean;
                         try {
                             generalBean = new Gson().fromJson(resp.getExtra(), CallGeneralBean.class);
@@ -176,8 +178,10 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
 
                         try {
                             List<GetSubChannelsByChannelBean.ClassesBean> classes = resp.getData().getClasses();
+                            int size = classes.size();
+                            int length = Math.min(size, 5);
                             LinkedList<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateCalsss = new LinkedList<>();
-                            for (int n = 0; n < 5; n++) {
+                            for (int n = 0; n < length; n++) {
                                 GetSubChannelsByChannelBean.ClassesBean temp = classes.get(n);
                                 if (null == temp)
                                     continue;
@@ -198,12 +202,12 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
                             GetSubChannelsByChannelBean.ListBean classDatas = new GetSubChannelsByChannelBean.ListBean();
                             classDatas.setPreTemplate(-1);
                             classDatas.setTemplateData(templateCalsss);
+                            LogUtil.log("GHGHH", "addPresenter => " + new Gson().toJson(classDatas));
                             // 3
                             List<GetSubChannelsByChannelBean.ListBean> templateDatas = generalBean.getTemplateDatas();
                             templateDatas.add(1, classDatas);
-                            // 4
-                            generalBean.setTemplateDatas(templateDatas);
                         } catch (Exception e) {
+                            LogUtil.log("GHGHH", "addPresenter => " + e.getMessage());
                         }
                         return generalBean;
                     }
@@ -393,6 +397,9 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
     private final void addPresenter(@NonNull ArrayObjectAdapter arrayObjectAdapter,
                                     @NonNull int templateCode,
                                     @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> datas) {
+
+        LogUtil.log("GHGHH", "addPresenter => type = " + templateCode + ", data = " + new Gson().toJson(datas));
+
         Collection collection = null;
         Object object = null;
         // 返回顶部

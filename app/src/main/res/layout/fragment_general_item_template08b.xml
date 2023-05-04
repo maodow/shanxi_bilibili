@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    app:rl_rate_height="0.6">
+    app:rl_rate_height="0.644">
 
     <include
         layout="@layout/common_poster"

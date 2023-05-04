@@ -2,6 +2,7 @@ package tv.huan.bilibili.widget.common;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
@@ -48,8 +49,18 @@ public final class CommomDataView extends TextView {
         setVisibility(View.INVISIBLE);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void checkVip() {
-        boolean containsVip = HeilongjiangUtil.getVipStatus();
-        setVisibility(containsVip ? View.VISIBLE : View.INVISIBLE);
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                return HeilongjiangUtil.isVip_WorkerThread(getContext());
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                setVisibility(aBoolean ? View.VISIBLE : View.INVISIBLE);
+            }
+        }.execute();
     }
 }

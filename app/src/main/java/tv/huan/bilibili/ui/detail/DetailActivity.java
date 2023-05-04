@@ -144,7 +144,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                HeilongjiangUtil.jumpVip(getApplicationContext(), null);
+                HeilongjiangUtil.goShopping_WorkerThread(getApplicationContext());
             }
         }, 2000);
     }

@@ -3,6 +3,8 @@ package tv.huan.bilibili.ui.detail.template;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,18 +79,23 @@ public final class DetailTemplatePlayer extends Presenter {
 
         // 默认焦点
         try {
-            boolean containsVip = HeilongjiangUtil.getVipStatus();
-            if (containsVip) {
-                if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
-                    viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.GONE);
-                    viewHolder.view.findViewById(R.id.detail_player_item_full).requestFocus();
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    boolean containsVip = HeilongjiangUtil.isVip_WorkerThread(viewHolder.view.getContext());
+                    if (containsVip) {
+                        if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
+                            viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.GONE);
+                            viewHolder.view.findViewById(R.id.detail_player_item_full).requestFocus();
+                        }
+                    } else {
+                        if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
+                            viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.VISIBLE);
+                            viewHolder.view.findViewById(R.id.detail_player_item_vip).requestFocus();
+                        }
+                    }
                 }
-            } else {
-                if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
-                    viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.VISIBLE);
-                    viewHolder.view.findViewById(R.id.detail_player_item_vip).requestFocus();
-                }
-            }
+            });
         } catch (Exception e) {
         }
 
@@ -205,14 +212,18 @@ public final class DetailTemplatePlayer extends Presenter {
     public void checkVipStatus(View view, MediaBean data, @NonNull long seek, boolean isFromUser) {
         LogUtil.log("DetailTemplatePlayer => checkVipStatus => isFromUser = " + isFromUser);
 
-        boolean containsVip = HeilongjiangUtil.getVipStatus();
-
-        if (containsVip) {
-            startHuawei(view, data, seek);
-        } else {
-            showVip(view);
-            jumpVip(view);
-        }
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                boolean vip_workerThread = HeilongjiangUtil.isVip_WorkerThread(view.getContext());
+                if (vip_workerThread) {
+                    startHuawei(view, data, seek);
+                } else {
+                    showVip(view);
+                    jumpVip(view);
+                }
+            }
+        });
     }
 
     private void showVip(View view) {

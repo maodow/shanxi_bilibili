@@ -120,6 +120,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         setVisibility(R.id.main_search, View.VISIBLE);
         setVisibility(R.id.main_vip, View.VISIBLE);
         setVisibility(R.id.main_logo, View.VISIBLE);
+        setFocusable(R.id.main_tabs, true);
     }
 
     @Override
@@ -127,6 +128,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         setVisibility(R.id.main_search, View.GONE);
         setVisibility(R.id.main_vip, View.GONE);
         setVisibility(R.id.main_logo, View.GONE);
+        setFocusable(R.id.main_tabs, false);
     }
 
     @Override

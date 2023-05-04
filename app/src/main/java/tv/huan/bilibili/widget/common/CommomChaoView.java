@@ -1,7 +1,9 @@
 package tv.huan.bilibili.widget.common;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -52,18 +54,28 @@ public final class CommomChaoView extends TextViewPlus {
     private void init() {
         String packageName = getContext().getPackageName();
         if (null != packageName && packageName.endsWith(".yanshi")) {
-            setText(getResources().getString( R.string.menu_chao_no));
+            setText(getResources().getString(R.string.menu_chao_no));
         }
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HeilongjiangUtil.jumpVip(getContext(), null);
+                HeilongjiangUtil.goShopping_WorkerThread(getContext());
             }
         });
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void checkVip() {
-        boolean containsVip = HeilongjiangUtil.getVipStatus();
-        setText(getResources().getString(containsVip ? R.string.menu_chao_yes : R.string.menu_chao_no));
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                return HeilongjiangUtil.isVip_WorkerThread(getContext());
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                setText(getResources().getString(aBoolean ? R.string.menu_chao_yes : R.string.menu_chao_no));
+            }
+        }.execute();
     }
 }

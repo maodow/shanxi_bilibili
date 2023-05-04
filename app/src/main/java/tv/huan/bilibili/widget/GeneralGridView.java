@@ -30,82 +30,103 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplate22;
 import tv.huan.bilibili.utils.LogUtil;
 
 public final class GeneralGridView extends LeanBackVerticalGridView {
-    public GeneralGridView(@NonNull Context context) {
-        super(context);
-        init();
-    }
+
+//    private final OnScrollListener mOnScrollListener = new OnScrollListener() {
+//        @Override
+//        public void onScrollStateChanged(@NonNull androidx.recyclerview.widget.RecyclerView recyclerView, int newState) {
+//            super.onScrollStateChanged(recyclerView, newState);
+//            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                GlideUtils.resumeRequests(getContext());
+//            } else {
+//                GlideUtils.pauseRequests(getContext());
+//            }
+//        }
+//    };
 
     public GeneralGridView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
-    public GeneralGridView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init();
-    }
-
-    private void init() {
-//        addOnScrollListener(new OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull androidx.recyclerview.widget.RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    GlideUtils.resumeRequests(getContext());
-//                } else {
-//                    GlideUtils.pauseRequests(getContext());
-//                }
-//            }
-//        });
-    }
+//    @Override
+//    protected void onAttachedToWindow() {
+//        super.onAttachedToWindow();
+//        addOnScrollListener(mOnScrollListener);
+//    }
+//
+//    @Override
+//    protected void onDetachedFromWindow() {
+//        super.onDetachedFromWindow();
+//        removeOnScrollListener(mOnScrollListener);
+//    }
 
     @Override
     public boolean dispatchKeyEvent(@NonNull KeyEvent event) {
 
-//        try {
-//            int repeatCount = event.getRepeatCount();
-//            if (repeatCount > 0)
-//                return true;
-//        } catch (Exception e) {
-//        }
-
-        try {
-            // 停止滚动 SCROLL_STATE_IDLE
-            // 正在被外部拖拽,一般为用户正在用手指滚动 SCROLL_STATE_DRAGGING
-            // 自动滚动开始 SCROLL_STATE_SETTLING
-            int state = getScrollState();
-            if (state != RecyclerView.SCROLL_STATE_IDLE) {
-                //GlideUtils.pauseRequests(getContext());
+        // down => action_down
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            int repeatCount = event.getRepeatCount();
+            int scrollState = getScrollState();
+            if (repeatCount >= 1 || scrollState != RecyclerView.SCROLL_STATE_IDLE) {
                 return true;
             } else {
-                //GlideUtils.resumeRequests(getContext());
+                if (null != mOnScrollTopListener) {
+                    int focusedChildPosition = findFocusPosition();
+                    if (focusedChildPosition >= 1) {
+                        mOnScrollTopListener.onHide();
+                    }
+                }
             }
-        } catch (Exception e) {
         }
-
-        // down
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+        // down => action_up
+        else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
             if (null != mOnScrollTopListener) {
-                int focusedChildPosition = getFocusedChildPosition();
+                int focusedChildPosition = findFocusPosition();
                 if (focusedChildPosition >= 1) {
                     mOnScrollTopListener.onHide();
                 }
             }
         }
-        // up
+        // up => action_down
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+            int repeatCount = event.getRepeatCount();
+            int scrollState = getScrollState();
+            if (repeatCount >= 1 || scrollState != RecyclerView.SCROLL_STATE_IDLE) {
+                return true;
+            } else {
+                if (null != mOnScrollTopListener) {
+                    int focusPosition = findFocusPosition();
+                    if (focusPosition <= 0) {
+                        mOnScrollTopListener.onShow();
+                    }
+                }
+            }
+        }
+        // up => action_up
+        else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
             if (null != mOnScrollTopListener) {
-                ViewHolder viewHolder = findViewHolderForLayoutPosition(1);
-                if (null != viewHolder && null != viewHolder.itemView && viewHolder.itemView.getVisibility() == View.VISIBLE) {
+                int focusPosition = findFocusPosition();
+                if (focusPosition <= 0) {
                     mOnScrollTopListener.onShow();
                 }
             }
         }
-
         return super.dispatchKeyEvent(event);
     }
 
-    private int getFocusedChildPosition() {
+    @Override
+    public View getFocusedChild() {
+        try {
+            View focusedChild = findFocus();
+            if (null == focusedChild)
+                throw new Exception("focusedChild is null");
+            return focusedChild;
+        } catch (Exception e) {
+            LeanBackUtil.log("GeneralGridView => findFocusChild => " + e.getMessage());
+            return null;
+        }
+    }
+
+    private int findFocusPosition() {
         try {
             View focusedChild = getFocusedChild();
             if (null == focusedChild)
@@ -123,7 +144,7 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
                 throw new Exception("position error: " + position);
             return position;
         } catch (Exception e) {
-            LeanBackUtil.log("GeneralGridView => getFocusedChildPosition => " + e.getMessage());
+            LeanBackUtil.log("GeneralGridView => findFocusPosition => " + e.getMessage());
             return -1;
         }
     }

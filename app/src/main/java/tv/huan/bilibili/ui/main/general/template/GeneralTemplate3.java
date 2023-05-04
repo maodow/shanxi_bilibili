@@ -122,8 +122,13 @@ public class GeneralTemplate3 extends ListTvGridPresenter<GetSubChannelsByChanne
     }
 
     @Override
-    protected int initLayout(int i) {
-        return R.layout.fragment_general_item_template03;
+    protected int initItemViewType(int position, GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean) {
+        return position <= 2 ? 1 : 2;
+    }
+
+    @Override
+    protected int initLayout(int viewType) {
+        return viewType == 1 ? R.layout.fragment_general_item_template03a : R.layout.fragment_general_item_template03b;
     }
 
     @Override

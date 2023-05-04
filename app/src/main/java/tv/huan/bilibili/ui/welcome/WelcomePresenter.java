@@ -1,7 +1,6 @@
 package tv.huan.bilibili.ui.welcome;
 
 import android.content.Context;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 
@@ -97,8 +96,8 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         LogUtil.log("WelcomePresenter => request => 初始化支付sdk");
                         if (BuildConfig.HUAN_CHECK_USERID) {
                             try {
-                                Context context = getView().getContext();
-                                HeilongjiangUtil.init(context);
+                                boolean init_workerThread = HeilongjiangUtil.init_WorkerThread(getView().getContext());
+                                LogUtil.log("WelcomePresenter => request => init_workerThread = " + init_workerThread);
                             } catch (Exception e) {
                             }
                         }
@@ -129,16 +128,12 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                 // 获取vip状态
                 .map(new Function<CallWelcomeBean, CallWelcomeBean>() {
                     @Override
-                    public CallWelcomeBean apply(CallWelcomeBean callWelcomeBean) throws Exception {
-                        for (int i = 0; i < 5; i++) {
-                            boolean checkStatus = HeilongjiangUtil.getCheckStatus();
-                            if (checkStatus) {
-                                callWelcomeBean.setCheckStatus(true);
-                                break;
-                            }
-                            HeilongjiangUtil.updateCheckVip(getView().getContext());
-                            SystemClock.sleep(i == 0 ? 400 : 1000);
-                        }
+                    public CallWelcomeBean apply(CallWelcomeBean callWelcomeBean) {
+                        LogUtil.log("WelcomePresenter => request => vip_workerThread = start");
+                        boolean vip_workerThread = HeilongjiangUtil.isVip_WorkerThread(getView().getContext());
+                        LogUtil.log("WelcomePresenter => request => vip_workerThread = " + vip_workerThread);
+                        LogUtil.log("WelcomePresenter => request => vip_workerThread = end");
+                        callWelcomeBean.setCheckStatus(vip_workerThread);
                         return callWelcomeBean;
                     }
                 })
@@ -269,7 +264,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         if (data.containsAd()) {
                             getView().setVisibility(R.id.welcome_img, View.VISIBLE);
                             getView().updateBackground(data.getAdUrl());
-                            intervalTime(data.isCheckStatus(),data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
+                            intervalTime(data.isCheckStatus(), data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
                         } else {
                             getView().next(data.isCheckStatus(), data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag());
                         }
@@ -278,7 +273,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                 .subscribe());
     }
 
-    private void intervalTime(@NonNull boolean checkStaus,@NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag, @NonNull int time) {
+    private void intervalTime(@NonNull boolean checkStaus, @NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag, @NonNull int time) {
 
         // 延时1s ，每间隔1s，时间单位
         addDisposable(Observable.interval(1, 1, TimeUnit.SECONDS)
