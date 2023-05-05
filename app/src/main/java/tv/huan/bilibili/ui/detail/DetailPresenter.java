@@ -2,7 +2,6 @@ package tv.huan.bilibili.ui.detail;
 
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -216,6 +215,26 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                             detailBean = new CallDetailBean();
                         }
+                        // 填充数据
+                        try {
+                            List<MediaBean> medias = detailBean.getMedias();
+                            if (null == medias)
+                                throw new Exception();
+                            int size = medias.size();
+                            if (size <= 0)
+                                throw new Exception();
+                            int playType = detailBean.getAlbum().getPlayType();
+                            int type = detailBean.getAlbum().getType();
+                            for (int i = 0; i < size; i++) {
+                                MediaBean mediaBean = medias.get(i);
+                                if (null == mediaBean)
+                                    continue;
+                                mediaBean.setTempPlayType(playType);
+                                mediaBean.setTempType(type);
+                            }
+                        } catch (Exception e) {
+                        }
+                        // 起播数据
                         try {
                             BaseDataBean data = responsedBean.getData();
                             if (null == data)
@@ -233,28 +252,8 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             detailBean.setSeek(data.getSeek());
                             detailBean.setPos(pos);
                         } catch (Exception e) {
-                        }
-                        try {
-                            BaseDataBean data = responsedBean.getData();
-                            if (null == data)
-                                throw new Exception();
-                            List<MediaBean> medias = detailBean.getMedias();
-                            if (null == medias)
-                                throw new Exception();
-                            int size = medias.size();
-                            if (size <= 0)
-                                throw new Exception();
-                            int playType = detailBean.getAlbum().getPlayType();
-                            int type = detailBean.getAlbum().getType();
-                            for (int i = 0; i < size; i++) {
-                                MediaBean mediaBean = medias.get(i);
-                                if (null == mediaBean)
-                                    continue;
-                                mediaBean.setTempPlayType(playType);
-                                mediaBean.setTempType(type);
-                            }
-
-                        } catch (Exception e) {
+                            detailBean.setSeek(0);
+                            detailBean.setPos(0);
                         }
                         return detailBean;
                     }
