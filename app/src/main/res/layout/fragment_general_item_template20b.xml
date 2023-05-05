@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<lib.kalu.leanback.round.RoundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<tv.huan.bilibili.widget.template20.Template20LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="false"
-    android:orientation="vertical"
-    app:rl_rate_height="0.56">
+    android:orientation="vertical">
 
     <!-- item1 -->
     <lib.kalu.leanback.round.RoundLinearLayout
@@ -146,4 +145,4 @@
 
     </lib.kalu.leanback.round.RoundRelativeLayout>
 
-</lib.kalu.leanback.round.RoundLinearLayout>
+</tv.huan.bilibili.widget.template20.Template20LinearLayout>
