@@ -4,10 +4,8 @@ package tv.huan.bilibili.ui.main.general.template;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,13 +32,6 @@ import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.widget.player.PlayerViewTemplate;
 
 public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
-
-    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-        }
-    };
 
     @Override
     public String initRowTitle(Context context) {
@@ -123,6 +114,29 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                         if (position >= 0) {
                             GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
                             JumpUtil.next(v.getContext(), templateBean);
+                        }
+                    }
+                });
+            } catch (Exception e) {
+            }
+
+            try {
+                view.findViewById(R.id.general_template22_root).setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                        if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                            PlayerView playerView = view.findViewById(R.id.general_template22_player);
+                            playerView.pause(true);
+                        }
+                        return false;
+                    }
+                });
+                view.findViewById(R.id.general_template22_root).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
+                        PlayerView playerView = view.findViewById(R.id.general_template22_player);
+                        if (b) {
+                            playerView.resume(true);
                         }
                     }
                 });

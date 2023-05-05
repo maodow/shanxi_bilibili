@@ -31,7 +31,6 @@ public class PlayerComponentInitTemplate extends RelativeLayout implements Compo
             case PlayerType.StateType.STATE_KERNEL_STOP:
             case PlayerType.StateType.STATE_CLOSE:
             case PlayerType.StateType.STATE_PAUSE:
-            case PlayerType.StateType.STATE_PAUSE_IGNORE:
                 LogUtil.log("PlayerComponentInitTemplate[show] => playState = " + playState);
                 show();
                 break;
@@ -39,7 +38,6 @@ public class PlayerComponentInitTemplate extends RelativeLayout implements Compo
             case PlayerType.StateType.STATE_ERROR_IGNORE:
             case PlayerType.StateType.STATE_START:
             case PlayerType.StateType.STATE_RESUME:
-            case PlayerType.StateType.STATE_RESUME_IGNORE:
             case PlayerType.StateType.STATE_KERNEL_RESUME:
                 LogUtil.log("PlayerComponentInitTemplate[gone] => playState = " + playState);
                 gone();

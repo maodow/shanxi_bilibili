@@ -52,7 +52,7 @@ public final class HuanApp extends Application {
 
     private void initPlayer() {
         PlayerBuilder build = new PlayerBuilder.Builder()
-                .setLog(true)
+                .setLog(false)
                 .setKernel(PlayerType.KernelType.EXO_V2)
                 .setRender(PlayerType.RenderType.TEXTURE_VIEW)
                 .setExoFFmpeg(PlayerType.FFmpegType.EXO_EXTENSION_RENDERER_ON_LOW_AUDIO)
