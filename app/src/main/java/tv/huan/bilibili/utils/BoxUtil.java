@@ -38,7 +38,7 @@ public final class BoxUtil {
             return userId;
         } catch (Exception e) {
             LogUtil.log("BoxUtil => getUserId => " + e.getMessage());
-            return BuildConfig.HUAN_CHECK_USERID ? "" : "00380035890";
+            return BuildConfig.HUAN_CHECK_USER_ID ? "" : "00380035890";
         }
     }
 

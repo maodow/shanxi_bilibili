@@ -1,6 +1,5 @@
 package tv.huan.bilibili.ui.welcome;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
@@ -40,122 +39,119 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
 
     protected void request() {
 
-        addDisposable(Observable.create(new ObservableOnSubscribe<CallWelcomeBean>() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
-                    public void subscribe(ObservableEmitter<CallWelcomeBean> emitter) throws Exception {
-
-                        CallWelcomeBean welcomeBean = new CallWelcomeBean();
-                        // ad
-                        ADUtil.adSplash(getView().getContext());
-
-                        try {
-                            // 3
-                            int select = getView().getIntExtra(WelcomeActivity.INTENT_SELECT, 1);
-                            welcomeBean.setSelect(select);
-
-                            int type;
-                            try {
-                                String extra = getView().getStringExtra(WelcomeActivity.INTENT_TYPE);
-                                type = Integer.parseInt(extra);
-                            } catch (Exception e) {
-                                type = getView().getIntExtra(WelcomeActivity.INTENT_TYPE, MainActivity.INTENT_TYPE_DEFAULT);
-                            }
-                            welcomeBean.setType(type);
-
-                            String cid = null;
-                            try {
-                                cid = getView().getStringExtra(WelcomeActivity.INTENT_CID);
-                            } catch (Exception e) {
-                            }
-                            welcomeBean.setCid(cid);
-
-                            int classId;
-                            try {
-                                String extra = getView().getStringExtra(WelcomeActivity.INTENT_CLASSID);
-                                classId = Integer.parseInt(extra);
-                            } catch (Exception e) {
-                                classId = getView().getIntExtra(WelcomeActivity.INTENT_CLASSID, -1);
-                            }
-                            welcomeBean.setClassId(classId);
-
-                            String secondTag = null;
-                            try {
-                                secondTag = getView().getStringExtra(WelcomeActivity.INTENT_SECOND_TAG);
-                            } catch (Exception e) {
-                            }
-                            welcomeBean.setSecondTag(secondTag);
-                        } catch (Exception e) {
-                        }
-                        emitter.onNext(welcomeBean);
+                    public void subscribe(ObservableEmitter<Boolean> emitter) {
+                        emitter.onNext(true);
                     }
                 })
-                // 初始化支付sdk
-                .map(new Function<CallWelcomeBean, CallWelcomeBean>() {
+                // sdk => init_WorkerThread
+                .map(new Function<Boolean, Boolean>() {
                     @Override
-                    public CallWelcomeBean apply(CallWelcomeBean data) {
-                        LogUtil.log("WelcomePresenter => request => 初始化支付sdk");
-                        if (BuildConfig.HUAN_CHECK_USERID) {
-                            try {
+                    public Boolean apply(Boolean aBoolean) throws Exception {
+                        try {
+                            if (BuildConfig.HUAN_CHECK_CMCC_INIT) {
                                 boolean init_workerThread = HeilongjiangUtil.init_WorkerThread(getView().getContext());
                                 LogUtil.log("WelcomePresenter => request => init_workerThread = " + init_workerThread);
-                            } catch (Exception e) {
+                                if (!init_workerThread)
+                                    throw new Exception("移动sdk初始化错误");
                             }
+                            return aBoolean;
+                        } catch (Exception e) {
+                            throw e;
                         }
-                        return data;
                     }
                 })
-                // 获取userId
-                .map(new Function<CallWelcomeBean, CallWelcomeBean>() {
+                // sdk => getUserId
+                .map(new Function<Boolean, Boolean>() {
                     @Override
-                    public CallWelcomeBean apply(CallWelcomeBean data) throws Exception {
-                        LogUtil.log("WelcomePresenter => request => 获取userId");
+                    public Boolean apply(Boolean aBoolean) throws Exception {
                         try {
-                            if (BuildConfig.HUAN_CHECK_USERID) {
-                                Context context = getView().getContext();
-                                String userId = HeilongjiangUtil.getUserId(context);
+                            if (BuildConfig.HUAN_CHECK_USER_ID) {
+                                String userId = HeilongjiangUtil.getUserId(getView().getContext());
                                 LogUtil.log("WelcomePresenter => request => userId = " + userId);
                                 if (null == userId || userId.length() <= 0) {
                                     String s = getView().getString(R.string.welcome_warning);
                                     throw new Exception(s);
                                 }
                             }
-                            return data;
+                            return aBoolean;
                         } catch (Exception e) {
                             throw e;
                         }
                     }
                 })
-                // 获取vip状态
-                .map(new Function<CallWelcomeBean, CallWelcomeBean>() {
+                // 欢网 => 广告sdk
+                .map(new Function<Boolean, Boolean>() {
                     @Override
-                    public CallWelcomeBean apply(CallWelcomeBean callWelcomeBean) {
-                        LogUtil.log("WelcomePresenter => request => vip_workerThread = start");
-                        boolean vip_workerThread = HeilongjiangUtil.isVip_WorkerThread(getView().getContext());
-                        LogUtil.log("WelcomePresenter => request => vip_workerThread = " + vip_workerThread);
-                        LogUtil.log("WelcomePresenter => request => vip_workerThread = end");
-                        callWelcomeBean.setCheckStatus(vip_workerThread);
-                        return callWelcomeBean;
+                    public Boolean apply(Boolean aBoolean) {
+                        try {
+                            ADUtil.adSplash(getView().getContext());
+                            LogUtil.log("WelcomePresenter => request => adSplash =>");
+                        } catch (Exception e) {
+                        }
+                        return aBoolean;
                     }
                 })
                 // 首次打开app上报
-                .map(new Function<CallWelcomeBean, CallWelcomeBean>() {
+                .map(new Function<Boolean, Boolean>() {
                     @Override
-                    public CallWelcomeBean apply(CallWelcomeBean data) {
-                        // 上报
+                    public Boolean apply(Boolean data) {
                         try {
-                            LogUtil.log("WelcomePresenter => request => 首次打开app上报");
                             reportAppActivation();
+                            LogUtil.log("WelcomePresenter => request => reportAppActivation =>");
                         } catch (Exception e) {
                         }
-
                         return data;
+                    }
+                })
+                // 初始化数据
+                .map(new Function<Boolean, CallWelcomeBean>() {
+                    @Override
+                    public CallWelcomeBean apply(Boolean data) {
+                        CallWelcomeBean welcomeBean = new CallWelcomeBean();
+                        // 3
+                        int select = getView().getIntExtra(WelcomeActivity.INTENT_SELECT, 1);
+                        welcomeBean.setSelect(select);
+
+                        int type;
+                        try {
+                            String extra = getView().getStringExtra(WelcomeActivity.INTENT_TYPE);
+                            type = Integer.parseInt(extra);
+                        } catch (Exception e) {
+                            type = getView().getIntExtra(WelcomeActivity.INTENT_TYPE, MainActivity.INTENT_TYPE_DEFAULT);
+                        }
+                        welcomeBean.setType(type);
+
+                        String cid = null;
+                        try {
+                            cid = getView().getStringExtra(WelcomeActivity.INTENT_CID);
+                        } catch (Exception e) {
+                        }
+                        welcomeBean.setCid(cid);
+
+                        int classId;
+                        try {
+                            String extra = getView().getStringExtra(WelcomeActivity.INTENT_CLASSID);
+                            classId = Integer.parseInt(extra);
+                        } catch (Exception e) {
+                            classId = getView().getIntExtra(WelcomeActivity.INTENT_CLASSID, -1);
+                        }
+                        welcomeBean.setClassId(classId);
+
+                        String secondTag = null;
+                        try {
+                            secondTag = getView().getStringExtra(WelcomeActivity.INTENT_SECOND_TAG);
+                        } catch (Exception e) {
+                        }
+                        welcomeBean.setSecondTag(secondTag);
+                        return welcomeBean;
                     }
                 })
                 // 广告接口
                 .flatMap(new Function<CallWelcomeBean, Observable<GetPopupInfoBeanBase>>() {
                     @Override
                     public Observable<GetPopupInfoBeanBase> apply(CallWelcomeBean data) {
-                        LogUtil.log("WelcomePresenter => request => 广告接口");
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getPopupInfo(s);
                     }
@@ -164,8 +160,6 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                 .map(new Function<GetPopupInfoBeanBase, CallWelcomeBean>() {
                     @Override
                     public CallWelcomeBean apply(GetPopupInfoBeanBase loadPageIcon) {
-                        LogUtil.log("WelcomePresenter => request => 下载广告");
-
                         CallWelcomeBean welcomeBean;
                         try {
                             welcomeBean = new Gson().fromJson(loadPageIcon.getExtra(), CallWelcomeBean.class);
@@ -198,7 +192,6 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                 .flatMap(new Function<CallWelcomeBean, Observable<BaseResponsedBean<GetChannelsBean>>>() {
                     @Override
                     public Observable<BaseResponsedBean<GetChannelsBean>> apply(CallWelcomeBean data) {
-                        LogUtil.log("WelcomePresenter => request => 频道接口");
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getChannels(1, 100, s);
                     }
@@ -207,8 +200,6 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                 .map(new Function<BaseResponsedBean<GetChannelsBean>, CallWelcomeBean>() {
                     @Override
                     public CallWelcomeBean apply(BaseResponsedBean<GetChannelsBean> response) {
-                        LogUtil.log("WelcomePresenter => request => 整理数据");
-
                         CallWelcomeBean welcomeBean;
                         try {
                             welcomeBean = new Gson().fromJson(response.getExtra(), CallWelcomeBean.class);
@@ -218,7 +209,8 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
 
                         ArrayList<GetChannelsBean.ItemBean> list = new ArrayList<>();
                         GetChannelsBean.ItemBean bean = new GetChannelsBean.ItemBean();
-                        bean.setName("我的");
+                        String string = getView().getString(R.string.tab_mine);
+                        bean.setName(string);
                         list.add(bean);
                         try {
                             List<GetChannelsBean.ItemBean> datas = response.getData().getList();
@@ -254,26 +246,26 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                     @Override
                     public void accept(Throwable throwable) {
                         LogUtil.log("WelcomePresenter => request => doOnError =>");
+                        getView().showToast(throwable);
                         getView().next();
                     }
                 })
                 .doOnNext(new Consumer<CallWelcomeBean>() {
                     @Override
                     public void accept(CallWelcomeBean data) {
-                        LogUtil.log("WelcomePresenter => request => doOnNext => " + new Gson().toJson(data));
                         if (data.containsAd()) {
                             getView().setVisibility(R.id.welcome_img, View.VISIBLE);
                             getView().updateBackground(data.getAdUrl());
-                            intervalTime(data.isCheckStatus(), data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
+                            intervalTime(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag(), data.getAdTime());
                         } else {
-                            getView().next(data.isCheckStatus(), data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag());
+                            getView().next(data.getData(), data.getSelect(), data.getType(), data.getCid(), data.getClassId(), data.getSecondTag());
                         }
                     }
                 })
                 .subscribe());
     }
 
-    private void intervalTime(@NonNull boolean checkStaus, @NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag, @NonNull int time) {
+    private void intervalTime(@NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag, @NonNull int time) {
 
         // 延时1s ，每间隔1s，时间单位
         addDisposable(Observable.interval(1, 1, TimeUnit.SECONDS)
@@ -285,7 +277,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         // 取消订阅
                         if (aLong >= time) {
                             dispose();
-                            getView().next(checkStaus, data, select, type, cid, classId, secondTag);
+                            getView().next(data, select, type, cid, classId, secondTag);
                         } else {
                             int num = (int) (time - aLong);
                             getView().setVisibility(R.id.welcome_time, View.VISIBLE);

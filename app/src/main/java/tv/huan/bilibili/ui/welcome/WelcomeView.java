@@ -10,5 +10,5 @@ public interface WelcomeView extends BaseViewImpl {
 
     void next();
 
-    void next(@NonNull boolean checkStaus, @NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag);
+    void next(@NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag);
 }

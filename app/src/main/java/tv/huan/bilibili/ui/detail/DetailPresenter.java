@@ -31,12 +31,12 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
 import tv.huan.bilibili.bean.Auth2BeanBase;
 import tv.huan.bilibili.bean.FavorBean;
+import tv.huan.bilibili.bean.GetLastBookmark;
 import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.bean.MediaDetailBean;
 import tv.huan.bilibili.bean.RecMediaBean;
 import tv.huan.bilibili.bean.base.BaseAuthorizationBean;
-import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallDetailBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
@@ -194,9 +194,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 观看记录
-                .flatMap(new Function<CallDetailBean, ObservableSource<BaseResponsedBean<BaseDataBean>>>() {
+                .flatMap(new Function<CallDetailBean, ObservableSource<BaseResponsedBean<GetLastBookmark>>>() {
                     @Override
-                    public ObservableSource<BaseResponsedBean<BaseDataBean>> apply(CallDetailBean data) {
+                    public ObservableSource<BaseResponsedBean<GetLastBookmark>> apply(CallDetailBean data) {
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
                         if (null == cid) {
                             cid = "";
@@ -206,12 +206,12 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     }
                 })
                 // 观看记录 => 数据处理
-                .map(new Function<BaseResponsedBean<BaseDataBean>, CallDetailBean>() {
+                .map(new Function<BaseResponsedBean<GetLastBookmark>, CallDetailBean>() {
                     @Override
-                    public CallDetailBean apply(BaseResponsedBean<BaseDataBean> responsedBean) {
+                    public CallDetailBean apply(BaseResponsedBean<GetLastBookmark> response) {
                         CallDetailBean detailBean;
                         try {
-                            detailBean = new Gson().fromJson(responsedBean.getExtra(), CallDetailBean.class);
+                            detailBean = new Gson().fromJson(response.getExtra(), CallDetailBean.class);
                         } catch (Exception e) {
                             detailBean = new CallDetailBean();
                         }
@@ -233,26 +233,36 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                                 mediaBean.setTempType(type);
                             }
                         } catch (Exception e) {
+                            LogUtil.log("DetailPresenter => request => " + e.getMessage());
                         }
-                        // 起播数据
+                        // 起播数据pos
                         try {
-                            BaseDataBean data = responsedBean.getData();
+                            GetLastBookmark data = response.getData();
                             if (null == data)
-                                throw new Exception();
+                                throw new Exception("data error: null");
+                            detailBean.setSeek(data.getSeek());
+                        } catch (Exception e) {
+                            LogUtil.log("DetailPresenter => request => " + e.getMessage());
+                            detailBean.setSeek(0);
+                        }
+                        // 起播数据seek
+                        try {
+                            GetLastBookmark data = response.getData();
+                            if (null == data)
+                                throw new Exception("data error: null");
                             List<MediaBean> medias = detailBean.getMedias();
                             if (null == medias)
-                                throw new Exception();
+                                throw new Exception("media error: null");
                             int size = medias.size();
                             if (size <= 0)
-                                throw new Exception();
+                                throw new Exception("size error: " + size);
                             int pos = data.getPos();
                             if (pos < 0 || pos + 1 >= size) {
                                 pos = 0;
                             }
-                            detailBean.setSeek(data.getSeek());
                             detailBean.setPos(pos);
                         } catch (Exception e) {
-                            detailBean.setSeek(0);
+                            LogUtil.log("DetailPresenter => request => " + e.getMessage());
                             detailBean.setPos(0);
                         }
                         return detailBean;

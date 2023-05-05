@@ -18,6 +18,7 @@ import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.FavorBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
+import tv.huan.bilibili.bean.GetLastBookmark;
 import tv.huan.bilibili.bean.GetMediasByCid2Bean;
 import tv.huan.bilibili.bean.GetPopupInfoBeanBase;
 import tv.huan.bilibili.bean.GetSecondTagAlbumsBean;
@@ -65,8 +66,8 @@ public interface HttpApi {
 
     // 查询观看记录
     @GET("data/getLastBookmark")
-    Observable<BaseResponsedBean<BaseDataBean>> getLastBookmark(@Query("cid") String cid,
-                                                                @Query(OkhttpInterceptorStandard.EXTRA) String extra);
+    Observable<BaseResponsedBean<GetLastBookmark>> getLastBookmark(@Query("cid") String cid,
+                                                                   @Query(OkhttpInterceptorStandard.EXTRA) String extra);
 
     // 查询收藏
     @GET("data/checkFavorite")

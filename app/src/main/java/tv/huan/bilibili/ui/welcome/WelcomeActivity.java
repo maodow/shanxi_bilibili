@@ -44,8 +44,7 @@ public class WelcomeActivity extends BaseActivity<WelcomeView, WelcomePresenter>
     }
 
     @Override
-    public void next(@NonNull boolean checkStaus, @NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag) {
-        showToast(checkStaus ? R.string.welcome_warning2 : R.string.welcome_warning3);
+    public void next(@NonNull String data, @NonNull int select, @NonNull int type, @NonNull String cid, @NonNull int classId, @NonNull String secondTag) {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(MainActivity.INTENT_SELECT, select);
         intent.putExtra(MainActivity.INTENT_TABS, data);

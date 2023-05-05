@@ -6,7 +6,7 @@ import tv.huan.bilibili.bean.base.BaseDataBean;
 
 public final class CallWelcomeBean extends BaseDataBean implements Serializable {
 
-    private boolean checkStatus;
+    private boolean initStatus;
     private int adTime;
     private String adUrl;
     private int select;
@@ -14,12 +14,12 @@ public final class CallWelcomeBean extends BaseDataBean implements Serializable 
     private String secondTag;
     private String data;
 
-    public boolean isCheckStatus() {
-        return checkStatus;
+    public boolean isInitStatus() {
+        return initStatus;
     }
 
-    public void setCheckStatus(boolean checkStatus) {
-        this.checkStatus = checkStatus;
+    public void setInitStatus(boolean initStatus) {
+        this.initStatus = initStatus;
     }
 
     public String getData() {
