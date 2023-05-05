@@ -606,10 +606,19 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             mDatas.remove(t);
                         }
                         int size = mDatas.size();
+                        try {
+                            FavBean.ItemBean itemBean = mDatas.get(size - 4);
+                            itemBean.setTempPosition(inserBeans.size());
+                        } catch (Exception e) {
+                        }
+
                         mDatas.addAll(size - 4, inserBeans);
-                        return true;
+
+                        return inserBeans.isEmpty();
                     }
-                }).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
+                })
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
                     }
@@ -621,11 +630,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 }).doOnNext(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) {
+                        getView().notifyDataRangeChanged(R.id.mine_list);
                         if (aBoolean) {
-                            getView().notifyDataRangeChanged(R.id.mine_list);
-//                            getView().showToast("刷新收藏缓存成功");
-                        } else {
-//                            getView().showToast("刷新收藏缓存失败");
+                            getView().requestFocusPosition(mDatas.size() - 4, R.id.mine_more);
                         }
                     }
                 }).subscribe());
@@ -710,10 +717,20 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             if (null == t) continue;
                             mDatas.remove(t);
                         }
+
+                        try {
+                            FavBean.ItemBean itemBean = mDatas.get(2);
+                            itemBean.setTempPosition(inserBeans.size());
+                        } catch (Exception e) {
+                        }
+
                         mDatas.addAll(2, inserBeans);
-                        return true;
+
+                        return inserBeans.isEmpty();
                     }
-                }).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
+                })
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) {
                     }
@@ -725,11 +742,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 }).doOnNext(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) {
+                        getView().notifyDataRangeChanged(R.id.mine_list);
                         if (aBoolean) {
-                            getView().notifyDataRangeChanged(R.id.mine_list);
-//                            getView().showToast("刷新历史缓存成功");
-                        } else {
-//                            getView().showToast("刷新历史缓存失败");
+                            getView().requestFocusPosition(2, R.id.mine_more);
                         }
                     }
                 }).subscribe());

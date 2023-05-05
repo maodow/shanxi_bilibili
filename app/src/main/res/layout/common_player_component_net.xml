@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000"
+    android:focusable="false">
+
+    <lib.kalu.mediaplayer.widget.loading.MPLoadingView
+        android:id="@+id/common_player_component_net"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:focusable="false"
+        android:indeterminateDuration="2000"
+        android:longClickable="false"
+        android:visibility="gone"
+        app:lv_color_round="#ffffff"
+        app:lv_count="8"
+        app:lv_radius="10dp"
+        app:lv_rate="0.9" />
+
+</RelativeLayout>

@@ -401,9 +401,10 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
     }
 
     protected <T extends androidx.leanback.widget.Presenter> void requestHuaweiAuth(Class<T> cls, Class<?> obj, String cid) {
+
         addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
                     @Override
-                    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                    public void subscribe(ObservableEmitter<String> emitter) {
                         emitter.onNext(cid);
                     }
                 })

@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.detail;
 
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -225,14 +226,24 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             int size = medias.size();
                             if (size <= 0)
                                 throw new Exception();
-
                             int pos = data.getPos();
                             if (pos < 0 || pos + 1 >= size) {
                                 pos = 0;
                             }
                             detailBean.setSeek(data.getSeek());
                             detailBean.setPos(pos);
-
+                        } catch (Exception e) {
+                        }
+                        try {
+                            BaseDataBean data = responsedBean.getData();
+                            if (null == data)
+                                throw new Exception();
+                            List<MediaBean> medias = detailBean.getMedias();
+                            if (null == medias)
+                                throw new Exception();
+                            int size = medias.size();
+                            if (size <= 0)
+                                throw new Exception();
                             int playType = detailBean.getAlbum().getPlayType();
                             int type = detailBean.getAlbum().getType();
                             for (int i = 0; i < size; i++) {
@@ -445,8 +456,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     public void accept(CallDetailBean data) {
                         getView().hideLoading();
                         getView().notifyDataRangeInsertLeanBack(R.id.detail_list);
-                        getView().startPlayerPosition(data.getMedias().get(data.getPos()), data.getPos(), 50000, false);
-//                        getView().startPlayerPosition(data.getMedias().get(data.getPos()), data.getPos(), data.getSeek(), false);
+                        getView().startPlayerPosition(data.getMedias().get(data.getPos()), data.getPos(), data.getSeek(), false);
                     }
                 }).subscribe());
     }

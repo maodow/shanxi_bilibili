@@ -38,7 +38,7 @@ public class PlayerView extends PlayerLayout {
         ComponentError error = new ComponentError(getContext());
         addComponent(error);
         // net
-        ComponentNet net = new ComponentNet(getContext());
+        PlayerComponentNet net = new PlayerComponentNet(getContext());
         addComponent(net);
         // seekbar
         ComponentSeek seek = new ComponentSeek(getContext());

@@ -1,6 +1,5 @@
 package tv.huan.bilibili.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -39,36 +38,45 @@ public final class GlideUtils {
     /**************************** ↓↓↓↓ ************************************/
 
     public static void loadHz(Context context, String url, ImageView imageView) {
-        into(context, url, imageView, 0);
+        check(context, imageView, url, 0, 0);
     }
 
     public static void loadVt(Context context, String url, ImageView imageView) {
-        into(context, url, imageView, 0);
+        check(context, imageView, url, 0, 0);
     }
 
     public static void load(Context context, String url, ImageView imageView, @DrawableRes int placeholder) {
-        into(context, url, imageView, placeholder);
+        check(context, imageView, url, placeholder, placeholder);
     }
 
     public static void load(Context context, String url, ImageView imageView) {
-        into(context, url, imageView, 0);
+        check(context, imageView, url, 0, 0);
     }
 
-    @SuppressLint("CheckResult")
-    private static void into(Context context, String url, final ImageView imageView, @DrawableRes int res) {
-
-        if (null == imageView)
-            return;
+    private static void check(@NonNull Context context,
+                              @NonNull ImageView imageView,
+                              @NonNull String url,
+                              @DrawableRes int errorId,
+                              @DrawableRes int placeholderId) {
 
         try {
-            imageView.setImageDrawable(null);
+            if (null == url || url.length() == 0)
+                throw new Exception("url error: " + url);
+            if (null == imageView)
+                throw new Exception("imageView error: null");
+            into(context, imageView, url, errorId, placeholderId);
         } catch (Exception e) {
+            LogUtil.log("GlideUtils => check => " + e.getMessage());
         }
+    }
 
-        if (null == url || url.length() == 0)
-            return;
+    private static void into(@NonNull Context context,
+                             @NonNull ImageView imageView,
+                             @NonNull String url,
+                             @DrawableRes int errorId,
+                             @DrawableRes int placeholderId) {
 
-        RequestOptions options = new RequestOptions()
+        RequestOptions requestOptions = new RequestOptions()
                 .dontAnimate()
                 .dontTransform()
                 .dontAnimate()
@@ -80,67 +88,36 @@ public final class GlideUtils {
                 .skipMemoryCache(false);
 
         try {
-            Drawable drawable = context.getResources().getDrawable(res);
-            if (null != drawable) {
-                options.error(drawable).placeholder(drawable);
-            }
+            if (errorId == 0)
+                throw new Exception();
+            requestOptions.error(context.getResources().getDrawable(errorId));
         } catch (Exception e) {
+            requestOptions.error(null);
         }
 
-        into(context, url, imageView, options);
-    }
-
-    private static void into(Context context, String url, final ImageView imageView, RequestOptions options) {
+        try {
+            if (placeholderId == 0)
+                throw new Exception();
+            requestOptions.placeholder(context.getResources().getDrawable(placeholderId));
+        } catch (Exception e) {
+            requestOptions.placeholder(null);
+        }
 
         try {
             imageView.setImageDrawable(null);
         } catch (Exception e) {
         }
 
-        if (null == url || url.length() == 0)
-            return;
-
+        try {
+            Glide.with(context).load(url.trim()).apply(requestOptions).into(imageView);
+        } catch (Exception e) {
+            LogUtil.log("GlideUtils => into => " + e.getMessage());
+        }
 
         // 圆角
 //            float v = context.getResources().getDimension(R.dimen.dp_4);
 //            GlideRoundTransform transform = new GlideRoundTransform(context, v);
 //            options.transform(transform);
-
-
-        // 图片
-        try {
-            Glide.with(context).load(url.trim()).apply(options).into(imageView);
-//            Glide.with(context).load(url).apply(options).into(new CustomTarget<Drawable>() {
-//                @Override
-//                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-//                    int visibility = imavoid onLoadCleared(@Nullable Drawable placeholder) {
-////                }
-////            });
-////            Glide.with(context).asBitmap().load(url).apply(options).into(new CustomTarget<Bitmap>() {
-////                @Override
-////                public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-////                    try {
-////                        Bitmap copy = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-////                        imageView.setImageDrawable(null);
-////                        imageView.setImageBitmap(null);
-////                        imageView.setImageBitmap(copy);
-////                    } catch (Exception e) {
-////                    }
-////                }
-////
-////                @Override
-////                public void onLoadCleared(@Nullable Drawable drawable) {
-////                }
-////            });geView.getVisibility();
-//                    if (visibility == View.VISIBLE) {
-//                        imageView.setImageDrawable(resource);
-//                    }
-//                }
-//
-//                @Override
-//                public
-        } catch (Exception e) {
-        }
     }
 
     /**************************** ↓↓↓↓ ************************************/

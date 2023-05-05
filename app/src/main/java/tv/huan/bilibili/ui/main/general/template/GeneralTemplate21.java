@@ -4,9 +4,11 @@ package tv.huan.bilibili.ui.main.general.template;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +33,28 @@ import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.widget.player.PlayerViewTemplate;
 
 public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 20001) {
+                try {
+                    View viewGroup = (View) ((Object[]) msg.obj)[0];
+                    String code = (String) ((Object[]) msg.obj)[1];
+                    startHuawei(viewGroup, code);
+                } catch (Exception e) {
+                }
+            } else if (msg.what == 20002) {
+                try {
+                    View viewGroup = (View) ((Object[]) msg.obj)[0];
+                    String url = (String) ((Object[]) msg.obj)[1];
+                    startPlayer(viewGroup, url);
+                } catch (Exception e) {
+                }
+            }
+        }
+    };
 
     @Override
     public String initRowTitle(Context context) {
@@ -69,13 +93,6 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
             textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
         } catch (Exception e) {
         }
-        try {
-            if (!hasFocus)
-                throw new Exception();
-            View parent = (View) view.getParent().getParent();
-            stopPlayer(parent);
-        } catch (Exception e) {
-        }
     }
 
     @Override
@@ -107,6 +124,8 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
 
     @Override
     protected void onBindHeadHolder(@NonNull Context context, @NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position) {
+        LogUtil.log("GeneralTemplate21 => onBindHeadHolder => position = " + position);
+
         try {
             ImageView imageView = view.findViewById(R.id.general_template21_poster);
             boolean hasExtPoster = templateBean.hasExtPoster();
@@ -144,6 +163,7 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
             textView.setText(templateBean.getDescription());
         } catch (Exception e) {
         }
+
         try {
             PlayerViewTemplate playerView = view.findViewById(R.id.general_template21_player);
             PlayerComponentInitTemplate component = playerView.findComponent(PlayerComponentInitTemplate.class);
@@ -154,20 +174,30 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
         } catch (Exception e) {
         }
 
+        try {
+            pausePlayer(view);
+        } catch (Exception e) {
+        }
+
+        try {
+            stopPlayer(view);
+        } catch (Exception e) {
+        }
+
         if (BuildConfig.HUAN_HUAWEI_AUTH) {
-            try {
-                Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
-                if (null != activity && activity instanceof MainActivity) {
-                    ((MainActivity) activity).huaweiAuth(GeneralTemplate21.class, GeneralTemplate21.GeneralTemplate21List.class, templateBean.getHuaweiId());
-                }
-            } catch (Exception e) {
-            }
+            Message message = new Message();
+            message.what = 20001;
+            message.obj = new Object[]{view, templateBean.getHuaweiId()};
+            mHandler.removeMessages(20001);
+            mHandler.removeMessages(20002);
+            mHandler.sendMessageDelayed(message, 4000);
         } else {
-            try {
-                String url = BoxUtil.getTestVideoUrl();
-                startPlayer(view, url);
-            } catch (Exception e) {
-            }
+            Message message = new Message();
+            message.what = 20002;
+            message.obj = new Object[]{view, BoxUtil.getTestVideoUrl()};
+            mHandler.removeMessages(20001);
+            mHandler.removeMessages(20002);
+            mHandler.sendMessageDelayed(message, 4000);
         }
     }
 
@@ -192,10 +222,11 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
             playerView.stop();
             playerView.release();
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => stopPlayer => " + e.getMessage());
         }
     }
 
-    public void pausePlayer(ViewGroup viewGroup) {
+    public void pausePlayer(View viewGroup) {
         LogUtil.log("GeneralTemplate21 => pausePlayer =>");
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
@@ -206,7 +237,7 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
         }
     }
 
-    public void resumePlayer(ViewGroup viewGroup) {
+    public void resumePlayer(View viewGroup) {
         LogUtil.log("GeneralTemplate21 => resumePlayer =>");
         try {
             PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
@@ -217,17 +248,26 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
         }
     }
 
-    public void startPlayer(View inflate, String s) {
+    public void startPlayer(View viewGroup, String s) {
         try {
             if (null == s || s.length() <= 0)
                 throw new Exception("url error: null");
-            PlayerView playerView = inflate.findViewById(R.id.general_template21_player);
+            PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(true);
-            builder.setDelay(3000);
             playerView.start(builder.build(), s);
         } catch (Exception e) {
             LogUtil.log("GeneralTemplate21 => startPlayer => " + e.getMessage());
+        }
+    }
+
+    private void startHuawei(View viewGroup, String code) {
+        try {
+            Activity activity = WrapperUtil.getWrapperActivity(viewGroup.getContext());
+            if (null != activity && activity instanceof MainActivity) {
+                ((MainActivity) activity).huaweiAuth(GeneralTemplate21.class, GeneralTemplate21.GeneralTemplate21List.class, code);
+            }
+        } catch (Exception e) {
         }
     }
 

@@ -295,7 +295,7 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
         if (null != template21) {
             ViewHolder viewHolder21 = findViewHolderForAdapterObject(GeneralTemplate21.GeneralTemplate21List.class);
             if (null != viewHolder21) {
-                template21.pausePlayer((ViewGroup) viewHolder21.itemView);
+                template21.pausePlayer(viewHolder21.itemView);
             }
         }
         GeneralTemplate22 template22 = getPresenter(GeneralTemplate22.class);

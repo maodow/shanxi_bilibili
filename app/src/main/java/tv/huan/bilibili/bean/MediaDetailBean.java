@@ -50,41 +50,49 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
     public String getInfo() {
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            // 电影，电视剧
-            if (type == BuildConfig.HUAN_TYPE_FILM || type == BuildConfig.HUAN_TYPE_TELEPLAY) {
-                stringBuilder.append("导   演： " + getDirector());
-                stringBuilder.append("\n");
-                stringBuilder.append("主   演： " + getLeadingActor());
-                stringBuilder.append("\n");
-            }
-            // 综艺，体育
-            else if (type == BuildConfig.HUAN_TYPE_VARIETY || type == BuildConfig.HUAN_TYPE_SPORTS) {
-                stringBuilder.append("嘉   宾： " + getGuests());
-                stringBuilder.append("\n");
-            }
-            // 少儿，动漫
-            else if (type == BuildConfig.HUAN_TYPE_ANIME || type == BuildConfig.HUAN_TYPE_CHILDREN) {
-                stringBuilder.append("导   演： " + getDirector());
-                stringBuilder.append("\n");
-            }
-            // 教育
-            else if (type == BuildConfig.HUAN_TYPE_EDUCATION) {
-            }
-            // 默认
-            else {
-                stringBuilder.append("嘉   宾： " + getDirector());
-                stringBuilder.append("\n");
-            }
-
-            // 简介
-            String desc = getDescription();
-            if (desc.contains("杜比")) {
-                stringBuilder.append("杜   比： " + desc);
-            } else {
-                stringBuilder.append("简   介： " + desc);
-            }
+            String actor = getLeadingActor();
+            if (null == actor || actor.length() <= 0)
+                throw new Exception();
+            stringBuilder.append("演职人员： " + actor);
         } catch (Exception e) {
+            stringBuilder.append("演职人员： 暂无");
         }
+//        try {
+//            // 电影，电视剧
+//            if (type == BuildConfig.HUAN_TYPE_FILM || type == BuildConfig.HUAN_TYPE_TELEPLAY) {
+//                stringBuilder.append("导   演： " + getDirector());
+//                stringBuilder.append("\n");
+//                stringBuilder.append("主   演： " +);
+//                stringBuilder.append("\n");
+//            }
+//            // 综艺，体育
+//            else if (type == BuildConfig.HUAN_TYPE_VARIETY || type == BuildConfig.HUAN_TYPE_SPORTS) {
+//                stringBuilder.append("嘉   宾： " + getGuests());
+//                stringBuilder.append("\n");
+//            }
+//            // 少儿，动漫
+//            else if (type == BuildConfig.HUAN_TYPE_ANIME || type == BuildConfig.HUAN_TYPE_CHILDREN) {
+//                stringBuilder.append("导   演： " + getDirector());
+//                stringBuilder.append("\n");
+//            }
+//            // 教育
+//            else if (type == BuildConfig.HUAN_TYPE_EDUCATION) {
+//            }
+//            // 默认
+//            else {
+//                stringBuilder.append("嘉   宾： " + getDirector());
+//                stringBuilder.append("\n");
+//            }
+//
+//            // 简介
+//            String desc = getDescription();
+//            if (desc.contains("杜比")) {
+//                stringBuilder.append("杜   比： " + desc);
+//            } else {
+//                stringBuilder.append("简   介： " + desc);
+//            }
+//        } catch (Exception e) {
+//        }
         return stringBuilder.toString();
     }
 

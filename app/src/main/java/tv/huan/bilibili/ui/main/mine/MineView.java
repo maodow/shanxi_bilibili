@@ -1,7 +1,6 @@
 package tv.huan.bilibili.ui.main.mine;
 
 import androidx.annotation.Keep;
-import androidx.annotation.NonNull;
 
 import tv.huan.bilibili.base.BaseViewImpl;
 
@@ -12,4 +11,5 @@ public interface MineView extends BaseViewImpl {
 
     void onShow();
 
+    void requestFocusPosition(int position, int id);
 }

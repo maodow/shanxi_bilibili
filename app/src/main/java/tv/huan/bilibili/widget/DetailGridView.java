@@ -176,6 +176,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             } else {
                 // 选集列表
                 if (data.isXuanJi()) {
+                    LogUtil.log("DetailGridView", "startPlayerPosition => 选集列表");
                     DetailTemplateXuanJi presenter = getPresenter(DetailTemplateXuanJi.class);
                     if (null != presenter) {
                         ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanJi.DetailTemplateXuanJiList.class);
@@ -186,6 +187,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
                 }
                 // 选期列表
                 else if (data.isXuanQi()) {
+                    LogUtil.log("DetailGridView", "startPlayerPosition => 选期列表");
                     DetailTemplateXuanQi presenter = getPresenter(DetailTemplateXuanQi.class);
                     if (null != presenter) {
                         ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplateXuanQi.DetailTemplateXuanQiList.class);
@@ -196,6 +198,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
                 }
                 // 电影
                 else {
+                    LogUtil.log("DetailGridView", "startPlayerPosition => 电影");
                     checkPlayerPosition(data, seek, false);
                 }
             }

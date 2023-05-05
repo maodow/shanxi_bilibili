@@ -22,17 +22,10 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
     public static final String BUNDLE_CLASSID = "bundle_classId";
     public static final String BUNDLE_NAME = "bundle_name";
     public static final String BUNDLE_INDEX = "bundle_index";
-    protected static final String BUNDLE_RESEAT = "bundle_reseat";
 
     @Override
     public int initLayout() {
         return R.layout.fragment_general;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getPresenter().requestBookmark();
     }
 
     @Override
@@ -72,11 +65,18 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
     @Override
     public void onShow() {
         setVisibility(getView(), View.VISIBLE);
+        getPresenter().requestTemplateHistory();
         getPresenter().showBackground();
         tv.huan.bilibili.widget.GeneralGridView gridView = findViewById(R.id.general_list);
         gridView.resumePlayer();
         gridView.resumeMessage();
         gridView.scrollToPosition(0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPresenter().requestTemplateHistory();
     }
 
     @Override

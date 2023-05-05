@@ -31,7 +31,7 @@ public final class PlayerViewTemplate extends PlayerView {
         loading.setComponentBackgroundColorInt(Color.parseColor("#000000"));
         addComponent(error);
         // net
-        ComponentNet net = new ComponentNet(getContext());
+        PlayerComponentNet net = new PlayerComponentNet(getContext());
         addComponent(net);
         // init
         PlayerComponentInitTemplate initTemplate = new PlayerComponentInitTemplate(getContext());

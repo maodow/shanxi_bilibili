@@ -554,28 +554,19 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
         }
     }
 
-    protected void requestBookmark() {
-
+    protected void requestTemplateHistory() {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
-                        boolean extra = getView().getBooleanExtra(GeneralFragment.BUNDLE_RESEAT, false);
-                        if (extra) {
-                            boolean visible = getView().isFragmentVisible();
-                            if (visible) {
-                                GeneralGridView gridView = getView().findViewById(R.id.general_list);
-                                boolean containsTemplateHistory = gridView.containsTemplateHistory();
-                                if (containsTemplateHistory) {
-                                    emitter.onNext(true);
-                                } else {
-                                    throw new Exception("not contains");
-                                }
-                            } else {
-                                throw new Exception("not visable");
-                            }
-                        } else {
-                            getView().putBooleanExtra(GeneralFragment.BUNDLE_RESEAT, true);
-                            throw new Exception("not init");
+                        try {
+                            GeneralGridView gridView = getView().findViewById(R.id.general_list);
+                            boolean contains = gridView.containsTemplateHistory();
+                            LogUtil.log("GeneralPresenter => requestTemplateHistory => contains = " + contains);
+                            if (!contains)
+                                throw new Exception("not contains");
+                            emitter.onNext(true);
+                        } catch (Exception e) {
+                            throw e;
                         }
                     }
                 })
