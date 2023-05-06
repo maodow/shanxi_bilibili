@@ -11,5 +11,5 @@ public interface MineView extends BaseViewImpl {
 
     void onShow();
 
-    void requestFocusPosition(int position, int id);
+    void requestFocusPosition(int position);
 }

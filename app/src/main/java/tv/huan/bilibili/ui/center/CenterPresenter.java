@@ -42,6 +42,7 @@ import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallCenterDelBaen;
 import tv.huan.bilibili.bean.format.CallOptBean;
 import tv.huan.bilibili.bean.format.CallPageBean;
+import tv.huan.bilibili.bean.local.LocalBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
@@ -294,55 +295,93 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
     private void delData(@NonNull String cid, @NonNull int position) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
-                int checkedIndex = classLayout.getCheckedIndex();
-                observableEmitter.onNext(checkedIndex == 0);
-            }
-        }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
-            @Override
-            public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean v) {
-                if (v) {
-                    return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
-                } else {
-                    return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
-                }
-            }
-        }).map(new Function<BaseResponsedBean<CallOptBean>, CallCenterDelBaen>() {
-            @Override
-            public CallCenterDelBaen apply(BaseResponsedBean<CallOptBean> resp) throws Exception {
-                try {
-                    boolean succ = resp.getData().isSucc();
-                    if (!succ) throw new Exception("操作失败");
-                    mDatas.remove(position);
-                    CallCenterDelBaen centerDelBaen = new CallCenterDelBaen();
-                    centerDelBaen.setPosition(position);
-                    centerDelBaen.setEmpty(mDatas.isEmpty());
-                    return centerDelBaen;
-                } catch (Exception e) {
-                    throw e;
-                }
-            }
-        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
-            @Override
-            public void accept(Disposable disposable) {
-                getView().showLoading();
-            }
-        }).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) {
-                getView().hideLoading();
-                getView().showToast(throwable);
-            }
-        }).doOnNext(new Consumer<CallCenterDelBaen>() {
-            @Override
-            public void accept(CallCenterDelBaen data) {
-                getView().hideLoading();
-                getView().setVisibility(R.id.center_nodata, data.isEmpty() ? View.VISIBLE : View.GONE);
-                getView().notifyItemRangeRemoved(R.id.center_list, data.getPosition(), 1);
-            }
-        }).subscribe());
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
+                        int checkedIndex = classLayout.getCheckedIndex();
+                        observableEmitter.onNext(checkedIndex == 0);
+                    }
+                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean v) {
+                        if (v) {
+                            return HttpClient.getHttpClient().getHttpApi().deleteBookmark(cid);
+                        } else {
+                            return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
+                        }
+                    }
+                }).map(new Function<BaseResponsedBean<CallOptBean>, CallCenterDelBaen>() {
+                    @Override
+                    public CallCenterDelBaen apply(BaseResponsedBean<CallOptBean> resp) throws Exception {
+                        try {
+                            boolean succ = resp.getData().isSucc();
+                            if (!succ)
+                                throw new Exception("操作失败");
+                            mDatas.remove(position);
+                            CallCenterDelBaen centerDelBaen = new CallCenterDelBaen();
+                            centerDelBaen.setPosition(position);
+                            centerDelBaen.setEmpty(mDatas.isEmpty());
+                            return centerDelBaen;
+                        } catch (Exception e) {
+                            throw e;
+                        }
+                    }
+                })
+                .map(new Function<CallCenterDelBaen, CallCenterDelBaen>() {
+                    @Override
+                    public CallCenterDelBaen apply(CallCenterDelBaen callCenterDelBaen) {
+                        try {
+                            ArrayList<LocalBean> temp = new ArrayList<>();
+                            int size = mDatas.size();
+                            for (int i = 0; i < size; i++) {
+                                if (temp.size() >= 3)
+                                    break;
+                                FavBean.ItemBean t = mDatas.get(i);
+                                if (null == t)
+                                    continue;
+                                LocalBean o = new LocalBean();
+                                o.setCid(t.getCid());
+                                o.setName(t.getAlbumName());
+                                o.setLocal_img(t.getAlbum().getPicture(true));
+                                o.setLocal_status(t.getStatusRec());
+                                temp.add(o);
+                            }
+                            if (null == temp || temp.size() <= 0)
+                                throw new Exception();
+                            String s = new Gson().toJson(temp);
+                            ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
+                            int checkedIndex = classLayout.getCheckedIndex();
+                            if (checkedIndex == 0) {
+                                CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY, s);
+                            } else if (checkedIndex == 1) {
+                                CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR, s);
+                            }
+                        } catch (Exception e) {
+                        }
+                        return callCenterDelBaen;
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                }).doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                        getView().showToast(throwable);
+                    }
+                }).doOnNext(new Consumer<CallCenterDelBaen>() {
+                    @Override
+                    public void accept(CallCenterDelBaen data) {
+                        getView().hideLoading();
+                        getView().setVisibility(R.id.center_nodata, data.isEmpty() ? View.VISIBLE : View.GONE);
+                        getView().notifyItemRangeRemoved(R.id.center_list, data.getPosition(), 1);
+                    }
+                }).subscribe());
     }
 
     protected boolean dispatchKey(KeyEvent event) {
@@ -421,40 +460,5 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
             }
         }
         return false;
-    }
-
-    protected final void onBackPressed() {
-
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> emitter) {
-                try {
-
-                    ArrayList<FavBean.ItemBean> itemBeans = new ArrayList<>();
-                    for (FavBean.ItemBean t : mDatas) {
-                        if (itemBeans.size() >= 3) break;
-                        itemBeans.add(t);
-                    }
-
-                    ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
-                    int checkedIndex = classLayout.getCheckedIndex();
-
-                    if (checkedIndex == 0) {
-                        CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_HISTORY_LOCAL, new Gson().toJson(itemBeans));
-                    } else if (checkedIndex == 1) {
-                        CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_FAVOR_LOCAL, new Gson().toJson(itemBeans));
-                    }
-
-                    emitter.onNext(true);
-                } catch (Exception e) {
-                    emitter.onNext(false);
-                }
-            }
-        }).compose(ComposeSchedulers.io_main()).doOnNext(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean data) {
-                getView().callFinish();
-            }
-        }).subscribe());
     }
 }

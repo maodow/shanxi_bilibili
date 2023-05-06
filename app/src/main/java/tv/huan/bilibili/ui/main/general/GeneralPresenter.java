@@ -178,7 +178,11 @@ public class GeneralPresenter extends BasePresenterImpl<GeneralView> {
 
                         try {
                             List<GetSubChannelsByChannelBean.ClassesBean> classes = resp.getData().getClasses();
+                            if (null == classes)
+                                throw new Exception();
                             int size = classes.size();
+                            if (size <= 0)
+                                throw new Exception();
                             int length = Math.min(size, 5);
                             LinkedList<GetSubChannelsByChannelBean.ListBean.TemplateBean> templateCalsss = new LinkedList<>();
                             for (int n = 0; n < length; n++) {

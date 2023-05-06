@@ -33,6 +33,7 @@ public final class HttpInterceptor extends OkhttpInterceptorStandard {
             HttpUrl build = request.url()
                     .newBuilder()
                     .addQueryParameter("prodId", String.valueOf(BoxUtil.getProdId()))
+                    .addQueryParameter("businessId", String.valueOf(BoxUtil.getProdId()))
                     .addQueryParameter("phoneNumber", BoxUtil.getUserId())
                     .addQueryParameter("uid", BoxUtil.getUserId())
                     .addQueryParameter("userId", BoxUtil.getUserId())

@@ -1,8 +1,6 @@
-package tv.huan.bilibili.widget.player;
+package tv.huan.bilibili.widget.player.component;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,22 +14,21 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 
-public class PlayerComponentInitTemplate extends RelativeLayout implements ComponentApi {
+public class PlayerComponentInitTemplate21 extends RelativeLayout implements ComponentApi {
 
-    public PlayerComponentInitTemplate(@NonNull Context context) {
+    public PlayerComponentInitTemplate21(@NonNull Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.common_player_component_init_template21, this, true);
     }
 
     @Override
     public void callPlayerEvent(@NonNull int playState) {
-        LogUtil.log("PlayerComponentInitTemplate => playState = " + playState);
         switch (playState) {
             case PlayerType.StateType.STATE_INIT:
             case PlayerType.StateType.STATE_KERNEL_STOP:
             case PlayerType.StateType.STATE_CLOSE:
             case PlayerType.StateType.STATE_PAUSE:
-                LogUtil.log("PlayerComponentInitTemplate[show] => playState = " + playState);
+//                LogUtil.log("PlayerComponentInitTemplate21[show] => playState = " + playState);
                 show();
                 break;
             case PlayerType.StateType.STATE_ERROR:
@@ -39,7 +36,7 @@ public class PlayerComponentInitTemplate extends RelativeLayout implements Compo
             case PlayerType.StateType.STATE_START:
             case PlayerType.StateType.STATE_RESUME:
             case PlayerType.StateType.STATE_KERNEL_RESUME:
-                LogUtil.log("PlayerComponentInitTemplate[gone] => playState = " + playState);
+//                LogUtil.log("PlayerComponentInitTemplate21[gone] => playState = " + playState);
                 gone();
                 break;
         }
@@ -49,7 +46,9 @@ public class PlayerComponentInitTemplate extends RelativeLayout implements Compo
     public void gone() {
         try {
             findViewById(R.id.common_player_component_init_template21_img).setVisibility(View.GONE);
+            LogUtil.log("PlayerComponentInitTemplate21 => gone => succ");
         } catch (Exception e) {
+            LogUtil.log("PlayerComponentInitTemplate21 => gone => " + e.getMessage());
         }
     }
 
@@ -58,21 +57,23 @@ public class PlayerComponentInitTemplate extends RelativeLayout implements Compo
         try {
             bringToFront();
             findViewById(R.id.common_player_component_init_template21_img).setVisibility(View.VISIBLE);
+            LogUtil.log("PlayerComponentInitTemplate21 => show => succ");
         } catch (Exception e) {
+            LogUtil.log("PlayerComponentInitTemplate21 => show => " + e.getMessage());
         }
     }
 
-    public final void showImage(@NonNull String imgUrl) {
+    @Override
+    public void setComponentImageUrl(@NonNull String url) {
         try {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    ImageView imageView = findViewById(R.id.common_player_component_init_template21_img);
-                    GlideUtils.loadHz(imageView.getContext(), imgUrl, imageView);
-                }
-            });
+            gone();
+            ImageView imageView = findViewById(R.id.common_player_component_init_template21_img);
+            imageView.setImageDrawable(null);
+            LogUtil.log("PlayerComponentInitTemplate21 => setComponentImageUrl => imageView = " + imageView + ", imgUrl = " + url);
+            GlideUtils.loadHz(imageView.getContext(), url, imageView);
+            show();
         } catch (Exception e) {
-            LogUtil.log("PlayerComponentInitTemplate => showImage => " + e.getMessage());
+            LogUtil.log("PlayerComponentInitTemplate21 => setComponentImageUrl => " + e.getMessage());
         }
     }
 }

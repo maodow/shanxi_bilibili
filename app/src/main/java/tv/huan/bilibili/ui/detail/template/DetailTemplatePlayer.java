@@ -29,8 +29,8 @@ import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.common.CommonPicView;
-import tv.huan.bilibili.widget.player.PlayerComponentInit;
-import tv.huan.bilibili.widget.player.PlayerComponentVip;
+import tv.huan.bilibili.widget.player.component.PlayerComponentInit;
+import tv.huan.bilibili.widget.player.component.PlayerComponentVip;
 import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 

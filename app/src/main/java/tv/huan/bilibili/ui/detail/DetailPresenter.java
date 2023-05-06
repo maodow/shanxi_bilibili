@@ -8,10 +8,12 @@ import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ItemBridgeAdapter;
 import androidx.leanback.widget.VerticalGridView;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -40,6 +42,7 @@ import tv.huan.bilibili.bean.base.BaseAuthorizationBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallDetailBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
+import tv.huan.bilibili.bean.local.LocalBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateFavor;
 import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
@@ -328,7 +331,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
 
                         // 收藏状态
                         try {
-                            detailBean.setFavor(data.getData().isFavor());
+                            detailBean.setFavor(data.getData().isSucc());
                         } catch (Exception e) {
                         }
                         return detailBean;
@@ -477,81 +480,211 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
     protected void addFavor(@NonNull String cid, @NonNull String recClassId) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                observableEmitter.onNext(true);
-            }
-        }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavorBean>>>() {
-            @Override
-            public Observable<BaseResponsedBean<FavorBean>> apply(Boolean aBoolean) {
-                return HttpClient.getHttpClient().getHttpApi().addFavorite(cid, recClassId);
-            }
-        }).map(new Function<BaseResponsedBean<FavorBean>, Boolean>() {
-            @Override
-            public Boolean apply(BaseResponsedBean<FavorBean> favorBeanBaseResponsedBean) {
-                try {
-                    boolean favor = favorBeanBaseResponsedBean.getData().isFavor();
-                    CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_FAVOR_NET, "1");
-                    return favor;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
-            @Override
-            public void accept(Disposable disposable) {
-                getView().showLoading();
-            }
-        }).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) {
-                getView().hideLoading();
-            }
-        }).doOnNext(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) {
-                getView().hideLoading();
-                getView().updateFavor(true);
-            }
-        }).subscribe());
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        observableEmitter.onNext(true);
+                    }
+                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavorBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<FavorBean>> apply(Boolean aBoolean) {
+                        return HttpClient.getHttpClient().getHttpApi().addFavorite(cid, recClassId);
+                    }
+                })
+                // 数据处理
+                .map(new Function<BaseResponsedBean<FavorBean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseResponsedBean<FavorBean> response) {
+                        try {
+                            FavorBean data = response.getData();
+                            if (null == data)
+                                throw new Exception();
+                            return data.isSucc();
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    }
+                })
+                // 查询媒资详情
+                .flatMap(new Function<Boolean, ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>>>() {
+                    @Override
+                    public ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>> apply(Boolean data) {
+                        if (data) {
+                            return HttpClient.getHttpClient().getHttpApi().getMediasByCid2(cid, null);
+                        } else {
+                            return Observable.create(new ObservableOnSubscribe<BaseResponsedBean<GetMediasByCid2Bean>>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<BaseResponsedBean<GetMediasByCid2Bean>> emitter) {
+                                    BaseResponsedBean baseResponsedBean = new BaseResponsedBean();
+                                    emitter.onNext(baseResponsedBean);
+                                }
+                            });
+                        }
+                    }
+                })
+                // 数据处理 => 收藏记录
+                .map(new Function<BaseResponsedBean<GetMediasByCid2Bean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseResponsedBean<GetMediasByCid2Bean> response) {
+                        try {
+                            // 1
+                            String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR);
+                            Type type = new TypeToken<List<LocalBean>>() {
+                            }.getType();
+                            List<LocalBean> list = new Gson().fromJson(s, type);
+                            // 2
+                            MediaDetailBean album = response.getData().getAlbum();
+                            String name = album.getName();
+                            String picture = album.getPicture(true);
+                            String cid1 = album.getCid();
+                            LocalBean localBean = new LocalBean();
+                            localBean.setLocal_img(picture);
+                            localBean.setName(name);
+                            localBean.setCid(cid1);
+                            // 3
+                            list.add(0, localBean);
+                            String s1 = new Gson().toJson(list);
+                            // 4
+                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR, s1);
+                            LogUtil.log("DetailPresenter => addFavor => cache succ");
+                        } catch (Exception e) {
+                            LogUtil.log("DetailPresenter => addFavor => cache fail");
+                        }
+                        try {
+                            GetMediasByCid2Bean data = response.getData();
+                            if (null == data)
+                                throw new Exception();
+                            return true;
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                }).doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                    }
+                }).doOnNext(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) {
+                        getView().hideLoading();
+                        getView().updateFavor(true);
+                    }
+                }).subscribe());
     }
 
     protected void cancleFavor(@NonNull String cid) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
-                observableEmitter.onNext(true);
-            }
-        }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
-            @Override
-            public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean aBoolean) {
-                return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
-            }
-        }).map(new Function<BaseResponsedBean<CallOptBean>, Boolean>() {
-            @Override
-            public Boolean apply(BaseResponsedBean<CallOptBean> resp) {
-                boolean favor = resp.getData().isSucc();
-                CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_FAVOR_NET, "1");
-                return favor;
-            }
-        }).delay(40, TimeUnit.MILLISECONDS).compose(ComposeSchedulers.io_main()).doOnSubscribe(new Consumer<Disposable>() {
-            @Override
-            public void accept(Disposable disposable) {
-                getView().showLoading();
-            }
-        }).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) {
-                getView().hideLoading();
-            }
-        }).doOnNext(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) {
-                getView().hideLoading();
-                getView().updateFavor(false);
-            }
-        }).subscribe());
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> observableEmitter) {
+                        observableEmitter.onNext(true);
+                    }
+                }).flatMap(new Function<Boolean, Observable<BaseResponsedBean<CallOptBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<CallOptBean>> apply(Boolean aBoolean) {
+                        return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
+                    }
+                })
+                // 数据处理
+                .map(new Function<BaseResponsedBean<CallOptBean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseResponsedBean<CallOptBean> response) {
+                        try {
+                            CallOptBean data = response.getData();
+                            if (null == data)
+                                throw new Exception();
+                            return data.isSucc();
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    }
+                })
+                // 查询媒资详情
+                .flatMap(new Function<Boolean, ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>>>() {
+                    @Override
+                    public ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>> apply(Boolean data) {
+                        if (data) {
+                            return HttpClient.getHttpClient().getHttpApi().getMediasByCid2(cid, null);
+                        } else {
+                            return Observable.create(new ObservableOnSubscribe<BaseResponsedBean<GetMediasByCid2Bean>>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<BaseResponsedBean<GetMediasByCid2Bean>> emitter) {
+                                    BaseResponsedBean baseResponsedBean = new BaseResponsedBean();
+                                    emitter.onNext(baseResponsedBean);
+                                }
+                            });
+                        }
+                    }
+                })
+                // 数据处理 => 收藏记录
+                .map(new Function<BaseResponsedBean<GetMediasByCid2Bean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseResponsedBean<GetMediasByCid2Bean> response) {
+                        try {
+                            // 1
+                            String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR);
+                            Type type = new TypeToken<List<LocalBean>>() {
+                            }.getType();
+                            List<LocalBean> list = new Gson().fromJson(s, type);
+                            // 2
+                            MediaDetailBean album = response.getData().getAlbum();
+                            // 3
+                            int index = -1;
+                            for (LocalBean o : list) {
+                                if (null == o)
+                                    continue;
+                                if (o.getCid().equals(album.getCid())) {
+                                    index = list.indexOf(o);
+                                    break;
+                                }
+                            }
+                            // 4
+                            if (index != -1) {
+                                list.remove(index);
+                            }
+                            String s1 = new Gson().toJson(list);
+                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR, s1);
+                            LogUtil.log("DetailPresenter => cancleFavor => cache succ");
+                        } catch (Exception e) {
+                            LogUtil.log("DetailPresenter => cancleFavor => cache fail");
+                        }
+                        try {
+                            GetMediasByCid2Bean data = response.getData();
+                            if (null == data)
+                                throw new Exception();
+                            return true;
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
+                .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                }).doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().hideLoading();
+                    }
+                }).doOnNext(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) {
+                        getView().hideLoading();
+                        getView().updateFavor(false);
+                    }
+                }).subscribe());
     }
 
     protected boolean dispatchEvent(KeyEvent event) {
@@ -639,7 +772,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         int endFlag = isEnd ? 0 : 1;
                         uploadPlayHistory(cid, vid, classId, pos, endFlag, duration, position);
                         // 3
-                        CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_HISTORY_NET, "1");
+//                        CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_HISTORY_NET, "1");
                         // 4
                         emitter.onNext(true);
                     }

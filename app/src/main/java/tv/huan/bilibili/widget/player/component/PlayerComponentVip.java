@@ -1,4 +1,4 @@
-package tv.huan.bilibili.widget.player;
+package tv.huan.bilibili.widget.player.component;
 
 import android.content.Context;
 import android.util.AttributeSet;

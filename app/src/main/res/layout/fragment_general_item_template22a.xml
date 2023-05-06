@@ -18,7 +18,7 @@
         android:focusable="true"
         app:rl_rate_width="1.78">
 
-        <tv.huan.bilibili.widget.player.PlayerViewTemplate
+        <tv.huan.bilibili.widget.player.PlayerViewTemplate22
             android:id="@+id/general_template22_player"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

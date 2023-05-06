@@ -2,20 +2,43 @@ package tv.huan.bilibili.widget.player;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.AttributeSet;
+
+import androidx.annotation.RequiresApi;
 
 import lib.kalu.mediaplayer.core.component.ComponentError;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
-import lib.kalu.mediaplayer.core.component.ComponentNet;
 import lib.kalu.mediaplayer.core.component.ComponentPause;
 import lib.kalu.mediaplayer.core.component.ComponentSeek;
 import lib.kalu.mediaplayer.widget.player.PlayerLayout;
 import tv.huan.bilibili.utils.ADUtil;
+import tv.huan.bilibili.widget.player.component.PlayerComponentADPause;
+import tv.huan.bilibili.widget.player.component.PlayerComponentADStart;
+import tv.huan.bilibili.widget.player.component.PlayerComponentInit;
+import tv.huan.bilibili.widget.player.component.PlayerComponentNet;
+import tv.huan.bilibili.widget.player.component.PlayerComponentVip;
 
 public class PlayerView extends PlayerLayout {
 
+    public PlayerView(Context context) {
+        super(context);
+        init();
+    }
+
     public PlayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
+    }
+
+    public PlayerView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public PlayerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
@@ -25,7 +48,7 @@ public class PlayerView extends PlayerLayout {
         ADUtil.adRelease();
     }
 
-    protected void init() {
+    private void init() {
         // loading
         ComponentLoading loading = new ComponentLoading(getContext());
         loading.setComponentBackgroundColorInt(Color.parseColor("#000000"));

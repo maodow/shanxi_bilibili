@@ -16,10 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.leanback.presenter.ListTvRowHeadPresenter;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
+import lib.kalu.mediaplayer.widget.player.PlayerLayout;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
@@ -28,9 +30,7 @@ import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate;
-import tv.huan.bilibili.widget.player.PlayerView;
-import tv.huan.bilibili.widget.player.PlayerViewTemplate;
+import tv.huan.bilibili.widget.player.component.PlayerComponentInitTemplate21;
 
 public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
@@ -87,44 +87,139 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
     }
 
     @Override
-    protected void onFocusItemHolder(@NonNull Context context, @NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, boolean hasFocus) {
+    protected void onCreateHeadHolder(@NonNull Context context, @NonNull View headView, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> data) {
+        try {
+            GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = data.get(0);
+            switchHead(headView, true, templateBean);
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    protected void onCreateItemHolder(@NonNull Context context, @NonNull View headView, @NonNull View itemView, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> data, @NonNull RecyclerView.ViewHolder holder) {
+        try {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = holder.getAbsoluteAdapterPosition();
+                    if (position >= 0) {
+                        GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = data.get(position);
+                        JumpUtil.next(view.getContext(), templateBean);
+                    }
+                }
+            });
+        } catch (Exception e) {
+        }
+        try {
+            itemView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    int position = holder.getAbsoluteAdapterPosition();
+                    if (position >= 0) {
+                        GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = data.get(position);
+                        switchHead(headView, hasFocus, templateBean);
+                    }
+                }
+            });
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    protected void onBindItemHolder(@NonNull Context context, @NonNull View headView, @NonNull View itemView, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean item, @NonNull int position) {
+        try {
+            TextView textView = itemView.findViewById(R.id.common_poster_name);
+            textView.setText(item.getName());
+        } catch (Exception e) {
+        }
+        try {
+            ImageView imageView = itemView.findViewById(R.id.common_poster_img);
+            GlideUtils.loadHz(imageView.getContext(), item.getPicture(true), imageView);
+        } catch (Exception e) {
+        }
+        try {
+            ImageView imageView = itemView.findViewById(R.id.common_poster_vip);
+            GlideUtils.loadVt(imageView.getContext(), item.getVipUrl(), imageView);
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    protected int initLayout() {
+        return R.layout.fragment_general_item_template21b;
+    }
+
+    @Override
+    protected int initContent() {
+        return R.layout.fragment_general_item_template21a;
+    }
+
+    @Override
+    protected int initContentMarginBottom(Context context) {
+        return context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
+    }
+
+    public void resumePlayer(View viewGroup) {
+        LogUtil.log("GeneralTemplate21 => resumePlayer =>");
+        try {
+            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template21_player);
+            playerView.setPlayWhenReady(true);
+            playerView.resume();
+        } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => resumePlayer => " + e.getMessage());
+        }
+    }
+
+    public void pausePlayer(View viewGroup) {
+        LogUtil.log("GeneralTemplate21 => pausePlayer =>");
+        try {
+            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template21_player);
+            playerView.pause();
+        } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => pausePlayer => " + e.getMessage());
+        }
+    }
+
+    public void startPlayer(View viewGroup, String s) {
+        try {
+            if (null == s || s.length() <= 0)
+                throw new Exception("url error: null");
+            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template21_player);
+            StartBuilder.Builder builder = new StartBuilder.Builder();
+            builder.setLoop(true);
+            playerView.start(builder.build(), s);
+        } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => startPlayer => " + e.getMessage());
+        }
+    }
+
+    private void startHuawei(View viewGroup, String code) {
+        try {
+            Activity activity = WrapperUtil.getWrapperActivity(viewGroup.getContext());
+            if (null != activity && activity instanceof MainActivity) {
+                ((MainActivity) activity).huaweiAuth(GeneralTemplate21.class, GeneralTemplate21.GeneralTemplate21List.class, code);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void switchHead(@NonNull View view,
+                            @NonNull boolean hasFocus,
+                            @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean) {
+
         try {
             TextView textView = view.findViewById(R.id.common_poster_name);
             textView.setEllipsize(hasFocus ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
         } catch (Exception e) {
         }
-    }
-
-    @Override
-    protected void onClickItemHolder(@NonNull Context context, @NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int i) {
         try {
-            JumpUtil.next(view.getContext(), templateBean);
+            if (hasFocus) {
+                resumePlayer((View) view.getParent().getParent());
+            } else {
+                pausePlayer((View) view.getParent().getParent());
+            }
         } catch (Exception e) {
         }
-    }
-
-    @Override
-    protected void onBindItemHolder(@NonNull Context context, @NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position) {
-        try {
-            TextView textView = view.findViewById(R.id.common_poster_name);
-            textView.setText(templateBean.getName());
-        } catch (Exception e) {
-        }
-        try {
-            ImageView imageView = view.findViewById(R.id.common_poster_img);
-            GlideUtils.loadHz(imageView.getContext(), templateBean.getPicture(true), imageView);
-        } catch (Exception e) {
-        }
-        try {
-            ImageView imageView = view.findViewById(R.id.common_poster_vip);
-            GlideUtils.loadVt(imageView.getContext(), templateBean.getVipUrl(), imageView);
-        } catch (Exception e) {
-        }
-    }
-
-    @Override
-    protected void onBindHeadHolder(@NonNull Context context, @NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position) {
-        LogUtil.log("GeneralTemplate21 => onBindHeadHolder => position = " + position);
 
         try {
             ImageView imageView = view.findViewById(R.id.general_template21_poster);
@@ -165,109 +260,43 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
         }
 
         try {
-            PlayerViewTemplate playerView = view.findViewById(R.id.general_template21_player);
-            PlayerComponentInitTemplate component = playerView.findComponent(PlayerComponentInitTemplate.class);
-            if (null == component)
+            PlayerLayout playerView = view.findViewById(R.id.general_template21_player);
+            PlayerComponentInitTemplate21 initTemplate21 = playerView.findComponent(PlayerComponentInitTemplate21.class);
+            if (null == initTemplate21)
                 throw new Exception("component error: null");
             String picture = templateBean.getPicture(true);
-            component.showImage(picture);
+            LogUtil.log("GeneralTemplate21 => showImage => picture = " + picture);
+            initTemplate21.setComponentImageUrl(picture);
+            LogUtil.log("GeneralTemplate21 => showImage => succ");
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => showImage => " + e.getMessage());
         }
 
         try {
-            pausePlayer(view);
+            PlayerLayout playerView = view.findViewById(R.id.general_template21_player);
+            playerView.pause();
+            playerView.stop();
+            playerView.release();
+            LogUtil.log("GeneralTemplate21 => releasePlayer => succ");
         } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => releasePlayer => " + e.getMessage());
         }
 
-        try {
-            stopPlayer(view);
-        } catch (Exception e) {
-        }
+        if (!hasFocus)
+            return;
 
         if (BuildConfig.HUAN_HUAWEI_AUTH) {
             Message message = new Message();
             message.what = 20001;
             message.obj = new Object[]{view, templateBean.getHuaweiId()};
-            mHandler.removeMessages(20001);
-            mHandler.removeMessages(20002);
+            mHandler.removeCallbacksAndMessages(null);
             mHandler.sendMessageDelayed(message, 4000);
         } else {
             Message message = new Message();
             message.what = 20002;
             message.obj = new Object[]{view, BoxUtil.getTestVideoUrl()};
-            mHandler.removeMessages(20001);
-            mHandler.removeMessages(20002);
+            mHandler.removeCallbacksAndMessages(null);
             mHandler.sendMessageDelayed(message, 4000);
-        }
-    }
-
-    @Override
-    protected int initLayout() {
-        return R.layout.fragment_general_item_template21b;
-    }
-
-    @Override
-    protected int initContent() {
-        return R.layout.fragment_general_item_template21a;
-    }
-
-    @Override
-    protected int initContentMarginBottom(Context context) {
-        return context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
-    }
-
-    private void stopPlayer(View inflate) {
-        try {
-            PlayerView playerView = inflate.findViewById(R.id.general_template21_player);
-            playerView.stop();
-            playerView.release();
-        } catch (Exception e) {
-            LogUtil.log("GeneralTemplate21 => stopPlayer => " + e.getMessage());
-        }
-    }
-
-    public void pausePlayer(View viewGroup) {
-        LogUtil.log("GeneralTemplate21 => pausePlayer =>");
-        try {
-            PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
-            playerView.setPlayWhenReady(false);
-            playerView.pause();
-        } catch (Exception e) {
-            LogUtil.log("GeneralTemplate21 => pausePlayer => " + e.getMessage());
-        }
-    }
-
-    public void resumePlayer(View viewGroup) {
-        LogUtil.log("GeneralTemplate21 => resumePlayer =>");
-        try {
-            PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
-            playerView.setPlayWhenReady(true);
-            playerView.resume();
-        } catch (Exception e) {
-            LogUtil.log("GeneralTemplate21 => resumePlayer => " + e.getMessage());
-        }
-    }
-
-    public void startPlayer(View viewGroup, String s) {
-        try {
-            if (null == s || s.length() <= 0)
-                throw new Exception("url error: null");
-            PlayerView playerView = viewGroup.findViewById(R.id.general_template21_player);
-            StartBuilder.Builder builder = new StartBuilder.Builder();
-            builder.setLoop(true);
-            playerView.start(builder.build(), s);
-        } catch (Exception e) {
-            LogUtil.log("GeneralTemplate21 => startPlayer => " + e.getMessage());
-        }
-    }
-
-    private void startHuawei(View viewGroup, String code) {
-        try {
-            Activity activity = WrapperUtil.getWrapperActivity(viewGroup.getContext());
-            if (null != activity && activity instanceof MainActivity) {
-                ((MainActivity) activity).huaweiAuth(GeneralTemplate21.class, GeneralTemplate21.GeneralTemplate21List.class, code);
-            }
-        } catch (Exception e) {
         }
     }
 

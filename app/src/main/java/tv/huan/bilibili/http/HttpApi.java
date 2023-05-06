@@ -27,7 +27,6 @@ import tv.huan.bilibili.bean.SearchAlbumByTypeNews;
 import tv.huan.bilibili.bean.SearchBean;
 import tv.huan.bilibili.bean.SpecialBean;
 import tv.huan.bilibili.bean.base.BaseAuthorizationBean;
-import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallOptBean;
 
@@ -37,6 +36,9 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("log/report")
     Observable<BaseResponsedBean<Object>> logReport(@Body RequestBody requestBody);
+
+    @POST("firstLogin/insertFirstLogin")
+    Observable<BaseResponsedBean<Object>> insertFirstLogin();
 
     // 退出挽留
     @GET("apk/wanLiu")

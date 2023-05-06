@@ -66,6 +66,8 @@ android {
             applicationIdSuffix ".yanshi"
             versionNameSuffix ".yanshi"
             manifestPlaceholders = [design_width_in_dp_value: "960", design_height_in_dp_value: "540"]
+            buildConfigField("String", "HUAN_JSON_LOCAL_HISTORY", "\"huan_json_local_history\"")
+            buildConfigField("String", "HUAN_JSON_LOCAL_FAVOR", "\"huan_json_local_favor\"")
             buildConfigField("int", "HUAN_TYPE_GETFISH", "310")//垂钓
             buildConfigField("int", "HUAN_TYPE_LIFE", "309")//茶文化
             buildConfigField("int", "HUAN_TYPE_SPORTS", "308")//体育
@@ -89,12 +91,6 @@ android {
             buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false") // 测试模板1-22
             buildConfigField("boolean", "HUAN_TEST_WHITE_VIP", "true")  // 详情vip按钮
             buildConfigField("String", "HUAN_API", "\"http://123.59.196.225:8162/mediaApi/\"")
-
-            // cache
-            buildConfigField("String", "HUAN_CACHE_UPDATE_HISTORY_LOCAL", "\"huan_cache_update_history_local\"")
-            buildConfigField("String", "HUAN_CACHE_UPDATE_HISTORY_NET", "\"huan_cache_update_history_net\"")
-            buildConfigField("String", "HUAN_CACHE_UPDATE_FAVOR_LOCAL", "\"huan_cache_update_favor_local\"")
-            buildConfigField("String", "HUAN_CACHE_UPDATE_FAVOR_NET", "\"huan_cache_update_favor_net\"")
         }
         // 黑龙江
         Heilongjinag {
@@ -102,6 +98,8 @@ android {
             applicationIdSuffix ".heilongjiang"
             versionNameSuffix ".heilongjiang"
             manifestPlaceholders = [design_width_in_dp_value: "960", design_height_in_dp_value: "540"]
+            buildConfigField("String", "HUAN_JSON_LOCAL_HISTORY", "\"huan_json_local_history\"")
+            buildConfigField("String", "HUAN_JSON_LOCAL_FAVOR", "\"huan_json_local_favor\"")
             buildConfigField("int", "HUAN_TYPE_GETFISH", "310")//垂钓
             buildConfigField("int", "HUAN_TYPE_LIFE", "309")//茶文化
             buildConfigField("int", "HUAN_TYPE_SPORTS", "308")//体育
@@ -119,17 +117,12 @@ android {
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false") // 换肤skin => 暂无
             buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "false") // 华为鉴权播放开关
-            buildConfigField("boolean", "HUAN_CHECK_CMCC_INIT", "true") // 移动sdk
-            buildConfigField("boolean", "HUAN_CHECK_USER_ID", "true") // 检测userId, 开启获取失败禁止进去主页
+            buildConfigField("boolean", "HUAN_CHECK_CMCC_INIT", "false") // 移动sdk
+            buildConfigField("boolean", "HUAN_CHECK_USER_ID", "false") // 检测userId, 开启获取失败禁止进去主页
             buildConfigField("boolean", "HUAN_CHECK_VIP", "true") // 检测vip
             buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false") // 测试模板1-22
             buildConfigField("boolean", "HUAN_TEST_WHITE_VIP", "false")  // 详情vip按钮
             buildConfigField("String", "HUAN_API", "\"http://36.138.129.3:8082/mediaApi/\"")
-            // cache
-            buildConfigField("String", "HUAN_CACHE_UPDATE_HISTORY_LOCAL", "\"huan_cache_update_history_local\"")
-            buildConfigField("String", "HUAN_CACHE_UPDATE_HISTORY_NET", "\"huan_cache_update_history_net\"")
-            buildConfigField("String", "HUAN_CACHE_UPDATE_FAVOR_LOCAL", "\"huan_cache_update_favor_local\"")
-            buildConfigField("String", "HUAN_CACHE_UPDATE_FAVOR_NET", "\"huan_cache_update_favor_net\"")
         }
     }
 
@@ -168,13 +161,13 @@ dependencies {
     // mvp
     api files('libs/lib_frame_mvp_release_20230331.aar')
     // leanback
-    api files('libs/lib_leanback_r1-2-0-alpha02_release_20230428.aar')
+    api files('libs/lib_leanback_r1-2-0-alpha02_release_20230506.aar')
     // keyboard
     // api project(path: ':module_keyboard')
     api files('libs/lib_keyboard_release_20230303.aar')
     // player
-    api files('libs/lib_mediaplayer_ui_release_20230505.aar')
-//    api files('libs/lib_mediaplayer_exo_r2.18.5_ff4.4_audio_release_20230505.aar')
+    api files('libs/lib_mediaplayer_ui_release_20230506.aar')
+    api files('libs/lib_mediaplayer_exo_r2.18.5_ff4.4_audio_release_20230505.aar')
     // heilongjiang
     // api project(path: ':huan_heilongjiang')
     api files('libs/lib_huan_heilongjiang_release_20230504.aar')

@@ -19,6 +19,7 @@ import java.util.List;
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.leanback.presenter.ListTvGridPresenter;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
+import lib.kalu.mediaplayer.widget.player.PlayerLayout;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
@@ -27,9 +28,7 @@ import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.bilibili.widget.player.PlayerComponentInitTemplate;
-import tv.huan.bilibili.widget.player.PlayerView;
-import tv.huan.bilibili.widget.player.PlayerViewTemplate;
+import tv.huan.bilibili.widget.player.component.PlayerComponentInitTemplate22;
 
 public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
 
@@ -125,7 +124,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                     @Override
                     public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                         if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                            PlayerView playerView = view.findViewById(R.id.general_template22_player);
+                            PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
                             playerView.pause(true);
                         }
                         return false;
@@ -134,7 +133,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                 view.findViewById(R.id.general_template22_root).setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View view, boolean b) {
-                        PlayerView playerView = view.findViewById(R.id.general_template22_player);
+                        PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
                         if (b) {
                             playerView.resume(true);
                         }
@@ -151,8 +150,8 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         // player
         if (viewType == 22_1) {
             try {
-                PlayerViewTemplate playerView = view.findViewById(R.id.general_template22_player);
-                PlayerComponentInitTemplate component = playerView.findComponent(PlayerComponentInitTemplate.class);
+                PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
+                PlayerComponentInitTemplate22 component = playerView.findComponent(PlayerComponentInitTemplate22.class);
                 if (null != component) {
                     component.showImage(templateBean.getPicture(true));
                 }
@@ -231,7 +230,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
     public void pausePlayer(View viewGroup) {
         LogUtil.log("GeneralTemplate22 => pausePlayer =>");
         try {
-            PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);
+            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
             playerView.setPlayWhenReady(false);
             playerView.pause();
         } catch (Exception e) {
@@ -242,7 +241,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
     public void resumePlayer(View viewGroup) {
         LogUtil.log("GeneralTemplate22 => resumePlayer =>");
         try {
-            PlayerView playerView = viewGroup.findViewById(R.id.general_template22_player);
+            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
             playerView.setPlayWhenReady(true);
             playerView.resume();
         } catch (Exception e) {
@@ -254,7 +253,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         try {
             if (null == s || s.length() <= 0)
                 throw new Exception("url error: null");
-            PlayerView playerView = inflate.findViewById(R.id.general_template22_player);
+            PlayerLayout playerView = inflate.findViewById(R.id.general_template22_player);
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(true);
             builder.setDelay(3000);

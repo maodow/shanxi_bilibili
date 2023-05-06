@@ -31,8 +31,7 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
     @Override
     public void onResume() {
         super.onResume();
-        getPresenter().updateFavor();
-        getPresenter().updateHistory();
+        getPresenter().updateCard();
     }
 
     @Override
@@ -43,12 +42,11 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
     @Override
     public void onShow() {
         setVisibility(getView(), View.VISIBLE);
-        getPresenter().updateFavor();
-        getPresenter().updateHistory();
+        getPresenter().updateCard();
     }
 
     @Override
-    public void requestFocusPosition(int position, int id) {
+    public void requestFocusPosition(int position) {
         Toast.makeText(getContext(), "刷新焦点 => " + position, Toast.LENGTH_SHORT).show();
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
@@ -56,7 +54,6 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
                 RecyclerViewVertical recyclerView = getView().findViewById(R.id.mine_list);
                 RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
                 viewHolder.itemView.requestFocus();
-//                recyclerView.requestFocusChild(position, id);
             }
         }, 100);
     }

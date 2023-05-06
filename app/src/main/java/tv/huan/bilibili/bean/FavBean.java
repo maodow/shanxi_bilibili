@@ -62,38 +62,10 @@ public class FavBean implements Serializable {
 
         private String albumName;
 
-        private int tempType;
         private boolean tempDel;
-        private String tempBanner;
-        private int tempDrawable;
-        private int tempPosition = -1;
-
-        public int getTempPosition() {
-            return tempPosition;
-        }
-
-        public void setTempPosition(int tempPosition) {
-            this.tempPosition = tempPosition;
-        }
-
-        public int getTempDrawable() {
-            return tempDrawable;
-        }
-
-        public void setTempDrawable(int tempDrawable) {
-            this.tempDrawable = tempDrawable;
-        }
 
         public String getAlbumName() {
             return albumName;
-        }
-
-        public int getTempType() {
-            return tempType;
-        }
-
-        public void setTempType(int tempType) {
-            this.tempType = tempType;
         }
 
         public boolean isTempDel() {
@@ -102,14 +74,6 @@ public class FavBean implements Serializable {
 
         public void setTempDel(boolean tempDel) {
             this.tempDel = tempDel;
-        }
-
-        public String getTempBanner() {
-            return tempBanner;
-        }
-
-        public void setTempBanner(String tempBanner) {
-            this.tempBanner = tempBanner;
         }
 
         public void setAlbumName(String albumName) {
