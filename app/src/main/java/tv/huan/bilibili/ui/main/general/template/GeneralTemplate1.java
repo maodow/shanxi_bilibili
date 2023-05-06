@@ -13,8 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,7 +152,7 @@ public final class GeneralTemplate1 extends ListTvGridPresenter<GetSubChannelsBy
             }
             // 3
             TextView vDesc = v.findViewById(R.id.album_item_template01_desc);
-            vDesc.setText(templateBean.getName());
+            vDesc.setText(templateBean.getBrief());
             vDesc.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
             // 4
             try {

@@ -92,7 +92,7 @@ public class DetailTemplateXuanQi extends ListTvEpisodesSingleGridPresenter<Medi
             if (playingPosition)
                 throw new Exception();
             ((DetailActivity) activity).updatePlayerPosition(t);
-            ((DetailActivity) activity).startPlayerPosition(t,position, 0, true);
+            ((DetailActivity) activity).startPlayerPosition(t, position, t.getSeek(), true);
         } catch (Exception e) {
         }
     }

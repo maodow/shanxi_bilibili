@@ -215,26 +215,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                             detailBean = new CallDetailBean();
                         }
-                        // 填充数据
-                        try {
-                            List<MediaBean> medias = detailBean.getMedias();
-                            if (null == medias)
-                                throw new Exception();
-                            int size = medias.size();
-                            if (size <= 0)
-                                throw new Exception();
-                            int playType = detailBean.getAlbum().getPlayType();
-                            int type = detailBean.getAlbum().getType();
-                            for (int i = 0; i < size; i++) {
-                                MediaBean mediaBean = medias.get(i);
-                                if (null == mediaBean)
-                                    continue;
-                                mediaBean.setTempPlayType(playType);
-                                mediaBean.setTempType(type);
-                            }
-                        } catch (Exception e) {
-                            LogUtil.log("DetailPresenter => request => " + e.getMessage());
-                        }
                         // 起播数据pos
                         try {
                             GetLastBookmark data = response.getData();
@@ -264,6 +244,30 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                             LogUtil.log("DetailPresenter => request => " + e.getMessage());
                             detailBean.setPos(0);
+                        }
+                        // 填充数据
+                        try {
+                            List<MediaBean> medias = detailBean.getMedias();
+                            if (null == medias)
+                                throw new Exception();
+                            int size = medias.size();
+                            if (size <= 0)
+                                throw new Exception();
+                            int playType = detailBean.getAlbum().getPlayType();
+                            int type = detailBean.getAlbum().getType();
+                            int pos = detailBean.getPos();
+                            long seek = detailBean.getSeek();
+                            for (int i = 0; i < size; i++) {
+                                MediaBean mediaBean = medias.get(i);
+                                if (null == mediaBean)
+                                    continue;
+                                mediaBean.setTempPlayType(playType);
+                                mediaBean.setTempType(type);
+                                mediaBean.setPos(i);
+                                mediaBean.setSeek(i == pos ? seek : 0);
+                            }
+                        } catch (Exception e) {
+                            LogUtil.log("DetailPresenter => request => " + e.getMessage());
                         }
                         return detailBean;
                     }
@@ -604,7 +608,8 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     long duration = gridView.getPlayerDuraion();
                     getView().putLongExtra(DetailActivity.INTENT_CUR_POSITION, position);
                     getView().putLongExtra(DetailActivity.INTENT_CUR_DURATION, duration);
-                    getView().callOnBackPressed();
+                    releasePlayer();
+                    onBackPressed();
                     return true;
                 }
             } catch (Exception e) {
@@ -613,55 +618,44 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         return false;
     }
 
-//    protected int getPlayerNextPosition() {
-//        try {
-//            DetailGridView gridView = getView().findViewById(R.id.detail_list);
-//            boolean playingEnd = gridView.isPlayingEnd();
-//            if (playingEnd) throw new Exception("播放结束");
-//            int nextPosition = gridView.getPlayerNextPosition();
-//            if (nextPosition < 0) throw new Exception("播放错误");
-//            return nextPosition;
-//        } catch (Exception e) {
-//            return -1;
-//        }
-//    }
-
-    protected void onBackPressed() {
+    private void onBackPressed() {
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
-            // 上报数据
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> emitter) {
+                    // 上报数据
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> emitter) {
 
-                String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
-                String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
-                // 1
-                long start = getView().getLongExtra(DetailActivity.INTENT_START_TIME, 0);
-                long end = System.currentTimeMillis();
-                reportPlayVodStop(cid, vid, start, end);
-                // 2
-                long duration = getView().getLongExtra(DetailActivity.INTENT_CUR_DURATION, 0);
-                long position = getView().getLongExtra(DetailActivity.INTENT_CUR_POSITION, 0);
-                boolean isEnd = position > 0 && duration > 0 && position >= duration;
-                String classId = getView().getStringExtra(DetailActivity.INTENT_REC_CLASSID, "");
-                int pos = getView().getIntExtra(DetailActivity.INTENT_INDEX, 1);
-                int endFlag = isEnd ? 0 : 1;
-                uploadPlayHistory(cid, vid, classId, pos, endFlag, duration, position);
-                // 3
-                CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_HISTORY_NET, "1");
-                // 4
-                emitter.onNext(true);
-            }
-        }).compose(ComposeSchedulers.io_main()).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) {
-                getView().callFinish();
-            }
-        }).doOnNext(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) {
-                getView().callFinish();
-            }
-        }).subscribe());
+                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
+                        String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
+                        // 1
+                        long start = getView().getLongExtra(DetailActivity.INTENT_START_TIME, 0);
+                        long end = System.currentTimeMillis();
+                        reportPlayVodStop(cid, vid, start, end);
+                        // 2
+                        long duration = getView().getLongExtra(DetailActivity.INTENT_CUR_DURATION, 0);
+                        long position = getView().getLongExtra(DetailActivity.INTENT_CUR_POSITION, 0);
+                        boolean isEnd = position > 0 && duration > 0 && position >= duration;
+                        String classId = getView().getStringExtra(DetailActivity.INTENT_REC_CLASSID, "");
+                        int pos = getView().getIntExtra(DetailActivity.INTENT_INDEX, 1);
+                        int endFlag = isEnd ? 0 : 1;
+                        uploadPlayHistory(cid, vid, classId, pos, endFlag, duration, position);
+                        // 3
+                        CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_HISTORY_NET, "1");
+                        // 4
+                        emitter.onNext(true);
+                    }
+                })
+                .compose(ComposeSchedulers.io_main())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().callOnBackPressed();
+                    }
+                }).doOnNext(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) {
+                        getView().callOnBackPressed();
+                    }
+                }).subscribe());
     }
 
     protected void requestHuaweiAuth(String movieCode, long seek) {

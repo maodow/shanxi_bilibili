@@ -14,13 +14,14 @@ public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable
     private int toType;
     private int id;
 
+    private String brief;
     private String name;
     private String title;
 
     private String playTime;
     private String playLength;
     private int pos;
-
+    private long seek;
 
     private boolean fromSearch = false;
     private String fromSearchKeys = null;
@@ -70,14 +71,11 @@ public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable
     }
 
     public long getSeek() {
-        try {
-            long l = Long.parseLong(playTime);
-            if (l <= 0)
-                throw new Exception();
-            return l;
-        } catch (Exception e) {
-            return 0;
-        }
+        return seek;
+    }
+
+    public void setSeek(long seek) {
+        this.seek = seek;
     }
 
     public String getPlayTime() {
@@ -187,5 +185,13 @@ public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable
 
     public void setRecClassId(String recClassId) {
         this.recClassId = recClassId;
+    }
+
+    public String getBrief() {
+        return brief;
+    }
+
+    public void setBrief(String brief) {
+        this.brief = brief;
     }
 }

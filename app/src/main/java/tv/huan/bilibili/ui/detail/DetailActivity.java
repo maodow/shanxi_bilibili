@@ -13,6 +13,7 @@ import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
+import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 
@@ -37,17 +38,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         return getPresenter().dispatchEvent(event) || super.dispatchKeyEvent(event);
-    }
-
-    @Override
-    public void onBackPressed() {
-        getPresenter().onBackPressed();
-    }
-
-    @Override
-    public void finish() {
-        getPresenter().releasePlayer();
-        super.finish();
     }
 
     @Override
@@ -119,7 +109,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
             @Override
             public void run() {
                 DetailGridView gridView = findViewById(R.id.detail_list);
-                gridView.startPlayerPosition(data, 0, 0, false);
+                gridView.startPlayerPosition(data, data.getPos(), data.getSeek(), false);
             }
         }, 1000);
     }
@@ -159,11 +149,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         DetailGridView gridView = findViewById(R.id.detail_list);
         gridView.startPlayer(s, seek);
     }
-
-//    @Override
-//    public int getPlayerNextPosition() {
-//        return getPresenter().getPlayerNextPosition();
-//    }
 
     @Override
     public void startFull() {

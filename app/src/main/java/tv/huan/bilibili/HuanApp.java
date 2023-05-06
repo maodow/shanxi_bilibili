@@ -53,9 +53,9 @@ public final class HuanApp extends Application {
     private void initPlayer() {
         PlayerBuilder build = new PlayerBuilder.Builder()
                 .setLog(true)
-                .setKernel(PlayerType.KernelType.EXO_V2)
+                .setKernel(PlayerType.KernelType.ANDROID)
                 .setRender(PlayerType.RenderType.TEXTURE_VIEW)
-                .setExoFFmpeg(PlayerType.FFmpegType.EXO_EXTENSION_RENDERER_ON_LOW_AUDIO)
+//                .setExoFFmpeg(PlayerType.FFmpegType.EXO_EXTENSION_RENDERER_ON_LOW_AUDIO)
                 .build();
         PlayerManager.getInstance().setConfig(build);
     }
