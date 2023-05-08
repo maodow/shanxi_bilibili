@@ -20,6 +20,8 @@ public class PlayerComponentNet extends RelativeLayout implements ComponentApi {
     public void callPlayerEvent(int playState) {
         switch (playState) {
             case PlayerType.StateType.STATE_BUFFERING_START:
+            case PlayerType.StateType.STATE_FAST_FORWARD_STOP:
+            case PlayerType.StateType.STATE_FAST_REWIND_STOP:
                 show();
                 break;
             case PlayerType.StateType.STATE_INIT:

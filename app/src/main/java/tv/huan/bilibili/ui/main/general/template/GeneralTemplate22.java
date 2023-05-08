@@ -127,12 +127,6 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                     public void onClick(View v) {
                         int position = viewHolder.getAbsoluteAdapterPosition();
                         if (position >= 0) {
-                            try {
-                                PlayerViewTemplate22 playerView = v.findViewById(R.id.general_template22_player);
-                                playerView.setJumpDetail(true);
-                            } catch (Exception e) {
-                            }
-
                             GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
                             JumpUtil.next(v.getContext(), templateBean);
                         }

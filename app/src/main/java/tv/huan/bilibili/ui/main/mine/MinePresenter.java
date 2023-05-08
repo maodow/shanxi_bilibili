@@ -15,8 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -571,6 +571,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             Type type = new TypeToken<List<LocalBean>>() {
                             }.getType();
                             List<LocalBean> newList = new Gson().fromJson(s, type);
+                            while (newList.size() > 3) {
+                                newList.remove(newList.size() - 1);
+                            }
                             // check
                             if (mDatas.get(mDatas.size() - 5).getCid().equals(newList.get(0).getCid()))
                                 throw new Exception();
@@ -621,6 +624,9 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             Type type = new TypeToken<List<LocalBean>>() {
                             }.getType();
                             List<LocalBean> newList = new Gson().fromJson(s, type);
+                            while (newList.size() > 3) {
+                                newList.remove(newList.size() - 1);
+                            }
                             // check
                             if (mDatas.get(2).getCid().equals(newList.get(0).getCid()))
                                 throw new Exception();

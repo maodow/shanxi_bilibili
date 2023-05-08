@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
@@ -37,19 +38,24 @@ public final class PlayerViewTemplate22 extends PlayerLayout {
         init();
     }
 
-    private boolean jumpDetailBack = false;
-    private boolean jumpDetail = false;
+    private boolean isClickJump = false;
 
-    public void setJumpDetail(boolean status) {
-        this.jumpDetail = status;
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+            isClickJump = true;
+        } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+            isClickJump = true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     @Override
     protected boolean enableWindowVisibilityChangedTodo(int visibility) {
-        if (jumpDetail && visibility != View.VISIBLE) {
+        if (isClickJump && visibility != View.VISIBLE) {
             return true;
-        } else if (jumpDetail && visibility == View.VISIBLE) {
-            jumpDetail = false;
+        } else if (isClickJump && visibility == View.VISIBLE) {
+            isClickJump = false;
             return true;
         }
         return false;

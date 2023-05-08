@@ -116,9 +116,9 @@ android {
             // 提示Throwable_Toast
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false") // 换肤skin => 暂无
-            buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "false") // 华为鉴权播放开关
-            buildConfigField("boolean", "HUAN_CHECK_CMCC_INIT", "false") // 移动sdk
-            buildConfigField("boolean", "HUAN_CHECK_USER_ID", "false") // 检测userId, 开启获取失败禁止进去主页
+            buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "true") // 华为鉴权播放开关
+            buildConfigField("boolean", "HUAN_CHECK_CMCC_INIT", "true") // 移动sdk
+            buildConfigField("boolean", "HUAN_CHECK_USER_ID", "true") // 检测userId, 开启获取失败禁止进去主页
             buildConfigField("boolean", "HUAN_CHECK_VIP", "true") // 检测vip
             buildConfigField("boolean", "HUAN_TEST_TEMPLATE_ENABLE", "false") // 测试模板1-22
             buildConfigField("boolean", "HUAN_TEST_WHITE_VIP", "false")  // 详情vip按钮

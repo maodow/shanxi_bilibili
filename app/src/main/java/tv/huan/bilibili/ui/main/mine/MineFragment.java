@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import lib.kalu.frame.mvp.BaseFragment;
 import lib.kalu.leanback.list.RecyclerViewVertical;
 import tv.huan.bilibili.R;
+import tv.huan.bilibili.utils.LogUtil;
 
 @Keep
 public class MineFragment extends BaseFragment<MineView, MinePresenter> implements MineView {
@@ -52,9 +53,15 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if (msg.what == 3001) {
-                RecyclerViewVertical recyclerView = getView().findViewById(R.id.mine_list);
-                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(msg.arg1);
-                viewHolder.itemView.requestFocus();
+                try {
+                    RecyclerViewVertical recyclerView = getView().findViewById(R.id.mine_list);
+                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(msg.arg1);
+                    if (null == viewHolder)
+                        throw new Exception("viewHolder error: null");
+                    viewHolder.itemView.requestFocus();
+                } catch (Exception e) {
+                    LogUtil.log("MineFragment => handleMessage => " + e.getMessage());
+                }
             }
         }
     };
