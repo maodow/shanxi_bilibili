@@ -24,9 +24,9 @@ import lib.kalu.leanback.round.RoundLinearLayout;
 import lib.kalu.leanback.round.RoundRelativeLayout;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
-import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.MessageBean;
+import tv.huan.bilibili.bean.local.LocalBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
@@ -343,45 +343,45 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
                             int id = view.getId();
                             if (id == R.id.general_item_template16a_rec1) {
                                 try {
-                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(0);
+                                    LocalBean itemBean = list.get(0).getTempHistoryLocalData().get(0);
                                     itemBean.setToType(1);
-                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    itemBean.setCid(itemBean.getCid());
                                     JumpUtil.next(view.getContext(), itemBean);
                                 } catch (Exception e) {
                                     LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
                                 }
                             } else if (id == R.id.general_item_template16a_rec2) {
                                 try {
-                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(1);
+                                    LocalBean itemBean = list.get(0).getTempHistoryLocalData().get(1);
                                     itemBean.setToType(1);
-                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    itemBean.setCid(itemBean.getCid());
                                     JumpUtil.next(view.getContext(), itemBean);
                                 } catch (Exception e) {
                                     LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
                                 }
                             } else if (id == R.id.general_item_template16a_rec3) {
                                 try {
-                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(2);
+                                    LocalBean itemBean = list.get(0).getTempHistoryLocalData().get(2);
                                     itemBean.setToType(1);
-                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    itemBean.setCid(itemBean.getCid());
                                     JumpUtil.next(view.getContext(), itemBean);
                                 } catch (Exception e) {
                                     LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
                                 }
                             } else if (id == R.id.general_item_template16a_rec4) {
                                 try {
-                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(3);
+                                    LocalBean itemBean = list.get(0).getTempHistoryLocalData().get(3);
                                     itemBean.setToType(1);
-                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    itemBean.setCid(itemBean.getCid());
                                     JumpUtil.next(view.getContext(), itemBean);
                                 } catch (Exception e) {
                                     LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
                                 }
                             } else if (id == R.id.general_item_template16a_rec5) {
                                 try {
-                                    FavBean.ItemBean itemBean = list.get(0).getTempFav().getRows().get(4);
+                                    LocalBean itemBean = list.get(0).getTempHistoryLocalData().get(4);
                                     itemBean.setToType(1);
-                                    itemBean.setCid(itemBean.getAlbum().getCid());
+                                    itemBean.setCid(itemBean.getCid());
                                     JumpUtil.next(view.getContext(), itemBean);
                                 } catch (Exception e) {
                                     LogUtil.log("GeneralTemplate16 => onClick => " + e.getMessage());
@@ -551,7 +551,7 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
 
         // left
         if (viewType == 1) {
-            updateHistory(v, templateBean.getTempFav());
+            updateHistory(v, templateBean.getTempHistoryLocalData());
         }
         // center
         else if (viewType == 2) {
@@ -645,10 +645,10 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
         }
     }
 
-    public void updateHistory(@NonNull View v, @NonNull FavBean data) {
+    public void updateHistory(@NonNull View v, @NonNull List<LocalBean> data) {
         // visable
         try {
-            int num = data.getRows().size();
+            int num = data.size();
             v.findViewById(R.id.general_item_template16a_rec1).setVisibility(num >= 1 ? View.VISIBLE : View.GONE);
             v.findViewById(R.id.general_item_template16a_rec2).setVisibility(num >= 2 ? View.VISIBLE : View.GONE);
             v.findViewById(R.id.general_item_template16a_rec3).setVisibility(num >= 3 ? View.VISIBLE : View.GONE);
@@ -657,7 +657,6 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
             v.findViewById(R.id.general_item_template16a_all1).setVisibility(num > 1 && num < 5 ? View.VISIBLE : View.GONE);
             v.findViewById(R.id.general_item_template16a_all2).setVisibility(num <= 0 ? View.VISIBLE : View.GONE);
         } catch (Exception e) {
-            LogUtil.log("GeneralTemplate16 => updateHistory => " + e.getMessage());
             v.findViewById(R.id.general_item_template16a_rec1).setVisibility(View.GONE);
             v.findViewById(R.id.general_item_template16a_rec2).setVisibility(View.GONE);
             v.findViewById(R.id.general_item_template16a_rec3).setVisibility(View.GONE);
@@ -688,9 +687,9 @@ public class GeneralTemplate16 extends ListTvGridPresenter<GetSubChannelsByChann
             }
 
             try {
-                FavBean.ItemBean itemBean = data.getRows().get(m);
-                textName.setText(itemBean.getNameRec());
-                textDate.setText(itemBean.getStatusRec());
+                LocalBean itemBean = data.get(m);
+                textName.setText(itemBean.getLocal_status());
+                textDate.setText(itemBean.getName());
             } catch (Exception e) {
                 LogUtil.log("GeneralTemplate16 => updateHistory => " + e.getMessage());
             }

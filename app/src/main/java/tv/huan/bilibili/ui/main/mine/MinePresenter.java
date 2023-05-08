@@ -35,7 +35,6 @@ import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
-import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.local.LocalBean;
 import tv.huan.bilibili.http.HttpClient;
@@ -352,17 +351,10 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         return true;
                     }
                 })
-                // 接口 => 观看历史
-                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean data) {
-                        return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 3, null);
-                    }
-                })
                 // 数据处理 => 观看历史
-                .map(new Function<BaseResponsedBean<FavBean>, Boolean>() {
+                .map(new Function<Boolean, Boolean>() {
                     @Override
-                    public Boolean apply(BaseResponsedBean<FavBean> resp) {
+                    public Boolean apply(Boolean data) {
 
                         // 1
                         try {
@@ -375,30 +367,24 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
 
                         // 2
                         try {
-                            FavBean data = resp.getData();
-                            if (null == data)
+                            String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY);
+                            if (null == s || s.length() <= 0)
                                 throw new Exception();
-                            List<FavBean.ItemBean> oldList = data.getRows();
-                            if (null == oldList || oldList.size() <= 0)
-                                throw new Exception();
-                            ArrayList<LocalBean> newList = new ArrayList<>();
-                            for (FavBean.ItemBean t : oldList) {
+                            Type type = new TypeToken<List<LocalBean>>() {
+                            }.getType();
+                            List<LocalBean> newList = new Gson().fromJson(s, type);
+                            int length = newList.size();
+                            if (length >= 3) {
+                                length = 3;
+                            }
+                            for (int i = 0; i < length; i++) {
+                                LocalBean t = newList.get(i);
                                 if (null == t)
                                     continue;
-                                if (newList.size() >= 3)
-                                    break;
-                                LocalBean o = new LocalBean();
-                                o.setCid(t.getCid());
-                                o.setName(t.getAlbumName());
-                                o.setLocal_img(t.getAlbum().getPicture(true));
-                                o.setLocal_index(oldList.indexOf(t));
-                                o.setLocal_status(t.getStatusRec());
-                                o.setLocal_type(TYPE_ITEM_IMG_HISTORY);
-                                newList.add(o);
+                                t.setLocal_index(i);
+                                t.setLocal_type(TYPE_ITEM_IMG_HISTORY);
+                                mDatas.add(t);
                             }
-                            String s = new Gson().toJson(newList);
-                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY, s);
-                            mDatas.addAll(newList);
                         } catch (Exception e) {
                         }
 
@@ -421,17 +407,10 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         return true;
                     }
                 })
-                // 接口 => 我的收藏
-                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean data) {
-                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3, null);
-                    }
-                })
                 // 数据处理 => 我的收藏
-                .map(new Function<BaseResponsedBean<FavBean>, Boolean>() {
+                .map(new Function<Boolean, Boolean>() {
                     @Override
-                    public Boolean apply(BaseResponsedBean<FavBean> resp) {
+                    public Boolean apply(Boolean data) {
 
                         // 1
                         try {
@@ -444,29 +423,24 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
 
                         // 2
                         try {
-                            FavBean data = resp.getData();
-                            if (null == data)
+                            String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR);
+                            if (null == s || s.length() <= 0)
                                 throw new Exception();
-                            List<FavBean.ItemBean> oldList = data.getRows();
-                            if (null == oldList || oldList.size() <= 0)
-                                throw new Exception();
-                            ArrayList<LocalBean> newList = new ArrayList<>();
-                            for (FavBean.ItemBean t : oldList) {
+                            Type type = new TypeToken<List<LocalBean>>() {
+                            }.getType();
+                            List<LocalBean> newList = new Gson().fromJson(s, type);
+                            int length = newList.size();
+                            if (length >= 3) {
+                                length = 3;
+                            }
+                            for (int i = 0; i < length; i++) {
+                                LocalBean t = newList.get(i);
                                 if (null == t)
                                     continue;
-                                if (newList.size() >= 3)
-                                    break;
-                                LocalBean o = new LocalBean();
-                                o.setCid(t.getCid());
-                                o.setName(t.getAlbum().getName());
-                                o.setLocal_img(t.getAlbum().getPicture(true));
-                                o.setLocal_index(oldList.indexOf(t));
-                                o.setLocal_type(TYPE_ITEM_IMG_FAVOR);
-                                newList.add(o);
+                                t.setLocal_index(i);
+                                t.setLocal_type(TYPE_ITEM_IMG_FAVOR);
+                                mDatas.add(t);
                             }
-                            String s = new Gson().toJson(newList);
-                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR, s);
-                            mDatas.addAll(newList);
                         } catch (Exception e) {
                         }
 
@@ -554,7 +528,10 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
     protected final void updateCard() {
         addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
                     @Override
-                    public void subscribe(ObservableEmitter<String> emitter) {
+                    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                        boolean fragmentVisible = getView().isFragmentVisible();
+                        if (!fragmentVisible)
+                            throw new Exception();
                         String s = new Gson().toJson(mDatas);
                         emitter.onNext(s);
                     }

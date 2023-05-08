@@ -29,6 +29,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.bean.MessageBean;
+import tv.huan.bilibili.bean.local.LocalBean;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
@@ -408,10 +409,9 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
                         public void onClick(View view) {
                             try {
                                 GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(0);
-                                FavBean tempFav = templateBean.getTempFav();
-                                FavBean.ItemBean itemBean = tempFav.getRows().get(0);
+                                List<LocalBean> datas = templateBean.getTempHistoryLocalData();
+                                LocalBean itemBean = datas.get(0);
                                 itemBean.setToType(1);
-                                itemBean.setCid(itemBean.getAlbum().getCid());
                                 JumpUtil.next(view.getContext(), itemBean);
                             } catch (Exception e) {
                             }
@@ -441,10 +441,9 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
                         public void onClick(View view) {
                             try {
                                 GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(0);
-                                FavBean tempFav = templateBean.getTempFav();
-                                FavBean.ItemBean itemBean = tempFav.getRows().get(1);
+                                List<LocalBean> datas = templateBean.getTempHistoryLocalData();
+                                LocalBean itemBean = datas.get(1);
                                 itemBean.setToType(1);
-                                itemBean.setCid(itemBean.getAlbum().getCid());
                                 JumpUtil.next(view.getContext(), itemBean);
                             } catch (Exception e) {
                             }
@@ -576,7 +575,7 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
             } catch (Exception e) {
             }
 
-            updateHistory(v, templateBean.getTempFav());
+            updateHistory(v, templateBean.getTempHistoryLocalData());
         }
         // center
         else if (viewType == 2) {
@@ -670,11 +669,11 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
         }
     }
 
-    public void updateHistory(@NonNull View viewGroup, @NonNull FavBean data) {
+    public void updateHistory(@NonNull View viewGroup, @NonNull List<LocalBean> data) {
 
         int lenght;
         try {
-            lenght = data.getRows().size();
+            lenght = data.size();
         } catch (Exception e) {
             lenght = 0;
         }
@@ -683,11 +682,11 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
         try {
             View viewById = viewGroup.findViewById(R.id.general_template17a_item1);
             viewById.setVisibility(lenght >= 1 ? View.VISIBLE : View.GONE);
-            FavBean.ItemBean bean = data.getRows().get(0);
+            LocalBean bean = data.get(0);
             TextView view1 = viewById.findViewById(R.id.general_template17a_item1_name);
-            view1.setText(bean.getNameRec());
+            view1.setText(bean.getName());
             TextView view2 = viewById.findViewById(R.id.general_template17a_item1_date);
-            view2.setText(bean.getStatusRec());
+            view2.setText(bean.getLocal_status());
         } catch (Exception e) {
         }
 
@@ -695,11 +694,11 @@ public class GeneralTemplate17 extends ListTvGridPresenter<GetSubChannelsByChann
         try {
             View viewById = viewGroup.findViewById(R.id.general_template17a_item2);
             viewById.setVisibility(lenght >= 2 ? View.VISIBLE : View.GONE);
-            FavBean.ItemBean bean = data.getRows().get(1);
+            LocalBean bean = data.get(1);
             TextView view1 = viewById.findViewById(R.id.general_template17a_item2_name);
-            view1.setText(bean.getNameRec());
+            view1.setText(bean.getName());
             TextView view2 = viewById.findViewById(R.id.general_template17a_item2_date);
-            view2.setText(bean.getStatusRec());
+            view2.setText(bean.getLocal_status());
         } catch (Exception e) {
         }
 

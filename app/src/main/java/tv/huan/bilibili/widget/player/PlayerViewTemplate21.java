@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.RequiresApi;
 
@@ -44,8 +45,32 @@ public final class PlayerViewTemplate21 extends PlayerLayout {
     }
 
     @Override
+    protected boolean enableDetachedFromWindowTodo() {
+        return false;
+    }
+
+    @Override
     protected boolean enableAttachedToWindowTodo() {
         return false;
+    }
+
+    @Override
+    protected boolean enableReleaseTag() {
+        return false;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        release(false);
+        super.onDetachedFromWindow();
+    }
+
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        if (visibility != View.VISIBLE) {
+            release(false);
+        }
+        super.onWindowVisibilityChanged(visibility);
     }
 
     private void init() {

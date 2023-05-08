@@ -15,12 +15,17 @@ import androidx.leanback.widget.Presenter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import lib.kalu.frame.mvp.util.CacheUtil;
 import lib.kalu.leanback.list.LeanBackVerticalGridView;
 import lib.kalu.leanback.util.LeanBackUtil;
 import tv.huan.bilibili.BuildConfig;
-import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
+import tv.huan.bilibili.bean.local.LocalBean;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate1;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate16;
 import tv.huan.bilibili.ui.main.general.template.GeneralTemplate17;
@@ -205,6 +210,20 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
         }
     }
 
+    public void cleanTemplatePlayerMessageDelayed() {
+        GeneralTemplate21 template21 = getPresenter(GeneralTemplate21.class);
+        if (null != template21) {
+            ViewHolder viewHolder21 = findViewHolderForAdapterObject(GeneralTemplate21.GeneralTemplate21List.class);
+            if (null != viewHolder21) {
+                template21.cleanTemplatePlayerMessageDelayed();
+            }
+        }
+        GeneralTemplate22 template22 = getPresenter(GeneralTemplate22.class);
+        if (null != template22) {
+            template22.cleanTemplatePlayerMessageDelayed();
+        }
+    }
+
     /***************/
 
     public boolean containsTemplateHistory() {
@@ -235,89 +254,82 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public void updateTemplateHistory(@NonNull FavBean data) {
-
-        if (BuildConfig.DEBUG) {
-            LogUtil.log("GeneralGridView => updateTemplateHistory => " + new Gson().toJson(data));
-        }
-
+    public void updateTemplateHistory() {
         try {
+            String s = CacheUtil.getCache(getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY);
+            if (null == s || s.length() <= 0)
+                throw new Exception();
+            Type type = new TypeToken<List<LocalBean>>() {
+            }.getType();
+            List<LocalBean> newList = new Gson().fromJson(s, type);
+            if (null == newList || newList.size() <= 0)
+                throw new Exception();
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
+            if (null == itemBridgeAdapter)
+                throw new Exception("itemBridgeAdapter error: null");
             ArrayObjectAdapter objectAdapter = (ArrayObjectAdapter) itemBridgeAdapter.getAdapter();
-
+            if (null == objectAdapter)
+                throw new Exception("objectAdapter error: null");
             int size = objectAdapter.size();
+            if (size <= 0)
+                throw new Exception("size error: " + size);
             for (int i = 0; i < size; i++) {
                 Object o = objectAdapter.get(i);
                 if (null == o)
                     continue;
                 // GeneralTemplate16
                 if (o instanceof GeneralTemplate16.GeneralTemplate16List) {
-                    try {
-                        GetSubChannelsByChannelBean.ListBean.TemplateBean t = (GetSubChannelsByChannelBean.ListBean.TemplateBean) ((GeneralTemplate16.GeneralTemplate16List) o).get(0);
-                        t.setTempFav(data);
-                        // 刷新
-                        GeneralTemplate16 template = getPresenter(GeneralTemplate16.class);
-                        if (null != template) {
-                            ViewHolder viewHolder = findViewHolderForAdapterPosition(i);
-                            template.updateHistory(viewHolder.itemView, data);
-                        }
-                    } catch (Exception e) {
-                        LogUtil.log("GeneralGridView => updateTemplateHistory => " + e.getMessage());
-                    }
+                    GeneralTemplate16 template = getPresenter(GeneralTemplate16.class);
+                    if (null == template)
+                        continue;
+                    GetSubChannelsByChannelBean.ListBean.TemplateBean t = (GetSubChannelsByChannelBean.ListBean.TemplateBean) ((GeneralTemplate16.GeneralTemplate16List) o).get(0);
+                    t.setTempHistoryLocalData(newList);
+                    ViewHolder viewHolder = findViewHolderForAdapterPosition(i);
+                    template.updateHistory(viewHolder.itemView, newList);
                 }
                 // GeneralTemplate17
                 else if (o instanceof GeneralTemplate17.GeneralTemplate17List) {
-                    try {
-                        GetSubChannelsByChannelBean.ListBean.TemplateBean t = (GetSubChannelsByChannelBean.ListBean.TemplateBean) ((GeneralTemplate17.GeneralTemplate17List) o).get(0);
-                        t.setTempFav(data);
-                        // 刷新
-                        GeneralTemplate17 template = getPresenter(GeneralTemplate17.class);
-                        if (null != template) {
-                            ViewHolder viewHolder = findViewHolderForAdapterPosition(i);
-                            template.updateHistory(viewHolder.itemView, data);
-                        }
-                    } catch (Exception e) {
-                        LogUtil.log("GeneralGridView => updateTemplateHistory => " + e.getMessage());
-                    }
+                    GeneralTemplate17 template = getPresenter(GeneralTemplate17.class);
+                    if (null == template)
+                        continue;
+                    GetSubChannelsByChannelBean.ListBean.TemplateBean t = (GetSubChannelsByChannelBean.ListBean.TemplateBean) ((GeneralTemplate17.GeneralTemplate17List) o).get(0);
+                    t.setTempHistoryLocalData(newList);
+                    ViewHolder viewHolder = findViewHolderForAdapterPosition(i);
+                    template.updateHistory(viewHolder.itemView, newList);
                 }
                 // GeneralTemplate20
                 else if (o instanceof GeneralTemplate20.GeneralTemplate20List) {
-                    try {
-                        GetSubChannelsByChannelBean.ListBean.TemplateBean t = (GetSubChannelsByChannelBean.ListBean.TemplateBean) ((GeneralTemplate20.GeneralTemplate20List) o).get(2);
-                        t.setTempFav(data);
-                        // 刷新
-                        GeneralTemplate20 template = getPresenter(GeneralTemplate20.class);
-                        if (null != template) {
-                            ViewHolder viewHolder = findViewHolderForAdapterPosition(i);
-                            template.updateHistory(viewHolder.itemView, data);
-                        }
-                    } catch (Exception e) {
-                        LogUtil.log("GeneralGridView => updateTemplateHistory => " + e.getMessage());
-                    }
+                    GeneralTemplate20 template = getPresenter(GeneralTemplate20.class);
+                    if (null == template)
+                        continue;
+                    GetSubChannelsByChannelBean.ListBean.TemplateBean t = (GetSubChannelsByChannelBean.ListBean.TemplateBean) ((GeneralTemplate20.GeneralTemplate20List) o).get(2);
+                    t.setTempHistoryLocalData(newList);
+                    ViewHolder viewHolder = findViewHolderForAdapterPosition(i);
+                    template.updateHistory(viewHolder.itemView, newList);
                 }
             }
         } catch (Exception e) {
         }
     }
 
-    public void pausePlayer() {
-        GeneralTemplate21 template21 = getPresenter(GeneralTemplate21.class);
-        if (null != template21) {
-            ViewHolder viewHolder21 = findViewHolderForAdapterObject(GeneralTemplate21.GeneralTemplate21List.class);
-            if (null != viewHolder21) {
-                template21.pausePlayer(viewHolder21.itemView);
-            }
-        }
-        GeneralTemplate22 template22 = getPresenter(GeneralTemplate22.class);
-        if (null != template22) {
-            ViewHolder viewHolder22 = findViewHolderForAdapterObject(GeneralTemplate22.GeneralTemplate22List.class);
-            if (null != viewHolder22) {
-                template22.pausePlayer((ViewGroup) viewHolder22.itemView);
-            }
-        }
-    }
+//    public void pausePlayer() {
+//        GeneralTemplate21 template21 = getPresenter(GeneralTemplate21.class);
+//        if (null != template21) {
+//            ViewHolder viewHolder21 = findViewHolderForAdapterObject(GeneralTemplate21.GeneralTemplate21List.class);
+//            if (null != viewHolder21) {
+//                template21.pausePlayer(viewHolder21.itemView);
+//            }
+//        }
+//        GeneralTemplate22 template22 = getPresenter(GeneralTemplate22.class);
+//        if (null != template22) {
+//            ViewHolder viewHolder22 = findViewHolderForAdapterObject(GeneralTemplate22.GeneralTemplate22List.class);
+//            if (null != viewHolder22) {
+//                template22.pausePlayer((ViewGroup) viewHolder22.itemView);
+//            }
+//        }
+//    }
 
-    public void resumePlayer() {
+    public void restartPlayer() {
         GeneralTemplate21 template21 = getPresenter(GeneralTemplate21.class);
         if (null != template21) {
             ViewHolder viewHolder21 = findViewHolderForAdapterObject(GeneralTemplate21.GeneralTemplate21List.class);
@@ -329,7 +341,7 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
         if (null != template22) {
             ViewHolder viewHolder22 = findViewHolderForAdapterObject(GeneralTemplate22.GeneralTemplate22List.class);
             if (null != viewHolder22) {
-                template22.resumePlayer((ViewGroup) viewHolder22.itemView);
+                template22.restartPlayer((ViewGroup) viewHolder22.itemView);
             }
         }
     }

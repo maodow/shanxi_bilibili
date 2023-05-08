@@ -30,7 +30,6 @@ import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.bilibili.widget.player.PlayerViewTemplate22;
 import tv.huan.bilibili.widget.player.component.PlayerComponentInitTemplate22;
 
 public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
@@ -42,6 +41,11 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             if (msg.what == 5001) {
                 try {
                     resumePlayer((View) msg.obj);
+                } catch (Exception e) {
+                }
+            } else if (msg.what == 5002) {
+                try {
+                    restartPlayer((View) msg.obj);
                 } catch (Exception e) {
                 }
             }
@@ -93,7 +97,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int viewType) {
-        // img
+        // 图片
         if (viewType == 22_2) {
             try {
                 view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -119,8 +123,10 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             } catch (Exception e) {
             }
         }
-        // video
+        // 视频
         else if (viewType == 22_1) {
+
+            // 点击监听
             try {
                 view.findViewById(R.id.general_template22_root).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -135,27 +141,34 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             } catch (Exception e) {
             }
 
+            // 下移监听
             try {
                 view.findViewById(R.id.general_template22_root).setOnKeyListener(new View.OnKeyListener() {
                     @Override
                     public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                         if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                            pausePlayer(view);
+                            releasePlayer(view);
                         }
                         return false;
                     }
                 });
+            } catch (Exception e) {
+            }
+
+            // 焦点监听
+            try {
                 view.findViewById(R.id.general_template22_root).setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View view, boolean b) {
-                        PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
-                        if (b) {
-                            boolean containsKernel = playerView.containsKernel();
-                            if (containsKernel) {
-                                playerView.resume(true);
-                            } else {
-                                playerView.restart();
-                            }
+                        try {
+                            if (!b)
+                                throw new Exception();
+                            PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
+                            boolean playing = playerView.isPlaying();
+                            if (playing)
+                                throw new Exception();
+                            sendMessageDelayedRestartPlayer(view);
+                        } catch (Exception e) {
                         }
                     }
                 });
@@ -190,6 +203,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                 } else {
                     String url = BoxUtil.getTestVideoUrl();
                     startPlayer(view, url);
+                    sendMessageDelayedStartPlayer(view);
                 }
             } catch (Exception e) {
             }
@@ -247,42 +261,53 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         return 5;
     }
 
-    public void pausePlayer(View viewGroup) {
-        try {
-            mHandler.removeCallbacksAndMessages(null);
-        } catch (Exception e) {
-        }
-        try {
-            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
-            playerView.setPlayWhenReady(true);
-            playerView.pause();
-        } catch (Exception e) {
-            LogUtil.log("GeneralTemplate22 => pausePlayer => " + e.getMessage());
-        }
-    }
-
     public void releasePlayer(View viewGroup) {
         try {
             mHandler.removeCallbacksAndMessages(null);
         } catch (Exception e) {
         }
         try {
-            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
-            playerView.pause();
-            playerView.stop();
-            playerView.release();
+            PlayerLayout playerLayout = viewGroup.findViewById(R.id.general_template22_player);
+            playerLayout.release();
         } catch (Exception e) {
             LogUtil.log("GeneralTemplate22 => releasePlayer => " + e.getMessage());
         }
     }
 
-    public void resumePlayer(View viewGroup) {
+//    public void pausePlayer(View viewGroup) {
+//        try {
+//            mHandler.removeCallbacksAndMessages(null);
+//        } catch (Exception e) {
+//        }
+//        try {
+//            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
+//            playerView.setPlayWhenReady(true);
+//            playerView.pause();
+//            LogUtil.log("GeneralTemplate22 => pausePlayer => thread = " + Thread.currentThread().getName());
+//        } catch (Exception e) {
+//            LogUtil.log("GeneralTemplate22 => pausePlayer => " + e.getMessage());
+//        }
+//    }
+
+    private void resumePlayer(View viewGroup) {
         try {
             PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
             playerView.setPlayWhenReady(true);
             playerView.resume();
+            LogUtil.log("GeneralTemplate22 => resumePlayer => thread = " + Thread.currentThread().getName());
         } catch (Exception e) {
             LogUtil.log("GeneralTemplate22 => resumePlayer => " + e.getMessage());
+        }
+    }
+
+    public void restartPlayer(View viewGroup) {
+        try {
+            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
+            playerView.setPlayWhenReady(true);
+            playerView.restart();
+            LogUtil.log("GeneralTemplate22 => restartPlayer => thread = " + Thread.currentThread().getName());
+        } catch (Exception e) {
+            LogUtil.log("GeneralTemplate22 => restartPlayer => " + e.getMessage());
         }
     }
 
@@ -297,13 +322,37 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             builder.setLoop(true);
             builder.setPlayWhenReady(false);
             playerView.start(builder.build(), s);
-            Message message = new Message();
-            message.what = 5001;
-            message.obj = inflate;
-            mHandler.removeCallbacksAndMessages(null);
-            mHandler.sendMessageDelayed(message, 3000);
         } catch (Exception e) {
             LogUtil.log("GeneralTemplate22 => startPlayer => " + e.getMessage());
+        }
+    }
+
+    private void sendMessageDelayedRestartPlayer(View viewGroup) {
+        cleanTemplatePlayerMessageDelayed();
+        try {
+            Message message = new Message();
+            message.what = 5002;
+            message.obj = viewGroup;
+            mHandler.sendMessageDelayed(message, 1000);
+        } catch (Exception e) {
+        }
+    }
+
+    private void sendMessageDelayedStartPlayer(View viewGroup) {
+        cleanTemplatePlayerMessageDelayed();
+        try {
+            Message message = new Message();
+            message.what = 5002;
+            message.obj = viewGroup;
+            mHandler.sendMessageDelayed(message, 1000);
+        } catch (Exception e) {
+        }
+    }
+
+    public void cleanTemplatePlayerMessageDelayed() {
+        try {
+            mHandler.removeCallbacksAndMessages(null);
+        } catch (Exception e) {
         }
     }
 

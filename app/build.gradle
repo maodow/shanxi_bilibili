@@ -116,7 +116,7 @@ android {
             // 提示Throwable_Toast
             buildConfigField("boolean", "HUAN_LOG", "true")  // 日志log
             buildConfigField("boolean", "HUAN_SKIN", "false") // 换肤skin => 暂无
-            buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "true") // 华为鉴权播放开关
+            buildConfigField("boolean", "HUAN_HUAWEI_AUTH", "false") // 华为鉴权播放开关
             buildConfigField("boolean", "HUAN_CHECK_CMCC_INIT", "true") // 移动sdk
             buildConfigField("boolean", "HUAN_CHECK_USER_ID", "true") // 检测userId, 开启获取失败禁止进去主页
             buildConfigField("boolean", "HUAN_CHECK_VIP", "true") // 检测vip
@@ -167,7 +167,8 @@ dependencies {
     api files('libs/lib_keyboard_release_20230303.aar')
     // player
     api files('libs/lib_mediaplayer_ui_release_20230508.aar')
-    api files('libs/lib_mediaplayer_exo_r2.18.5_ff4.4_audio_release_20230505.aar')
+//    api files('libs/lib_mediaplayer_exo_r2.18.6_release_20230508.aar')
+//    api files('libs/lib_mediaplayer_ijk_k0.8.8_ff3.4_release_20230424.aar')
     // heilongjiang
     // api project(path: ':huan_heilongjiang')
     api files('libs/lib_huan_heilongjiang_release_20230504.aar')

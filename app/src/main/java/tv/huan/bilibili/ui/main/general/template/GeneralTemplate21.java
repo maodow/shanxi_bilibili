@@ -308,6 +308,7 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
         if (!hasFocus)
             return;
 
+        cleanTemplatePlayerMessageDelayed();
         if (BuildConfig.HUAN_HUAWEI_AUTH) {
             Message message = new Message();
             message.what = 20001;
@@ -318,8 +319,14 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
             Message message = new Message();
             message.what = 20002;
             message.obj = new Object[]{view, BoxUtil.getTestVideoUrl()};
-            mHandler.removeCallbacksAndMessages(null);
             mHandler.sendMessageDelayed(message, 4000);
+        }
+    }
+
+    public void cleanTemplatePlayerMessageDelayed() {
+        try {
+            mHandler.removeCallbacksAndMessages(null);
+        } catch (Exception e) {
         }
     }
 

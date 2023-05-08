@@ -101,14 +101,16 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
                 throw new Exception();
             if (!(activity instanceof DetailActivity))
                 throw new Exception();
-            if (isFromUser) {
-                ((DetailActivity) activity).startFull();
+            int episodeIndex = item.getEpisodeIndex();
+            boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(episodeIndex);
+            if (playingPosition) {
+                if (isFromUser) {
+                    ((DetailActivity) activity).startFull();
+                }
+            } else {
+                ((DetailActivity) activity).updatePlayerPosition(item);
+                ((DetailActivity) activity).startPlayerPosition(item, position, item.getSeek(), true);
             }
-            boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(position);
-            if (playingPosition)
-                throw new Exception();
-            ((DetailActivity) activity).updatePlayerPosition(item);
-            ((DetailActivity) activity).startPlayerPosition(item, position, item.getSeek(), true);
         } catch (Exception e) {
         }
     }

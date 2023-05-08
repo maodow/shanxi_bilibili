@@ -18,13 +18,16 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.frame.mvp.util.CacheUtil;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
+import tv.huan.bilibili.bean.FavBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
 import tv.huan.bilibili.bean.GetPopupInfoBeanBase;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallWelcomeBean;
+import tv.huan.bilibili.bean.local.LocalBean;
 import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.ADUtil;
@@ -108,6 +111,83 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         try {
                             reportAppActivation();
                             LogUtil.log("WelcomePresenter => request => reportAppActivation =>");
+                        } catch (Exception e) {
+                        }
+                        return true;
+                    }
+                })
+                // 接口 => 观看历史
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean data) {
+                        return HttpClient.getHttpClient().getHttpApi().getBookmark(0, 3, null);
+                    }
+                })
+                // 数据处理 => 观看历史
+                .map(new Function<BaseResponsedBean<FavBean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseResponsedBean<FavBean> resp) {
+                        try {
+                            FavBean data = resp.getData();
+                            if (null == data)
+                                throw new Exception();
+                            List<FavBean.ItemBean> oldList = data.getRows();
+                            if (null == oldList || oldList.size() <= 0)
+                                throw new Exception();
+                            ArrayList<LocalBean> newList = new ArrayList<>();
+                            for (FavBean.ItemBean t : oldList) {
+                                if (null == t)
+                                    continue;
+                                if (newList.size() >= 3)
+                                    break;
+                                LocalBean o = new LocalBean();
+                                o.setCid(t.getCid());
+                                o.setName(t.getAlbumName());
+                                o.setLocal_img(t.getAlbum().getPicture(true));
+                                o.setLocal_index(oldList.indexOf(t));
+                                o.setLocal_status(t.getStatusRec());
+                                newList.add(o);
+                            }
+                            String s = new Gson().toJson(newList);
+                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY, s);
+                        } catch (Exception e) {
+                        }
+                        return true;
+                    }
+                })
+                // 接口 => 我的收藏
+                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<FavBean>>>() {
+                    @Override
+                    public Observable<BaseResponsedBean<FavBean>> apply(Boolean data) {
+                        return HttpClient.getHttpClient().getHttpApi().getFavList(0, 3, null);
+                    }
+                })
+                // 数据处理 => 我的收藏
+                .map(new Function<BaseResponsedBean<FavBean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseResponsedBean<FavBean> resp) {
+                        try {
+                            FavBean data = resp.getData();
+                            if (null == data)
+                                throw new Exception();
+                            List<FavBean.ItemBean> oldList = data.getRows();
+                            if (null == oldList || oldList.size() <= 0)
+                                throw new Exception();
+                            ArrayList<LocalBean> newList = new ArrayList<>();
+                            for (FavBean.ItemBean t : oldList) {
+                                if (null == t)
+                                    continue;
+                                if (newList.size() >= 3)
+                                    break;
+                                LocalBean o = new LocalBean();
+                                o.setCid(t.getCid());
+                                o.setName(t.getAlbum().getName());
+                                o.setLocal_img(t.getAlbum().getPicture(true));
+                                o.setLocal_index(oldList.indexOf(t));
+                                newList.add(o);
+                            }
+                            String s = new Gson().toJson(newList);
+                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR, s);
                         } catch (Exception e) {
                         }
                         return true;

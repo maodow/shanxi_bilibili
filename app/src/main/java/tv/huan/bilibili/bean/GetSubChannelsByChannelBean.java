@@ -11,6 +11,7 @@ import lib.kalu.leanback.presenter.bean.TvPresenterRowBean;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.base.BaseImageBean;
+import tv.huan.bilibili.bean.local.LocalBean;
 
 @Keep
 public class GetSubChannelsByChannelBean implements Serializable {
@@ -109,7 +110,7 @@ public class GetSubChannelsByChannelBean implements Serializable {
 
             private boolean tempShow;
             private String tempTitle;
-            private FavBean tempFav;
+            private List<LocalBean> tempHistoryLocalData;
             private boolean tempChecked;
 
 
@@ -193,12 +194,12 @@ public class GetSubChannelsByChannelBean implements Serializable {
                 return tempTitle;
             }
 
-            public FavBean getTempFav() {
-                return tempFav;
+            public List<LocalBean> getTempHistoryLocalData() {
+                return tempHistoryLocalData;
             }
 
-            public void setTempFav(FavBean tempFav) {
-                this.tempFav = tempFav;
+            public void setTempHistoryLocalData(List<LocalBean> tempHistoryLocalData) {
+                this.tempHistoryLocalData = tempHistoryLocalData;
             }
 
             public void setTempShow(boolean tempShow) {

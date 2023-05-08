@@ -30,6 +30,7 @@ public class PlayerComponentInitTemplate22 extends RelativeLayout implements Com
             case PlayerType.StateType.STATE_CLOSE:
             case PlayerType.StateType.STATE_PAUSE:
             case PlayerType.StateType.STATE_PAUSE_IGNORE:
+            case PlayerType.StateType.STATE_RELEASE:
                 LogUtil.log("PlayerComponentInitTemplate22[show] => playState = " + playState);
                 show();
                 break;

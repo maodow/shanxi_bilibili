@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
@@ -38,26 +37,8 @@ public final class PlayerViewTemplate22 extends PlayerLayout {
         init();
     }
 
-    private boolean isClickJump = false;
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
-            isClickJump = true;
-        } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-            isClickJump = true;
-        }
-        return super.dispatchKeyEvent(event);
-    }
-
     @Override
     protected boolean enableWindowVisibilityChangedTodo(int visibility) {
-        if (isClickJump && visibility != View.VISIBLE) {
-            return true;
-        } else if (isClickJump && visibility == View.VISIBLE) {
-            isClickJump = false;
-            return true;
-        }
         return false;
     }
 
@@ -69,6 +50,25 @@ public final class PlayerViewTemplate22 extends PlayerLayout {
     @Override
     protected boolean enableAttachedToWindowTodo() {
         return false;
+    }
+
+    @Override
+    protected boolean enableReleaseTag() {
+        return false;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        release(false);
+        super.onDetachedFromWindow();
+    }
+
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        if (visibility != View.VISIBLE) {
+            release(false);
+        }
+        super.onWindowVisibilityChanged(visibility);
     }
 
     private void init() {

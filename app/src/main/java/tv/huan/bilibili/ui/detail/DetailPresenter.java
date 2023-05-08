@@ -77,13 +77,16 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 // 媒资数据
                 .flatMap(new Function<CallDetailBean, ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>>>() {
                     @Override
-                    public ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>> apply(CallDetailBean data) {
-                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                        if (null == cid) {
-                            cid = "";
+                    public ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>> apply(CallDetailBean data) throws Exception {
+                        try {
+                            String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                            if (null == cid || cid.length() <= 0)
+                                throw new Exception("cid error: " + cid);
+                            String s = new Gson().toJson(data);
+                            return HttpClient.getHttpClient().getHttpApi().getMediasByCid2(cid, s);
+                        } catch (Exception e) {
+                            throw e;
                         }
-                        String s = new Gson().toJson(data);
-                        return HttpClient.getHttpClient().getHttpApi().getMediasByCid2(cid, s);
                     }
                 })
                 // 媒资数据 => 数据处理
@@ -201,9 +204,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     @Override
                     public ObservableSource<BaseResponsedBean<GetLastBookmark>> apply(CallDetailBean data) {
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
-                        if (null == cid) {
-                            cid = "";
-                        }
                         String s = new Gson().toJson(data);
                         return HttpClient.getHttpClient().getHttpApi().getLastBookmark(cid, s);
                     }
