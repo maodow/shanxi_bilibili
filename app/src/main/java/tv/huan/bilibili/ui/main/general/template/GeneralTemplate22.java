@@ -327,7 +327,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
         }
     }
 
-    private void sendMessageDelayedRestartPlayer(View viewGroup) {
+    public void sendMessageDelayedRestartPlayer(View viewGroup) {
         cleanTemplatePlayerMessageDelayed();
         try {
             Message message = new Message();
