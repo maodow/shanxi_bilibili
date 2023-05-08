@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -123,6 +124,18 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
             });
         } catch (Exception e) {
         }
+        try {
+            itemView.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+                        mHandler.removeCallbacksAndMessages(null);
+                    }
+                    return false;
+                }
+            });
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -159,6 +172,18 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
         return context.getResources().getDimensionPixelOffset(R.dimen.dp_24);
     }
 
+    public void releasePlayer(View viewGroup) {
+        LogUtil.log("GeneralTemplate21 => releasePlayer =>");
+        try {
+            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template21_player);
+            playerView.pause();
+            playerView.stop();
+            playerView.release();
+        } catch (Exception e) {
+            LogUtil.log("GeneralTemplate21 => releasePlayer => " + e.getMessage());
+        }
+    }
+
     public void resumePlayer(View viewGroup) {
         LogUtil.log("GeneralTemplate21 => resumePlayer =>");
         try {
@@ -174,6 +199,7 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
         LogUtil.log("GeneralTemplate21 => pausePlayer =>");
         try {
             PlayerLayout playerView = viewGroup.findViewById(R.id.general_template21_player);
+            playerView.setPlayWhenReady(false);
             playerView.pause();
         } catch (Exception e) {
             LogUtil.log("GeneralTemplate21 => pausePlayer => " + e.getMessage());

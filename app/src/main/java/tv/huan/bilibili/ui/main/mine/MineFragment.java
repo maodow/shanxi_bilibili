@@ -2,10 +2,11 @@ package tv.huan.bilibili.ui.main.mine;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import lib.kalu.frame.mvp.BaseFragment;
@@ -36,6 +37,7 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
 
     @Override
     public void onHide() {
+        mHandler.removeCallbacksAndMessages(null);
         setVisibility(getView(), View.GONE);
     }
 
@@ -45,16 +47,24 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
         getPresenter().updateCard();
     }
 
-    @Override
-    public void requestFocusPosition(int position) {
-        Toast.makeText(getContext(), "刷新焦点 => " + position, Toast.LENGTH_SHORT).show();
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 3001) {
                 RecyclerViewVertical recyclerView = getView().findViewById(R.id.mine_list);
-                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(msg.arg1);
                 viewHolder.itemView.requestFocus();
             }
-        }, 100);
+        }
+    };
+
+    @Override
+    public void requestFocusPosition(int position) {
+        Message message = new Message();
+        message.what = 3001;
+        message.arg1 = position;
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler.sendMessageDelayed(message, 100);
     }
 }

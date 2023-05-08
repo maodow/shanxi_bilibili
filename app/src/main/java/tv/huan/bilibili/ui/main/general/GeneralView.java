@@ -12,7 +12,9 @@ public interface GeneralView extends BaseViewImpl {
 
     void onShow();
 
+    void onRelease();
+
     void updateTemplateHistory(FavBean data);
 
-    <T extends androidx.leanback.widget.Presenter>  void startPlayerFromHuawei(Class<T> cls, Class<?> obj,  String s);
+    <T extends androidx.leanback.widget.Presenter> void startPlayerFromHuawei(Class<T> cls, Class<?> obj, String s);
 }

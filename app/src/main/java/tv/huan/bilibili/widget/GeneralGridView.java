@@ -30,6 +30,20 @@ import tv.huan.bilibili.ui.main.general.template.GeneralTemplate22;
 import tv.huan.bilibili.utils.LogUtil;
 
 public final class GeneralGridView extends LeanBackVerticalGridView {
+    public GeneralGridView(@NonNull Context context) {
+        super(context);
+//        setItemViewCacheSize(100);
+    }
+
+    public GeneralGridView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+//        setItemViewCacheSize(100);
+    }
+
+    public GeneralGridView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+//        setItemViewCacheSize(100);
+    }
 
 //    private final OnScrollListener mOnScrollListener = new OnScrollListener() {
 //        @Override
@@ -42,10 +56,6 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
 //            }
 //        }
 //    };
-
-    public GeneralGridView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
 
 //    @Override
 //    protected void onAttachedToWindow() {
@@ -320,6 +330,27 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
             ViewHolder viewHolder22 = findViewHolderForAdapterObject(GeneralTemplate22.GeneralTemplate22List.class);
             if (null != viewHolder22) {
                 template22.resumePlayer((ViewGroup) viewHolder22.itemView);
+            }
+        }
+    }
+
+    public void releasePlayer() {
+        GeneralTemplate21 template21 = getPresenter(GeneralTemplate21.class);
+        LogUtil.log("GeneralGridView => releasePlayer => template21 = " + template21);
+        if (null != template21) {
+            ViewHolder viewHolder21 = findViewHolderForAdapterObject(GeneralTemplate21.GeneralTemplate21List.class);
+            LogUtil.log("GeneralGridView => releasePlayer => viewHolder21 = " + viewHolder21);
+            if (null != viewHolder21) {
+                template21.releasePlayer((ViewGroup) viewHolder21.itemView);
+            }
+        }
+        GeneralTemplate22 template22 = getPresenter(GeneralTemplate22.class);
+        LogUtil.log("GeneralGridView => releasePlayer => template22 = " + template22);
+        if (null != template22) {
+            ViewHolder viewHolder22 = findViewHolderForAdapterObject(GeneralTemplate22.GeneralTemplate22List.class);
+            LogUtil.log("GeneralGridView => releasePlayer => viewHolder22 = " + viewHolder22);
+            if (null != viewHolder22) {
+                template22.releasePlayer((ViewGroup) viewHolder22.itemView);
             }
         }
     }

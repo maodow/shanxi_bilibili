@@ -102,10 +102,10 @@ public class ExitDialog extends DialogFragment implements DialogInterface.OnKeyL
             @Override
             public void onClick(View v) {
                 try {
-                    ((MainActivity) getActivity()).onCall(1100, null);
+                    dismiss();
+                    ((MainActivity) getActivity()).onBackPressed();
                 } catch (Exception e) {
                 }
-                dismiss();
             }
         });
 

@@ -4,18 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.RequiresApi;
 
 import lib.kalu.mediaplayer.core.component.ComponentError;
-import lib.kalu.mediaplayer.core.component.ComponentLoading;
 import lib.kalu.mediaplayer.widget.player.PlayerLayout;
 import tv.huan.bilibili.widget.player.component.PlayerComponentInitTemplate22;
 import tv.huan.bilibili.widget.player.component.PlayerComponentNet;
-import tv.huan.bilibili.widget.player.component.PlayerComponentPauseTemplate;
 
 public final class PlayerViewTemplate22 extends PlayerLayout {
-
 
     public PlayerViewTemplate22(Context context) {
         super(context);
@@ -38,19 +36,39 @@ public final class PlayerViewTemplate22 extends PlayerLayout {
         init();
     }
 
+    private boolean jumpDetailBack = false;
+    private boolean jumpDetail = false;
+
+    public void setJumpDetail(boolean status) {
+        this.jumpDetail = status;
+    }
+
+    @Override
+    protected boolean enableWindowVisibilityChangedTodo(int visibility) {
+        if (jumpDetail && visibility != View.VISIBLE) {
+            return true;
+        } else if (jumpDetail && visibility == View.VISIBLE) {
+            jumpDetail = false;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected boolean enableDetachedFromWindowTodo() {
+        return false;
+    }
+
+    @Override
+    protected boolean enableAttachedToWindowTodo() {
+        return false;
+    }
+
     private void init() {
-        // loading
-        ComponentLoading loading = new ComponentLoading(getContext());
-        loading.setComponentBackgroundColorInt(Color.parseColor("#000000"));
-        addComponent(loading);
         // error
         ComponentError error = new ComponentError(getContext());
-        loading.setComponentBackgroundColorInt(Color.parseColor("#000000"));
+        error.setComponentBackgroundColorInt(Color.parseColor("#000000"));
         addComponent(error);
-        // pause
-        PlayerComponentPauseTemplate pause = new PlayerComponentPauseTemplate(getContext());
-        loading.setComponentBackgroundColorInt(Color.parseColor("#66000000"));
-        addComponent(pause);
         // net
         PlayerComponentNet net = new PlayerComponentNet(getContext());
         addComponent(net);

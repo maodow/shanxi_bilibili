@@ -143,6 +143,39 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                         }
 
+                        // 观看记录
+                        try {
+                            // 1
+                            String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY);
+                            Type type = new TypeToken<List<LocalBean>>() {
+                            }.getType();
+                            List<LocalBean> list = new Gson().fromJson(s, type);
+                            // 2
+                            MediaDetailBean album = getMediasByCid2BeanBaseResponsedBean.getData().getAlbum();
+                            String name = album.getName();
+                            String picture = album.getPicture(true);
+                            String cid1 = album.getCid();
+                            for (LocalBean o : list) {
+                                if (null == o)
+                                    continue;
+                                String cid = o.getCid();
+                                if (cid.equals(cid1)) {
+                                    list.remove(o);
+                                    break;
+                                }
+                            }
+                            LocalBean localBean = new LocalBean();
+                            localBean.setLocal_img(picture);
+                            localBean.setName(name);
+                            localBean.setCid(cid1);
+                            // 3
+                            list.add(0, localBean);
+                            String s1 = new Gson().toJson(list);
+                            // 4
+                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY, s1);
+                        } catch (Exception e) {
+                        }
+
                         CallDetailBean detailBean;
                         try {
                             detailBean = new Gson().fromJson(getMediasByCid2BeanBaseResponsedBean.getExtra(), CallDetailBean.class);
@@ -854,7 +887,9 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
             PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
             if (null == playerView)
                 throw new Exception();
+            playerView.setPlayWhenReady(false);
             playerView.stop();
+            playerView.pause();
             playerView.release();
         } catch (Exception e) {
         }

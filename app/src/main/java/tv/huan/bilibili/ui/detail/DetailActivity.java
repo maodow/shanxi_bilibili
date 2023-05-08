@@ -4,6 +4,7 @@ package tv.huan.bilibili.ui.detail;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -13,7 +14,6 @@ import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
-import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 
@@ -38,6 +38,12 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         return getPresenter().dispatchEvent(event) || super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        mHandler.removeCallbacksAndMessages(null);
+        super.onBackPressed();
     }
 
     @Override
@@ -92,26 +98,53 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         return gridView.isPlayerPlayingPosition(position);
     }
 
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 2001) {
+                try {
+                    DetailGridView gridView = findViewById(R.id.detail_list);
+                    gridView.startPlayerPosition(msg.arg1);
+                } catch (Exception e) {
+                }
+            } else if (msg.what == 2002) {
+                try {
+                    DetailGridView gridView = findViewById(R.id.detail_list);
+                    gridView.startPlayerPosition(((MediaBean) msg.obj), ((MediaBean) msg.obj).getPos(), ((MediaBean) msg.obj).getSeek(), false);
+                } catch (Exception e) {
+                }
+            } else if (msg.what == 2003) {
+                try {
+                    DetailGridView gridView = findViewById(R.id.detail_list);
+                    gridView.startPlayerPosition((MediaBean) ((Object[]) msg.obj)[0], (Integer) ((Object[]) msg.obj)[1], (Long) ((Object[]) msg.obj)[2], (Boolean) ((Object[]) msg.obj)[3]);
+                } catch (Exception e) {
+                }
+            } else if (msg.what == 2004) {
+                try {
+                    HeilongjiangUtil.goShopping_WorkerThread(getApplicationContext());
+                } catch (Exception e) {
+                }
+            }
+        }
+    };
+
     @Override
     public void startPlayerPosition(@NonNull int position) {
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                DetailGridView gridView = findViewById(R.id.detail_list);
-                gridView.startPlayerPosition(position);
-            }
-        }, 1000);
+        Message message = new Message();
+        message.what = 2001;
+        message.arg1 = position;
+        mHandler.removeMessages(2001);
+        mHandler.sendMessageDelayed(message, 1000);
     }
 
     @Override
     public void startPlayerPosition(@NonNull MediaBean data) {
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                DetailGridView gridView = findViewById(R.id.detail_list);
-                gridView.startPlayerPosition(data, data.getPos(), data.getSeek(), false);
-            }
-        }, 1000);
+        Message message = new Message();
+        message.what = 2002;
+        message.obj = data;
+        mHandler.removeMessages(2002);
+        mHandler.sendMessageDelayed(message, 1000);
     }
 
     @Override
@@ -119,24 +152,20 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         putStringExtra(INTENT_VID, data.getVid());
         putStringExtra(INTENT_REC_CLASSID, data.getTempRecClassId());
         putIntExtra(INTENT_INDEX, pos);
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                DetailGridView gridView = findViewById(R.id.detail_list);
-                gridView.startPlayerPosition(data, pos, seek, isFromUser);
-            }
-        }, 1000);
+        Message message = new Message();
+        message.what = 2003;
+        message.obj = new Object[]{data, pos, seek, isFromUser};
+        mHandler.removeMessages(2003);
+        mHandler.sendMessageDelayed(message, 1000);
     }
 
     @Override
     public void jumpVip() {
         Toast.makeText(getApplicationContext(), "观看当前视频, 需要开通会员, 即将跳转订购页面", Toast.LENGTH_SHORT).show();
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                HeilongjiangUtil.goShopping_WorkerThread(getApplicationContext());
-            }
-        }, 2000);
+        Message message = new Message();
+        message.what = 2004;
+        mHandler.removeMessages(2004);
+        mHandler.sendMessageDelayed(message, 1000);
     }
 
     @Override

@@ -640,8 +640,19 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
         // down
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
             int focusId = getView().getCurrentFocusId();
-            if (focusId == R.id.filter_item) {
-
+            if (focusId == R.id.filter_tags) {
+                TagsLayout tagsLayout = getView().findViewById(R.id.filter_tags);
+                int rowCount = tagsLayout.getRowCount();
+                int checkedIndexRow = tagsLayout.getCheckedIndexRow();
+                if (checkedIndexRow + 1 >= rowCount) {
+                    RecyclerViewGrid recyclerView = getView().findViewById(R.id.filter_content);
+                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(0);
+                    if (null != viewHolder) {
+                        viewHolder.itemView.requestFocus();
+                    }
+                    return true;
+                }
+            } else if (focusId == R.id.filter_item) {
                 RecyclerViewGrid recyclerView = getView().findViewById(R.id.filter_content);
                 int itemCount = recyclerView.getAdapter().getItemCount();
                 int v = itemCount % 4;

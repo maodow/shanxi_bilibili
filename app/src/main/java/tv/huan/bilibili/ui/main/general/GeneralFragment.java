@@ -74,6 +74,12 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
     }
 
     @Override
+    public void onRelease() {
+        tv.huan.bilibili.widget.GeneralGridView gridView = findViewById(R.id.general_list);
+        gridView.releasePlayer();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         getPresenter().requestTemplateHistory();

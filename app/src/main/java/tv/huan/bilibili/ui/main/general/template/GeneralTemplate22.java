@@ -4,6 +4,8 @@ package tv.huan.bilibili.ui.main.general.template;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,9 +30,23 @@ import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.widget.player.PlayerViewTemplate22;
 import tv.huan.bilibili.widget.player.component.PlayerComponentInitTemplate22;
 
 public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsByChannelBean.ListBean.TemplateBean> {
+
+    private final android.os.Handler mHandler = new android.os.Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 5001) {
+                try {
+                    resumePlayer((View) msg.obj);
+                } catch (Exception e) {
+                }
+            }
+        }
+    };
 
     @Override
     public String initRowTitle(Context context) {
@@ -77,6 +93,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int viewType) {
+        LogUtil.log("GeneralTemplate22 => onCreateHolder =>");
         // img
         if (viewType == 22_2) {
             try {
@@ -111,6 +128,12 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                     public void onClick(View v) {
                         int position = viewHolder.getAbsoluteAdapterPosition();
                         if (position >= 0) {
+                            try {
+                                PlayerViewTemplate22 playerView = v.findViewById(R.id.general_template22_player);
+                                playerView.setJumpDetail(true);
+                            } catch (Exception e) {
+                            }
+
                             GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean = list.get(position);
                             JumpUtil.next(v.getContext(), templateBean);
                         }
@@ -124,8 +147,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                     @Override
                     public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                         if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                            PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
-                            playerView.pause(true);
+                            pausePlayer(view);
                         }
                         return false;
                     }
@@ -135,7 +157,13 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                     public void onFocusChange(View view, boolean b) {
                         PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
                         if (b) {
-                            playerView.resume(true);
+                            boolean containsKernel = playerView.containsKernel();
+                            LogUtil.log("GeneralTemplate22 => onFocusChange => containsKernel = " + containsKernel);
+                            if (containsKernel) {
+                                playerView.resume(true);
+                            } else {
+                                playerView.restart();
+                            }
                         }
                     }
                 });
@@ -146,7 +174,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
 
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
-
+        LogUtil.log("GeneralTemplate22 => onBindHolder =>");
         // player
         if (viewType == 22_1) {
             try {
@@ -158,20 +186,22 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             } catch (Exception e) {
             }
 
-            if (BuildConfig.HUAN_HUAWEI_AUTH) {
-                try {
+            try {
+                PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
+                boolean containsKernel = playerView.containsKernel();
+                LogUtil.log("GeneralTemplate22 => onBindHolder => containsKernel = " + containsKernel);
+                if (containsKernel)
+                    throw new Exception();
+                if (BuildConfig.HUAN_HUAWEI_AUTH) {
                     Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
                     if (null != activity && activity instanceof MainActivity) {
                         ((MainActivity) activity).huaweiAuth(GeneralTemplate22.class, GeneralTemplate22.GeneralTemplate22List.class, templateBean.getHuaweiId());
                     }
-                } catch (Exception e) {
-                }
-            } else {
-                try {
+                } else {
                     String url = BoxUtil.getTestVideoUrl();
                     startPlayer(view, url);
-                } catch (Exception e) {
                 }
+            } catch (Exception e) {
             }
         }
         // img
@@ -228,13 +258,33 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
     }
 
     public void pausePlayer(View viewGroup) {
-        LogUtil.log("GeneralTemplate22 => pausePlayer =>");
+        try {
+            mHandler.removeCallbacksAndMessages(null);
+        } catch (Exception e) {
+        }
         try {
             PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
-            playerView.setPlayWhenReady(false);
+            playerView.setPlayWhenReady(true);
             playerView.pause();
+            LogUtil.log("GeneralTemplate22 => pausePlayer => succ");
         } catch (Exception e) {
             LogUtil.log("GeneralTemplate22 => pausePlayer => " + e.getMessage());
+        }
+    }
+
+    public void releasePlayer(View viewGroup) {
+        try {
+            mHandler.removeCallbacksAndMessages(null);
+        } catch (Exception e) {
+        }
+        try {
+            PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
+            playerView.pause();
+            playerView.stop();
+            playerView.release();
+            LogUtil.log("GeneralTemplate22 => releasePlayer => succ");
+        } catch (Exception e) {
+            LogUtil.log("GeneralTemplate22 => releasePlayer => " + e.getMessage());
         }
     }
 
@@ -254,10 +304,17 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             if (null == s || s.length() <= 0)
                 throw new Exception("url error: null");
             PlayerLayout playerView = inflate.findViewById(R.id.general_template22_player);
+            if (null == playerView)
+                throw new Exception("playerView error: null");
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(true);
-            builder.setDelay(3000);
+            builder.setPlayWhenReady(false);
             playerView.start(builder.build(), s);
+            Message message = new Message();
+            message.what = 5001;
+            message.obj = inflate;
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler.sendMessageDelayed(message, 3000);
         } catch (Exception e) {
             LogUtil.log("GeneralTemplate22 => startPlayer => " + e.getMessage());
         }

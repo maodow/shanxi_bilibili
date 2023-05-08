@@ -21,15 +21,13 @@ public interface MainView extends BaseViewImpl {
 
     void hideTitle();
 
-    void contentScrollTop();
-
     void showDialog(@NonNull String data);
 
     void startFullPlayer();
 
     void stopFullPlayer();
 
-    <T extends androidx.leanback.widget.Presenter> void huaweiAuth(Class<T> cls, Class<?> obj,  String cid);
+    <T extends androidx.leanback.widget.Presenter> void huaweiAuth(Class<T> cls, Class<?> obj, String cid);
 
     <T extends androidx.leanback.widget.Presenter> void huaweiSucc(Class<T> cls, Class<?> obj, String s);
 }

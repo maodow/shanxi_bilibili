@@ -37,19 +37,21 @@ public final class PlayerViewTemplate21 extends PlayerLayout {
         init();
     }
 
+    @Override
+    protected boolean enableWindowVisibilityChangedTodo(int visibility) {
+        return false;
+    }
+
+    @Override
+    protected boolean enableAttachedToWindowTodo() {
+        return false;
+    }
+
     private void init() {
-        // loading
-        ComponentLoading loading = new ComponentLoading(getContext());
-        loading.setComponentBackgroundColorInt(Color.parseColor("#000000"));
-        addComponent(loading);
         // error
         ComponentError error = new ComponentError(getContext());
-        loading.setComponentBackgroundColorInt(Color.parseColor("#000000"));
+        error.setComponentBackgroundColorInt(Color.parseColor("#000000"));
         addComponent(error);
-        // pause
-        PlayerComponentPauseTemplate pause = new PlayerComponentPauseTemplate(getContext());
-        loading.setComponentBackgroundColorInt(Color.parseColor("#66000000"));
-        addComponent(pause);
         // net
         PlayerComponentNet net = new PlayerComponentNet(getContext());
         addComponent(net);

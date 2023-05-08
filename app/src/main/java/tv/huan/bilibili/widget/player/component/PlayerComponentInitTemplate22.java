@@ -24,19 +24,22 @@ public class PlayerComponentInitTemplate22 extends RelativeLayout implements Com
     @Override
     public void callPlayerEvent(@NonNull int playState) {
         switch (playState) {
+            case PlayerType.StateType.STATE_RESTAER:
             case PlayerType.StateType.STATE_INIT:
             case PlayerType.StateType.STATE_KERNEL_STOP:
             case PlayerType.StateType.STATE_CLOSE:
             case PlayerType.StateType.STATE_PAUSE:
-//                LogUtil.log("PlayerComponentInitTemplate[show] => playState = " + playState);
+            case PlayerType.StateType.STATE_PAUSE_IGNORE:
+                LogUtil.log("PlayerComponentInitTemplate22[show] => playState = " + playState);
                 show();
                 break;
             case PlayerType.StateType.STATE_ERROR:
             case PlayerType.StateType.STATE_ERROR_IGNORE:
             case PlayerType.StateType.STATE_START:
             case PlayerType.StateType.STATE_RESUME:
+            case PlayerType.StateType.STATE_RESUME_IGNORE:
             case PlayerType.StateType.STATE_KERNEL_RESUME:
-//                LogUtil.log("PlayerComponentInitTemplate[gone] => playState = " + playState);
+                LogUtil.log("PlayerComponentInitTemplate22[gone] => playState = " + playState);
                 gone();
                 break;
         }
@@ -46,9 +49,8 @@ public class PlayerComponentInitTemplate22 extends RelativeLayout implements Com
     public void gone() {
         try {
             findViewById(R.id.common_player_component_init_template22_img).setVisibility(View.GONE);
-            LogUtil.log("PlayerComponentInitTemplate => gone => succ");
         } catch (Exception e) {
-            LogUtil.log("PlayerComponentInitTemplate => gone => " + e.getMessage());
+            LogUtil.log("PlayerComponentInitTemplate22 => gone => " + e.getMessage());
         }
     }
 
@@ -57,9 +59,8 @@ public class PlayerComponentInitTemplate22 extends RelativeLayout implements Com
         try {
             bringToFront();
             findViewById(R.id.common_player_component_init_template22_img).setVisibility(View.VISIBLE);
-            LogUtil.log("PlayerComponentInitTemplate => show => succ");
         } catch (Exception e) {
-            LogUtil.log("PlayerComponentInitTemplate => show => " + e.getMessage());
+            LogUtil.log("PlayerComponentInitTemplate22 => show => " + e.getMessage());
         }
     }
 
@@ -68,7 +69,7 @@ public class PlayerComponentInitTemplate22 extends RelativeLayout implements Com
             ImageView imageView = findViewById(R.id.common_player_component_init_template22_img);
             GlideUtils.loadHz(imageView.getContext(), imgUrl, imageView);
         } catch (Exception e) {
-            LogUtil.log("PlayerComponentInitTemplate => showImage => " + e.getMessage());
+            LogUtil.log("PlayerComponentInitTemplate22 => showImage => " + e.getMessage());
         }
     }
 }

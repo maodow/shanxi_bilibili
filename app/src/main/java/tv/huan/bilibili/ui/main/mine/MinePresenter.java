@@ -385,7 +385,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             for (FavBean.ItemBean t : oldList) {
                                 if (null == t)
                                     continue;
-                                if (newList.size() >= 2)
+                                if (newList.size() >= 3)
                                     break;
                                 LocalBean o = new LocalBean();
                                 o.setCid(t.getCid());
@@ -454,7 +454,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             for (FavBean.ItemBean t : oldList) {
                                 if (null == t)
                                     continue;
-                                if (newList.size() >= 2)
+                                if (newList.size() >= 3)
                                     break;
                                 LocalBean o = new LocalBean();
                                 o.setCid(t.getCid());
@@ -571,18 +571,21 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             Type type = new TypeToken<List<LocalBean>>() {
                             }.getType();
                             List<LocalBean> newList = new Gson().fromJson(s, type);
-                            for (LocalBean t : newList) {
-                                if (null == t) continue;
-                                t.setLocal_index(newList.indexOf(t));
-                                t.setLocal_type(TYPE_ITEM_IMG_FAVOR);
+                            // check
+                            if (mDatas.get(mDatas.size() - 5).getCid().equals(newList.get(0).getCid()))
+                                throw new Exception();
+                            for (LocalBean o : newList) {
+                                if (null == o) continue;
+                                o.setLocal_index(newList.indexOf(o));
+                                o.setLocal_type(TYPE_ITEM_IMG_FAVOR);
                             }
                             // 2
                             ArrayList<LocalBean> oldList = new ArrayList<>();
-                            for (LocalBean t : mDatas) {
-                                if (null == t) continue;
-                                int tempType = t.getLocal_type();
+                            for (LocalBean o : mDatas) {
+                                if (null == o) continue;
+                                int tempType = o.getLocal_type();
                                 if (tempType == TYPE_ITEM_IMG_FAVOR) {
-                                    oldList.add(t);
+                                    oldList.add(o);
                                 }
                             }
                             // 3
@@ -591,16 +594,16 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                                 mDatas.remove(t);
                             }
                             // 4
-                            int size = mDatas.size();
                             try {
-                                LocalBean itemBean = mDatas.get(size - 4);
+                                LocalBean itemBean = mDatas.get(mDatas.size() - 4);
                                 itemBean.setLocal_index(newList.size());
                             } catch (Exception e) {
                             }
-                            mDatas.addAll(size - 4, newList);
                             // 5
-                            LocalBean itemBean = mDatas.get(mDatas.size() - 4);
-                            itemBean.setLocal_index(newList.size());
+                            try {
+                                mDatas.addAll(mDatas.size() - 4, newList);
+                            } catch (Exception e) {
+                            }
                         } catch (Exception e) {
                         }
                         return aBoolean;
@@ -618,10 +621,13 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             Type type = new TypeToken<List<LocalBean>>() {
                             }.getType();
                             List<LocalBean> newList = new Gson().fromJson(s, type);
-                            for (LocalBean t : newList) {
-                                if (null == t) continue;
-                                t.setLocal_index(newList.indexOf(t));
-                                t.setLocal_type(TYPE_ITEM_IMG_HISTORY);
+                            // check
+                            if (mDatas.get(2).getCid().equals(newList.get(0).getCid()))
+                                throw new Exception();
+                            for (LocalBean o : newList) {
+                                if (null == o) continue;
+                                o.setLocal_index(newList.indexOf(o));
+                                o.setLocal_type(TYPE_ITEM_IMG_HISTORY);
                             }
                             // 2
                             ArrayList<LocalBean> oldList = new ArrayList<>();
@@ -638,10 +644,16 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                                 mDatas.remove(t);
                             }
                             // 4
-                            mDatas.addAll(2, newList);
+                            try {
+                                LocalBean localBean = mDatas.get(2);
+                                localBean.setLocal_index(newList.size());
+                            } catch (Exception e) {
+                            }
                             // 5
-                            LocalBean localBean = mDatas.get(2);
-                            localBean.setLocal_index(newList.size());
+                            try {
+                                mDatas.addAll(2, newList);
+                            } catch (Exception e) {
+                            }
                         } catch (Exception e) {
                         }
                         return aBoolean;

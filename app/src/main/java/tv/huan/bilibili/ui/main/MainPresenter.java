@@ -25,6 +25,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
+import lib.kalu.leanback.list.RecyclerViewVertical;
 import lib.kalu.leanback.tab.TabLayout;
 import lib.kalu.leanback.tab.model.TabModel;
 import lib.kalu.leanback.tab.model.TabModelImage;
@@ -46,6 +47,7 @@ import tv.huan.bilibili.ui.main.mine.MineFragment;
 import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
+import tv.huan.bilibili.widget.GeneralGridView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public class MainPresenter extends BasePresenterImpl<MainView> {
@@ -284,9 +286,18 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
             TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
             int checkedIndex = tabLayout.getCheckedIndex();
             if (focusId != R.id.main_tabs) {
+                String tag = "fragment" + checkedIndex;
+                if (checkedIndex == 0) {
+                    MineFragment fragment = (MineFragment) getView().findFragmentByTag(tag);
+                    RecyclerViewVertical recyclerView = fragment.findViewById(R.id.mine_list);
+                    recyclerView.scrollToPosition(0);
+                } else {
+                    GeneralFragment fragment = (GeneralFragment) getView().findFragmentByTag(tag);
+                    GeneralGridView gridView = fragment.findViewById(R.id.general_list);
+                    gridView.scrollToPosition(0);
+                }
                 tabLayout.scrollToPosition(checkedIndex);
                 getView().requestFocus(R.id.main_tabs);
-                getView().contentScrollTop();
             } else {
                 int itemCount = tabLayout.getItemCount();
                 if (itemCount > 1 && checkedIndex != 1) {
@@ -494,6 +505,48 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                         if (fragment instanceof GeneralFragment) {
                             ((GeneralFragment) fragment).startPlayerFromHuawei(cls, obj, s);
                         }
+                    }
+                }).subscribe());
+    }
+
+    protected void onBackPressedTodo() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Boolean> emitter) {
+                        // 1
+                        reportAppExit();
+                        // 2
+                        ADUtil.adRelease();
+                        // 3
+                        try {
+                            TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+                            int count = tabLayout.getItemCount();
+                            for (int i = 1; i < count; i++) {
+                                String tag = "fragment" + i;
+                                Fragment fragment = getView().findFragmentByTag(tag);
+                                LogUtil.log("MainPresenter => onBackPressedTodo => tag = " + tag + ", fragment = " + fragment);
+                                if (null == fragment)
+                                    continue;
+                                if (fragment instanceof GeneralFragment) {
+                                    ((GeneralFragment) fragment).onRelease();
+                                }
+                            }
+                        } catch (Exception e) {
+                        }
+                        // 4
+                        emitter.onNext(true);
+                    }
+                }).compose(ComposeSchedulers.io_main())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        getView().killProcess();
+                    }
+                })
+                .doOnNext(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean fragment) {
+                        getView().killProcess();
                     }
                 }).subscribe());
     }

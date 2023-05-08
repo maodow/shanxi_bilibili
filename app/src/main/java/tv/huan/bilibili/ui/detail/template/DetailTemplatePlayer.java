@@ -29,9 +29,9 @@ import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.common.CommonPicView;
+import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.widget.player.component.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.component.PlayerComponentVip;
-import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public final class DetailTemplatePlayer extends Presenter {
@@ -296,7 +296,6 @@ public final class DetailTemplatePlayer extends Presenter {
             LogUtil.log("DetailTemplatePlayer => startPlayer => seek = " + seek + ", s = " + s);
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(false);
-            builder.setDelay(1000);
             builder.setSeek(seek);
             PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
             playerView.start(builder.build(), s);

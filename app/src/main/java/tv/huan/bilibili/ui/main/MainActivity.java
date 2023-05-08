@@ -132,12 +132,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     @Override
-    public void contentScrollTop() {
-        GeneralGridView gridView = findViewById(R.id.general_list);
-        gridView.scrollTop();
-    }
-
-    @Override
     public void showDialog(@NonNull String data) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         ExitDialog dialog = new ExitDialog();
@@ -170,17 +164,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     @Override
-    public void onCall(@NonNull int code, @NonNull JSONObject object) {
-        super.onCall(code, object);
-        if (code == 1100) {
-            getPresenter().reportAppExit();
-            onBackPressed();
-        }
-    }
-
-    @Override
     public void onBackPressed() {
-        ADUtil.adRelease();
-        super.onBackPressed();
+        getPresenter().onBackPressedTodo();
     }
 }
