@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi;
 import lib.kalu.mediaplayer.core.component.ComponentError;
 import lib.kalu.mediaplayer.core.component.ComponentLoading;
 import lib.kalu.mediaplayer.widget.player.PlayerLayout;
+import tv.huan.bilibili.R;
 import tv.huan.bilibili.widget.player.component.PlayerComponentInitTemplate21;
 import tv.huan.bilibili.widget.player.component.PlayerComponentNet;
 import tv.huan.bilibili.widget.player.component.PlayerComponentPauseTemplate;
@@ -57,6 +58,7 @@ public final class PlayerViewTemplate21 extends PlayerLayout {
         addComponent(net);
         // init
         PlayerComponentInitTemplate21 initTemplate = new PlayerComponentInitTemplate21(getContext());
+        initTemplate.setComponentBackgroundResource(R.drawable.bg_shape_placeholder);
         addComponent(initTemplate);
     }
 }

@@ -64,12 +64,29 @@ public class PlayerComponentInitTemplate22 extends RelativeLayout implements Com
         }
     }
 
-    public final void showImage(@NonNull String imgUrl) {
+    @Override
+    public void setComponentImageUrl(@NonNull String url) {
         try {
+            gone();
             ImageView imageView = findViewById(R.id.common_player_component_init_template22_img);
-            GlideUtils.loadHz(imageView.getContext(), imgUrl, imageView);
+            imageView.setImageDrawable(null);
+            GlideUtils.loadHz(imageView.getContext(), url, imageView);
+            show();
         } catch (Exception e) {
-            LogUtil.log("PlayerComponentInitTemplate22 => showImage => " + e.getMessage());
+            LogUtil.log("PlayerComponentInitTemplate21 => setComponentImageUrl => " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void setComponentBackgroundResource(int resid) {
+        try {
+            gone();
+            ImageView imageView = findViewById(R.id.common_player_component_init_template22_img);
+            imageView.setImageDrawable(null);
+            imageView.setBackgroundResource(resid);
+            show();
+        } catch (Exception e) {
+            LogUtil.log("PlayerComponentInitTemplate22 => setComponentBackgroundResource => " + e.getMessage());
         }
     }
 }

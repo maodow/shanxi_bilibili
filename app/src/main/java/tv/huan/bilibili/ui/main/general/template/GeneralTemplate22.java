@@ -93,7 +93,6 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
 
     @Override
     protected void onCreateHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View view, @NonNull List<GetSubChannelsByChannelBean.ListBean.TemplateBean> list, @NonNull int viewType) {
-        LogUtil.log("GeneralTemplate22 => onCreateHolder =>");
         // img
         if (viewType == 22_2) {
             try {
@@ -158,7 +157,6 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                         PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
                         if (b) {
                             boolean containsKernel = playerView.containsKernel();
-                            LogUtil.log("GeneralTemplate22 => onFocusChange => containsKernel = " + containsKernel);
                             if (containsKernel) {
                                 playerView.resume(true);
                             } else {
@@ -174,14 +172,13 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
 
     @Override
     protected void onBindHolder(@NonNull View view, @NonNull GetSubChannelsByChannelBean.ListBean.TemplateBean templateBean, @NonNull int position, @NonNull int viewType) {
-        LogUtil.log("GeneralTemplate22 => onBindHolder =>");
         // player
         if (viewType == 22_1) {
             try {
                 PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
                 PlayerComponentInitTemplate22 component = playerView.findComponent(PlayerComponentInitTemplate22.class);
                 if (null != component) {
-                    component.showImage(templateBean.getPicture(true));
+                    component.setComponentImageUrl(templateBean.getPicture(true));
                 }
             } catch (Exception e) {
             }
@@ -189,7 +186,6 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             try {
                 PlayerLayout playerView = view.findViewById(R.id.general_template22_player);
                 boolean containsKernel = playerView.containsKernel();
-                LogUtil.log("GeneralTemplate22 => onBindHolder => containsKernel = " + containsKernel);
                 if (containsKernel)
                     throw new Exception();
                 if (BuildConfig.HUAN_HUAWEI_AUTH) {
@@ -266,7 +262,6 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
             playerView.setPlayWhenReady(true);
             playerView.pause();
-            LogUtil.log("GeneralTemplate22 => pausePlayer => succ");
         } catch (Exception e) {
             LogUtil.log("GeneralTemplate22 => pausePlayer => " + e.getMessage());
         }
@@ -282,14 +277,12 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
             playerView.pause();
             playerView.stop();
             playerView.release();
-            LogUtil.log("GeneralTemplate22 => releasePlayer => succ");
         } catch (Exception e) {
             LogUtil.log("GeneralTemplate22 => releasePlayer => " + e.getMessage());
         }
     }
 
     public void resumePlayer(View viewGroup) {
-        LogUtil.log("GeneralTemplate22 => resumePlayer =>");
         try {
             PlayerLayout playerView = viewGroup.findViewById(R.id.general_template22_player);
             playerView.setPlayWhenReady(true);

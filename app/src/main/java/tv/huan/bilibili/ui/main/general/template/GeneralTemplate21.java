@@ -173,7 +173,6 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
     }
 
     public void releasePlayer(View viewGroup) {
-        LogUtil.log("GeneralTemplate21 => releasePlayer =>");
         try {
             PlayerLayout playerView = viewGroup.findViewById(R.id.general_template21_player);
             playerView.pause();
@@ -185,7 +184,6 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
     }
 
     public void resumePlayer(View viewGroup) {
-        LogUtil.log("GeneralTemplate21 => resumePlayer =>");
         try {
             PlayerLayout playerView = viewGroup.findViewById(R.id.general_template21_player);
             playerView.setPlayWhenReady(true);
@@ -196,7 +194,6 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
     }
 
     public void pausePlayer(View viewGroup) {
-        LogUtil.log("GeneralTemplate21 => pausePlayer =>");
         try {
             PlayerLayout playerView = viewGroup.findViewById(R.id.general_template21_player);
             playerView.setPlayWhenReady(false);

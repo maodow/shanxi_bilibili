@@ -76,4 +76,17 @@ public class PlayerComponentInitTemplate21 extends RelativeLayout implements Com
             LogUtil.log("PlayerComponentInitTemplate21 => setComponentImageUrl => " + e.getMessage());
         }
     }
+
+    @Override
+    public void setComponentBackgroundResource(int resid) {
+        try {
+            gone();
+            ImageView imageView = findViewById(R.id.common_player_component_init_template21_img);
+            imageView.setImageDrawable(null);
+            imageView.setBackgroundResource(resid);
+            show();
+        } catch (Exception e) {
+            LogUtil.log("PlayerComponentInitTemplate21 => setComponentBackgroundResource => " + e.getMessage());
+        }
+    }
 }
