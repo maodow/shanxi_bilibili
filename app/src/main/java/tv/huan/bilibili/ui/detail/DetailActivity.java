@@ -43,7 +43,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     public void onBackPressed() {
         mHandler.removeCallbacksAndMessages(null);
-        super.onBackPressed();
+       getPresenter().onBackPressedTodo();
     }
 
     @Override

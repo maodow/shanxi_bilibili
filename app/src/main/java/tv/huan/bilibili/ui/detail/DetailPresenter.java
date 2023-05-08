@@ -143,39 +143,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                         }
 
-                        // 观看记录
-                        try {
-                            // 1
-                            String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY);
-                            Type type = new TypeToken<List<LocalBean>>() {
-                            }.getType();
-                            List<LocalBean> list = new Gson().fromJson(s, type);
-                            // 2
-                            MediaDetailBean album = getMediasByCid2BeanBaseResponsedBean.getData().getAlbum();
-                            String name = album.getName();
-                            String picture = album.getPicture(true);
-                            String cid1 = album.getCid();
-                            for (LocalBean o : list) {
-                                if (null == o)
-                                    continue;
-                                String cid = o.getCid();
-                                if (cid.equals(cid1)) {
-                                    list.remove(o);
-                                    break;
-                                }
-                            }
-                            LocalBean localBean = new LocalBean();
-                            localBean.setLocal_img(picture);
-                            localBean.setName(name);
-                            localBean.setCid(cid1);
-                            // 3
-                            list.add(0, localBean);
-                            String s1 = new Gson().toJson(list);
-                            // 4
-                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY, s1);
-                        } catch (Exception e) {
-                        }
-
                         CallDetailBean detailBean;
                         try {
                             detailBean = new Gson().fromJson(getMediasByCid2BeanBaseResponsedBean.getExtra(), CallDetailBean.class);
@@ -775,8 +742,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                     getView().putLongExtra(DetailActivity.INTENT_CUR_POSITION, position);
                     getView().putLongExtra(DetailActivity.INTENT_CUR_DURATION, duration);
                     releasePlayer();
-                    onBackPressed();
-                    return true;
+                    return false;
                 }
             } catch (Exception e) {
             }
@@ -784,11 +750,11 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         return false;
     }
 
-    private void onBackPressed() {
-        addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
+    protected void onBackPressedTodo() {
+        addDisposable(Observable.create(new ObservableOnSubscribe<LocalBean>() {
                     // 上报数据
                     @Override
-                    public void subscribe(ObservableEmitter<Boolean> emitter) {
+                    public void subscribe(ObservableEmitter<LocalBean> emitter) {
 
                         String cid = getView().getStringExtra(DetailActivity.INTENT_CID, "");
                         String vid = getView().getStringExtra(DetailActivity.INTENT_VID, "");
@@ -805,21 +771,92 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         int endFlag = isEnd ? 0 : 1;
                         uploadPlayHistory(cid, vid, classId, pos, endFlag, duration, position);
                         // 3
-//                        CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_CACHE_UPDATE_HISTORY_NET, "1");
+                        LocalBean o = new LocalBean();
+                        if (position > 0 && duration > 0 && position == duration) {
+                            o.setLocal_status("已看完");
+                        } else if (position <= 0 && duration <= 0) {
+                            o.setLocal_status("观看至 1%");
+                        } else {
+                            o.setLocal_status("观看至 " + (int) position * 100 / duration + "%");
+                        }
                         // 4
-                        emitter.onNext(true);
+                        emitter.onNext(o);
                     }
                 })
+                // 媒资数据
+                .flatMap(new Function<LocalBean, ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>>>() {
+                    @Override
+                    public ObservableSource<BaseResponsedBean<GetMediasByCid2Bean>> apply(LocalBean data) {
+                        String cid = getView().getStringExtra(DetailActivity.INTENT_CID);
+                        if (null == cid) {
+                            cid = "";
+                        }
+                        String s = new Gson().toJson(data);
+                        return HttpClient.getHttpClient().getHttpApi().getMediasByCid2(cid, s);
+                    }
+                })
+                // 数据处理
+                .map(new Function<BaseResponsedBean<GetMediasByCid2Bean>, Boolean>() {
+                    @Override
+                    public Boolean apply(BaseResponsedBean<GetMediasByCid2Bean> responsedBean) {
+
+                        LocalBean localBean;
+                        try {
+                            localBean = new Gson().fromJson(responsedBean.getExtra(), LocalBean.class);
+                        } catch (Exception e) {
+                            localBean = new LocalBean();
+                        }
+
+                        // 观看记录
+                        try {
+                            // 1
+                            String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY);
+                            Type type = new TypeToken<List<LocalBean>>() {
+                            }.getType();
+                            List<LocalBean> list = new Gson().fromJson(s, type);
+                            // 2
+                            MediaDetailBean album = responsedBean.getData().getAlbum();
+                            localBean.setCid(album.getCid());
+                            localBean.setLocal_img(album.getPicture(true));
+                            localBean.setName(album.getName());
+                            for (LocalBean o : list) {
+                                if (null == o)
+                                    continue;
+                                String cid = o.getCid();
+                                if (cid.equals(localBean.getCid())) {
+                                    list.remove(o);
+                                    break;
+                                }
+                            }
+                            // 3
+                            list.add(0, localBean);
+                            String s1 = new Gson().toJson(list);
+                            // 4
+                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY, s1);
+                        } catch (Exception e) {
+                        }
+                        return true;
+                    }
+                })
+                .delay(40, TimeUnit.MILLISECONDS)
                 .compose(ComposeSchedulers.io_main())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) {
+                        getView().showLoading();
+                    }
+                })
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-                        getView().callOnBackPressed();
+                        getView().hideLoading();
+                        getView().callFinish();
                     }
                 }).doOnNext(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) {
-                        getView().callOnBackPressed();
+                        getView().hideLoading();
+                        getView().callFinish();
                     }
                 }).subscribe());
     }
