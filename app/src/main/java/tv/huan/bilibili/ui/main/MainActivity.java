@@ -8,8 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
-import org.json.JSONObject;
-
 import java.util.List;
 
 import lib.kalu.frame.mvp.BaseActivity;
@@ -20,8 +18,6 @@ import lib.kalu.leanback.tab.listener.OnTabChangeListener;
 import lib.kalu.leanback.tab.model.TabModel;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.dialog.ExitDialog;
-import tv.huan.bilibili.utils.ADUtil;
-import tv.huan.bilibili.widget.GeneralGridView;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
 
@@ -109,11 +105,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         showTitle();
     }
 
-    @Override
-    public void tabScroll(int position) {
-        TabLayout tabLayout = findViewById(R.id.main_tabs);
-        tabLayout.scrollToPosition(1);
-    }
+//    @Override
+//    public void tabScroll(int position) {
+//        TabLayout tabLayout = findViewById(R.id.main_tabs);
+//        tabLayout.scrollToPosition(1);
+//    }
 
     @Override
     public void showTitle() {
@@ -151,6 +147,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 //        PlayerView playerView = findViewById(R.id.main_player);
 //        playerView.stop();
 //        playerView.release();
+    }
+
+    @Override
+    public void contentScrollTop() {
+        getPresenter().fragmentScrollTop();
     }
 
     @Override

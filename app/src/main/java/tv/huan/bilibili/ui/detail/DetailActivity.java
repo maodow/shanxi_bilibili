@@ -92,11 +92,11 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         gridView.updatePlayerPosition(data);
     }
 
-    @Override
-    public boolean isPlayerPlayingPosition(@NonNull int position) {
-        DetailGridView gridView = findViewById(R.id.detail_list);
-        return gridView.isPlayerPlayingPosition(position);
-    }
+//    @Override
+//    public boolean isPlayerPlayingPosition(@NonNull int position) {
+//        DetailGridView gridView = findViewById(R.id.detail_list);
+//        return gridView.isPlayerPlayingPosition(position);
+//    }
 
     private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override

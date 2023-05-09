@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -117,17 +118,19 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
         }
     }
 
-    public final boolean checkPlayerPlayingPosition(@NonNull int position) {
-        try {
-            TextView textView = findViewById(R.id.detail_player_item_data_position);
-            String s = String.valueOf(textView.getText());
-            int index = s.indexOf("第");
-            String substring = s.substring(index + 1, index + 2);
-            return Integer.parseInt(substring) == position + 1;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+//    public final boolean checkPlayerPlayingPosition(@NonNull int position) {
+//        try {
+//            TextView textView = findViewById(R.id.detail_player_item_data_position);
+//            String s = String.valueOf(textView.getText());
+//            int start = s.indexOf("第");
+//            int end = s.indexOf("集");
+//            String substring = s.substring(start + 1, end);
+//            Toast.makeText(getContext(), ""+substring, Toast.LENGTH_SHORT).show();
+//            return Integer.parseInt(substring) == position + 1;
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
 
     public final int getPosition() {
         try {

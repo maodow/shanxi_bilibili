@@ -656,7 +656,7 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
                 RecyclerViewGrid recyclerView = getView().findViewById(R.id.filter_content);
                 int itemCount = recyclerView.getAdapter().getItemCount();
                 int v = itemCount % 4;
-                int focusPosition = recyclerView.findFocusPosition();
+                int focusPosition = recyclerView.findFocusedChildPosition();
 
                 ClassScrollView classLayout = getView().findViewById(R.id.filter_class);
                 int checkedIndex = classLayout.getCheckedIndex();

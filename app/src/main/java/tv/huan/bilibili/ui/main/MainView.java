@@ -15,8 +15,6 @@ public interface MainView extends BaseViewImpl {
 
     void rightScroll();
 
-    void tabScroll(int position);
-
     void showTitle();
 
     void hideTitle();
@@ -26,6 +24,8 @@ public interface MainView extends BaseViewImpl {
     void startFullPlayer();
 
     void stopFullPlayer();
+
+    void contentScrollTop();
 
     <T extends androidx.leanback.widget.Presenter> void huaweiAuth(Class<T> cls, Class<?> obj, String cid);
 

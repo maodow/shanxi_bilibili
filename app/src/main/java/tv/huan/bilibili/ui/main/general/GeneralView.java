@@ -14,5 +14,7 @@ public interface GeneralView extends BaseViewImpl {
 
     void onRelease();
 
+    void scrollTop();
+
     <T extends androidx.leanback.widget.Presenter> void startPlayerFromHuawei(Class<T> cls, Class<?> obj, String s);
 }

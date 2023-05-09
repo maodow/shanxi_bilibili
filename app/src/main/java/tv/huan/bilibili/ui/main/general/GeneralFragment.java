@@ -81,6 +81,12 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
     }
 
     @Override
+    public void scrollTop() {
+        tv.huan.bilibili.widget.GeneralGridView gridView = findViewById(R.id.general_list);
+        gridView.scrollTop(false);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         GeneralGridView gridView = findViewById(R.id.general_list);

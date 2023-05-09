@@ -164,21 +164,13 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public void scrollTop() {
+    @Override
+    public void scrollTop(boolean hasFocus) {
+        super.scrollTop(hasFocus);
         if (null != mOnScrollTopListener) {
             mOnScrollTopListener.onShow();
         }
-        scrollUp(0);
     }
-
-//    public boolean isTop() {
-//        try {
-//            ViewHolder viewHolder = findViewHolderForLayoutPosition(0);
-//            viewHolder.itemView;
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
 
     public void pauseMessage() {
         GeneralTemplate17 template17 = getPresenter(GeneralTemplate17.class);

@@ -414,8 +414,8 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 }
             } else if (focusId == R.id.center_item) {
                 RecyclerViewGrid recyclerView = getView().findViewById(R.id.center_list);
-                int focusPosition = recyclerView.findFocusPosition();
-                int itemCount = recyclerView.getItemCount();
+                int focusPosition = recyclerView.findFocusedChildPosition();
+                int itemCount = recyclerView.getAdapterItemCount();
                 if (itemCount > 0 && itemCount - focusPosition <= 4) {
                     ClassScrollView scrollView = getView().findViewById(R.id.center_tabs);
                     int checkedIndex = scrollView.getCheckedIndex();

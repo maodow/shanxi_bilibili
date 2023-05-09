@@ -120,18 +120,18 @@ public final class DetailGridView extends LeanBackVerticalGridView {
         }
     }
 
-    public boolean isPlayerPlayingPosition(@NonNull int position) {
-        try {
-            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
-            if (null == viewHolder) throw new Exception("viewHolder error: null");
-            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
-            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
-            return presenterPlayer.checkPlayerPlayingPosition(viewHolder.itemView, position);
-        } catch (Exception e) {
-            LogUtil.log("DetailGridView => isPlayerPlayingPosition => " + e.getMessage());
-            return false;
-        }
-    }
+//    public boolean isPlayerPlayingPosition(@NonNull int position) {
+//        try {
+//            ViewHolder viewHolder = findViewHolderForAdapterObject(DetailTemplatePlayer.DetailTemplatePlayerObject.class);
+//            if (null == viewHolder) throw new Exception("viewHolder error: null");
+//            DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
+//            if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
+//            return presenterPlayer.checkPlayerPlayingPosition(viewHolder.itemView, position);
+//        } catch (Exception e) {
+//            LogUtil.log("DetailGridView => isPlayerPlayingPosition => " + e.getMessage());
+//            return false;
+//        }
+//    }
 
     public void startPlayerPosition(@NonNull int position) {
         LogUtil.log("DetailGridView", "startPlayerPosition => position = " + position);

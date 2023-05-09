@@ -196,18 +196,18 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    public boolean checkPlayerPlayingPosition(View view, int position) {
-        try {
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
-            String url = playerView.getUrl();
-            if (null == url || url.length() <= 0)
-                return false;
-            PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
-            return componentInit.checkPlayerPlayingPosition(position);
-        } catch (Exception e) {
-            return false;
-        }
-    }
+//    public boolean checkPlayerPlayingPosition(View view, int position) {
+//        try {
+//            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+//            String url = playerView.getUrl();
+//            if (null == url || url.length() <= 0)
+//                return false;
+//            PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
+//            return componentInit.checkPlayerPlayingPosition(position);
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
 
     public void checkVipStatus(View view, MediaBean data, @NonNull long seek, boolean isFromUser) {
         LogUtil.log("DetailTemplatePlayer => checkVipStatus => isFromUser = " + isFromUser);

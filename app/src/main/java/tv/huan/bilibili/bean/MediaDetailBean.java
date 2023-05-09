@@ -49,6 +49,8 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
 
     public String getInfo() {
         StringBuilder stringBuilder = new StringBuilder();
+
+        // 演职人员
         try {
             String actor = getLeadingActor();
             if (null == actor || actor.length() <= 0)
@@ -57,6 +59,17 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
         } catch (Exception e) {
             stringBuilder.append("演职人员： 暂无");
         }
+
+        // 简介
+        try {
+            String desc = getDescription();
+            if (null == desc || desc.length() <= 0)
+                throw new Exception();
+            stringBuilder.append("\n\n简   介： " + desc);
+        } catch (Exception e) {
+            stringBuilder.append("\n\n简   介： 暂无");
+        }
+
 //        try {
 //            // 电影，电视剧
 //            if (type == BuildConfig.HUAN_TYPE_FILM || type == BuildConfig.HUAN_TYPE_TELEPLAY) {

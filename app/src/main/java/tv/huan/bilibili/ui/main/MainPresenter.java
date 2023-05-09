@@ -25,7 +25,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import lib.kalu.frame.mvp.transformer.ComposeSchedulers;
-import lib.kalu.leanback.list.RecyclerViewVertical;
 import lib.kalu.leanback.tab.TabLayout;
 import lib.kalu.leanback.tab.model.TabModel;
 import lib.kalu.leanback.tab.model.TabModelImage;
@@ -47,7 +46,6 @@ import tv.huan.bilibili.ui.main.mine.MineFragment;
 import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.bilibili.widget.GeneralGridView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public class MainPresenter extends BasePresenterImpl<MainView> {
@@ -283,22 +281,11 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
         // back
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             int focusId = getView().getCurrentFocusId();
-            TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
-            int checkedIndex = tabLayout.getCheckedIndex();
             if (focusId != R.id.main_tabs) {
-                String tag = "fragment" + checkedIndex;
-                if (checkedIndex == 0) {
-                    MineFragment fragment = (MineFragment) getView().findFragmentByTag(tag);
-                    RecyclerViewVertical recyclerView = fragment.findViewById(R.id.mine_list);
-                    recyclerView.scrollToPosition(0);
-                } else {
-                    GeneralFragment fragment = (GeneralFragment) getView().findFragmentByTag(tag);
-                    GeneralGridView gridView = fragment.findViewById(R.id.general_list);
-                    gridView.scrollToPosition(0);
-                }
-                tabLayout.scrollToPosition(checkedIndex);
-                getView().requestFocus(R.id.main_tabs);
+                fragmentScrollTop();
             } else {
+                TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+                int checkedIndex = tabLayout.getCheckedIndex();
                 int itemCount = tabLayout.getItemCount();
                 if (itemCount > 1 && checkedIndex != 1) {
                     tabLayout.scrollToPosition(1);
@@ -355,6 +342,24 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
             }
         }
         return false;
+    }
+
+    protected void fragmentScrollTop() {
+        try {
+            TabLayout tabLayout = getView().findViewById(R.id.main_tabs);
+            int checkedIndex = tabLayout.getCheckedIndex();
+            String tag = "fragment" + checkedIndex;
+            if (checkedIndex == 0) {
+                MineFragment fragment = (MineFragment) getView().findFragmentByTag(tag);
+                fragment.scrollTop();
+            } else {
+                GeneralFragment fragment = (GeneralFragment) getView().findFragmentByTag(tag);
+                fragment.scrollTop();
+            }
+            tabLayout.scrollToPosition(checkedIndex);
+            tabLayout.requestFocus();
+        } catch (Exception e) {
+        }
     }
 
     private void requestExit() {

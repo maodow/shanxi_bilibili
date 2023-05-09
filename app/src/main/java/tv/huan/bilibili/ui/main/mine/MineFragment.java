@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -47,6 +46,12 @@ public class MineFragment extends BaseFragment<MineView, MinePresenter> implemen
     public void onShow() {
         setVisibility(getView(), View.VISIBLE);
         getPresenter().updateCard();
+    }
+
+    @Override
+    public void scrollTop() {
+        RecyclerViewVertical recyclerView = getView().findViewById(R.id.mine_list);
+        recyclerView.scrollTop(false);
     }
 
     private final Handler mHandler = new Handler(Looper.getMainLooper()) {

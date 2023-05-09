@@ -91,25 +91,22 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
         }
     }
 
-
     @Override
-    public void onClickEpisode(@NonNull Context context, @NonNull View view, @NonNull MediaBean item, @NonNull int position, boolean isFromUser) {
-        LogUtil.log("DetailTemplateXuanJi => onClickEpisode => position = " + position + ", isFromUser = " + isFromUser + ", data = " + new Gson().toJson(item));
+    public void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int checkedIndex, @NonNull int playingIndex, boolean isFromUser) {
+        LogUtil.log("DetailTemplateXuanJi => onClickEpisode => playingIndex = " + playingIndex+", checkedIndex = "+checkedIndex + ", isFromUser = " + isFromUser + ", data = " + new Gson().toJson(item));
         try {
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null == activity)
                 throw new Exception();
             if (!(activity instanceof DetailActivity))
                 throw new Exception();
-            int episodeIndex = item.getEpisodeIndex();
-            boolean playingPosition = ((DetailActivity) activity).isPlayerPlayingPosition(episodeIndex);
-            if (playingPosition) {
+            if (playingIndex == checkedIndex) {
                 if (isFromUser) {
                     ((DetailActivity) activity).startFull();
                 }
             } else {
                 ((DetailActivity) activity).updatePlayerPosition(item);
-                ((DetailActivity) activity).startPlayerPosition(item, position, item.getSeek(), true);
+                ((DetailActivity) activity).startPlayerPosition(item, checkedIndex, item.getSeek(), true);
             }
         } catch (Exception e) {
         }

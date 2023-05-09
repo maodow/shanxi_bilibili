@@ -17,7 +17,7 @@ public interface DetailView extends BaseViewImpl {
 
     void updatePlayerPosition(@NonNull MediaBean data);
 
-    boolean isPlayerPlayingPosition(@NonNull int position);
+//    boolean isPlayerPlayingPosition(@NonNull int position);
 
     void startPlayerPosition(@NonNull int position);
 

@@ -1,6 +1,7 @@
 package tv.huan.bilibili.ui.main.general.template;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,9 @@ import android.view.ViewGroup;
 
 import androidx.leanback.widget.Presenter;
 
+import lib.kalu.frame.mvp.util.WrapperUtil;
 import tv.huan.bilibili.R;
-import tv.huan.bilibili.utils.JumpUtil;
-import tv.huan.bilibili.widget.GeneralGridView;
+import tv.huan.bilibili.ui.main.MainActivity;
 
 public class GeneralTemplateBottom extends Presenter {
     @Override
@@ -23,7 +24,12 @@ public class GeneralTemplateBottom extends Presenter {
                     @Override
                     public void onClick(View v) {
                         try {
-                            ((GeneralGridView) v.getParent().getParent()).scrollTop();
+                            Activity activity = WrapperUtil.getWrapperActivity(v.getContext());
+                            if (null == activity)
+                                throw new Exception();
+                            if (!(activity instanceof MainActivity))
+                                throw new Exception();
+                            ((MainActivity) activity).contentScrollTop();
                         } catch (Exception e) {
                         }
                     }
