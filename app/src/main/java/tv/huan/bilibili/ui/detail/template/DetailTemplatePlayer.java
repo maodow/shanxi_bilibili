@@ -29,8 +29,6 @@ import tv.huan.bilibili.widget.common.CommonPicView;
 import tv.huan.bilibili.widget.player.PlayerViewForDetail;
 import tv.huan.bilibili.widget.player.component.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.component.PlayerComponentVip;
-import tv.huan.heilongjiang.HeilongjiangUtil;
-import tv.huan.bilibili.widget.player.PlayerView;
 
 public final class DetailTemplatePlayer extends Presenter {
 
