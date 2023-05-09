@@ -3,6 +3,7 @@ package tv.huan.bilibili.bean.base;
 import java.io.Serializable;
 
 import lib.kalu.leanback.presenter.bean.TvEpisodesPlusItemBean;
+import tv.huan.bilibili.BuildConfig;
 
 public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable {
 
@@ -13,6 +14,7 @@ public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable
     private int toType;
     private String jumpParam;
     private int id;
+    private int type;
 
     private String brief;
     private String name;
@@ -155,6 +157,35 @@ public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable
         }
     }
 
+    public String getName1() {
+        try {
+            if (type == BuildConfig.HUAN_TYPE_FILM) {
+                throw new Exception();
+            } else {
+                int pos = getPos();
+                if (pos < 0)
+                    throw new Exception();
+                return getName() + "(第" + (pos + 1) + "集)";
+            }
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public String getName2(int pos) {
+        try {
+            if (type == BuildConfig.HUAN_TYPE_FILM) {
+                throw new Exception();
+            } else {
+                if (pos < 0)
+                    throw new Exception();
+                return getName() + "(第" + (pos + 1) + "集)";
+            }
+        } catch (Exception e) {
+            return getName();
+        }
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -193,5 +224,13 @@ public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable
 
     public void setBrief(String brief) {
         this.brief = brief;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
     }
 }

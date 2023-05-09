@@ -49,9 +49,12 @@ import tv.huan.bilibili.ui.detail.template.DetailTemplatePlayer;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanJi;
 import tv.huan.bilibili.ui.detail.template.DetailTemplateXuanQi;
 import tv.huan.bilibili.utils.DevicesUtils;
+import tv.huan.bilibili.utils.ADUtil;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.bilibili.widget.player.PlayerView;
+import tv.huan.bilibili.widget.player.PlayerViewForDetail;
+import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public class DetailPresenter extends BasePresenterImpl<DetailView> {
     public DetailPresenter(@NonNull DetailView detailView) {
@@ -660,7 +663,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         // center
         if (event.getAction() == KeyEvent.ACTION_DOWN && (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER || event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
             try {
-                PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
+                PlayerViewForDetail playerView = getView().findViewById(R.id.detail_player_item_video);
                 boolean isFull = playerView.isFull();
                 // full
                 if (isFull) {
@@ -696,7 +699,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
 
             try {
-                PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
+                PlayerViewForDetail playerView = getView().findViewById(R.id.detail_player_item_video);
                 boolean isFull = playerView.isFull();
                 // full
                 if (isFull) {
@@ -741,6 +744,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         uploadPlayHistory(cid, vid, classId, pos, endFlag, duration, position);
                         // 3
                         LocalBean o = new LocalBean();
+                        o.setPos(pos);
                         if (position > 0 && duration > 0 && position == duration) {
                             o.setLocal_status("已看完");
                         } else if (position <= 0 && duration <= 0) {
@@ -787,7 +791,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                             MediaDetailBean album = responsedBean.getData().getAlbum();
                             localBean.setCid(album.getCid());
                             localBean.setLocal_img(album.getPicture(true));
-                            localBean.setName(album.getName());
+                            localBean.setName(album.getName2(localBean.getPos()));
                             for (LocalBean o : list) {
                                 if (null == o)
                                     continue;
@@ -805,6 +809,17 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         } catch (Exception e) {
                         }
                         return true;
+                    }
+                })
+                // 销毁ad-sdk
+                .map(new Function<Boolean, Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean aBoolean) {
+                        try {
+                            ADUtil.adRelease();
+                        } catch (Exception e) {
+                        }
+                        return aBoolean;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)
@@ -894,7 +909,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
 
     protected void releasePlayer() {
         try {
-            PlayerView playerView = getView().findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = getView().findViewById(R.id.detail_player_item_video);
             if (null == playerView)
                 throw new Exception();
             playerView.setPlayWhenReady(false);

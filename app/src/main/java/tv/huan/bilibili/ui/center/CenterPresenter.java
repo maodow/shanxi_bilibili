@@ -152,13 +152,13 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                 try {
                     FavBean.ItemBean itemBean = mDatas.get(position);
                     TextView textView = holder.itemView.findViewById(R.id.common_poster_name);
-                    textView.setText(itemBean.getNameRec());
+                    textView.setText(itemBean.getName1());
                 } catch (Exception e) {
                 }
                 try {
                     FavBean.ItemBean itemBean = mDatas.get(position);
                     TextView textView = holder.itemView.findViewById(R.id.common_poster_status);
-                    textView.setText(itemBean.getStatusRec());
+                    textView.setText(itemBean.getStatus());
                     textView.setVisibility(itemBean.isVisibility() ? View.GONE : View.VISIBLE);
                 } catch (Exception e) {
                 }
@@ -310,45 +310,33 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             return HttpClient.getHttpClient().getHttpApi().cancelFavorite(cid);
                         }
                     }
-                }).map(new Function<BaseResponsedBean<CallOptBean>, CallCenterDelBaen>() {
+                })
+                .map(new Function<BaseResponsedBean<CallOptBean>, CallCenterDelBaen>() {
                     @Override
                     public CallCenterDelBaen apply(BaseResponsedBean<CallOptBean> resp) throws Exception {
+
                         try {
                             boolean succ = resp.getData().isSucc();
                             if (!succ)
                                 throw new Exception("操作失败");
+
+                            // 1
                             mDatas.remove(position);
-                            CallCenterDelBaen centerDelBaen = new CallCenterDelBaen();
-                            centerDelBaen.setPosition(position);
-                            centerDelBaen.setEmpty(mDatas.isEmpty());
-                            return centerDelBaen;
-                        } catch (Exception e) {
-                            throw e;
-                        }
-                    }
-                })
-                .map(new Function<CallCenterDelBaen, CallCenterDelBaen>() {
-                    @Override
-                    public CallCenterDelBaen apply(CallCenterDelBaen callCenterDelBaen) {
-                        try {
-                            ArrayList<LocalBean> temp = new ArrayList<>();
-                            int size = mDatas.size();
-                            for (int i = 0; i < size; i++) {
-                                if (temp.size() >= 3)
-                                    break;
-                                FavBean.ItemBean t = mDatas.get(i);
+                            // 2
+                            ArrayList<LocalBean> list = new ArrayList<>();
+                            for (FavBean.ItemBean t : mDatas) {
                                 if (null == t)
                                     continue;
+                                if (list.size() >= 3)
+                                    break;
                                 LocalBean o = new LocalBean();
                                 o.setCid(t.getCid());
-                                o.setName(t.getAlbumName());
+                                o.setName(t.getName());
                                 o.setLocal_img(t.getAlbum().getPicture(true));
-                                o.setLocal_status(t.getStatusRec());
-                                temp.add(o);
+                                o.setLocal_status(t.getStatus());
+                                list.add(o);
                             }
-                            if (null == temp || temp.size() <= 0)
-                                throw new Exception();
-                            String s = new Gson().toJson(temp);
+                            String s = new Gson().toJson(list);
                             ClassScrollView classLayout = getView().findViewById(R.id.center_tabs);
                             int checkedIndex = classLayout.getCheckedIndex();
                             if (checkedIndex == 0) {
@@ -356,9 +344,14 @@ public class CenterPresenter extends BasePresenterImpl<CenterView> {
                             } else if (checkedIndex == 1) {
                                 CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR, s);
                             }
+                            // 3
+                            CallCenterDelBaen centerDelBaen = new CallCenterDelBaen();
+                            centerDelBaen.setPosition(position);
+                            centerDelBaen.setEmpty(mDatas.isEmpty());
+                            return centerDelBaen;
                         } catch (Exception e) {
+                            throw e;
                         }
-                        return callCenterDelBaen;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)

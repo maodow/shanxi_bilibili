@@ -110,7 +110,7 @@
     </LinearLayout>
 
     <!-- 播放器 -->
-    <tv.huan.bilibili.widget.player.PlayerViewTemplate21
+    <tv.huan.bilibili.widget.player.PlayerViewForTemplate21
         android:id="@+id/general_template21_player"
         android:layout_width="0dp"
         android:layout_height="match_parent"

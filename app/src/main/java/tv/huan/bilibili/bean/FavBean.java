@@ -65,10 +65,6 @@ public class FavBean implements Serializable {
 
         private boolean tempDel;
 
-        public String getAlbumName() {
-            return albumName;
-        }
-
         public boolean isTempDel() {
             return tempDel;
         }
@@ -109,7 +105,7 @@ public class FavBean implements Serializable {
             }
         }
 
-        public String getNameRec() {
+        public String getName1() {
             try {
                 int type = getAlbum().getType();
                 if (type == BuildConfig.HUAN_TYPE_FILM) {
@@ -121,11 +117,11 @@ public class FavBean implements Serializable {
                     return getAlbum().getName() + "(第" + (pos + 1) + "集)";
                 }
             } catch (Exception e) {
-                return "";
+                return getName();
             }
         }
 
-        public String getStatusRec() {
+        public String getStatus() {
             try {
                 long position = Long.parseLong(getPlayTime());
                 long duration = Long.parseLong(getPlayLength());
@@ -157,7 +153,7 @@ public class FavBean implements Serializable {
                 int length1 = spannableString.length();
                 spannableString.setSpan(new AbsoluteSizeSpan(30), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                 spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#ffffff")), 0, length1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                String status = getStatusRec();
+                String status = getStatus();
                 spannableString.append("  " + status);
                 int length2 = spannableString.length();
                 spannableString.setSpan(new AbsoluteSizeSpan(22), length1, length2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -172,7 +168,6 @@ public class FavBean implements Serializable {
         public static class InfoBean extends BaseImageBean implements Serializable {
 
             private String code;
-            private int type;
             private String productName;
             private int payStatus;
             private int productType;
@@ -183,14 +178,6 @@ public class FavBean implements Serializable {
 
             public void setCode(String code) {
                 this.code = code;
-            }
-
-            public int getType() {
-                return type;
-            }
-
-            public void setType(int type) {
-                this.type = type;
             }
 
             public String getProductName() {

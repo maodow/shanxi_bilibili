@@ -17,7 +17,8 @@ import tv.huan.bilibili.utils.LogUtil;
 @Keep
 public class MineFragment extends BaseFragment<MineView, MinePresenter> implements MineView {
 
-    protected final static String BUNDLE_REFRESH = "bundle_refresh";
+    protected final static String BUNDLE_JUMP_HISTRRY = "bundle_jump_histrry";
+    protected final static String BUNDLE_JUMP_FAV = "bundle_jump_fav";
 
     @Override
     public int initLayout() {

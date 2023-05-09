@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.List;
 
 import lib.kalu.frame.mvp.util.CacheUtil;
@@ -247,15 +248,23 @@ public final class GeneralGridView extends LeanBackVerticalGridView {
     }
 
     public void updateTemplateHistory() {
+
         try {
-            String s = CacheUtil.getCache(getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY);
-            if (null == s || s.length() <= 0)
-                throw new Exception();
-            Type type = new TypeToken<List<LocalBean>>() {
-            }.getType();
-            List<LocalBean> newList = new Gson().fromJson(s, type);
-            if (null == newList || newList.size() <= 0)
-                throw new Exception();
+            // 1 => search
+            List<LocalBean> newList = new LinkedList<>();
+            try {
+                String s = CacheUtil.getCache(getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY);
+                if (null == s || s.length() <= 0)
+                    throw new Exception();
+                Type type = new TypeToken<List<LocalBean>>() {
+                }.getType();
+                List<LocalBean> list = new Gson().fromJson(s, type);
+                if (null == list || list.size() <= 0)
+                    throw new Exception();
+                newList.addAll(list);
+            } catch (Exception e) {
+            }
+            // 2 => update
             ItemBridgeAdapter itemBridgeAdapter = (ItemBridgeAdapter) getAdapter();
             if (null == itemBridgeAdapter)
                 throw new Exception("itemBridgeAdapter error: null");

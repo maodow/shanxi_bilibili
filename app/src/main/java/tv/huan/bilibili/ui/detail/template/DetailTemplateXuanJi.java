@@ -78,7 +78,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
 
     @Override
     public void onBindHolderRange(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int position) {
-//        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderRange => position = " + position + ", hasFocus = " + hasFocus + ", isPlaying = " + isPlaying + ", isChecked = " + isChecked);
+        LogUtil.log("DetailTemplateXuanJi => onBindViewHolderRange => position = " + position + ", item = " + new Gson().toJson(item));
         try {
             TextView textView = v.findViewById(R.id.detail_xuanji2_item_name);
             textView.setText(item.getRangeStart() + "-" + item.getRangeEnd());
@@ -93,18 +93,17 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
 
     @Override
     public void onClickEpisode(@NonNull Context context, @NonNull View v, @NonNull MediaBean item, @NonNull int checkedIndex, @NonNull int playingIndex, boolean isFromUser) {
-        LogUtil.log("DetailTemplateXuanJi => onClickEpisode => playingIndex = " + playingIndex+", checkedIndex = "+checkedIndex + ", isFromUser = " + isFromUser + ", data = " + new Gson().toJson(item));
+        LogUtil.log("DetailTemplateXuanJi => onClickEpisode => playingIndex = " + playingIndex + ", checkedIndex = " + checkedIndex + ", isFromUser = " + isFromUser + ", data = " + new Gson().toJson(item));
         try {
             Activity activity = WrapperUtil.getWrapperActivity(context);
             if (null == activity)
                 throw new Exception();
             if (!(activity instanceof DetailActivity))
                 throw new Exception();
-            if (playingIndex == checkedIndex) {
-                if (isFromUser) {
-                    ((DetailActivity) activity).startFull();
-                }
-            } else {
+            if (playingIndex == checkedIndex && isFromUser) {
+                ((DetailActivity) activity).startFull();
+            }
+            if (playingIndex != checkedIndex) {
                 ((DetailActivity) activity).updatePlayerPosition(item);
                 ((DetailActivity) activity).startPlayerPosition(item, checkedIndex, item.getSeek(), true);
             }

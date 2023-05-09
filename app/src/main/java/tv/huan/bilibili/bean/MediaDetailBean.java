@@ -208,14 +208,6 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
         this.columnId = columnId;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public int getIsTrailer() {
         return isTrailer;
     }

@@ -25,6 +25,7 @@ import tv.huan.bilibili.bean.ServerSettingData.UpgradeBean;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
 
+    public static final String INTENT_START_TIME = "intent_start_time";
     public static final String INTENT_ENABLE = "intent_enable";
     public static final String INTENT_SECOND_TAG = "intent_second_tag";
     public static final String INTENT_CID = "intent_cid";
@@ -53,6 +54,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     @Override
     public int initLayout() {
+        putLongExtra(INTENT_START_TIME, System.currentTimeMillis());
         return R.layout.activity_main;
     }
 

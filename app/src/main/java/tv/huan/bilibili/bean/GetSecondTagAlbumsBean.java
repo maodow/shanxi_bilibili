@@ -26,19 +26,9 @@ public class GetSecondTagAlbumsBean implements Serializable {
 
     @Keep
     public static class ItemBean extends BaseImageBean implements Serializable {
-        private int type;
-
         @Override
         public int getToType() {
             return 1;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
         }
     }
 }

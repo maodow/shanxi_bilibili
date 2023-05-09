@@ -108,6 +108,9 @@ public final class ReportUtils {
         JSONObject object = create("search_result_item_num", prodId);
         try {
             object.put("keyword", keyword);
+            if (num < 0) {
+                num = 0;
+            }
             object.put("num", num);
         } catch (Exception e) {
         }
@@ -136,6 +139,7 @@ public final class ReportUtils {
     public static JSONObject detailLoadFinished(int prodId, String cid) {
         JSONObject object = create("detail_load_finished", prodId);
         try {
+            // "home","channel","topic","launcher"
             object.put("pre_page", "");
             object.put("pre_info", "");
             if (null == cid) {
@@ -175,10 +179,14 @@ public final class ReportUtils {
     /**
      * 退出
      */
-    public static JSONObject appExit(int prodId) {
+    public static JSONObject appExit(int prodId, long startTime, long endTime) {
         JSONObject object = create("app_exit", prodId);
         try {
-            object.put("use_time", System.currentTimeMillis());
+            if (endTime <= startTime) {
+                object.put("use_time", 0);
+            } else {
+                object.put("use_time", (endTime - startTime) / 1000);
+            }
         } catch (Exception e) {
         }
         return object;
@@ -190,7 +198,7 @@ public final class ReportUtils {
     public static JSONObject topicLoadFinished(int prodId, int sceneId) {
         JSONObject object = create("topic_load_finished", prodId);
         try {
-            object.put("scene_id", sceneId);
+            object.put("scene_id", String.valueOf(sceneId));
         } catch (Exception e) {
         }
         return object;

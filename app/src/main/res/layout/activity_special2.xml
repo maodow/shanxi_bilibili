@@ -47,7 +47,7 @@
                 app:rl_corner_top_right="8dp"
                 >
 
-                <tv.huan.bilibili.widget.player.PlayerView
+                <tv.huan.bilibili.widget.player.PlayerViewForDetail
                     android:id="@+id/special2_player"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

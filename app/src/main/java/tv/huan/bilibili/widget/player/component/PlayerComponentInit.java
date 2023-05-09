@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -136,8 +135,9 @@ public class PlayerComponentInit extends RelativeLayout implements ComponentApi 
         try {
             TextView textView = findViewById(R.id.detail_player_item_data_position);
             String s = String.valueOf(textView.getText());
-            int index = s.indexOf("第");
-            String substring = s.substring(index + 1, index + 2);
+            int start = s.indexOf("第");
+            int end = s.indexOf("集");
+            String substring = s.substring(start + 1, end);
             return Integer.parseInt(substring);
         } catch (Exception e) {
             return -1;

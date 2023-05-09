@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.utils.GlideUtils;
-import tv.huan.bilibili.widget.player.PlayerView;
+import tv.huan.bilibili.widget.player.PlayerViewForDetail;
 
 public class Special2Activity extends BaseActivity<Special2View, Special2Presenter> implements Special2View {
 
@@ -43,7 +43,7 @@ public class Special2Activity extends BaseActivity<Special2View, Special2Present
     public void startPlayer(@NonNull String url, @NonNull String name, @NonNull String info) {
         setText(R.id.special2_name, name);
         setText(R.id.special2_info, info);
-        PlayerView videoLayout = findViewById(R.id.special2_player);
+        PlayerViewForDetail videoLayout = findViewById(R.id.special2_player);
         videoLayout.start(url);
     }
 

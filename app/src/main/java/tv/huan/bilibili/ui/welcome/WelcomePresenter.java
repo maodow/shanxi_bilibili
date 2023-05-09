@@ -107,15 +107,17 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                                     break;
                                 LocalBean o = new LocalBean();
                                 o.setCid(t.getCid());
-                                o.setName(t.getAlbumName());
+                                o.setName(t.getName1());
                                 o.setLocal_img(t.getAlbum().getPicture(true));
                                 o.setLocal_index(oldList.indexOf(t));
-                                o.setLocal_status(t.getStatusRec());
+                                o.setLocal_status(t.getStatus());
+                                o.setPos(t.getPos());
                                 newList.add(o);
                             }
                             String s = new Gson().toJson(newList);
                             CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY, s);
                         } catch (Exception e) {
+                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY, "[]");
                         }
                         return true;
                     }
@@ -154,6 +156,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                             String s = new Gson().toJson(newList);
                             CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR, s);
                         } catch (Exception e) {
+                            CacheUtil.setCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR, "[]");
                         }
                         return true;
                     }
