@@ -11,6 +11,7 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 import java.util.List;
 
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.base.BaseImageBean;
 
@@ -110,10 +111,14 @@ public class FavBean implements Serializable {
 
         public String getNameRec() {
             try {
-                if (getPos() <= 0) {
-                    return getAlbum().getName();
+                int type = getAlbum().getType();
+                if (type == BuildConfig.HUAN_TYPE_FILM) {
+                    throw new Exception();
                 } else {
-                    return getAlbum().getName() + "(第" + getPos() + "集)";
+                    int pos = getPos();
+                    if (pos < 0)
+                        throw new Exception();
+                    return getAlbum().getName() + "(第" + (pos + 1) + "集)";
                 }
             } catch (Exception e) {
                 return "";

@@ -34,6 +34,14 @@ public class CenterActivity extends BaseActivity<CenterView, CenterPresenter> im
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        ClassScrollView classLayout = findViewById(R.id.center_tabs);
+        int checkedIndex = classLayout.getCheckedIndex();
+        getPresenter().request(checkedIndex, true, true);
+    }
+
+    @Override
     public void updateTab(ArrayList<ClassBean> data, int select) {
         ClassScrollView classLayout = findViewById(R.id.center_tabs);
         classLayout.setOnCheckedChangeListener(new OnCheckedChangeListener() {
