@@ -190,7 +190,7 @@ public class BaseDataBean extends TvEpisodesPlusItemBean implements Serializable
                 return getName() + "(第" + (pos + 1) + "集)";
             }
         } catch (Exception e) {
-            return "";
+            return getName();
         }
     }
 

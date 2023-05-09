@@ -117,7 +117,7 @@ public class FavBean implements Serializable {
                     return getAlbum().getName() + "(第" + (pos + 1) + "集)";
                 }
             } catch (Exception e) {
-                return "";
+                return getName();
             }
         }
 
