@@ -35,7 +35,7 @@ public class DetailTemplateXuanJi extends ListTvEpisodesDoubleRowPresenter<Media
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
         super.onBindViewHolder(viewHolder, item);
-        LogUtil.log("DetailTemplateXuanJi => onBindViewHolder => data = " + new Gson().toJson(item));
+//        LogUtil.log("DetailTemplateXuanJi => onBindViewHolder => data = " + new Gson().toJson(item));
     }
 
     @Override

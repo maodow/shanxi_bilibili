@@ -162,6 +162,7 @@ public class WebviewPresenter extends BasePresenterImpl<WebviewView> {
                                 public void subscribe(ObservableEmitter<BaseResponsedBean<String>> observableEmitter) {
                                     BaseResponsedBean<String> baseResponsedBean = new BaseResponsedBean<>();
                                     baseResponsedBean.setData(null);
+                                    observableEmitter.onNext(baseResponsedBean);
                                 }
                             });
                         }

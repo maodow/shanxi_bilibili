@@ -38,6 +38,10 @@ public final class JumpUtil {
             case 4:
                 nextSpecial(context, templateBean);
                 break;
+            // Web
+            case 8:
+                nextWeb(context, templateBean);
+                break;
         }
     }
 
@@ -94,6 +98,12 @@ public final class JumpUtil {
         }
     }
 
+    public static void nextWeb(@NonNull Context context, @NonNull BaseDataBean data) {
+        Intent intent = new Intent(context, WebviewActivity.class);
+        intent.putExtra(WebviewActivity.INTENT_HELP, false);
+        intent.putExtra(WebviewActivity.INTENT_URL, data.getJumpParam());
+        context.startActivity(intent);
+    }
 
     /*****************/
 

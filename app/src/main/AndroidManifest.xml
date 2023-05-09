@@ -6,6 +6,16 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <!-- 对接支付 -->
+    <uses-permission android:name="com.aspire.hdc.permission.PAY_SERVICE" />
+
+    <!--可选权限(广告sdk)-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+
     <application
         android:name="tv.huan.bilibili.HuanApp"
         android:allowBackup="false"
@@ -27,7 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="tv.huan.bilibili.heilongjiang.open"/>
+                <action android:name="tv.huan.bilibili.shanxi.open"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
@@ -103,6 +113,19 @@
             android:exported="false"
             android:theme="@style/AppTheme"
             android:screenOrientation="landscape" />
+
+
+        <!-- 对接支付 -->
+        <activity
+            android:name="com.aspire.hdc.pay.sdk.AuthActivity"
+            android:exported="false"
+            tools:ignore="Instantiatable"/>
+
+        <!-- ip:port：根据不同的环境（如：测试环境、生产环境）进行配置，如：112.4.10.139:8090 -->
+        <meta-data
+            android:name="HDC_PAYMENT_URL"
+            android:value="https://www.sandykun.top:8099" />
+
     </application>
 
 </manifest>

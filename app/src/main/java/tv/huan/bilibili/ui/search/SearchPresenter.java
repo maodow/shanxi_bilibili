@@ -57,40 +57,14 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-//                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72);
-//                int v = offset / 8;
-//                outRect.set(0, 0, offset, offset);
-//                int position = parent.getChildAdapterPosition(view);
-//
-//                int i = position % 4;
-//                if (i == 0) {
-//                    outRect.set(0, 0, v * 2, 0);
-//                } else if (i == 3) {
-//                    outRect.set(v * 2, 0, 0, 0);
-//                } else {
-//                    outRect.set(v, 0, v, 0);
-//                }
-//
-//                if (i == 1) {
-//                    view.setTranslationX(-v / 2);
-//                } else if (i == 2) {
-//                    view.setTranslationX(v / 2);
-//                } else {
-//                    view.setTranslationX(0);
-//                }
-
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_48);
-                int v = offset / 6;
-                outRect.set(0, 0, offset, offset);
                 int position = parent.getChildAdapterPosition(view);
-
-                int i = position % 3;
-                if (i == 0) {
-                    outRect.set(0, 0, v * 2, 0);
-                } else if (i == 2) {
-                    outRect.set(v * 2, 0, 0, 0);
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_48) / 6;
+                if (position % 3 == 0) {
+                    outRect.set(0, 0, offset * 2, 0);
+                } else if (position % 3 == 2) {
+                    outRect.set(offset * 2, 0, 0, 0);
                 } else {
-                    outRect.set(v, 0, v, 0);
+                    outRect.set(offset , 0, offset, 0);
                 }
             }
         });

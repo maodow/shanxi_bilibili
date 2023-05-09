@@ -29,16 +29,16 @@ public final class BoxUtil {
         }
     }
 
+
     public static String getUserId() {
         try {
-            Context context = FrameContext.getApplicationContext();
-            String userId = HeilongjiangUtil.getUserId(context);
-            if (null == userId || userId.length() <= 0)
+            String userId = DevicesUtils.INSTANCE.getAccount();
+            if (userId.length() <= 0)
                 throw new Exception("userId error: null");
             return userId;
         } catch (Exception e) {
             LogUtil.log("BoxUtil => getUserId => " + e.getMessage());
-            return BuildConfig.HUAN_CHECK_USER_ID ? "" : "00380035890";
+            return "00380035890";
         }
     }
 

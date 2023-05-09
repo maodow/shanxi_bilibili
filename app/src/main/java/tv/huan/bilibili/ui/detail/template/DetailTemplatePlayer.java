@@ -1,21 +1,15 @@
 package tv.huan.bilibili.ui.detail.template;
 
-
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
-
 import org.json.JSONObject;
-
 import lib.kalu.frame.mvp.util.WrapperUtil;
 import lib.kalu.mediaplayer.config.player.PlayerType;
 import lib.kalu.mediaplayer.config.start.StartBuilder;
@@ -24,8 +18,11 @@ import lib.kalu.mediaplayer.listener.OnPlayerChangeListener;
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
+import tv.huan.bilibili.listener.OnStatusChangeListener;
 import tv.huan.bilibili.ui.detail.DetailActivity;
+import tv.huan.bilibili.utils.AuthUtils;
 import tv.huan.bilibili.utils.BoxUtil;
+import tv.huan.bilibili.utils.DevicesUtils;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.common.CommonPicView;
@@ -33,6 +30,7 @@ import tv.huan.bilibili.widget.player.PlayerView;
 import tv.huan.bilibili.widget.player.component.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.component.PlayerComponentVip;
 import tv.huan.heilongjiang.HeilongjiangUtil;
+import tv.huan.bilibili.widget.player.PlayerView;
 
 public final class DetailTemplatePlayer extends Presenter {
 
@@ -79,24 +77,26 @@ public final class DetailTemplatePlayer extends Presenter {
 
         // 默认焦点
         try {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
+            AuthUtils.getInstance().doAuth(new OnStatusChangeListener() {
                 @Override
-                public void run() {
-                    boolean containsVip = HeilongjiangUtil.isVip_WorkerThread(viewHolder.view.getContext());
-                    if (containsVip) {
-                        if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
-                            viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.GONE);
-                            viewHolder.view.findViewById(R.id.detail_player_item_full).requestFocus();
-                        }
-                    } else {
-                        if (!BuildConfig.HUAN_TEST_WHITE_VIP) {
-                            viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.VISIBLE);
-                            viewHolder.view.findViewById(R.id.detail_player_item_vip).requestFocus();
-                        }
+                public void onPass() {
+                    if (BuildConfig.HUAN_CHECK_VIP) {
+                        viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.GONE);
+                        viewHolder.view.findViewById(R.id.detail_player_item_full).requestFocus();
+                    }
+                }
+
+                @Override
+                public void onFail() {
+                    if (BuildConfig.HUAN_CHECK_VIP) {
+                        viewHolder.view.findViewById(R.id.detail_player_item_vip).setVisibility(View.VISIBLE);
+                        viewHolder.view.findViewById(R.id.detail_player_item_vip).requestFocus();
                     }
                 }
             });
+
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // 播放器信息
@@ -160,7 +160,7 @@ public final class DetailTemplatePlayer extends Presenter {
             try {
                 length = ((MediaBean) o).getTempPicList().length;
             } catch (Exception e) {
-                length = 0;
+                length = 1;
             }
             Context context = linearLayout.getContext();
             int height = context.getResources().getDimensionPixelOffset(R.dimen.dp_16);
@@ -170,10 +170,14 @@ public final class DetailTemplatePlayer extends Presenter {
                 int margin = linearLayout.getContext().getResources().getDimensionPixelOffset(i == length - 1 ? R.dimen.dp_8 : R.dimen.dp_4);
                 params.setMargins(0, 0, margin, 0);
                 picView.setLayoutParams(params);
-                GlideUtils.loadHz(picView.getContext(), ((MediaBean) o).getTempPicList()[i], picView);
+
+                //陕西, 此处VIP小图标，及图标后的文本标签，需apk自行判断添加
+                boolean isFree = ((MediaBean) o).getTempPayType() == 0; //媒资收费或免费
+                GlideUtils.loadDrawableResources(picView, isFree ? 0 : R.drawable.ic_huiyuan);
                 linearLayout.addView(picView, i);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -211,19 +215,23 @@ public final class DetailTemplatePlayer extends Presenter {
 
     public void checkVipStatus(View view, MediaBean data, @NonNull long seek, boolean isFromUser) {
         LogUtil.log("DetailTemplatePlayer => checkVipStatus => isFromUser = " + isFromUser);
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                boolean vip_workerThread = HeilongjiangUtil.isVip_WorkerThread(view.getContext());
-                if (vip_workerThread) {
+        try {
+            LogUtil.log("DetailTemplatePlayer => checkAccount");
+            AuthUtils.getInstance().doAuth(new OnStatusChangeListener() {
+                @Override
+                public void onPass() {
                     startHuawei(view, data, seek);
-                } else {
+                }
+
+                @Override
+                public void onFail() {
                     showVip(view);
                     jumpVip(view);
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            LogUtil.log("DetailTemplatePlayer => checkAccount => " + e.getMessage());
+        }
     }
 
     private void showVip(View view) {
@@ -257,7 +265,9 @@ public final class DetailTemplatePlayer extends Presenter {
                     throw new Exception("activity error: null");
                 if (!(activity instanceof DetailActivity))
                     throw new Exception("activity error: " + activity);
-                ((DetailActivity) activity).huaweiAuth(data.getMovieCode(), seek);
+                String platformType = DevicesUtils.INSTANCE.getPlatform();
+                String playCode = "0".equals(platformType) ? data.getHwMovieCode() : data.getMovieCode();
+                ((DetailActivity) activity).huaweiAuth(playCode, seek);
             } catch (Exception e) {
                 LogUtil.log("DetailTemplatePlayer => startHuawei => " + e.getMessage());
             }

@@ -1,19 +1,17 @@
 package tv.huan.bilibili.ui.detail;
 
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import lib.kalu.frame.mvp.BaseActivity;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
+import tv.huan.bilibili.utils.AuthUtils;
 import tv.huan.bilibili.widget.DetailGridView;
 import tv.huan.heilongjiang.HeilongjiangUtil;
 
@@ -122,8 +120,9 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
                 }
             } else if (msg.what == 2004) {
                 try {
-                    HeilongjiangUtil.goShopping_WorkerThread(getApplicationContext());
+                    AuthUtils.getInstance().doPay(getContext(), "","");
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }

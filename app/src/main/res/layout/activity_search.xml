@@ -62,8 +62,9 @@
         android:paddingLeft="@dimen/dp_12"
         android:paddingRight="@dimen/dp_12"
         android:singleLine="true"
-        android:text="@string/search_input"
-        android:textColor="@color/color_303030"
+        android:hint="@string/search_input"
+        android:textColorHint="#696969"
+        android:textColor="@color/white"
         android:textSize="@dimen/sp_14"
         app:tvp_drawable_left_height="@dimen/dp_14"
         app:tvp_drawable_left_width="@dimen/dp_14" />

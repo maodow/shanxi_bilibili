@@ -2,6 +2,7 @@ package tv.huan.bilibili.bean.format;
 
 import java.io.Serializable;
 
+import tv.huan.bilibili.bean.ServerSettingData;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 
 public final class CallWelcomeBean extends BaseDataBean implements Serializable {
@@ -13,6 +14,9 @@ public final class CallWelcomeBean extends BaseDataBean implements Serializable 
     private int type;
     private String secondTag;
     private String data;
+
+    private ServerSettingData settingData; // /getSettings接口服务端配置信息
+
 
     public boolean isInitStatus() {
         return initStatus;
@@ -76,4 +80,13 @@ public final class CallWelcomeBean extends BaseDataBean implements Serializable 
 //        return "https://picnew11.photophoto.cn/20170513/huwaidaxingguanggaopaiyangjizhanshihaibaotadengxiangjufuxuanchuan-26754205_1.jpg";
         return adUrl;
     }
+
+    public ServerSettingData getSettingData() {
+        return settingData;
+    }
+
+    public void setSettingData(ServerSettingData settingData) {
+        this.settingData = settingData;
+    }
+
 }

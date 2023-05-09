@@ -206,3 +206,7 @@
 
 -dontwarn com.alibaba.fastjson.**
 -keep class com.alibaba.fastjson.**{*;}
+
+
+ #保留支付SDK不被混淆
+ -keep public class com.aspire.hdc.pay.**{*;}

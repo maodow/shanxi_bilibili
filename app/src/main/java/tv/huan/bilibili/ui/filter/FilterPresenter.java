@@ -74,50 +74,22 @@ public class FilterPresenter extends BasePresenterImpl<FilterView> {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-//                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_96);
-//                int v = offset / 10;
-//                outRect.set(0, 0, offset, offset);
-//                int position = parent.getChildAdapterPosition(view);
-//
-//                int i = position % 5;
-//                if (i == 0) {
-//                    outRect.set(0, 0, v * 2, 0);
-//                } else if (i == 4) {
-//                    outRect.set(v * 2, 0, 0, 0);
-//                } else {
-//                    outRect.set(v, 0, v, 0);
-//                }
-//
-//                if (i == 1) {
-//                    view.setTranslationX(-v / 2);
-//                } else if (i == 3) {
-//                    view.setTranslationX(v / 2);
-//                } else {
-//                    view.setTranslationX(0);
-//                }
-
-                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72);
-                int v = offset / 8;
-                outRect.set(0, 0, offset, offset);
                 int position = parent.getChildAdapterPosition(view);
-
-                int i = position % 4;
-                if (i == 0) {
-                    outRect.set(0, 0, v * 2, 0);
-                } else if (i == 3) {
-                    outRect.set(v * 2, 0, 0, 0);
+                int offset = view.getResources().getDimensionPixelOffset(R.dimen.dp_72) / 8;
+                if (position % 4 == 0) {
+                    outRect.set(0, 0, offset * 2, 0);
+                } else if (position % 4 == 3) {
+                    outRect.set(offset * 2, 0, 0, 0);
                 } else {
-                    outRect.set(v, 0, v, 0);
+                    outRect.set(offset, 0, offset, 0);
                 }
 
-                if (i == 1) {
-                    view.setTranslationX(-v / 2);
-                } else if (i == 2) {
-                    view.setTranslationX(v / 2);
-                } else {
-                    view.setTranslationX(0);
+                int transX = offset * 2 / (3 * 2);
+                if (position % 4 == 1) {
+                    view.setTranslationX(-transX);
+                } else if (position % 4 == 2) {
+                    view.setTranslationX(transX);
                 }
-
             }
         });
         recyclerView.setAdapter(new RecyclerView.Adapter() {

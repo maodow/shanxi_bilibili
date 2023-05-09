@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.bean.base.BaseImageBean;
+import tv.huan.bilibili.utils.StringUtils;
 
 @Keep
 public final class MediaDetailBean extends BaseImageBean implements Serializable {
@@ -34,78 +35,70 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
     private String resolutionList;
     private String url;
     private String encryptionType;
-    private int playType;
+
+    private int payStatus; //付费类型  0免费;  1收费
+    private int playType = -1; //播放策略(payStatus = 1时生效)  0:全部收费;  1:一集免费;  2:两集免费
+
     private String price;//名字
     private String productName;//单点名字
     private int validTerm;//单点天数
     private int productType;//1.单点2.专区3会员4专区周期
     private int productCodeStatus; //可否购买
 
-
     private String code;//计费吗
     private String splitTag;//标签
     private String[] picList; // 标签集合
 
+    private int detailType; //详情页UI显示分类：1电影   2电视剧   3综艺
+
 
     public String getInfo() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        // 演职人员
         try {
-            String actor = getLeadingActor();
-            if (null == actor || actor.length() <= 0)
-                throw new Exception();
-            stringBuilder.append("演职人员： " + actor);
-        } catch (Exception e) {
-            stringBuilder.append("演职人员： 暂无");
-        }
+            // 电影，电视剧
+            if (detailType == BuildConfig.HUAN_TYPE_FILM || detailType == BuildConfig.HUAN_TYPE_TELEPLAY) {
+                String separatorStr = "";
+                if(!StringUtils.isEmpty(getDirector()) && !StringUtils.isEmpty(getLeadingActor())){
+                    separatorStr = ",";
+                } else if(StringUtils.isEmpty(getDirector()) && StringUtils.isEmpty(getLeadingActor())){
+                    separatorStr = "暂无";
+                }
 
-        // 简介
-        try {
+                if (getDirector().equals(getLeadingActor())){
+                    stringBuilder.append("演职人员： " + getDirector());
+                } else{
+                    stringBuilder.append("演职人员： " + getDirector().concat(separatorStr).concat(getLeadingActor()));
+                }
+                stringBuilder.append("\n");
+            }
+            // 综艺，体育
+            else if (detailType == BuildConfig.HUAN_TYPE_VARIETY || detailType == BuildConfig.HUAN_TYPE_SPORTS) {
+                stringBuilder.append("嘉   宾： " + getGuests());
+                stringBuilder.append("\n");
+            }
+            // 少儿，动漫
+            else if (detailType == BuildConfig.HUAN_TYPE_ANIME || detailType == BuildConfig.HUAN_TYPE_CHILDREN) {
+                stringBuilder.append("导   演： " + getDirector());
+                stringBuilder.append("\n");
+            }
+            // 教育
+            else if (detailType == BuildConfig.HUAN_TYPE_EDUCATION) {
+            }
+            // 默认
+            else {
+                stringBuilder.append("嘉   宾： " + getDirector());
+                stringBuilder.append("\n");
+            }
+
+            // 简介
             String desc = getDescription();
-            if (null == desc || desc.length() <= 0)
-                throw new Exception();
-            stringBuilder.append("\n\n简   介： " + desc);
+            if (desc.contains("杜比")) {
+                stringBuilder.append("杜   比： " + desc);
+            } else {
+                stringBuilder.append("简   介： " + desc);
+            }
         } catch (Exception e) {
-            stringBuilder.append("\n\n简   介： 暂无");
         }
-
-//        try {
-//            // 电影，电视剧
-//            if (type == BuildConfig.HUAN_TYPE_FILM || type == BuildConfig.HUAN_TYPE_TELEPLAY) {
-//                stringBuilder.append("导   演： " + getDirector());
-//                stringBuilder.append("\n");
-//                stringBuilder.append("主   演： " +);
-//                stringBuilder.append("\n");
-//            }
-//            // 综艺，体育
-//            else if (type == BuildConfig.HUAN_TYPE_VARIETY || type == BuildConfig.HUAN_TYPE_SPORTS) {
-//                stringBuilder.append("嘉   宾： " + getGuests());
-//                stringBuilder.append("\n");
-//            }
-//            // 少儿，动漫
-//            else if (type == BuildConfig.HUAN_TYPE_ANIME || type == BuildConfig.HUAN_TYPE_CHILDREN) {
-//                stringBuilder.append("导   演： " + getDirector());
-//                stringBuilder.append("\n");
-//            }
-//            // 教育
-//            else if (type == BuildConfig.HUAN_TYPE_EDUCATION) {
-//            }
-//            // 默认
-//            else {
-//                stringBuilder.append("嘉   宾： " + getDirector());
-//                stringBuilder.append("\n");
-//            }
-//
-//            // 简介
-//            String desc = getDescription();
-//            if (desc.contains("杜比")) {
-//                stringBuilder.append("杜   比： " + desc);
-//            } else {
-//                stringBuilder.append("简   介： " + desc);
-//            }
-//        } catch (Exception e) {
-//        }
         return stringBuilder.toString();
     }
 
@@ -118,11 +111,28 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
     }
 
     public String getSplitTag() {
-        return splitTag;
+        String separatStr1 = StringUtils.isEmpty(getScore()) ? "暂无评分 | " : "分 | ";
+        String separatStr2 = "";
+        if(!StringUtils.isEmpty(getYear()) && !StringUtils.isEmpty(getAreaName())){
+            separatStr2 = " | ";
+        }
+        if(StringUtils.isEmpty(getYear()) && StringUtils.isEmpty(getAreaName())){
+            return getScore();
+        } else{
+            return getScore().concat(separatStr1).concat(getYear()).concat(separatStr2).concat(getAreaName());
+        }
     }
 
     public void setSplitTag(String splitTag) {
         this.splitTag = splitTag;
+    }
+
+    public int getDetailType() {
+        return detailType;
+    }
+
+    public void setDetailType(int detailType) {
+        this.detailType = detailType;
     }
 
     public int getProductCodeStatus() {
@@ -173,6 +183,14 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
         this.validTerm = validTerm;
     }
 
+
+    public int getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(int payStatus) {
+        this.payStatus = payStatus;
+    }
 
     public int getPlayType() {
         return playType;
@@ -251,6 +269,9 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
     }
 
     public String getScore() {
+        if(null == score || score.equals("无")){
+            return "";
+        }
         return score;
     }
 
@@ -331,6 +352,9 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
     }
 
     public String getAreaName() {
+        if(null == areaName || areaName.equals("无")){
+            return "";
+        }
         return areaName;
     }
 
@@ -339,6 +363,9 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
     }
 
     public String getYear() {
+        if(null == year || year.equals("无")){
+            return "";
+        }
         return year;
     }
 
@@ -392,7 +419,7 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
 
     public boolean isXuanQi() {
         //  选期 => 教育、体育、综艺
-        if (type == BuildConfig.HUAN_TYPE_EDUCATION || type == BuildConfig.HUAN_TYPE_SPORTS || type == BuildConfig.HUAN_TYPE_VARIETY) {
+        if (detailType == BuildConfig.HUAN_TYPE_EDUCATION || detailType == BuildConfig.HUAN_TYPE_SPORTS || detailType == BuildConfig.HUAN_TYPE_VARIETY) {
             return true;
         } else {
             return false;
@@ -401,11 +428,11 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
 
     public boolean isXuanJi() {
         // 电影
-        if (type == BuildConfig.HUAN_TYPE_FILM) {
+        if (detailType == BuildConfig.HUAN_TYPE_FILM) {
             return false;
         }
         //  选期 => 教育、体育、综艺
-        else if (type == BuildConfig.HUAN_TYPE_EDUCATION || type == BuildConfig.HUAN_TYPE_SPORTS || type == BuildConfig.HUAN_TYPE_VARIETY) {
+        else if (detailType == BuildConfig.HUAN_TYPE_EDUCATION || detailType == BuildConfig.HUAN_TYPE_SPORTS || detailType == BuildConfig.HUAN_TYPE_VARIETY) {
             return false;
         }
         // 选集

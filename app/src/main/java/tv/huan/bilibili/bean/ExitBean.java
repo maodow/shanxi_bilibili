@@ -40,14 +40,23 @@ public class ExitBean extends BaseDataBean implements Serializable {
     @Keep
     public static class ImgsBean implements Serializable {
 
-        private String poster;
+        private String icon;
+        private String focus;
 
-        public String getPoster() {
-            return poster;
+        public String getIcon() {
+            return icon;
         }
 
-        public void setPoster(String poster) {
-            this.poster = poster;
+        public void setIcon(String icon) {
+            this.icon = icon;
+        }
+
+        public String getFocus() {
+            return focus;
+        }
+
+        public void setFocus(String focus) {
+            this.focus = focus;
         }
     }
 }

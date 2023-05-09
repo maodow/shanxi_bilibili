@@ -2,6 +2,7 @@ package tv.huan.bilibili.ui.main;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
@@ -31,11 +32,12 @@ import lib.kalu.leanback.tab.model.TabModelImage;
 import lib.kalu.leanback.tab.model.TabModelText;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import tv.huan.bilibili.BuildConfig;
 import tv.huan.bilibili.R;
 import tv.huan.bilibili.base.BasePresenterImpl;
+import tv.huan.bilibili.base.BaseThirdResponse;
 import tv.huan.bilibili.bean.ExitBean;
 import tv.huan.bilibili.bean.GetChannelsBean;
-import tv.huan.bilibili.bean.base.BaseAuthorizationBean;
 import tv.huan.bilibili.bean.base.BaseDataBean;
 import tv.huan.bilibili.bean.base.BaseResponsedBean;
 import tv.huan.bilibili.bean.format.CallMainBean;
@@ -44,9 +46,10 @@ import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.ui.main.general.GeneralFragment;
 import tv.huan.bilibili.ui.main.mine.MineFragment;
 import tv.huan.bilibili.utils.ADUtil;
+import tv.huan.bilibili.utils.DevicesUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
-import tv.huan.heilongjiang.HeilongjiangUtil;
+import tv.huan.bilibili.utils.StringUtils;
 
 public class MainPresenter extends BasePresenterImpl<MainView> {
     public MainPresenter(@NonNull MainView mainView) {
@@ -77,6 +80,7 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                 JumpUtil.next(getView().getContext(), bean);
             }
         } else {
+            LogUtil.log("嘤嘤嘤嘤嘤嘤嘤晕");
             FragmentManager fragmentManager = getView().getSupportFragmentManager();
             WarningDialog dialog = new WarningDialog();
             dialog.show(fragmentManager, null);
@@ -419,14 +423,15 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
     protected <T extends androidx.leanback.widget.Presenter> void requestHuaweiAuth(Class<T> cls, Class<?> obj, String cid) {
 
         addDisposable(Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                emitter.onNext(StringUtils.null2Length0(cid));
+            }
+        })
+                .flatMap(new Function<String, Observable<BaseThirdResponse>>() {
                     @Override
-                    public void subscribe(ObservableEmitter<String> emitter) {
-                        emitter.onNext(cid);
-                    }
-                })
-                .flatMap(new Function<String, Observable<BaseAuthorizationBean>>() {
-                    @Override
-                    public Observable<BaseAuthorizationBean> apply(String s) throws Exception {
+                    public Observable<BaseThirdResponse> apply(String s) throws Exception {
+                        LogUtil.log(cls.getSimpleName()+"@@@获取播放链接, movieCode: "+s);
                         JSONObject object = new JSONObject();
                         object.put("cid", s);
                         object.put("tid", "-1");
@@ -437,23 +442,26 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                         object.put("idflag", "1");
                         String json = String.valueOf(object);
                         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), json);
-                        String url = HeilongjiangUtil.getEpgServer(getView().getContext());
-                        return HttpClient.getHttpClient().getHttpApi().huaweiAuth(url, requestBody, s);
+                        String epgServer = DevicesUtils.INSTANCE.getEpgServer();
+                        String reqUrl = "";
+                        if(!TextUtils.isEmpty(epgServer)){
+                            reqUrl = epgServer.concat(BuildConfig.PLAY_API);
+                        }
+                        return HttpClient.getHttpClient().getHttpApi().getPlayUrl(reqUrl, requestBody);
                     }
                 })
-                // 华为播放鉴权 => 数据处理
-                .map(new Function<BaseAuthorizationBean, String>() {
+                // 获取播放地址 => 数据处理
+                .map(new Function<BaseThirdResponse, String>() {
                     @Override
-                    public String apply(BaseAuthorizationBean resp) throws Exception {
-                        if (null == resp)
-                            throw new Exception("鉴权失败: not contains resp");
-                        List<BaseAuthorizationBean.ItemBean> data = resp.getData();
-                        if (null == data || data.size() <= 0)
-                            throw new Exception("鉴权失败: " + resp.getReturncode());
-                        String url = data.get(0).getPlayurl();
-                        if (null == url || url.length() <= 0)
-                            throw new Exception("鉴权失败: " + resp.getReturncode());
-                        return url;
+                    public String apply(BaseThirdResponse resp) throws Exception {
+                        try {
+                            String url = resp.getUrls().get(0).getPlayurl();
+                            if (null == url || url.length() <= 0)
+                                throw new Exception();
+                            return url;
+                        } catch (Exception e) {
+                            throw new Exception("获取播放链接失败！errCode => " + resp.getReturncode()+"，  "+resp.getDescription());
+                        }
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)

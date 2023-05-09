@@ -2,16 +2,14 @@ package tv.huan.bilibili.widget.common;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import tv.huan.bilibili.R;
-import tv.huan.heilongjiang.HeilongjiangUtil;
+import tv.huan.bilibili.listener.OnStatusChangeListener;
+import tv.huan.bilibili.utils.AuthUtils;
 
 @SuppressLint("AppCompatCustomView")
 public final class CommomDataView extends TextView {
@@ -51,16 +49,21 @@ public final class CommomDataView extends TextView {
 
     @SuppressLint("StaticFieldLeak")
     private void checkVip() {
-        new AsyncTask<Void, Void, Boolean>() {
+        AuthUtils.getInstance().doAuth(new OnStatusChangeListener() {
             @Override
-            protected Boolean doInBackground(Void... voids) {
-                return HeilongjiangUtil.isVip_WorkerThread(getContext());
+            public void onPass() {
+                updateVisibility(true);
             }
 
             @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                setVisibility(aBoolean ? View.VISIBLE : View.INVISIBLE);
+            public void onFail() {
+                updateVisibility(false);
             }
-        }.execute();
+        });
     }
+
+    private void updateVisibility(boolean succ) {
+        setVisibility(succ ? View.VISIBLE : View.GONE);
+    }
+
 }

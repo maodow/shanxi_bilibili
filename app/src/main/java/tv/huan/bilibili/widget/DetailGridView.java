@@ -210,11 +210,11 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     private void checkPlayerPosition(@NonNull MediaBean data, long seek, boolean isFromUser) {
         try {
 
-            int playType = data.getTempPlayType();
-            int index = data.getEpisodeIndex() + 1;
-            LogUtil.log("DetailGridView", "checkPlayerPosition => playType = " + playType + ", index = " + index);
+            int playType = data.getTempPlayType(); //试看集数
+            int currEpisode = data.getEpisodeIndex() + 1; //当前集数
+            LogUtil.log("DetailGridView", "checkPlayerPosition => playType = " + playType + ", currEpisode = " + currEpisode);
             // 免费
-            if (playType > 0 && index <= playType) {
+            if (playType > 0 && currEpisode <= playType) {
                 checkPlayerPositionHuawei(data, seek);
             }
             // 收费

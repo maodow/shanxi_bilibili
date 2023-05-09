@@ -3,17 +3,15 @@ package tv.huan.bilibili.widget.common;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
-import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
-
 import lib.kalu.leanback.plus.TextViewPlus;
 import tv.huan.bilibili.R;
-import tv.huan.heilongjiang.HeilongjiangUtil;
+import tv.huan.bilibili.listener.OnStatusChangeListener;
+import tv.huan.bilibili.utils.AuthUtils;
 
 public final class CommomChaoView extends TextViewPlus {
     public CommomChaoView(@NonNull Context context) {
@@ -59,23 +57,28 @@ public final class CommomChaoView extends TextViewPlus {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HeilongjiangUtil.goShopping_WorkerThread(getContext());
+                AuthUtils.getInstance().doPay(getContext(), "","");
             }
         });
     }
 
     @SuppressLint("StaticFieldLeak")
     private void checkVip() {
-        new AsyncTask<Void, Void, Boolean>() {
+        AuthUtils.getInstance().doAuth(new OnStatusChangeListener() {
             @Override
-            protected Boolean doInBackground(Void... voids) {
-                return HeilongjiangUtil.isVip_WorkerThread(getContext());
+            public void onPass() {
+                updateText(true);
             }
 
             @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                setText(getResources().getString(aBoolean ? R.string.menu_chao_yes : R.string.menu_chao_no));
+            public void onFail() {
+                updateText(false);
             }
-        }.execute();
+        });
     }
+
+    private void updateText(boolean succ) {
+        setText(getResources().getString(succ ? R.string.menu_chao_yes : R.string.menu_chao_no));
+    }
+
 }

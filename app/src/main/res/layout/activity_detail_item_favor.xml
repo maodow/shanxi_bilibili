@@ -2,14 +2,10 @@
 <tv.huan.bilibili.widget.common.CommonRoundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/detail_item_favor"
-    android:layout_width="@dimen/dp_198"
+    android:layout_width="@dimen/dp_200"
     android:layout_height="wrap_content"
     android:focusable="true"
-    app:rl_rate_height="0.536">
-    <!--    android:layout_width="wrap_content"-->
-    <!--    android:layout_height="@dimen/dp_192"-->
-    <!--    android:focusable="true"-->
-    <!--    app:rl_rate_width="0.71">-->
+    app:rl_rate_height="0.56">
 
     <include
         layout="@layout/common_poster"

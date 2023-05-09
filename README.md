@@ -1,6 +1,6 @@
 # bilibili_hlj_cmcc_android
 
-B站黑龙江移动安卓前端
+B站陕西移动安卓前端
 
 #
 #### 推荐位 => 打开apk

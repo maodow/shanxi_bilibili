@@ -28,6 +28,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.BoxUtil;
+import tv.huan.bilibili.utils.DevicesUtils;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
@@ -220,6 +221,7 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
         try {
             Activity activity = WrapperUtil.getWrapperActivity(viewGroup.getContext());
             if (null != activity && activity instanceof MainActivity) {
+                LogUtil.log("=======playCode: "+code);
                 ((MainActivity) activity).huaweiAuth(GeneralTemplate21.class, GeneralTemplate21.GeneralTemplate21List.class, code);
             }
         } catch (Exception e) {
@@ -312,7 +314,9 @@ public class GeneralTemplate21 extends ListTvRowHeadPresenter<GetSubChannelsByCh
         if (BuildConfig.HUAN_HUAWEI_AUTH) {
             Message message = new Message();
             message.what = 20001;
-            message.obj = new Object[]{view, templateBean.getHuaweiId()};
+            String platformType = DevicesUtils.INSTANCE.getPlatform(); //判断平台
+            String playCode = "0".equals(platformType) ? templateBean.getHwMovieCode() : templateBean.getMovieCode();
+            message.obj = new Object[]{view, playCode};
             mHandler.removeCallbacksAndMessages(null);
             mHandler.sendMessageDelayed(message, 4000);
         } else {

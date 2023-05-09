@@ -27,4 +27,8 @@
     <color name="color_ffc888">#ffc888</color>
     <color name="color_aa000000">#aa000000</color>
 
+    <!--App更新字体颜色  -->
+    <color name="skin_update_title">#214A8A</color>
+    <color name="skin_update_content">#000000</color>
+
 </resources>

@@ -27,6 +27,7 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.bean.GetSubChannelsByChannelBean;
 import tv.huan.bilibili.ui.main.MainActivity;
 import tv.huan.bilibili.utils.BoxUtil;
+import tv.huan.bilibili.utils.DevicesUtils;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
 import tv.huan.bilibili.utils.LogUtil;
@@ -42,6 +43,7 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                 try {
                     resumePlayer((View) msg.obj);
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else if (msg.what == 5002) {
                 try {
@@ -197,8 +199,11 @@ public final class GeneralTemplate22 extends ListTvGridPresenter<GetSubChannelsB
                     throw new Exception();
                 if (BuildConfig.HUAN_HUAWEI_AUTH) {
                     Activity activity = WrapperUtil.getWrapperActivity(view.getContext());
-                    if (null != activity && activity instanceof MainActivity) {
-                        ((MainActivity) activity).huaweiAuth(GeneralTemplate22.class, GeneralTemplate22.GeneralTemplate22List.class, templateBean.getHuaweiId());
+                    if (activity instanceof MainActivity) {
+                        String platformType = DevicesUtils.INSTANCE.getPlatform(); //判断平台
+                        String playCode = "0".equals(platformType) ? templateBean.getHwMovieCode() : templateBean.getMovieCode();
+                        LogUtil.log("=======playCode: "+platformType+", movieCode: "+templateBean.getMovieCode()+", hwMovieCode: "+templateBean.getHwMovieCode());
+                        ((MainActivity) activity).huaweiAuth(GeneralTemplate22.class, GeneralTemplate22.GeneralTemplate22List.class, playCode);
                     }
                 } else {
                     String url = BoxUtil.getTestVideoUrl();

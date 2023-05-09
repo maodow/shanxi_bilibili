@@ -16,12 +16,12 @@ public final class HttpClient extends BaseClient {
 
     @Override
     protected int initReadTimeout() {
-        return 2;
+        return 15;
     }
 
     @Override
     protected int initWriteTimeout() {
-        return 2;
+        return 15;
     }
 
     @Override
