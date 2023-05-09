@@ -11,7 +11,6 @@ import tv.huan.bilibili.bean.base.BaseImageBean;
 public final class MediaDetailBean extends BaseImageBean implements Serializable {
 
     private String columnId;
-    private int type;
     private int isTrailer;
     private String seconditle;
     private String director;
@@ -188,14 +187,6 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
 
     public void setColumnId(String columnId) {
         this.columnId = columnId;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public int getIsTrailer() {
@@ -392,7 +383,7 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
 
     public boolean isXuanQi() {
         //  选期 => 教育、体育、综艺
-        if (type == BuildConfig.HUAN_TYPE_EDUCATION || type == BuildConfig.HUAN_TYPE_SPORTS || type == BuildConfig.HUAN_TYPE_VARIETY) {
+        if (getType() == BuildConfig.HUAN_TYPE_EDUCATION || getType() == BuildConfig.HUAN_TYPE_SPORTS || getType() == BuildConfig.HUAN_TYPE_VARIETY) {
             return true;
         } else {
             return false;
@@ -401,11 +392,11 @@ public final class MediaDetailBean extends BaseImageBean implements Serializable
 
     public boolean isXuanJi() {
         // 电影
-        if (type == BuildConfig.HUAN_TYPE_FILM) {
+        if (getType() == BuildConfig.HUAN_TYPE_FILM) {
             return false;
         }
         //  选期 => 教育、体育、综艺
-        else if (type == BuildConfig.HUAN_TYPE_EDUCATION || type == BuildConfig.HUAN_TYPE_SPORTS || type == BuildConfig.HUAN_TYPE_VARIETY) {
+        else if (getType() == BuildConfig.HUAN_TYPE_EDUCATION || getType() == BuildConfig.HUAN_TYPE_SPORTS || getType() == BuildConfig.HUAN_TYPE_VARIETY) {
             return false;
         }
         // 选集

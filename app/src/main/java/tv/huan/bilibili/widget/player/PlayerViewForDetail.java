@@ -20,25 +20,25 @@ import tv.huan.bilibili.widget.player.component.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.component.PlayerComponentNet;
 import tv.huan.bilibili.widget.player.component.PlayerComponentVip;
 
-public class PlayerView extends PlayerLayout {
+public class PlayerViewForDetail extends PlayerLayout {
 
-    public PlayerView(Context context) {
+    public PlayerViewForDetail(Context context) {
         super(context);
         init();
     }
 
-    public PlayerView(Context context, AttributeSet attrs) {
+    public PlayerViewForDetail(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public PlayerView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PlayerViewForDetail(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public PlayerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public PlayerViewForDetail(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
@@ -65,17 +65,8 @@ public class PlayerView extends PlayerLayout {
 
     @Override
     protected void onDetachedFromWindow() {
-        release(false);
-        ADUtil.adRelease();
+//
         super.onDetachedFromWindow();
-    }
-
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        if (visibility != View.VISIBLE) {
-            release(false);
-        }
-        super.onWindowVisibilityChanged(visibility);
     }
 
     private void init() {

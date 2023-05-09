@@ -168,7 +168,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
     }
 
     public void startPlayerPosition(@NonNull MediaBean data, @NonNull int pos, @NonNull long seek, boolean isFromUser) {
-        LogUtil.log("DetailGridView", "startPlayerPosition => isFromUser = " + isFromUser + ", data = " + new Gson().toJson(data));
+        LogUtil.log("DetailGridView", "startPlayerPosition => pos = " + pos + ", seek = " + seek + ", isFromUser = " + isFromUser + ", data = " + new Gson().toJson(data));
 
         try {
             if (isFromUser) {

@@ -10,7 +10,6 @@ public final class CallWelcomeBean extends BaseDataBean implements Serializable 
     private int adTime;
     private String adUrl;
     private int select;
-    private int type;
     private String secondTag;
     private String data;
 
@@ -44,14 +43,6 @@ public final class CallWelcomeBean extends BaseDataBean implements Serializable 
 
     public void setSelect(int select) {
         this.select = select;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public String getSecondTag() {

@@ -67,7 +67,7 @@ public class GeneralFragment extends BaseFragment<GeneralView, GeneralPresenter>
         setVisibility(getView(), View.VISIBLE);
         getPresenter().showBackground();
         tv.huan.bilibili.widget.GeneralGridView gridView = findViewById(R.id.general_list);
-//        gridView.scrollTop();
+        gridView.scrollTop(false);
         gridView.updateTemplateHistory();
         gridView.resumeMessage();
         gridView.cleanTemplatePlayerMessageDelayed();

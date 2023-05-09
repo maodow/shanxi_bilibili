@@ -519,7 +519,9 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> emitter) {
                         // 1
-                        reportAppExit();
+                        long endTime = System.currentTimeMillis();
+                        long startTime = getView().getLongExtra(MainActivity.INTENT_START_TIME, endTime);
+                        reportAppExit(startTime, endTime);
                         // 2
                         ADUtil.adRelease();
                         // 3

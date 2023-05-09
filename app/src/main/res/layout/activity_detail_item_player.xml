@@ -7,7 +7,7 @@
     android:clipToPadding="false"
     android:orientation="horizontal">
 
-    <tv.huan.bilibili.widget.player.PlayerView
+    <tv.huan.bilibili.widget.player.PlayerViewForDetail
         android:id="@+id/detail_player_item_video"
         android:layout_width="@dimen/dp_420"
         android:background="@color/color_black"

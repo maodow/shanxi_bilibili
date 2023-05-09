@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -41,6 +42,7 @@ import tv.huan.bilibili.http.HttpClient;
 import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.JumpUtil;
+import tv.huan.bilibili.utils.LogUtil;
 
 @Keep
 public class MinePresenter extends BasePresenterImpl<MineView> {
@@ -149,9 +151,10 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         public void onClick(View v) {
                             int position = holder.getAbsoluteAdapterPosition();
                             if (position > 0) {
+                                getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_FAV, false);
+                                getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_HISTRRY, true);
                                 LocalBean itemBean = mDatas.get(position);
                                 itemBean.setToType(1);
-                                getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, true);
                                 JumpUtil.next(v.getContext(), itemBean);
                             }
                         }
@@ -171,9 +174,10 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         public void onClick(View v) {
                             int position = holder.getAbsoluteAdapterPosition();
                             if (position > 0) {
+                                getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_FAV, true);
+                                getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_HISTRRY, false);
                                 LocalBean itemBean = mDatas.get(position);
                                 itemBean.setToType(1);
-                                getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, true);
                                 JumpUtil.next(v.getContext(), itemBean);
                             }
                         }
@@ -206,10 +210,12 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                                 LocalBean itemBean = mDatas.get(position);
                                 int toType = itemBean.getToType();
                                 if (toType == 8001) {
-                                    getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, true);
+                                    getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_FAV, false);
+                                    getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_HISTRRY, true);
                                     JumpUtil.nextCenter(v.getContext(), false);
                                 } else if (toType == 8002) {
-                                    getView().putBooleanExtra(MineFragment.BUNDLE_REFRESH, true);
+                                    getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_FAV, true);
+                                    getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_HISTRRY, false);
                                     JumpUtil.nextCenter(v.getContext(), true);
                                 }
                             }
@@ -536,83 +542,12 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         emitter.onNext(s);
                     }
                 })
-                // 刷新 => 全部收藏
-                .map(new Function<String, String>() {
-                    @Override
-                    public String apply(String aBoolean) {
-                        try {
-                            // 1
-                            String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR);
-                            if (null == s || s.length() <= 0)
-                                throw new Exception();
-                            Type type = new TypeToken<List<LocalBean>>() {
-                            }.getType();
-                            List<LocalBean> newList = new Gson().fromJson(s, type);
-                            while (newList.size() > 3) {
-                                newList.remove(newList.size() - 1);
-                            }
-                            // check
-                            if (mDatas.get(mDatas.size() - 5).getCid().equals(newList.get(0).getCid()))
-                                throw new Exception();
-                            for (LocalBean o : newList) {
-                                if (null == o) continue;
-                                o.setLocal_index(newList.indexOf(o));
-                                o.setLocal_type(TYPE_ITEM_IMG_FAVOR);
-                            }
-                            // 2
-                            ArrayList<LocalBean> oldList = new ArrayList<>();
-                            for (LocalBean o : mDatas) {
-                                if (null == o) continue;
-                                int tempType = o.getLocal_type();
-                                if (tempType == TYPE_ITEM_IMG_FAVOR) {
-                                    oldList.add(o);
-                                }
-                            }
-                            // 3
-                            for (LocalBean t : oldList) {
-                                if (null == t) continue;
-                                mDatas.remove(t);
-                            }
-                            // 4
-                            try {
-                                LocalBean itemBean = mDatas.get(mDatas.size() - 4);
-                                itemBean.setLocal_index(newList.size());
-                            } catch (Exception e) {
-                            }
-                            // 5
-                            try {
-                                mDatas.addAll(mDatas.size() - 4, newList);
-                            } catch (Exception e) {
-                            }
-                        } catch (Exception e) {
-                        }
-                        return aBoolean;
-                    }
-                })
                 // 刷新 => 全部历史
                 .map(new Function<String, String>() {
                     @Override
                     public String apply(String aBoolean) {
                         try {
-                            // 1
-                            String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY);
-                            if (null == s || s.length() <= 0)
-                                throw new Exception();
-                            Type type = new TypeToken<List<LocalBean>>() {
-                            }.getType();
-                            List<LocalBean> newList = new Gson().fromJson(s, type);
-                            while (newList.size() > 3) {
-                                newList.remove(newList.size() - 1);
-                            }
-                            // check
-                            if (mDatas.get(2).getCid().equals(newList.get(0).getCid()))
-                                throw new Exception();
-                            for (LocalBean o : newList) {
-                                if (null == o) continue;
-                                o.setLocal_index(newList.indexOf(o));
-                                o.setLocal_type(TYPE_ITEM_IMG_HISTORY);
-                            }
-                            // 2
+                            // 1 => del
                             ArrayList<LocalBean> oldList = new ArrayList<>();
                             for (LocalBean t : mDatas) {
                                 if (null == t) continue;
@@ -621,20 +556,88 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                                     oldList.add(t);
                                 }
                             }
-                            // 3
                             for (LocalBean t : oldList) {
-                                if (null == t) continue;
+                                if (null == t)
+                                    continue;
                                 mDatas.remove(t);
                             }
-                            // 4
+                            // 2 => insert
+                            List<LocalBean> newList = new LinkedList<>();
                             try {
-                                LocalBean localBean = mDatas.get(2);
-                                localBean.setLocal_index(newList.size());
+                                String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_HISTORY);
+                                if (null == s || s.length() <= 0)
+                                    throw new Exception();
+                                Type type = new TypeToken<List<LocalBean>>() {
+                                }.getType();
+                                List<LocalBean> list = new Gson().fromJson(s, type);
+                                for (LocalBean o : list) {
+                                    if (null == o)
+                                        continue;
+                                    int size = newList.size();
+                                    if (size >= 3)
+                                        break;
+                                    o.setLocal_index(size);
+                                    o.setLocal_type(TYPE_ITEM_IMG_HISTORY);
+                                    newList.add(o);
+                                }
                             } catch (Exception e) {
                             }
-                            // 5
+                            // 3 => check
                             try {
-                                mDatas.addAll(2, newList);
+                                int start = 2;
+                                mDatas.get(start).setLocal_index(newList.size());
+                                mDatas.addAll(start, newList);
+                            } catch (Exception e) {
+                            }
+                        } catch (Exception e) {
+                        }
+                        return aBoolean;
+                    }
+                })
+                // 刷新 => 全部收藏
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(String aBoolean) {
+                        try {
+                            // 1 => del
+                            ArrayList<LocalBean> oldList = new ArrayList<>();
+                            for (LocalBean t : mDatas) {
+                                if (null == t) continue;
+                                int tempType = t.getLocal_type();
+                                if (tempType == TYPE_ITEM_IMG_FAVOR) {
+                                    oldList.add(t);
+                                }
+                            }
+                            for (LocalBean t : oldList) {
+                                if (null == t)
+                                    continue;
+                                mDatas.remove(t);
+                            }
+                            // 2 => insert
+                            List<LocalBean> newList = new LinkedList<>();
+                            try {
+                                String s = CacheUtil.getCache(getView().getContext(), BuildConfig.HUAN_JSON_LOCAL_FAVOR);
+                                if (null == s || s.length() <= 0)
+                                    throw new Exception();
+                                Type type = new TypeToken<List<LocalBean>>() {
+                                }.getType();
+                                List<LocalBean> list = new Gson().fromJson(s, type);
+                                for (LocalBean o : list) {
+                                    if (null == o) continue;
+                                    int size = newList.size();
+                                    if (size >= 3)
+                                        break;
+                                    o.setLocal_index(size);
+                                    o.setLocal_type(TYPE_ITEM_IMG_FAVOR);
+                                    newList.add(o);
+                                }
+                            } catch (Exception e) {
+                            }
+                            // 3 => check
+                            try {
+                                int start = mDatas.size() - 4;
+                                mDatas.get(start).setLocal_index(newList.size());
+                                mDatas.addAll(start, newList);
                             } catch (Exception e) {
                             }
                         } catch (Exception e) {
@@ -650,7 +653,17 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                             String s1 = new Gson().toJson(mDatas);
                             if (s1.equals(s))
                                 throw new Exception();
-                            return mDatas.size() - 4;
+                            boolean b1 = getView().getBooleanExtra(MineFragment.BUNDLE_JUMP_FAV, false);
+                            boolean b2 = getView().getBooleanExtra(MineFragment.BUNDLE_JUMP_HISTRRY, false);
+                            getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_FAV, false);
+                            getView().putBooleanExtra(MineFragment.BUNDLE_JUMP_HISTRRY, false);
+                            if (b2) {
+                                return 2;
+                            } else if (b1) {
+                                return mDatas.size() - 4;
+                            } else {
+                                return 0;
+                            }
                         } catch (Exception e) {
                             throw e;
                         }
@@ -664,7 +677,6 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                 }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
-//                        getView().showToast("获取收藏缓存失败");
                     }
                 }).doOnNext(new Consumer<Integer>() {
                     @Override

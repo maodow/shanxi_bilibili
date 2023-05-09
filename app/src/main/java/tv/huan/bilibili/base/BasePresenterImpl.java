@@ -56,9 +56,9 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
         logReport(object);
     }
 
-    protected final void reportSearchResultItemNum(String keyword) {
+    protected final void reportSearchResultItemNum(String keyword, int num) {
         int prodId = getView().getProdId();
-        JSONObject object = ReportUtils.searchResultItemNum(prodId, 1, keyword);
+        JSONObject object = ReportUtils.searchResultItemNum(prodId, num, keyword);
         logReport(object);
     }
 
@@ -98,9 +98,9 @@ public class BasePresenterImpl<M extends BaseViewImpl> extends BasePresenter {
         logReport(object);
     }
 
-    public final void reportAppExit() {
+    public final void reportAppExit(long startTime, long endTime) {
         int prodId = getView().getProdId();
-        JSONObject object = ReportUtils.appExit(prodId);
+        JSONObject object = ReportUtils.appExit(prodId, startTime, endTime);
         logReport(object);
     }
 

@@ -29,7 +29,7 @@ import tv.huan.bilibili.utils.BoxUtil;
 import tv.huan.bilibili.utils.GlideUtils;
 import tv.huan.bilibili.utils.LogUtil;
 import tv.huan.bilibili.widget.common.CommonPicView;
-import tv.huan.bilibili.widget.player.PlayerView;
+import tv.huan.bilibili.widget.player.PlayerViewForDetail;
 import tv.huan.bilibili.widget.player.component.PlayerComponentInit;
 import tv.huan.bilibili.widget.player.component.PlayerComponentVip;
 import tv.huan.heilongjiang.HeilongjiangUtil;
@@ -101,7 +101,7 @@ public final class DetailTemplatePlayer extends Presenter {
 
         // 播放器信息
         try {
-            PlayerView playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit component = playerView.findComponent(PlayerComponentInit.class);
             component.setData((MediaBean) o);
             component.show();
@@ -110,7 +110,7 @@ public final class DetailTemplatePlayer extends Presenter {
 
         // vip
         try {
-            PlayerView playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
             PlayerComponentVip component = playerView.findComponent(PlayerComponentVip.class);
             component.setData((MediaBean) o);
         } catch (Exception e) {
@@ -138,7 +138,7 @@ public final class DetailTemplatePlayer extends Presenter {
         } catch (Exception e) {
         }
         try {
-            PlayerView playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = viewHolder.view.findViewById(R.id.detail_player_item_video);
             ComponentPause component = playerView.findComponent(ComponentPause.class);
             component.setComponentTitleText(((MediaBean) o).getTempTitle());
         } catch (Exception e) {
@@ -188,7 +188,7 @@ public final class DetailTemplatePlayer extends Presenter {
 
     public void updatePosition(View view, int position) {
         try {
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = view.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
             componentInit.updatePosition(position);
             componentInit.show();
@@ -228,7 +228,7 @@ public final class DetailTemplatePlayer extends Presenter {
 
     private void showVip(View view) {
         try {
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = view.findViewById(R.id.detail_player_item_video);
             PlayerComponentVip component = playerView.findComponent(PlayerComponentVip.class);
             component.show();
         } catch (Exception e) {
@@ -273,7 +273,7 @@ public final class DetailTemplatePlayer extends Presenter {
 
     public long getPosition(View view) {
         try {
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = view.findViewById(R.id.detail_player_item_video);
             return playerView.getPosition();
         } catch (Exception e) {
             LogUtil.log("DetailTemplatePlayer => getPosition => " + e.getMessage());
@@ -283,7 +283,7 @@ public final class DetailTemplatePlayer extends Presenter {
 
     public long getDuration(View view) {
         try {
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = view.findViewById(R.id.detail_player_item_video);
             return playerView.getDuration();
         } catch (Exception e) {
             LogUtil.log("DetailTemplatePlayer => getDuration => " + e.getMessage());
@@ -293,11 +293,11 @@ public final class DetailTemplatePlayer extends Presenter {
 
     public void startPlayer(View view, String s, long seek) {
         try {
-            LogUtil.log("DetailTemplatePlayer => startPlayer => seek = " + seek + ", s = " + s);
+            LogUtil.log("DetailTemplatePlayer => startPlayer => thread = " + Thread.currentThread().getName() + ", seek = " + seek + ", s = " + s);
             StartBuilder.Builder builder = new StartBuilder.Builder();
             builder.setLoop(false);
             builder.setSeek(seek);
-            PlayerView playerView = view.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = view.findViewById(R.id.detail_player_item_video);
             playerView.start(builder.build(), s);
         } catch (Exception e) {
             LogUtil.log("DetailTemplatePlayer => startPlayer => " + e.getMessage());
@@ -307,7 +307,7 @@ public final class DetailTemplatePlayer extends Presenter {
     public void stopFull(View view) {
         try {
             ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
-            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = viewGroup.findViewById(R.id.detail_player_item_video);
             playerView.stopFull();
         } catch (Exception e) {
         }
@@ -316,7 +316,7 @@ public final class DetailTemplatePlayer extends Presenter {
     public void startFull(View view) {
         try {
             ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
-            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = viewGroup.findViewById(R.id.detail_player_item_video);
             playerView.startFull();
         } catch (Exception e) {
         }
@@ -325,7 +325,7 @@ public final class DetailTemplatePlayer extends Presenter {
     private void stopFloat(View view) {
         try {
             ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
-            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = viewGroup.findViewById(R.id.detail_player_item_video);
             playerView.stopFloat();
         } catch (Exception e) {
         }
@@ -334,7 +334,7 @@ public final class DetailTemplatePlayer extends Presenter {
     private void startFloat(View view) {
         try {
             ViewGroup viewGroup = (ViewGroup) view.getParent().getParent().getParent();
-            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = viewGroup.findViewById(R.id.detail_player_item_video);
             playerView.startFloat();
         } catch (Exception e) {
         }
@@ -411,7 +411,7 @@ public final class DetailTemplatePlayer extends Presenter {
                 @Override
                 public void onClick(View v) {
                     ViewGroup viewGroup = (ViewGroup) v.getParent().getParent().getParent();
-                    PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+                    PlayerViewForDetail playerView = viewGroup.findViewById(R.id.detail_player_item_video);
                     playerView.startFull();
                 }
             });
@@ -419,7 +419,7 @@ public final class DetailTemplatePlayer extends Presenter {
         }
 
         try {
-            PlayerView playerView = viewGroup.findViewById(R.id.detail_player_item_video);
+            PlayerViewForDetail playerView = viewGroup.findViewById(R.id.detail_player_item_video);
             playerView.setPlayerChangeListener(new OnPlayerChangeListener() {
 
                 @Override
@@ -440,12 +440,14 @@ public final class DetailTemplatePlayer extends Presenter {
                                 if (mediaBean.isXuanJi() || mediaBean.isXuanQi()) {
                                     int tempLegnth = mediaBean.getTempLegnth();
                                     PlayerComponentInit component = playerView.findComponent(PlayerComponentInit.class);
-                                    int nextPosition = component.getPosition();
-                                    if (nextPosition + 1 >= tempLegnth) {
-                                        nextPosition = 0;
+                                    int position = component.getPosition();
+                                    if (position >= tempLegnth) {
+                                        component.updatePosition(0);
+                                        ((DetailActivity) activity).startPlayerPosition(0);
+                                    } else {
+                                        component.updatePosition(position);
+                                        ((DetailActivity) activity).startPlayerPosition(position);
                                     }
-                                    component.updatePosition(nextPosition);
-                                    ((DetailActivity) activity).startPlayerPosition(nextPosition);
                                 }
                                 // 电影
                                 else {

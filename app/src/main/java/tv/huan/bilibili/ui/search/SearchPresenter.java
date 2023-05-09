@@ -189,17 +189,6 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         }
                     }
                 })
-                // 上报 => 搜索关键字
-                .map(new Function<CallSearchBean, CallSearchBean>() {
-                    @Override
-                    public CallSearchBean apply(CallSearchBean data) {
-                        String input = data.getInput();
-                        if (null != input && input.length() > 0) {
-                            reportSearchResultItemNum(input);
-                        }
-                        return data;
-                    }
-                })
                 // 接口 => 请求
                 .flatMap(new Function<CallSearchBean, Observable<BaseResponsedBean<SearchBean>>>() {
                     @Override
@@ -257,6 +246,18 @@ public class SearchPresenter extends BasePresenterImpl<SearchView> {
                         } catch (Exception e) {
                         }
                         return searchBean;
+                    }
+                })
+                // 上报 => 搜索关键字
+                .map(new Function<CallSearchBean, CallSearchBean>() {
+                    @Override
+                    public CallSearchBean apply(CallSearchBean data) {
+                        String input = data.getInput();
+                        if (null != input && input.length() > 0) {
+                            int size = mData.size();
+                            reportSearchResultItemNum(input, size);
+                        }
+                        return data;
                     }
                 })
                 .delay(40, TimeUnit.MILLISECONDS)

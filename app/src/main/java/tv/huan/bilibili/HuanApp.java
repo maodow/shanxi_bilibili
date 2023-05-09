@@ -53,7 +53,7 @@ public final class HuanApp extends Application {
     private void initPlayer() {
         PlayerBuilder build = new PlayerBuilder.Builder()
                 .setLog(true)
-                .setKernel(PlayerType.KernelType.ANDROID)
+                .setKernel(PlayerType.KernelType.IJK)
                 .setRender(PlayerType.RenderType.TEXTURE_VIEW)
                 .build();
         PlayerManager.getInstance().setConfig(build);

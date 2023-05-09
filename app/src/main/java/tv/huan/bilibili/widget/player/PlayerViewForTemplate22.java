@@ -14,25 +14,25 @@ import tv.huan.bilibili.R;
 import tv.huan.bilibili.widget.player.component.PlayerComponentInitTemplate22;
 import tv.huan.bilibili.widget.player.component.PlayerComponentNet;
 
-public final class PlayerViewTemplate22 extends PlayerLayout {
+public final class PlayerViewForTemplate22 extends PlayerLayout {
 
-    public PlayerViewTemplate22(Context context) {
+    public PlayerViewForTemplate22(Context context) {
         super(context);
         init();
     }
 
-    public PlayerViewTemplate22(Context context, AttributeSet attrs) {
+    public PlayerViewForTemplate22(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public PlayerViewTemplate22(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PlayerViewForTemplate22(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public PlayerViewTemplate22(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public PlayerViewForTemplate22(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
