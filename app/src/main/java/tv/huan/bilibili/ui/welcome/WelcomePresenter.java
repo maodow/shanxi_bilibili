@@ -61,18 +61,10 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeView> {
                         return aBoolean;
                     }
                 })
-                // 首次app上报
-                .flatMap(new Function<Boolean, Observable<BaseResponsedBean<Object>>>() {
-                    @Override
-                    public Observable<BaseResponsedBean<Object>> apply(Boolean aBoolean) {
-                        LogUtil.log("WelcomePresenter => request => insertFirstLogin =>");
-                        return HttpClient.getHttpClient().getHttpApi().insertFirstLogin();
-                    }
-                })
                 // 打开app上报
-                .map(new Function<BaseResponsedBean<Object>, Boolean>() {
+                .map(new Function<Boolean, Boolean>() {
                     @Override
-                    public Boolean apply(BaseResponsedBean<Object> data) {
+                    public Boolean apply(Boolean b) {
                         try {
                             reportAppActivation();
                             LogUtil.log("WelcomePresenter => request => reportAppActivation =>");

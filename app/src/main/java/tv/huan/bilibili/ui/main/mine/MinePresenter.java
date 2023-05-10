@@ -320,6 +320,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
     }
 
     protected void request() {
+        mDatas.clear();
         addDisposable(Observable.create(new ObservableOnSubscribe<Boolean>() {
                     @Override
                     public void subscribe(ObservableEmitter<Boolean> emitter) {
@@ -340,7 +341,7 @@ public class MinePresenter extends BasePresenterImpl<MineView> {
                         try {
                             LocalBean itemBean = new LocalBean();
                             itemBean.setLocal_type(TYPE_ITEM_HEAD);
-                            mDatas.clear();
+
                             mDatas.add(itemBean);
                         } catch (Exception e) {
                         }

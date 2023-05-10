@@ -292,7 +292,7 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                 int checkedIndex = tabLayout.getCheckedIndex();
                 int itemCount = tabLayout.getItemCount();
                 if (itemCount > 1 && checkedIndex != 1) {
-                    tabLayout.scrollToPosition(1);
+                    tabLayout.checkedPosition(1);
                 } else {
                     requestExit();
                 }
@@ -360,7 +360,7 @@ public class MainPresenter extends BasePresenterImpl<MainView> {
                 GeneralFragment fragment = (GeneralFragment) getView().findFragmentByTag(tag);
                 fragment.scrollTop();
             }
-            tabLayout.scrollToPosition(checkedIndex);
+            tabLayout.checkedPosition(checkedIndex);
             tabLayout.requestFocus();
         } catch (Exception e) {
         }
