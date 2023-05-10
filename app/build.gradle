@@ -162,9 +162,9 @@ dependencies {
     api files('libs/lib_leanback_r1-2-0-alpha02_release_20230509.aar')
     // keyboard
     // api project(path: ':module_keyboard')
-    api files('libs/lib_keyboard_release_20230303.aar')
+    api files('libs/lib_keyboard_release_20230510.aar')
     // player
-    api files('libs/lib_mediaplayer_ui_release_20230509.aar')
+    api files('libs/lib_mediaplayer_ui_release_20230510.aar')
 //    api files('libs/lib_mediaplayer_exo_r2.18.6_release_20230508.aar')
     api files('libs/lib_mediaplayer_ijk_k0.8.8_ff3.4_release_20230424.aar')
     // heilongjiang

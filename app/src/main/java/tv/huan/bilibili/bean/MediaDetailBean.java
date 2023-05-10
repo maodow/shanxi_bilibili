@@ -12,7 +12,6 @@ import tv.huan.bilibili.utils.StringUtils;
 public final class MediaDetailBean extends BaseImageBean implements Serializable {
 
     private String columnId;
-    private int type;
     private int isTrailer;
     private String seconditle;
     private String director;
