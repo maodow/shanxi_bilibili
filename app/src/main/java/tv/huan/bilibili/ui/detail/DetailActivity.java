@@ -13,7 +13,6 @@ import tv.huan.bilibili.bean.MediaBean;
 import tv.huan.bilibili.dialog.InfoDialog;
 import tv.huan.bilibili.utils.AuthUtils;
 import tv.huan.bilibili.widget.DetailGridView;
-import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 

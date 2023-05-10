@@ -1,16 +1,10 @@
 package tv.huan.bilibili.utils;
 
-import android.content.Context;
-
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-
-import lib.kalu.frame.mvp.context.FrameContext;
-import tv.huan.bilibili.BuildConfig;
-import tv.huan.heilongjiang.HeilongjiangUtil;
 
 public final class BoxUtil {
 
