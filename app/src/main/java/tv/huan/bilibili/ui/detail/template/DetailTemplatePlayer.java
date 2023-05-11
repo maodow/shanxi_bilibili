@@ -188,13 +188,21 @@ public final class DetailTemplatePlayer extends Presenter {
         }
     }
 
-    public void updatePosition(View view, int position) {
+    public void updatePosition(View view, @NonNull MediaBean data) {
         try {
             PlayerViewForDetail playerView = view.findViewById(R.id.detail_player_item_video);
             PlayerComponentInit componentInit = playerView.findComponent(PlayerComponentInit.class);
-            componentInit.updatePosition(position);
+            componentInit.updatePosition(data.getEpisodeIndex());
             componentInit.show();
+
+            //暂停时显示的集数
+            ComponentPause component = playerView.findComponent(ComponentPause.class);
+            String epIndex = view.getResources().getString(R.string.detail_playing_position, data.getEpisodeIndex() + 1);
+            TextView textView = componentInit.findViewById(R.id.detail_player_item_data_name);
+            String mediaTitle = textView.getText().toString();
+            component.setComponentTitleText(mediaTitle.concat(epIndex));
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

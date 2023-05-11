@@ -809,17 +809,6 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                         return true;
                     }
                 })
-                // 销毁ad-sdk
-                .map(new Function<Boolean, Boolean>() {
-                    @Override
-                    public Boolean apply(Boolean aBoolean) {
-                        try {
-                            ADUtil.adRelease();
-                        } catch (Exception e) {
-                        }
-                        return aBoolean;
-                    }
-                })
                 .delay(40, TimeUnit.MILLISECONDS)
                 .compose(ComposeSchedulers.io_main())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -831,12 +820,22 @@ public class DetailPresenter extends BasePresenterImpl<DetailView> {
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
+                        try {
+                            ADUtil.adRelease();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         getView().hideLoading();
                         getView().callFinish();
                     }
                 }).doOnNext(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) {
+                        try {
+                            ADUtil.adRelease();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         getView().hideLoading();
                         getView().callFinish();
                     }

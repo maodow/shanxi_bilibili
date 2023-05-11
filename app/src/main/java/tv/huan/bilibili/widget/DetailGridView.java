@@ -114,7 +114,7 @@ public final class DetailGridView extends LeanBackVerticalGridView {
             if (null == viewHolder) throw new Exception("viewHolder error: null");
             DetailTemplatePlayer presenterPlayer = getPresenter(DetailTemplatePlayer.class);
             if (null == presenterPlayer) throw new Exception("presenterPlayer error: null");
-            presenterPlayer.updatePosition(viewHolder.itemView, data.getEpisodeIndex());
+            presenterPlayer.updatePosition(viewHolder.itemView, data);
         } catch (Exception e) {
             LogUtil.log("DetailGridView => updatePlayerPosition => " + e.getMessage());
         }
